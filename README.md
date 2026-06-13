@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VowLMS
 
-## Getting Started
+VowLMS is the local build of the GoalVow Academy LMS platform. It is a premium, mobile-first Next.js App Router application for learning pathways, assessments, VR practice placeholders, certificates, rewards, learning hubs, and opportunities.
 
-First, run the development server:
+## Local Setup
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Verification Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+npx prisma generate
+npx prisma db push
+npx prisma db seed
+```
 
-## Learn More
+`npx prisma db push` requires a PostgreSQL `DATABASE_URL` in `.env.local`.
 
-To learn more about Next.js, take a look at the following resources:
+## Platform Areas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Public marketing homepage
+- Academy and course catalogue
+- Course detail, lesson player, assessment, VR practice, results, and certificates
+- Learner, facilitator, employer, and admin dashboards
+- Rewards, opportunities, learning hubs, pricing, PWA offline fallback
+- API routes for health, catalogues, dashboards, progress, assessments, VR, certificates, rewards, PayFast, and integrations
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment
 
-## Deploy on Vercel
+Copy `.env.example` to `.env.local` and fill values as services become available. The app renders locally with mock data, so a database is not required for the first UI demo.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js App Router with TypeScript and `src/`
+- Tailwind CSS v4
+- Prisma schema for PostgreSQL
+- Auth.js-ready mock auth boundary
+- PWA manifest and service worker
+- WebXR and React Three Fiber-ready VR placeholder structure
+- PayFast and GoalVow ecosystem integration placeholders
