@@ -1,0 +1,286 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  LEARNER
+  FACILITATOR
+  EMPLOYER
+  ADMIN
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum LessonType {
+  TEXT
+  VIDEO
+  ASSESSMENT
+  VR_PRACTICE
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id                 String              @id @default(cuid())
+  name               String
+  email              String              @unique
+  role               Role                @default(LEARNER)
+  profile            Profile?
+  enrollments        Enrollment[]
+  progress           Progress[]
+  assessmentAttempts AssessmentAttempt[]
+  vrAttempts         VRAttempt[]
+  certificates       Certificate[]
+  rewardEvents       RewardEvent[]
+  payments           Payment[]
+  analyticsEvents    AnalyticsEvent[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone     String?
+  city      String?
+  country   String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Academy {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String
+  audience    String
+  category    String
+  heroMessage String
+  courses     Course[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Course {
+  id                 String              @id @default(cuid())
+  slug               String              @unique
+  academyId          String
+  academy            Academy             @relation(fields: [academyId], references: [id], onDelete: Cascade)
+  title              String
+  description        String
+  level              String
+  duration           String
+  price              Decimal             @db.Decimal(10, 2)
+  status             CourseStatus        @default(DRAFT)
+  modules            Module[]
+  enrollments        Enrollment[]
+  assessments        Assessment[]
+  vrPractices        VRPractice[]
+  certificates       Certificate[]
+  payments           Payment[]
+  opportunities      Opportunity[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+model Module {
+  id        String   @id @default(cuid())
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title     String
+  order     Int
+  lessons   Lesson[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([courseId, order])
+}
+
+model Lesson {
+  id            String       @id @default(cuid())
+  moduleId      String
+  module        Module       @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  slug          String       @unique
+  title         String
+  type          LessonType   @default(TEXT)
+  content       String
+  videoUrl      String?
+  hasAssessment Boolean      @default(false)
+  hasVRPractice Boolean      @default(false)
+  order         Int
+  progress      Progress[]
+  assessment    Assessment?
+  vrPractice    VRPractice?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progress  Int      @default(0)
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, courseId])
+}
+
+model Progress {
+  id          String    @id @default(cuid())
+  userId      String
+  lessonId    String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  completed   Boolean   @default(false)
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, lessonId])
+}
+
+model Assessment {
+  id          String              @id @default(cuid())
+  courseId    String
+  lessonId    String              @unique
+  course      Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson      Lesson              @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  slug        String              @unique
+  title       String
+  passMark    Int                 @default(70)
+  questions   Json
+  attempts    AssessmentAttempt[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
+
+model AssessmentAttempt {
+  id           String     @id @default(cuid())
+  userId       String
+  assessmentId String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  answers      Json
+  score        Int
+  passed       Boolean
+  createdAt    DateTime   @default(now())
+}
+
+model VRPractice {
+  id              String      @id @default(cuid())
+  courseId        String
+  lessonId        String      @unique
+  course          Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson          Lesson      @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  slug            String      @unique
+  title           String
+  scenario        String
+  skillsPracticed String[]
+  attempts        VRAttempt[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model VRAttempt {
+  id           String     @id @default(cuid())
+  userId       String
+  vrPracticeId String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vrPractice   VRPractice @relation(fields: [vrPracticeId], references: [id], onDelete: Cascade)
+  score        Int
+  evidence     Json?
+  createdAt    DateTime   @default(now())
+}
+
+model Certificate {
+  id            String   @id @default(cuid())
+  userId        String
+  courseId      String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course        Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  certificateId String   @unique
+  issuedAt      DateTime @default(now())
+  pdfUrl        String?
+}
+
+model RewardEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     String
+  points    Int
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
+
+model Opportunity {
+  id          String   @id @default(cuid())
+  courseId    String?
+  course      Course?  @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  title       String
+  type        String
+  partner     String
+  location    String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model LearningHub {
+  id        String   @id @default(cuid())
+  name      String
+  location  String
+  capacity  Int
+  focus     String
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, location])
+}
+
+model Payment {
+  id          String        @id @default(cuid())
+  userId      String
+  courseId    String?
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course      Course?       @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  provider    String        @default("payfast")
+  amount      Decimal       @db.Decimal(10, 2)
+  currency    String        @default("ZAR")
+  status      PaymentStatus @default(PENDING)
+  providerRef String?
+  metadata    Json?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  event     String
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+}

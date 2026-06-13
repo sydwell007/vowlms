@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="VowLMS maskable icon">
+  <rect width="512" height="512" fill="#06111f"/>
+  <circle cx="384" cy="126" r="64" fill="#20c7ff" opacity="0.86"/>
+  <path d="M104 138h304L256 400 104 138Z" fill="#f5c542"/>
+  <path d="M184 194h144l-72 124-72-124Z" fill="#06111f"/>
+</svg>
