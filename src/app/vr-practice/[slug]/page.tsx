@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 import { VRStudio } from "@/components/vr/VRStudio";
 import { getVRPracticeBySlug } from "@/lib/data";
 
@@ -15,7 +15,7 @@ export default async function VRPracticePage({ params }: { params: Promise<{ slu
 
   return (
     <main>
-      <section className="surface-grid py-12 text-white md:py-16">
+      <section className="premium-section-dark surface-grid py-12 text-white md:py-16">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">{course.title}</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">VR Practice</h1>
@@ -25,9 +25,9 @@ export default async function VRPracticePage({ params }: { params: Promise<{ slu
           <div className="mt-8">
             <VRStudio practice={practice} />
           </div>
-          <Link href={`/results/${course.slug}`} className="mt-8 inline-flex min-h-11 items-center justify-center rounded-md bg-gold px-5 text-sm font-semibold text-[#07101d]">
+          <ButtonLink href={`/results/${course.slug}`} className="mt-8">
             Save demo score
-          </Link>
+          </ButtonLink>
         </div>
       </section>
     </main>

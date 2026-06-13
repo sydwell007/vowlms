@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { getCourseBySlug } from "@/lib/data";
@@ -13,9 +13,9 @@ export default async function ResultsPage({ params }: { params: Promise<{ course
   }
 
   return (
-    <main className="bg-slate-50 text-ink">
+    <main className="premium-page">
       <section className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-6 lg:px-8">
-        <div className="rounded-lg border border-slate-200 bg-white p-6 card-shadow">
+        <div className="premium-card rounded-xl p-6">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1166c8]">Results</p>
           <h1 className="mt-4 text-balance text-3xl font-semibold sm:text-5xl">{course.title}</h1>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -28,12 +28,12 @@ export default async function ResultsPage({ params }: { params: Promise<{ course
             <ProgressBar value={100} label="Completion" />
           </div>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link href={`/certificates/${course.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#06111f] px-5 text-sm font-semibold text-white">
+            <ButtonLink href={`/certificates/${course.slug}`} variant="ink">
               Generate certificate
-            </Link>
-            <Link href="/rewards" className="inline-flex min-h-11 items-center justify-center rounded-md border border-slate-200 px-5 text-sm font-semibold text-ink">
+            </ButtonLink>
+            <ButtonLink href="/rewards" variant="outline">
               View rewards
-            </Link>
+            </ButtonLink>
           </div>
         </div>
       </section>

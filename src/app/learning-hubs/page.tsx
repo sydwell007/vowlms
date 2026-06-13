@@ -18,7 +18,7 @@ export default function LearningHubsPage() {
       >
         <div className="grid gap-5 md:grid-cols-3">
           {hubs.map((hub) => (
-            <article key={hub.id} className="rounded-lg border border-slate-200 bg-white p-6 card-shadow">
+            <article key={hub.id} className="premium-card rounded-xl p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">{hub.status}</p>
               <h2 className="mt-3 text-2xl font-semibold">{hub.name}</h2>
               <p className="mt-2 text-sm font-medium text-muted">{hub.location}</p>

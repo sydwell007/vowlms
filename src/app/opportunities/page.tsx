@@ -18,7 +18,7 @@ export default function OpportunitiesPage() {
       >
         <div className="grid gap-5 md:grid-cols-2">
           {opportunities.map((opportunity) => (
-            <article key={opportunity.id} className="rounded-lg border border-slate-200 bg-white p-6 card-shadow">
+            <article key={opportunity.id} className="premium-card rounded-xl p-6">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">{opportunity.type}</p>
               <h2 className="mt-3 text-2xl font-semibold">{opportunity.title}</h2>
               <p className="mt-2 text-sm font-medium text-muted">{opportunity.partner} | {opportunity.location}</p>

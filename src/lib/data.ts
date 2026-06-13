@@ -12,7 +12,12 @@ export function getAcademies() {
 }
 
 export function getAcademyBySlug(slug: string) {
-  return academies.find((academy) => academy.slug === slug);
+  return academies.find((academy) => academy.slug === slug || academy.category === slug);
+}
+
+export function getAcademyHref(categoryOrAcademy: { category: string } | string) {
+  const category = typeof categoryOrAcademy === "string" ? categoryOrAcademy : categoryOrAcademy.category;
+  return `/academies/${category}`;
 }
 
 export function getCourses() {
@@ -20,7 +25,13 @@ export function getCourses() {
 }
 
 export function getCoursesByAcademy(academySlug: string) {
-  return courses.filter((course) => course.academySlug === academySlug);
+  const academy = getAcademyBySlug(academySlug);
+
+  if (!academy) {
+    return [];
+  }
+
+  return courses.filter((course) => course.academySlug === academy.slug);
 }
 
 export function getCourseBySlug(slug: string) {

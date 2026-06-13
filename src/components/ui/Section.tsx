@@ -12,7 +12,7 @@ export function Section({ eyebrow, title, description, children, tone = "dark" }
   const isLight = tone === "light";
 
   return (
-    <section className={isLight ? "bg-white py-16 text-ink md:py-24" : "py-16 text-white md:py-24"}>
+    <section className={isLight ? "premium-section-light py-16 text-ink md:py-24" : "premium-section-dark py-16 text-white md:py-24"}>
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="mb-10 max-w-3xl">
           {eyebrow ? (
@@ -22,7 +22,7 @@ export function Section({ eyebrow, title, description, children, tone = "dark" }
           ) : null}
           <h2 className="text-balance text-3xl font-semibold tracking-normal sm:text-4xl">{title}</h2>
           {description ? (
-            <p className={isLight ? "mt-4 text-base leading-7 text-muted" : "mt-4 text-base leading-7 text-white/72"}>
+            <p className={isLight ? "mt-4 max-w-2xl text-base leading-7 text-muted" : "mt-4 max-w-2xl text-base leading-7 text-white/72"}>
               {description}
             </p>
           ) : null}

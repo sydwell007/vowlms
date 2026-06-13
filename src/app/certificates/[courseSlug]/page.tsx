@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 import { getCourseBySlug } from "@/lib/data";
 
 export default async function CertificatePage({ params }: { params: Promise<{ courseSlug: string }> }) {
@@ -13,10 +13,10 @@ export default async function CertificatePage({ params }: { params: Promise<{ co
   const certificateId = `VOWLMS-${course.slug.toUpperCase().slice(0, 10)}-2026`;
 
   return (
-    <main className="bg-slate-50 text-ink">
+    <main className="premium-page">
       <section className="mx-auto w-full max-w-5xl px-5 py-10 sm:px-6 lg:px-8">
-        <div className="rounded-lg border border-slate-200 bg-white p-5 card-shadow">
-          <div className="rounded-lg border-2 border-[#f5c542] bg-[#fffdf6] p-8 text-center">
+        <div className="premium-card rounded-xl p-5">
+          <div className="rounded-xl border-2 border-[#f5c542] bg-[linear-gradient(180deg,#fffdf6_0%,#fff7e2_100%)] p-8 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.65)]">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#1166c8]">Certificate of Completion</p>
             <h1 className="mt-6 text-4xl font-semibold">Amina Mokoena</h1>
             <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted">
@@ -24,27 +24,27 @@ export default async function CertificatePage({ params }: { params: Promise<{ co
             </p>
             <h2 className="mx-auto mt-5 max-w-3xl text-3xl font-semibold">{course.title}</h2>
             <div className="mt-8 grid gap-4 text-sm sm:grid-cols-3">
-              <div className="rounded-md bg-white p-4">
+              <div className="premium-card rounded-lg p-4">
                 <p className="font-semibold">Completion date</p>
                 <p className="mt-1 text-muted">13 June 2026</p>
               </div>
-              <div className="rounded-md bg-white p-4">
+              <div className="premium-card rounded-lg p-4">
                 <p className="font-semibold">Certificate ID</p>
                 <p className="mt-1 break-words text-muted">{certificateId}</p>
               </div>
-              <div className="rounded-md bg-white p-4">
+              <div className="premium-card rounded-lg p-4">
                 <p className="font-semibold">Rewards</p>
                 <p className="mt-1 text-muted">{course.rewards} points</p>
               </div>
             </div>
           </div>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Link href={`/api/certificates/generate?courseSlug=${course.slug}&format=pdf`} className="inline-flex min-h-11 items-center justify-center rounded-md bg-[#06111f] px-5 text-sm font-semibold text-white">
+            <ButtonLink href={`/api/certificates/generate?courseSlug=${course.slug}&format=pdf`} variant="ink">
               Download PDF
-            </Link>
-            <Link href="/opportunities" className="inline-flex min-h-11 items-center justify-center rounded-md border border-slate-200 px-5 text-sm font-semibold text-ink">
+            </ButtonLink>
+            <ButtonLink href="/opportunities" variant="outline">
               View opportunities
-            </Link>
+            </ButtonLink>
           </div>
         </div>
       </section>

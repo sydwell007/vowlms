@@ -15,7 +15,7 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
 
   return (
     <main>
-      <section className="surface-grid py-16 text-white md:py-24">
+      <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">{academy.category.replaceAll("-", " ")}</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">{academy.name}</h1>

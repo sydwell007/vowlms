@@ -22,7 +22,7 @@ export default function RewardsPage() {
       >
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {rewards.map(([title, points, description]) => (
-            <article key={title} className="rounded-lg border border-slate-200 bg-white p-6 card-shadow">
+            <article key={title} className="premium-card rounded-xl p-6">
               <p className="text-3xl font-semibold text-[#1166c8]">{points}</p>
               <h2 className="mt-4 text-xl font-semibold">{title}</h2>
               <p className="mt-3 text-sm leading-6 text-muted">{description}</p>

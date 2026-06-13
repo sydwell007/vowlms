@@ -12,15 +12,15 @@ type DashboardShellProps = {
 
 export function DashboardShell({ role, title, description, metrics, children }: DashboardShellProps) {
   return (
-    <main className="min-h-screen bg-slate-50 text-ink">
-      <section className="bg-[#06111f] py-12 text-white">
+    <main className="premium-page">
+      <section className="premium-section-dark surface-grid border-b border-white/6 py-14 text-white">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">{role} dashboard</p>
           <h1 className="mt-4 text-balance text-3xl font-semibold sm:text-5xl">{title}</h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-white/70">{description}</p>
         </div>
       </section>
-      <section className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
+      <section className="mx-auto -mt-8 w-full max-w-7xl px-5 pb-12 sm:px-6 lg:px-8">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {metrics.map((metric) => (
             <MetricCard key={metric.label} {...metric} />
