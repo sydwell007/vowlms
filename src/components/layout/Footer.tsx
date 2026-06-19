@@ -24,15 +24,15 @@ const columns = [
     ],
   },
   {
-    title: "Other Services",
+    title: "Platform",
     links: [
       { href: "/rewards", label: "VowRewards" },
-      { href: "/support", label: "VowSupport" },
       { href: "/opportunities", label: "PlugConnect" },
       { href: "/learning-hubs", label: "Learning Hubs" },
-      { href: "/skillsshop", label: "SkillsShop" },
-      { href: "/vowtools", label: "VowTools" },
-      { href: "/cheforder", label: "ChefOrder" },
+      { href: "/announcements", label: "Announcements" },
+      { href: "/calendar", label: "Learning Calendar" },
+      { href: "/search", label: "Search Courses" },
+      { href: "/pricing", label: "Pricing" },
     ],
   },
 ];

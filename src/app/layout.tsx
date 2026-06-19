@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 import { AcademyTopBar } from "@/components/layout/AcademyTopBar";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -24,8 +25,15 @@ export const metadata: Metadata = {
   },
   description:
     "A premium GoalVow learning platform for skills, schools, business, VR practice, rewards, and opportunity pathways.",
+  keywords: ["LMS", "learning management", "GoalVow", "online learning", "skills training", "South Africa", "academy"],
   metadataBase: new URL("https://vowlms.co.za"),
   manifest: "/manifest.webmanifest",
+  openGraph: {
+    type: "website",
+    siteName: "VowLMS",
+    title: "VowLMS | GoalVow Learning Platform",
+    description: "Premium GoalVow LMS for skills, schools, business, and opportunity pathways.",
+  },
 };
 
 export const viewport: Viewport = {
@@ -48,6 +56,16 @@ export default function RootLayout({
         {children}
         <Footer />
         <ServiceWorkerRegistration />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            style: {
+              borderRadius: "12px",
+              fontFamily: "var(--font-geist-sans)",
+              fontSize: "14px",
+            },
+          }}
+        />
       </body>
     </html>
   );
