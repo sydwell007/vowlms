@@ -67,6 +67,7 @@ export type VRPractice = {
 
 export type Course = {
   slug: string;
+  moodleId?: number | null;
   title: string;
   academySlug: string;
   description: string;

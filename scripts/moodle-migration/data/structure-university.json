@@ -1,0 +1,472 @@
+{
+  "academy": {
+    "id": "university",
+    "name": "University Online",
+    "vowSlug": "university-online",
+    "base": "https://goalvow.com/university",
+    "category": "university-online"
+  },
+  "fetchedAt": "2026-06-20T05:20:19.169Z",
+  "courses": [
+    {
+      "moodleId": 2,
+      "shortname": "BSc in Artificial Intelligence &amp; Data Science",
+      "fullname": "BSc in Artificial Intelligence &amp; Data Science",
+      "slug": "bsc-in-artificial-intelligence-amp-data-science",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 4,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "bsc-in-artificial-intelligence-amp-data-science-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 5,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "bsc-in-artificial-intelligence-amp-data-science-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 6,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "bsc-in-artificial-intelligence-amp-data-science-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 7,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "bsc-in-artificial-intelligence-amp-data-science-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 3,
+      "shortname": "BSc in Software Development",
+      "fullname": "BSc in Software Development (Cloud, Cybersecurity, Robotics)",
+      "slug": "bsc-in-software-development-cloud-cybersecurity-robotics",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 9,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "bsc-in-software-development-cloud-cybersecurity-robotics-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 10,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "bsc-in-software-development-cloud-cybersecurity-robotics-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 11,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "bsc-in-software-development-cloud-cybersecurity-robotics-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 12,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "bsc-in-software-development-cloud-cybersecurity-robotics-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 4,
+      "shortname": "BBA Bachelor of Business Administration ",
+      "fullname": "BBA Bachelor of Business Administration ",
+      "slug": "bba-bachelor-of-business-administration",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 14,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "bba-bachelor-of-business-administration-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 15,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "bba-bachelor-of-business-administration-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 16,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "bba-bachelor-of-business-administration-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 17,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "bba-bachelor-of-business-administration-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 5,
+      "shortname": "Bachelor of Commerce in Entrepreuship &amp; Innovation",
+      "fullname": "Bachelor of Commerce in Entrepreuship &amp; Innovation",
+      "slug": "bachelor-of-commerce-in-entrepreuship-amp-innovation",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 19,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "bachelor-of-commerce-in-entrepreuship-amp-innovation-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 20,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "bachelor-of-commerce-in-entrepreuship-amp-innovation-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 21,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "bachelor-of-commerce-in-entrepreuship-amp-innovation-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 22,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "bachelor-of-commerce-in-entrepreuship-amp-innovation-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 6,
+      "shortname": "Bachelor of Education",
+      "fullname": "Bachelor of Education (EdTech &amp; eLearning Focus)",
+      "slug": "bachelor-of-education-edtech-amp-elearning-focus",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 24,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "bachelor-of-education-edtech-amp-elearning-focus-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 25,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "bachelor-of-education-edtech-amp-elearning-focus-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 26,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "bachelor-of-education-edtech-amp-elearning-focus-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 27,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "bachelor-of-education-edtech-amp-elearning-focus-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 7,
+      "shortname": "Bachelor of Design and Digital Media",
+      "fullname": "Bachelor of Design and Digital Media",
+      "slug": "bachelor-of-design-and-digital-media",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 29,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "bachelor-of-design-and-digital-media-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 30,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "bachelor-of-design-and-digital-media-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 31,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "bachelor-of-design-and-digital-media-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 32,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "bachelor-of-design-and-digital-media-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 8,
+      "shortname": "Bachelor of Communication &amp; Marketing",
+      "fullname": "Bachelor of Communication &amp; Marketing (Digital Focus)",
+      "slug": "bachelor-of-communication-amp-marketing-digital-focus",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 34,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "bachelor-of-communication-amp-marketing-digital-focus-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 35,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "bachelor-of-communication-amp-marketing-digital-focus-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 36,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "bachelor-of-communication-amp-marketing-digital-focus-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 37,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "bachelor-of-communication-amp-marketing-digital-focus-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 9,
+      "shortname": "Bachelor of Finance &amp; Investment Technology",
+      "fullname": "Bachelor of Finance &amp; Investment Technology",
+      "slug": "bachelor-of-finance-amp-investment-technology",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 39,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "bachelor-of-finance-amp-investment-technology-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 40,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "bachelor-of-finance-amp-investment-technology-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 41,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "bachelor-of-finance-amp-investment-technology-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 42,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "bachelor-of-finance-amp-investment-technology-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 10,
+      "shortname": "Bachelor of Public Health",
+      "fullname": "Bachelor of Public Health (Digital Health Systems)",
+      "slug": "bachelor-of-public-health-digital-health-systems",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 44,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "bachelor-of-public-health-digital-health-systems-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 45,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "bachelor-of-public-health-digital-health-systems-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 46,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "bachelor-of-public-health-digital-health-systems-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 47,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "bachelor-of-public-health-digital-health-systems-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 11,
+      "shortname": "Bachelor of Environmental &amp; Sustainable Development",
+      "fullname": "Bachelor of Environmental &amp; Sustainable Development",
+      "slug": "bachelor-of-environmental-amp-sustainable-development",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 49,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "bachelor-of-environmental-amp-sustainable-development-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 50,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "bachelor-of-environmental-amp-sustainable-development-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 51,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "bachelor-of-environmental-amp-sustainable-development-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 52,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "bachelor-of-environmental-amp-sustainable-development-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    }
+  ]
+}

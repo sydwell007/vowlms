@@ -1,0 +1,1116 @@
+{
+  "academy": {
+    "id": "business-school",
+    "name": "Business School",
+    "vowSlug": "business-school",
+    "base": "https://goalvow.com/business-school",
+    "category": "business-school"
+  },
+  "fetchedAt": "2026-06-20T05:20:13.374Z",
+  "courses": [
+    {
+      "moodleId": 2,
+      "shortname": "Starting a Business in Africa",
+      "fullname": "Starting a Business in Africa",
+      "slug": "starting-a-business-in-africa",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 4,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "starting-a-business-in-africa-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 5,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "starting-a-business-in-africa-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 6,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "starting-a-business-in-africa-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 7,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "starting-a-business-in-africa-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 3,
+      "shortname": "Lean Startup Fundamentals",
+      "fullname": "Lean Startup Fundamentals",
+      "slug": "lean-startup-fundamentals",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 9,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "lean-startup-fundamentals-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 10,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "lean-startup-fundamentals-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 11,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "lean-startup-fundamentals-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 12,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "lean-startup-fundamentals-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 4,
+      "shortname": "Business Model Design",
+      "fullname": "Business Model Design",
+      "slug": "business-model-design",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 14,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "business-model-design-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 15,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "business-model-design-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 16,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "business-model-design-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 17,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "business-model-design-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 5,
+      "shortname": "Cloud Tools for Managers",
+      "fullname": "Cloud Tools for Managers",
+      "slug": "cloud-tools-for-managers",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 19,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "cloud-tools-for-managers-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 20,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "cloud-tools-for-managers-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 21,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "cloud-tools-for-managers-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 22,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "cloud-tools-for-managers-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 6,
+      "shortname": "Data Analytics for Decision Making",
+      "fullname": "Data Analytics for Decision Making",
+      "slug": "data-analytics-for-decision-making",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 24,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "data-analytics-for-decision-making-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 25,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "data-analytics-for-decision-making-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 26,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "data-analytics-for-decision-making-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 27,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "data-analytics-for-decision-making-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 7,
+      "shortname": "AI for Business",
+      "fullname": "AI for Business",
+      "slug": "ai-for-business",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 29,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "ai-for-business-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 30,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "ai-for-business-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 31,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "ai-for-business-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 32,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "ai-for-business-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 8,
+      "shortname": "Financial Planning Basics",
+      "fullname": "Financial Planning Basics",
+      "slug": "financial-planning-basics",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 34,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "financial-planning-basics-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 35,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "financial-planning-basics-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 36,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "financial-planning-basics-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 37,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "financial-planning-basics-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 9,
+      "shortname": "Quick Books &amp; Business Accounting",
+      "fullname": "Quick Books &amp; Business Accounting",
+      "slug": "quick-books-amp-business-accounting",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 39,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "quick-books-amp-business-accounting-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 40,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "quick-books-amp-business-accounting-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 41,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "quick-books-amp-business-accounting-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 42,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "quick-books-amp-business-accounting-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 10,
+      "shortname": "Financial Literacy for Non-Finance Managers",
+      "fullname": "Financial Literacy for Non-Finance Managers",
+      "slug": "financial-literacy-for-non-finance-managers",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 44,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "financial-literacy-for-non-finance-managers-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 45,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "financial-literacy-for-non-finance-managers-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 46,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "financial-literacy-for-non-finance-managers-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 47,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "financial-literacy-for-non-finance-managers-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 11,
+      "shortname": "Sales Mastery",
+      "fullname": "Sales Mastery",
+      "slug": "sales-mastery",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 49,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "sales-mastery-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 50,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "sales-mastery-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 51,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "sales-mastery-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 52,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "sales-mastery-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 12,
+      "shortname": "Brand Storytelling",
+      "fullname": "Brand Storytelling",
+      "slug": "brand-storytelling",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 54,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "brand-storytelling-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 55,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "brand-storytelling-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 56,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "brand-storytelling-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 57,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "brand-storytelling-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 13,
+      "shortname": "Social Media Strategy",
+      "fullname": "Social Media Strategy",
+      "slug": "social-media-strategy",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 59,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "social-media-strategy-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 60,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "social-media-strategy-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 61,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "social-media-strategy-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 62,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "social-media-strategy-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 14,
+      "shortname": "Leading Hybrid Teams",
+      "fullname": "Leading Hybrid Teams",
+      "slug": "leading-hybrid-teams",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 64,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "leading-hybrid-teams-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 65,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "leading-hybrid-teams-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 66,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "leading-hybrid-teams-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 67,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "leading-hybrid-teams-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 15,
+      "shortname": "Time Management",
+      "fullname": "Time Management",
+      "slug": "time-management",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 69,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "time-management-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 70,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "time-management-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 71,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "time-management-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 72,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "time-management-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 16,
+      "shortname": "Communication for Impact",
+      "fullname": "Communication for Impact",
+      "slug": "communication-for-impact",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 74,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "communication-for-impact-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 75,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "communication-for-impact-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 76,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "communication-for-impact-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 77,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "communication-for-impact-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 17,
+      "shortname": "Diploma in People &amp; Organizational Leadership",
+      "fullname": "Diploma in People &amp; Organizational Leadership",
+      "slug": "diploma-in-people-amp-organizational-leadership",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 79,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "diploma-in-people-amp-organizational-leadership-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 80,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "diploma-in-people-amp-organizational-leadership-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 81,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "diploma-in-people-amp-organizational-leadership-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 82,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "diploma-in-people-amp-organizational-leadership-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 18,
+      "shortname": "Diploma in Financial Analysis &amp; Investment",
+      "fullname": "Diploma in Financial Analysis &amp; Investment",
+      "slug": "diploma-in-financial-analysis-amp-investment",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 84,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "diploma-in-financial-analysis-amp-investment-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 85,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "diploma-in-financial-analysis-amp-investment-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 86,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "diploma-in-financial-analysis-amp-investment-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 87,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "diploma-in-financial-analysis-amp-investment-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 19,
+      "shortname": "Diploma in Marketing Strategy &amp; Brand Leadership",
+      "fullname": "Diploma in Marketing Strategy &amp; Brand Leadership",
+      "slug": "diploma-in-marketing-strategy-amp-brand-leadership",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 89,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "diploma-in-marketing-strategy-amp-brand-leadership-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 90,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "diploma-in-marketing-strategy-amp-brand-leadership-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 91,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "diploma-in-marketing-strategy-amp-brand-leadership-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 92,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "diploma-in-marketing-strategy-amp-brand-leadership-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 20,
+      "shortname": "Diploma in Digital Business Transformation",
+      "fullname": "Diploma in Digital Business Transformation",
+      "slug": "diploma-in-digital-business-transformation",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 94,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "diploma-in-digital-business-transformation-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 95,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "diploma-in-digital-business-transformation-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 96,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "diploma-in-digital-business-transformation-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 97,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "diploma-in-digital-business-transformation-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 21,
+      "shortname": "Diploma in Business Management &amp; Operations",
+      "fullname": "Diploma in Business Management &amp; Operations",
+      "slug": "diploma-in-business-management-amp-operations",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 99,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "diploma-in-business-management-amp-operations-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 100,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "diploma-in-business-management-amp-operations-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 101,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "diploma-in-business-management-amp-operations-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 102,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "diploma-in-business-management-amp-operations-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 22,
+      "shortname": "African Business Fellowship",
+      "fullname": "African Business Fellowship",
+      "slug": "african-business-fellowship",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 104,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "african-business-fellowship-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 105,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "african-business-fellowship-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 106,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "african-business-fellowship-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 107,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "african-business-fellowship-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 23,
+      "shortname": "Innovation &amp; Strategy Program",
+      "fullname": "Innovation &amp; Strategy Program",
+      "slug": "innovation-amp-strategy-program",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 109,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "innovation-amp-strategy-program-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 110,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "innovation-amp-strategy-program-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 111,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "innovation-amp-strategy-program-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 112,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "innovation-amp-strategy-program-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 24,
+      "shortname": "Executive MBA (eMBA)",
+      "fullname": "Executive MBA (eMBA)",
+      "slug": "executive-mba-emba",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 114,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "executive-mba-emba-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 115,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "executive-mba-emba-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 116,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "executive-mba-emba-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 117,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "executive-mba-emba-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 25,
+      "shortname": "Executive Leadership Program (ELP)",
+      "fullname": "Executive Leadership Program (ELP)",
+      "slug": "executive-leadership-program-elp",
+      "summary": "",
+      "sections": [
+        {
+          "sectionId": 119,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "executive-leadership-program-elp-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 120,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "executive-leadership-program-elp-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 121,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "executive-leadership-program-elp-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 122,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "executive-leadership-program-elp-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    }
+  ]
+}

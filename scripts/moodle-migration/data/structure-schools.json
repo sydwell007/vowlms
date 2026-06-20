@@ -1,0 +1,1143 @@
+{
+  "academy": {
+    "id": "schools",
+    "name": "GoalVow Schools",
+    "vowSlug": "private-school",
+    "base": "https://goalvow.com/schools",
+    "category": "private-school"
+  },
+  "fetchedAt": "2026-06-20T05:19:48.691Z",
+  "courses": [
+    {
+      "moodleId": 2,
+      "shortname": "PE",
+      "fullname": "Physical Education",
+      "slug": "physical-education",
+      "summary": "In this course, physical education encourages students to develop their fine motor skills, movement, and confidence to enjoy healthy physical activity regularly. A combination of interactive and hands-on activities teaches students essential skills. Students learn how to respect themselves and others while playing. Select the link below to view the Number of Minutes of Physical Activity by State.",
+      "sections": [
+        {
+          "sectionId": 2,
+          "sectionIndex": 1,
+          "title": "Module 1: Physically Active Lifestyle",
+          "slug": "physical-education-module-1-physically-active-lifestyle",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 3,
+          "sectionIndex": 2,
+          "title": "Module 2: Introduction to Common Movements",
+          "slug": "physical-education-module-2-introduction-to-common-movements",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 4,
+          "sectionIndex": 3,
+          "title": "Module 3: Let's Move",
+          "slug": "physical-education-module-3-let-s-move",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 5,
+          "sectionIndex": 4,
+          "title": "Module 4: Effects of Exercise",
+          "slug": "physical-education-module-4-effects-of-exercise",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        },
+        {
+          "sectionId": 6,
+          "sectionIndex": 5,
+          "title": "Module 5: Responsibility, Respect and Enjojyment",
+          "slug": "physical-education-module-5-responsibility-respect-and-enjojyment",
+          "summary": "",
+          "modules": [],
+          "order": 5
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 3,
+      "shortname": "Art",
+      "fullname": "Art",
+      "slug": "art",
+      "summary": "In this course, the student will explore color, line, and shape. A combination of interactive and hands-on studio projects encourages the student to create art, sharpen fine motor skills, and explore areas of interest in art. Artistic modes include drawing, painting, assembling, and sculpting.",
+      "sections": [
+        {
+          "sectionId": 8,
+          "sectionIndex": 1,
+          "title": "Module 1: Art is Everywhere",
+          "slug": "art-module-1-art-is-everywhere",
+          "summary": "",
+          "modules": [
+            {
+              "id": 8,
+              "name": "Module 1: Description",
+              "type": "label",
+              "url": null,
+              "description": "Everything in the world is made up of five basic elements of shape: circle, dot, angle line, curved line, and straight line. In this unit, your student will learn to recognize these elements of shape in his environment and in presented artworks. He will apply these elements to create original artworks using a variety of media, including crayons, finger paints, and watercolors; he will also use techniques that include cutting and pasting, finger painting, and drawing. Art is a way for people to record what happens around the world. Your student will create sidewalk art inspired by the Diwali Festival in India, which celebrates the fall season. As a portfolio assessment, your student will create a mixed-media collage using the five elements of shape.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 1
+        },
+        {
+          "sectionId": 9,
+          "sectionIndex": 2,
+          "title": "Module 2: Coloring the Season",
+          "slug": "art-module-2-coloring-the-season",
+          "summary": "",
+          "modules": [
+            {
+              "id": 9,
+              "name": "Module 2: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this module, your student will build on her knowledge of art elements and begin to explore the color wheel. She will use various art techniques, including watercolor painting and crayon resist, and will use a variety of media including crayons, pencil, watercolors, and objects from nature. She will create original artworks inspired by the season and a Monarch butterfly watercolor painting inspired by the annual migration of Monarch butterflies. As a portfolio assessment, your student will create a fall-themed painting.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 2
+        },
+        {
+          "sectionId": 10,
+          "sectionIndex": 3,
+          "title": "Module 3: Winter is Taking Shape",
+          "slug": "art-module-3-winter-is-taking-shape",
+          "summary": "",
+          "modules": [
+            {
+              "id": 10,
+              "name": "Module 3: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this module, your student will continue to build on his knowledge of art elements and colors and begin to explore shapes, texture, and pattern in artworks. He will create original artworks inspired by the season. As a portfolio assessment, your student will use shapes, texture, and pattern to make a kite inspired by those made traditionally during the Korean Lunar New Year.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 3
+        },
+        {
+          "sectionId": 11,
+          "sectionIndex": 4,
+          "title": "Module 4: Art Forms",
+          "slug": "art-module-4-art-forms",
+          "summary": "",
+          "modules": [
+            {
+              "id": 11,
+              "name": "Module 4: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this module, your student will continue to build on her knowledge of art elements and principles of design, exploring balance and symmetry. She will begin to explore art as form, or sculpture, and use various media, such as clay, yarn, and other arts and crafts materials to create art forms. She will create original artworks inspired by animals, a mask inspired by the Mardi Gras celebration, and a tree sculpture inspired by a Bulgarian tradition. In a cross-curricular activity, she will paint a mural inspired by the book, Abuela. As a portfolio assessment, your student will create a clay sculpture of a playground.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 4
+        },
+        {
+          "sectionId": 12,
+          "sectionIndex": 5,
+          "title": "Module 5: Springtime Painting",
+          "slug": "art-module-5-springtime-painting",
+          "summary": "",
+          "modules": [
+            {
+              "id": 12,
+              "name": "Module 5: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this module, your student will continue to build on his knowledge of art elements and principles of design, exploring patterns in art, different media (including tissue paper, mud, watercolors, and sponges), and processes and tools for painting. He will create original artwork and crafts inspired by the season, as well as a Malian mud cloth inspired by a tradition of the Malian people in Africa. As a portfolio assessment, your student will cut basic and more complex shapes out of sponges and then create a sponge and finger paint mural.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 5
+        },
+        {
+          "sectionId": 13,
+          "sectionIndex": 6,
+          "title": "Module 6: Summertime Art",
+          "slug": "art-module-6-summertime-art",
+          "summary": "",
+          "modules": [
+            {
+              "id": 13,
+              "name": "Module 6: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this culminating module, your student will continue to explore art elements, processes, and techniques, and apply them to fun arts and crafts projects. She will create a sun print, learn how to make multi-color crayons, and use objects from nature to inspire her art. She will create original artworks inspired by the season and a sunshine flag inspired by Inti Raymi, an Ecuadorian tradition. As a portfolio assessment, your student will choose the media, techniques, and processes to create an original artwork with the theme, “My Art.”",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 6
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 4,
+      "shortname": "Music",
+      "fullname": "Music",
+      "slug": "music",
+      "summary": "Designed for students in grades K–2, this course explores differences between music and everyday sounds, and also how the body hears and responds to music. Aligning to the National Core Arts Standards, the course introduces skills that assist the student in making music individually and with another person. The student will identify instrument characteristics and sounds and begin to consider the way music of the student’s own culture might sound different to a person from another culture. With a",
+      "sections": [
+        {
+          "sectionId": 15,
+          "sectionIndex": 1,
+          "title": "Module 1: Music and Me!",
+          "slug": "music-module-1-music-and-me",
+          "summary": "",
+          "modules": [
+            {
+              "id": 4,
+              "name": "Module 1: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this module, your student will begin to explore the differences between sound and music. He will begin by differentiating between sounds and musical patterns. Over the course of this module, your student will explore ways in which people listen to and create music. This exploration will include performing simple melodies with his voice and with an instrument.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 1
+        },
+        {
+          "sectionId": 16,
+          "sectionIndex": 2,
+          "title": "Module 2: Fast and Slow, Stop and Go",
+          "slug": "music-module-2-fast-and-slow-stop-and-go",
+          "summary": "",
+          "modules": [
+            {
+              "id": 5,
+              "name": "Module 2: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this module, your student will learn to recognize simple rhythms using ta, ti-ti, and sh. Your student will use her listening skills to move her body in appropriate ways to match musical patterns. As she explores rhythm, your student will learn to recognize and perform rhythmic patterns and melodies with changes in tempo.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 2
+        },
+        {
+          "sectionId": 17,
+          "sectionIndex": 3,
+          "title": "Module 3: High and Low, Loud and Soft",
+          "slug": "music-module-3-high-and-low-loud-and-soft",
+          "summary": "",
+          "modules": [
+            {
+              "id": 6,
+              "name": "Module 3: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this module, your student will use his listening skills to identify high and low pitches, and soft and loud sounds. He will move his body in appropriate ways to symbolize extremes of pitch and dynamic contrast. He will also learn the names for the pitches that make up the scale on the Virtual Xylophone.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 3
+        },
+        {
+          "sectionId": 18,
+          "sectionIndex": 4,
+          "title": "Module 4: Music Around the World",
+          "slug": "music-module-4-music-around-the-world",
+          "summary": "",
+          "modules": [
+            {
+              "id": 7,
+              "name": "Module 4: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this module, your student will identify characteristics and sounds related to a selection of instruments and music from around the world. She will create instruments from various cultures. Finally, she will write her own song about her family's background and culture.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 5,
+      "shortname": "Elementary Sign Language",
+      "fullname": "Elementary Sign Language",
+      "slug": "elementary-sign-language",
+      "summary": "In this course, students are introduced to the fundamental concepts of South African Sign Language. Students explore vocabulary, grammar, and conversational skills using basic signing and fingerspelling techniques.",
+      "sections": [
+        {
+          "sectionId": 20,
+          "sectionIndex": 1,
+          "title": "Module 1: Introduction to South African Sign Language",
+          "slug": "elementary-sign-language-module-1-introduction-to-south-african-sign-language",
+          "summary": "",
+          "modules": [
+            {
+              "id": 15,
+              "name": "Module 1: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this module, your student will be introduced to South African Sign Language, or SASL. He will study the history of SASL and learn how it became the standard language for deaf and hard of hearing people in South Africa. He will also learn about some of the accepted rules of etiquette in Deaf culture. This introductory unit also teaches your student how to sign the letters of the alphabet and the mechanics of fingerspelling.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 1
+        },
+        {
+          "sectionId": 21,
+          "sectionIndex": 2,
+          "title": "Module 2: Numbers",
+          "slug": "elementary-sign-language-module-2-numbers",
+          "summary": "",
+          "modules": [
+            {
+              "id": 16,
+              "name": "Module 2: Description",
+              "type": "label",
+              "url": null,
+              "description": "This module introduces the signing of numbers. Your student will learn how to sign numbers 1–100, as well as the signs for dollars and cents. A variety of fun activities give your student a chance to practice using SASL to discuss counting and using money.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 2
+        },
+        {
+          "sectionId": 22,
+          "sectionIndex": 3,
+          "title": "Module 3: Time",
+          "slug": "elementary-sign-language-module-3-time",
+          "summary": "",
+          "modules": [
+            {
+              "id": 17,
+              "name": "Module 3: Description",
+              "type": "label",
+              "url": null,
+              "description": "In this module, your student will study various aspects of time. Not only will he learn how to communicate time using SASL, he will also learn the signs for the 7 days of the week and the 12 months of the year. The signs for various holidays as well as the four seasons are also taught in this module.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 3
+        },
+        {
+          "sectionId": 23,
+          "sectionIndex": 4,
+          "title": "Module 4: Nouns",
+          "slug": "elementary-sign-language-module-4-nouns",
+          "summary": "",
+          "modules": [
+            {
+              "id": 18,
+              "name": "Module 4: Description",
+              "type": "label",
+              "url": null,
+              "description": "Your student will learn the signs for some commonly used nouns. The categories of family, places, food, colors, and animals are explored as your student practices these signs to add to her growing library of American Sign Language knowledge.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 4
+        },
+        {
+          "sectionId": 24,
+          "sectionIndex": 5,
+          "title": "Module 5: Descriptions",
+          "slug": "elementary-sign-language-module-5-descriptions",
+          "summary": "",
+          "modules": [
+            {
+              "id": 19,
+              "name": "Module 5: Description",
+              "type": "label",
+              "url": null,
+              "description": "The lessons in this module will teach your student how to sign various descriptions using South African Sign Language. He will learn how to sign descriptive words that express feelings, sizes, possessions, and locations. In addition, he will combine some previously taught signs for numbers, time, and nouns, with descriptive signs taught in this module.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 5
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 6,
+      "shortname": "Language Arts Term 1",
+      "fullname": "Language Arts Term 1",
+      "slug": "language-arts-term-1",
+      "summary": "In this course, the student will learn, practice, and apply the fundamental skills and strategies that will provide the foundation to grow into a strong, fluent reader, writer, and communicator. Reading, writing, and language instruction are presented in close alignment with the Language Arts Florida Standards. Early in the semester students review the names of the letters of the alphabet. Daily instruction in phonics and spelling as well as high frequency words serves as a building block that e",
+      "sections": [
+        {
+          "sectionId": 26,
+          "sectionIndex": 1,
+          "title": "Course Overview",
+          "slug": "language-arts-term-1-course-overview",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 27,
+          "sectionIndex": 2,
+          "title": "Module 1: Different Kinds of Families",
+          "slug": "language-arts-term-1-module-1-different-kinds-of-families",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 28,
+          "sectionIndex": 3,
+          "title": "Module 2: Outside in any Weather",
+          "slug": "language-arts-term-1-module-2-outside-in-any-weather",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 29,
+          "sectionIndex": 4,
+          "title": "Module 3: Fun for Everyone",
+          "slug": "language-arts-term-1-module-3-fun-for-everyone",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        },
+        {
+          "sectionId": 53,
+          "sectionIndex": 5,
+          "title": "Module 4: No Place Like Home",
+          "slug": "language-arts-term-1-module-4-no-place-like-home",
+          "summary": "",
+          "modules": [],
+          "order": 5
+        },
+        {
+          "sectionId": 54,
+          "sectionIndex": 6,
+          "title": "Module 5: What a Surprise!",
+          "slug": "language-arts-term-1-module-5-what-a-surprise",
+          "summary": "",
+          "modules": [],
+          "order": 6
+        },
+        {
+          "sectionId": 55,
+          "sectionIndex": 7,
+          "title": "Module 6: Friends Help Each Other",
+          "slug": "language-arts-term-1-module-6-friends-help-each-other",
+          "summary": "",
+          "modules": [],
+          "order": 7
+        },
+        {
+          "sectionId": 56,
+          "sectionIndex": 8,
+          "title": "Module 7: Friends are Kind",
+          "slug": "language-arts-term-1-module-7-friends-are-kind",
+          "summary": "",
+          "modules": [],
+          "order": 8
+        },
+        {
+          "sectionId": 57,
+          "sectionIndex": 9,
+          "title": "Module 8: What a Friend Needs",
+          "slug": "language-arts-term-1-module-8-what-a-friend-needs",
+          "summary": "",
+          "modules": [],
+          "order": 9
+        },
+        {
+          "sectionId": 58,
+          "sectionIndex": 10,
+          "title": "Module 9: Animals Learn and Grow",
+          "slug": "language-arts-term-1-module-9-animals-learn-and-grow",
+          "summary": "",
+          "modules": [],
+          "order": 10
+        },
+        {
+          "sectionId": 59,
+          "sectionIndex": 11,
+          "title": "Module 10: Ways Animals are Different",
+          "slug": "language-arts-term-1-module-10-ways-animals-are-different",
+          "summary": "",
+          "modules": [],
+          "order": 11
+        },
+        {
+          "sectionId": 60,
+          "sectionIndex": 12,
+          "title": "Module 11: Animal Parents and Babies",
+          "slug": "language-arts-term-1-module-11-animal-parents-and-babies",
+          "summary": "",
+          "modules": [],
+          "order": 12
+        },
+        {
+          "sectionId": 61,
+          "sectionIndex": 13,
+          "title": "Module 12: Animals Working Together",
+          "slug": "language-arts-term-1-module-12-animals-working-together",
+          "summary": "",
+          "modules": [],
+          "order": 13
+        },
+        {
+          "sectionId": 62,
+          "sectionIndex": 14,
+          "title": "Module 13: Feeling Angry",
+          "slug": "language-arts-term-1-module-13-feeling-angry",
+          "summary": "",
+          "modules": [],
+          "order": 14
+        },
+        {
+          "sectionId": 63,
+          "sectionIndex": 15,
+          "title": "Module 14: Feeling Happy",
+          "slug": "language-arts-term-1-module-14-feeling-happy",
+          "summary": "",
+          "modules": [],
+          "order": 15
+        },
+        {
+          "sectionId": 64,
+          "sectionIndex": 16,
+          "title": "Module 15: Feeling Sad",
+          "slug": "language-arts-term-1-module-15-feeling-sad",
+          "summary": "",
+          "modules": [],
+          "order": 16
+        },
+        {
+          "sectionId": 65,
+          "sectionIndex": 17,
+          "title": "Module 16: Feeling Scared",
+          "slug": "language-arts-term-1-module-16-feeling-scared",
+          "summary": "",
+          "modules": [],
+          "order": 17
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 8,
+      "shortname": "Lang Arts Term 2",
+      "fullname": "Language Arts Term 2",
+      "slug": "language-arts-term-2",
+      "summary": "In this course, the student will learn, practice, and apply the fundamental skills and strategies that will provide the foundation to grow into a strong, fluent reader, writer, and communicator. Reading, writing, and language instruction are presented in close alignment with the Language Arts Florida Standards. Daily instruction in phonics and spelling as well as high frequency words serves as a building block that enables the student to emerge as a reader. Core reading instruction gives the stu",
+      "sections": [
+        {
+          "sectionId": 36,
+          "sectionIndex": 1,
+          "title": "Course Overview",
+          "slug": "language-arts-term-2-course-overview",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 37,
+          "sectionIndex": 2,
+          "title": "Module 1: We Learn About the World",
+          "slug": "language-arts-term-2-module-1-we-learn-about-the-world",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 38,
+          "sectionIndex": 3,
+          "title": "Module 2: Now I can Do It",
+          "slug": "language-arts-term-2-module-2-now-i-can-do-it",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 39,
+          "sectionIndex": 4,
+          "title": "Module 3: Say Goodbye to Fear!",
+          "slug": "language-arts-term-2-module-3-say-goodbye-to-fear",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        },
+        {
+          "sectionId": 40,
+          "sectionIndex": 5,
+          "title": "Module 4: On Our Own",
+          "slug": "language-arts-term-2-module-4-on-our-own",
+          "summary": "",
+          "modules": [],
+          "order": 5
+        },
+        {
+          "sectionId": 41,
+          "sectionIndex": 6,
+          "title": "Module 5: Help Can Be a Surprise",
+          "slug": "language-arts-term-2-module-5-help-can-be-a-surprise",
+          "summary": "",
+          "modules": [],
+          "order": 6
+        },
+        {
+          "sectionId": 42,
+          "sectionIndex": 7,
+          "title": "Module 6: Help Can Be Anywhere",
+          "slug": "language-arts-term-2-module-6-help-can-be-anywhere",
+          "summary": "",
+          "modules": [],
+          "order": 7
+        },
+        {
+          "sectionId": 43,
+          "sectionIndex": 8,
+          "title": "Module 7: Small Helpers",
+          "slug": "language-arts-term-2-module-7-small-helpers",
+          "summary": "",
+          "modules": [],
+          "order": 8
+        },
+        {
+          "sectionId": 44,
+          "sectionIndex": 9,
+          "title": "Module 8: Ways We Help",
+          "slug": "language-arts-term-2-module-8-ways-we-help",
+          "summary": "",
+          "modules": [],
+          "order": 9
+        },
+        {
+          "sectionId": 45,
+          "sectionIndex": 10,
+          "title": "Module 9: Where the Wind Blows",
+          "slug": "language-arts-term-2-module-9-where-the-wind-blows",
+          "summary": "",
+          "modules": [],
+          "order": 10
+        },
+        {
+          "sectionId": 46,
+          "sectionIndex": 11,
+          "title": "Module 10: Ready for the Rain",
+          "slug": "language-arts-term-2-module-10-ready-for-the-rain",
+          "summary": "",
+          "modules": [],
+          "order": 11
+        },
+        {
+          "sectionId": 47,
+          "sectionIndex": 12,
+          "title": "Module 11: Snowy Days",
+          "slug": "language-arts-term-2-module-11-snowy-days",
+          "summary": "",
+          "modules": [],
+          "order": 12
+        },
+        {
+          "sectionId": 48,
+          "sectionIndex": 13,
+          "title": "Module 12: All about Fog",
+          "slug": "language-arts-term-2-module-12-all-about-fog",
+          "summary": "",
+          "modules": [],
+          "order": 13
+        },
+        {
+          "sectionId": 49,
+          "sectionIndex": 14,
+          "title": "Module 13: Good Food for You",
+          "slug": "language-arts-term-2-module-13-good-food-for-you",
+          "summary": "",
+          "modules": [],
+          "order": 14
+        },
+        {
+          "sectionId": 50,
+          "sectionIndex": 15,
+          "title": "Module 14: A World of Healthy Food",
+          "slug": "language-arts-term-2-module-14-a-world-of-healthy-food",
+          "summary": "",
+          "modules": [],
+          "order": 15
+        },
+        {
+          "sectionId": 51,
+          "sectionIndex": 16,
+          "title": "Module 15: Many Ways to Eat a Food",
+          "slug": "language-arts-term-2-module-15-many-ways-to-eat-a-food",
+          "summary": "",
+          "modules": [],
+          "order": 16
+        },
+        {
+          "sectionId": 52,
+          "sectionIndex": 17,
+          "title": "Module 16: Chefs Cook",
+          "slug": "language-arts-term-2-module-16-chefs-cook",
+          "summary": "",
+          "modules": [],
+          "order": 17
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 9,
+      "shortname": "Mathematics Term 1",
+      "fullname": "Mathematics Term 1",
+      "slug": "mathematics-term-1",
+      "summary": "In this first semester course, mathematical thinking and problem solving are introduced. Students explore topics and apply mathematical practices outlined in the Common Core State Standards and other state standards. The first few units focus on counting and sorting. Then, lessons introduce addition and subtraction. Throughout the course, students engage in hands on and online activities to master basic skills.\r\n\r\nSupplies:\r\n\r\nAttribute blocks (30)\r\nClock face (1)\r\nCoins (44)\r\nConnecting snap cu",
+      "sections": [
+        {
+          "sectionId": 67,
+          "sectionIndex": 1,
+          "title": "Module 1: Let's Learn Math!",
+          "slug": "mathematics-term-1-module-1-let-s-learn-math",
+          "summary": "",
+          "modules": [
+            {
+              "id": 25,
+              "name": "In this unit, your student will learn about the ac...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will learn about the activities she will do in math class. The first lesson, intended for Learning Coaches, provides advice for using the Lesson Guide to support your student, and details the resources found in the course. It also offers helpful tips for building your student’s math skills. The second lesson is intended for students and their Learning Coaches. This lesson will introduce your student to the concept of math, and describe the structure of math lessons.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 1
+        },
+        {
+          "sectionId": 68,
+          "sectionIndex": 2,
+          "title": "Module 2: One to Five",
+          "slug": "mathematics-term-1-module-2-one-to-five",
+          "summary": "",
+          "modules": [
+            {
+              "id": 26,
+              "name": "Your student will learn to count 1–5. He will lear...",
+              "type": "label",
+              "url": null,
+              "description": "Your student will learn to count 1–5. He will learn that the number of objects remains the same even if the order changes. He will be taught to write and read the numbers 1–5. The lessons will introduce the idea that each item is only counted once. Your student will be given strategies to encourage counting with one-to-one correlation. Using what he has learned, he will make a book about his state that he will submit as a portfolio assessment.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 2
+        },
+        {
+          "sectionId": 69,
+          "sectionIndex": 3,
+          "title": "Module 3: Comparing and Ordering 0 to 5",
+          "slug": "mathematics-term-1-module-3-comparing-and-ordering-0-to-5",
+          "summary": "",
+          "modules": [
+            {
+              "id": 27,
+              "name": "In this unit, your student will learn to compare n...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will learn to compare numbers 0–5. She will use comparison words such as more , fewer , same , and as many to explain the relationships between numbers. By recognizing differences of 1 and 2 fewer and more, your student will continue to develop strength in counting and comparing. The student will be introduced to reading and writing the number 0. She will understand that zero means none. She will also have the chance to describe and evaluate equal groups. Your student will explore ordinal numbers first through fifth. She will have the opportunity to use ordinal numbers to describe positions of objects in a group .",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 3
+        },
+        {
+          "sectionId": 70,
+          "sectionIndex": 4,
+          "title": "Module 4: Six to Ten",
+          "slug": "mathematics-term-1-module-4-six-to-ten",
+          "summary": "",
+          "modules": [
+            {
+              "id": 28,
+              "name": "Your student will be introduced to the numbers 6 t...",
+              "type": "label",
+              "url": null,
+              "description": "Your student will be introduced to the numbers 6 to 10. He will use these numbers to count, evaluate, and manipulate. Writing the numbers 6 to 10 will be taught and evaluated in this unit with particular attention to the orientation of the numbers. Your student will be introduced to patterning. He will pattern using number of objects.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 4
+        },
+        {
+          "sectionId": 76,
+          "sectionIndex": 5,
+          "title": "Module 5: Comparing and Ordering Numbers 0 to 10",
+          "slug": "mathematics-term-1-module-5-comparing-and-ordering-numbers-0-to-10",
+          "summary": "",
+          "modules": [
+            {
+              "id": 29,
+              "name": "Your student will learn to compare numbers. She wi...",
+              "type": "label",
+              "url": null,
+              "description": "Your student will learn to compare numbers. She will learn when evaluating two numbers the greater number is more and the smaller number is less. The student will understand that it is helpful to use 5 or 10 as a benchmark. She will compare numbers that are 1 and 2 more as well as 1 and 2 less. All of these skills will be used to help order the numbers through 10. She will continue to order while being exposed to using a number line.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 5
+        },
+        {
+          "sectionId": 77,
+          "sectionIndex": 6,
+          "title": "Module 6: Numbers to 20",
+          "slug": "mathematics-term-1-module-6-numbers-to-20",
+          "summary": "",
+          "modules": [
+            {
+              "id": 30,
+              "name": "Your student will learn to count, read, and write ...",
+              "type": "label",
+              "url": null,
+              "description": "Your student will learn to count, read, and write numbers from 11–20. Your student will learn to use logical reasoning to solve word problems.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 6
+        },
+        {
+          "sectionId": 78,
+          "sectionIndex": 7,
+          "title": "Module 7: Numbers to 100",
+          "slug": "mathematics-term-1-module-7-numbers-to-100",
+          "summary": "",
+          "modules": [
+            {
+              "id": 31,
+              "name": "In this unit, your student will explore numbers up...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will explore numbers up to 100. She will learn how to count to 100 and will write numbers to 100. She will use ten-frames, a hundred chart, and counters to help visualize numbers up to 100 in terms of groups of 10. To reinforce the concept of 100, your student will use on-screen manipulatives as well as physical manipulatives. In addition, she will use and reference the hundreds chart.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 7
+        },
+        {
+          "sectionId": 79,
+          "sectionIndex": 8,
+          "title": "Module 8: Understanding Addition",
+          "slug": "mathematics-term-1-module-8-understanding-addition",
+          "summary": "",
+          "modules": [
+            {
+              "id": 32,
+              "name": "In this unit, your student will be exposed to addi...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will be exposed to addition in a developmentally appropriate manner using storytelling and manipulatives. He will understand that when two groups join, the individual groups no longer exist. Instead, there is a newly formed group that now represents the total. He will be introduced to the addition sign, the equal sign, and the horizontal format of addition. Your student will be asked to tell an addition story by representing the statement with a picture.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 8
+        },
+        {
+          "sectionId": 80,
+          "sectionIndex": 9,
+          "title": "Module 9: Understanding Subtraction",
+          "slug": "mathematics-term-1-module-9-understanding-subtraction",
+          "summary": "",
+          "modules": [
+            {
+              "id": 33,
+              "name": "The student will be exposed to subtraction in a de...",
+              "type": "label",
+              "url": null,
+              "description": "The student will be exposed to subtraction in a developmentally appropriate manner using storytelling and manipulatives. She will understand that when you take away something from the larger group, a new, smaller group is formed, which is the number left. She will be introduced to the subtraction sign and the formal horizontal format of subtraction. The student will be asked to tell a subtraction story by pictorially representing the statement.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 9
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 10,
+      "shortname": "Mathematics Term 2",
+      "fullname": "Mathematics Term 2",
+      "slug": "mathematics-term-2",
+      "summary": "In this second semester course, students continue to engage in mathematical thinking and problem solving. Students explore topics and apply mathematical practices outlined in the Common Core State Standards and other state standards. Students have opportunities to describe, sort, and compare objects and explore basic shapes. Stories and activities  teach students about money, time, fractions, and measurement. Throughout the course, students engage in hands on and online activities to master basi",
+      "sections": [
+        {
+          "sectionId": 72,
+          "sectionIndex": 1,
+          "title": "Module 1: Composing and Decomposing Numbers to 10",
+          "slug": "mathematics-term-2-module-1-composing-and-decomposing-numbers-to-10",
+          "summary": "",
+          "modules": [
+            {
+              "id": 34,
+              "name": "In this unit, your student will demonstrate his un...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will demonstrate his understanding of the rules of a number sentence by composing and decomposing numbers to 10. He will do this by showing that there is more than one way to show a number. Manipulatives and activities will be used to make the idea of number conservation concrete. The vocabulary words, whole and part , will be mastered during this unit. To put these words into practice, your student will demonstrate how to join parts in various ways to make a whole when showing addition. Finally, he will be able to explain the purpose of a graph and use information gathered in a graph to solidify his understanding of number conservation.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 1
+        },
+        {
+          "sectionId": 73,
+          "sectionIndex": 2,
+          "title": "Module 2: Composing Numbers 11 to 19",
+          "slug": "mathematics-term-2-module-2-composing-numbers-11-to-19",
+          "summary": "",
+          "modules": [
+            {
+              "id": 35,
+              "name": "In this unit, your student will compose numbers fr...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will compose numbers from 10–19. She will be able to utilize her understanding of number conservation to create addition sentences where 11–19 can be represented by 10 and another addend. Furthermore, by exploring place value, your student will begin to build more concrete number sense for numbers in the teens. Finally, she will explore number patterns using the first two rows of the hundreds chart.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 2
+        },
+        {
+          "sectionId": 74,
+          "sectionIndex": 3,
+          "title": "Module 3: Decomposing Numbers 11 to 19",
+          "slug": "mathematics-term-2-module-3-decomposing-numbers-11-to-19",
+          "summary": "",
+          "modules": [
+            {
+              "id": 36,
+              "name": "In this unit, your student will continue to show n...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will continue to show number conservation by creating numbers from 10–19 in a variety of ways. He will begin by making sets of numbers between 10 and 19 on a double ten-frame. Gradually your student will grow his number sense by decomposing numbers between 10 and 19. As your student becomes more familiar with the double ten-frame, he will be able to see a teen number as a set of 10 and another addend. To reinforce the concept of number decomposition, your student will use counters, number cards, and connecting cubes. Finally, patterns in the decomposition of teen numbers will be explored to solidify his understanding further.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 3
+        },
+        {
+          "sectionId": 75,
+          "sectionIndex": 4,
+          "title": "Module 4: Measurement",
+          "slug": "mathematics-term-2-module-4-measurement",
+          "summary": "",
+          "modules": [
+            {
+              "id": 37,
+              "name": "In this unit, your student will explore the measur...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will explore the measurements of length. Exploration will begin by having your student identify the measurable qualities of different objects. She will then explore length by using the words: shorter , shortest , longer , longest , and as long as . Your student will begin by comparing the length of two objects and move on to comparing three or more objects. She will continue the same process when exploring the measurement of height and correctly use the vocabulary words: taller , as tall as , and tallest . Overall, your student will make connections to her environment and understand that objects can be compared in a variety of ways using measurement. Finally, she will utilize the guess and check method to solve problems.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 4
+        },
+        {
+          "sectionId": 82,
+          "sectionIndex": 5,
+          "title": "Module 5: Sort, Classify, Count, and Categorize Data",
+          "slug": "mathematics-term-2-module-5-sort-classify-count-and-categorize-data",
+          "summary": "",
+          "modules": [
+            {
+              "id": 38,
+              "name": "In this unit, your student will classify two- and ...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will classify two- and three-dimensional objects according to their attributes. Your student will begin by comparing objects according to characteristics that are the same and different. H e will first demonstrate how to sort objects according to one distinct characteristic, such as color, and then sort the same set of objects according to a different attribute, such as size. Next, your student will explore sorting by categorizing a set of objects by color and size. In order to solidify his learning, he will perform an activity using the sorting rule. Finally, your student will use real graphs and picture graphs to record data that he sorts.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 5
+        },
+        {
+          "sectionId": 83,
+          "sectionIndex": 6,
+          "title": "Module 6: Identifying and Describing Shapes",
+          "slug": "mathematics-term-2-module-6-identifying-and-describing-shapes",
+          "summary": "",
+          "modules": [
+            {
+              "id": 39,
+              "name": "In this unit, your student will begin to build a f...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will begin to build a foundation of geometric concepts and spatial relations. Your student will learn about the specific attributes of the rectangle, square, circle, triangle, and hexagon. She will be able to identify these shapes in her environment, as well as in written activities.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 6
+        },
+        {
+          "sectionId": 84,
+          "sectionIndex": 7,
+          "title": "Module 7: Position and Location of Shapes",
+          "slug": "mathematics-term-2-module-7-position-and-location-of-shapes",
+          "summary": "",
+          "modules": [
+            {
+              "id": 40,
+              "name": "In this unit, your student will explore the topica...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will explore the topical characteristics of shapes and continue to build his spatial sense which will aid him in identifying specific shapes. He will be able to identify objects according to the specific attributes of inside, outside, above, below, on, in front of, behind, next to, beside, left, and right. Finally, your student will use tactile manipulatives to physically show spatial understanding.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 7
+        },
+        {
+          "sectionId": 85,
+          "sectionIndex": 8,
+          "title": "Module 8: Geometry",
+          "slug": "mathematics-term-2-module-8-geometry",
+          "summary": "",
+          "modules": [
+            {
+              "id": 41,
+              "name": "In this unit, your student will continue to explor...",
+              "type": "label",
+              "url": null,
+              "description": "In this unit, your student will continue to explore three-dimensional or solid figures. She will further investigate the attributes of three-dimensional figures in order to solidify each shape’s name and characteristics. Both real-world examples and thoughtful questions will reinforce these essential concepts. Congruency will be introduced and your student will be able to identify objects that are the same size and shape. More abstract concepts will also be explored. Your student will be able to create new shapes by combining other shapes. To reinforce her understanding of spatial relations, your student will act as a detective and identify two- and three-dimensional shapes when given clues.",
+              "completion": 0,
+              "contents": []
+            }
+          ],
+          "order": 8
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 11,
+      "shortname": "Science Term 1",
+      "fullname": "Science Term 1",
+      "slug": "science-term-1",
+      "summary": "In this course, the student will learn, practice, and apply the skills and understandings that provide the foundation to grow into a successful scientific thinker through, science and engineering practices, and crosscutting concepts. Units of instruction present core ideas in an expanding view for young learners starting with the basics of discerning living from nonliving and the needs of living things. This foundation expands into study of plants and animals then the environment. Later students",
+      "sections": [
+        {
+          "sectionId": 90,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "science-term-1-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 91,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "science-term-1-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 92,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "science-term-1-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 93,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "science-term-1-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    },
+    {
+      "moodleId": 12,
+      "shortname": "Science Term 2",
+      "fullname": "Science Term 2",
+      "slug": "science-term-2",
+      "summary": "In this course, the student will learn, practice, and apply the skills and understandings that provide the foundation to grow into a successful scientific thinker through disciplinary core ideas, science and engineering practices, and crosscutting concepts. Units of instruction present core ideas starting with physical science topics. First, the basics of force and motion are studied using tangible pushes and pulls. A unit about energy looks at forms the student can readily observe: heat, light,",
+      "sections": [
+        {
+          "sectionId": 95,
+          "sectionIndex": 1,
+          "title": "New section",
+          "slug": "science-term-2-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 1
+        },
+        {
+          "sectionId": 96,
+          "sectionIndex": 2,
+          "title": "New section",
+          "slug": "science-term-2-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 2
+        },
+        {
+          "sectionId": 97,
+          "sectionIndex": 3,
+          "title": "New section",
+          "slug": "science-term-2-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 3
+        },
+        {
+          "sectionId": 98,
+          "sectionIndex": 4,
+          "title": "New section",
+          "slug": "science-term-2-new-section",
+          "summary": "",
+          "modules": [],
+          "order": 4
+        }
+      ],
+      "error": null
+    }
+  ]
+}
