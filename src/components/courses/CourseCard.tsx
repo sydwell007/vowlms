@@ -11,7 +11,7 @@ export function CourseCard({ course }: { course: Course }) {
         <span className="rounded-full bg-[#e8f6ff] px-3 py-1 text-xs font-semibold text-[#1166c8]">{course.level}</span>
         <span className="rounded-full bg-[#fff5d1] px-3 py-1 text-xs font-semibold text-[#8a6100]">{formatCurrency(course.price)}</span>
       </div>
-      <h3 className="mt-5 text-[1.85rem] font-semibold leading-tight">{course.title}</h3>
+      <h3 className="mt-5 text-xl font-semibold leading-snug line-clamp-2">{course.title}</h3>
       <p className="mt-2 text-sm font-medium text-[#1166c8]">{academy?.name}</p>
       <p className="mt-3 flex-1 text-sm leading-6 text-muted">{course.description}</p>
       <div className="mt-5 grid grid-cols-2 gap-3 text-sm">

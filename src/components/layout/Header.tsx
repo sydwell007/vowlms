@@ -9,10 +9,10 @@ import { NotificationBell } from "@/components/notifications/NotificationBell";
 const navItems = [
   { href: "/academies", label: "Academies" },
   { href: "/courses", label: "Courses" },
+  { href: "/catalogue", label: "Catalogue" },
   { href: "/opportunities", label: "Opportunities" },
   { href: "/rewards", label: "Rewards" },
   { href: "/calendar", label: "Calendar" },
-  { href: "/announcements", label: "Announcements" },
   { href: "/dashboard/learner", label: "Dashboard", activePrefix: "/dashboard" },
 ];
 

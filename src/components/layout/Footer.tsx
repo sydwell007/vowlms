@@ -26,6 +26,7 @@ const columns = [
   {
     title: "Platform",
     links: [
+      { href: "/catalogue", label: "Course Catalogue" },
       { href: "/rewards", label: "VowRewards" },
       { href: "/opportunities", label: "PlugConnect" },
       { href: "/learning-hubs", label: "Learning Hubs" },

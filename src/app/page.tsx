@@ -8,21 +8,25 @@ import { getAcademies, getCourses } from "@/lib/data";
 export default function Home() {
   const academies = getAcademies();
   const courses = getCourses();
-  const ecosystemHighlights = [
-    ["PWA-ready mobile access", "Learners can move between hubs, phones, and web."],
-    ["Certificate and rewards flow", "Practical evidence becomes achievement and momentum."],
-    ["PayFast and ecosystem APIs", "Structured for growth across GoalVow subsidiaries."],
+  const featuredCourses = courses.slice(0, 8);
+
+  const platformHighlights = [
+    ["PWA-ready mobile access", "Learners access GoalVow from any device, any learning hub, fully offline-capable."],
+    ["Certificate and rewards flow", "Practical evidence converts to verified certificates and VowRewards points."],
+    ["PayFast-powered payments", "Secure ZAR checkout for paid courses across all GoalVow academies."],
   ];
+
   const investorTrust = [
     "Role-based dashboards for learners, facilitators, employers, and admins.",
-    "Analytics events for progress, assessment attempts, VR attempts, certificates, and engagement.",
-    "Prisma schema ready for PostgreSQL without forcing a database for this local mock.",
-    "PWA manifest, service worker, and offline page ready for mobile-first rollout.",
+    "Analytics tracking across progress, assessments, VR sessions, certificates, and engagement.",
+    "Prisma + PostgreSQL data layer ready for high-volume production traffic.",
+    "PWA manifest, service worker, and offline page for mobile-first rollout across learning hubs.",
   ];
 
   return (
     <main className="premium-page">
-      <section className="premium-section-dark surface-grid relative isolate overflow-hidden border-b border-white/6 py-20 text-white sm:py-20 lg:py-24">
+      {/* Hero */}
+      <section className="premium-section-dark surface-grid relative isolate overflow-hidden border-b border-white/6 py-20 text-white sm:py-20 lg:py-28">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_72%_24%,rgba(32,199,255,0.18),transparent_26rem),radial-gradient(circle_at_18%_78%,rgba(245,197,66,0.12),transparent_20rem)]" />
         <div className="absolute right-[-4rem] top-10 -z-10 h-80 w-80 rounded-full border border-electric/20" />
         <div className="absolute left-[58%] top-[14%] -z-10 hidden h-48 w-48 rounded-full bg-electric/8 blur-3xl lg:block" />
@@ -33,17 +37,17 @@ export default function Home() {
               VowLMS
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/76">
-              A premium learning platform for skills, schools, business, VR practice, rewards, mobile access, support, and opportunity pathways.
+              A premium learning platform connecting {courses.length.toLocaleString()} courses across 6 GoalVow academies — with skills training, culinary arts, business, private school, and university online pathways.
             </p>
             <p className="mt-5 max-w-xl text-base leading-7 text-white/64">
-              Built to serve GoalVow Holdings with a confident academy experience, clearer progress signals, and infrastructure that feels credible to partners, learners, and investors.
+              Built to serve GoalVow Holdings with a confident learner experience, verifiable progress, and infrastructure ready for investors, partners, and large-scale community rollout.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href="/courses">Start learning</ButtonLink>
-              <ButtonLink href="/dashboard/learner" variant="secondary">Open dashboard</ButtonLink>
+              <ButtonLink href="/courses">Browse courses</ButtonLink>
+              <ButtonLink href="/auth/signin" variant="secondary">Sign in to your academy</ButtonLink>
             </div>
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
-              {ecosystemHighlights.map(([title, detail]) => (
+              {platformHighlights.map(([title, detail]) => (
                 <div key={title} className="premium-card-dark rounded-xl px-4 py-4">
                   <p className="text-sm font-semibold text-white">{title}</p>
                   <p className="mt-2 text-sm leading-6 text-white/62">{detail}</p>
@@ -59,8 +63,8 @@ export default function Home() {
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">Learner progress</p>
                   <h2 className="mt-3 text-2xl font-semibold">One journey across learning, practice, proof, and opportunity.</h2>
                 </div>
-                <div className="rounded-full border border-white/12 bg-white/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white/70">
-                  Live system view
+                <div className="rounded-full border border-white/12 bg-white/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white/70 shrink-0">
+                  Live platform
                 </div>
               </div>
               <div className="mt-6 h-2.5 rounded-full bg-white/14">
@@ -68,28 +72,28 @@ export default function Home() {
               </div>
               <div className="mt-5 grid grid-cols-3 gap-2 text-center text-xs font-semibold text-white/72">
                 <span className="rounded-lg border border-white/10 bg-white/8 p-3">Assess</span>
-                <span className="rounded-lg border border-white/10 bg-white/8 p-3">VR</span>
+                <span className="rounded-lg border border-white/10 bg-white/8 p-3">VR Practice</span>
                 <span className="rounded-lg border border-white/10 bg-white/8 p-3">Reward</span>
               </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="premium-card-dark rounded-2xl p-5">
-                <p className="text-3xl font-semibold text-gold">6</p>
-                <p className="mt-2 text-sm font-semibold text-white">GoalVow academies</p>
-                <p className="mt-2 text-sm leading-6 text-white/62">One platform shell tailored for training, school, chef, business, and university pathways.</p>
+                <p className="text-3xl font-semibold text-gold">{courses.length.toLocaleString()}</p>
+                <p className="mt-2 text-sm font-semibold text-white">Active courses</p>
+                <p className="mt-2 text-sm leading-6 text-white/62">Across upskilling, trades, culinary, school, business, and university online pathways.</p>
               </div>
               <div className="premium-card-dark rounded-2xl p-5">
-                <p className="text-3xl font-semibold text-electric">4</p>
-                <p className="mt-2 text-sm font-semibold text-white">Ecosystem services</p>
-                <p className="mt-2 text-sm leading-6 text-white/62">Rewards, opportunities, hubs, and future venture integrations sit close to learning outcomes.</p>
+                <p className="text-3xl font-semibold text-electric">{academies.length}</p>
+                <p className="mt-2 text-sm font-semibold text-white">GoalVow academies</p>
+                <p className="mt-2 text-sm leading-6 text-white/62">One platform shell with role-based access, rewards, and opportunity routing per academy.</p>
               </div>
             </div>
 
             <div className="premium-card-dark rounded-2xl p-5">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">Investor-ready platform shell</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">Investor-ready infrastructure</p>
               <div className="mt-4 flex flex-wrap gap-2">
-                {["Structured academy network", "Clear user roles", "Rewards and certificates", "Opportunity routing"].map((item) => (
+                {["Verified certificates", "VowRewards integration", "PlugConnect opportunities", "VR practice sessions"].map((item) => (
                   <span key={item} className="rounded-full border border-white/10 bg-white/8 px-3 py-1 text-xs font-semibold text-white/74">
                     {item}
                   </span>
@@ -100,11 +104,29 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Stats bar */}
+      <section className="border-y border-slate-100 bg-white py-6">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-6 px-5 sm:px-6 md:grid-cols-4 lg:px-8">
+          {[
+            { value: courses.length.toLocaleString(), label: "Courses available" },
+            { value: "6", label: "Academy pathways" },
+            { value: "9+", label: "Ecosystem integrations" },
+            { value: "100%", label: "Mobile + PWA ready" },
+          ].map(({ value, label }) => (
+            <div key={label} className="text-center">
+              <p className="text-3xl font-semibold text-[#1166c8]">{value}</p>
+              <p className="mt-1 text-sm text-muted">{label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Academy catalogue */}
       <Section
         tone="light"
         eyebrow="Academy catalogue"
-        title="One LMS template for the GoalVow learning ecosystem"
-        description="Upskilling, skills training, Chef Academy, private school, business school, and university online pathways share a common learner journey."
+        title="One LMS for the entire GoalVow learning ecosystem"
+        description="Upskilling, skills training, Chef Academy, private school, business school, and university online pathways share a unified learner journey — from enrolment to certificate to opportunity."
       >
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {academies.map((academy) => (
@@ -113,39 +135,46 @@ export default function Home() {
         </div>
       </Section>
 
+      {/* Core learning flow */}
       <Section
-        eyebrow="Core flow"
+        eyebrow="How it works"
         title="From academy entry to opportunity matching"
-        description="The platform keeps this phase focused: learning content, assessments, VR practice placeholders, results, certificates, rewards, and opportunity surfaces."
+        description="Every learner follows the same structured pathway: enrol, learn, assess, practise with VR, earn a certificate, collect rewards, and connect to employment or entrepreneurship opportunities."
       >
         <LearningFlow />
       </Section>
 
+      {/* Featured courses */}
       <Section
         tone="light"
         eyebrow="Featured courses"
-        title="Seeded courses for each academy"
-        description="Sample courses make the local build feel complete while leaving the structure ready for PostgreSQL and admin tooling."
+        title="Start learning today"
+        description="Browse courses across all GoalVow academies. From professional culinary skills to business fundamentals and university degrees — all with assessments, certificates, and VowRewards."
       >
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {courses.slice(0, 4).map((course) => (
+          {featuredCourses.slice(0, 4).map((course) => (
             <CourseCard key={course.slug} course={course} />
           ))}
         </div>
+        <div className="mt-8 text-center">
+          <ButtonLink href="/courses" variant="ink">
+            Browse all {courses.length.toLocaleString()} courses →
+          </ButtonLink>
+        </div>
       </Section>
 
+      {/* Ecosystem */}
       <Section
-        tone="light"
         eyebrow="Ecosystem"
         title="VR, rewards, support, shops, tools, hubs, and mobile access"
-        description="VowLMS includes placeholder integration routes for VowRewards, PlugConnect, VowSupport, SkillsShop, VowTools, Learning Hubs, ChefOrder, PayFast, Mux, and Cloudflare R2."
+        description="VowLMS connects directly to VowRewards, PlugConnect, VowSupport, SkillsShop, VowTools, Learning Hubs, ChefOrder, Mux video, and Cloudflare R2."
       >
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {[
-            ["VR simulations", "WebXR-ready practice pages with future React Three Fiber Canvas structure."],
-            ["VowRewards", "Reward events for lessons, assessments, VR attempts, and completion."],
-            ["PlugConnect", "Opportunity pathways for employers and verified learner achievements."],
-            ["Learning hubs", "Mobile-first learning access with offline structure and future sync."],
+            ["VR simulations", "WebXR-ready practice pages with React Three Fiber for immersive learner training and assessment."],
+            ["VowRewards", "Reward events fire on lesson completion, assessment passes, VR attempts, and course completion."],
+            ["PlugConnect", "Verified learner achievements route directly to employer pipelines and freelance opportunities."],
+            ["Learning hubs", "Mobile-first access from community learning hubs with offline content and future sync."],
           ].map(([title, description]) => (
             <article key={title} className="premium-card rounded-xl p-5 text-ink">
               <h3 className="text-xl font-semibold">{title}</h3>
@@ -155,18 +184,38 @@ export default function Home() {
         </div>
       </Section>
 
+      {/* Investor trust */}
       <section className="premium-section-light py-16 text-ink md:py-24">
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 sm:px-6 md:grid-cols-[0.9fr_1.1fr] lg:px-8">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1166c8]">Investor-ready trust</p>
-            <h2 className="mt-4 text-balance text-3xl font-semibold sm:text-4xl">Focused LMS now, scalable ecosystem later.</h2>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1166c8]">Built for scale</p>
+            <h2 className="mt-4 text-balance text-3xl font-semibold sm:text-4xl">Focused LMS now. Scalable ecosystem platform next.</h2>
+            <p className="mt-4 text-sm leading-7 text-muted">Architected for GoalVow Holdings to onboard partners, facilitate government-funded cohorts, and demonstrate measurable learning impact.</p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             {investorTrust.map((item) => (
               <div key={item} className="premium-card-soft rounded-xl p-5 text-sm leading-6 text-muted">
+                <span className="mr-2 text-[#1166c8] font-bold">✓</span>
                 {item}
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="premium-section-dark py-16 text-white">
+        <div className="mx-auto w-full max-w-7xl px-5 text-center sm:px-6 lg:px-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Ready to start?</p>
+          <h2 className="mt-4 text-balance text-3xl font-semibold sm:text-4xl">
+            Join GoalVow's growing learner community
+          </h2>
+          <p className="mt-4 mx-auto max-w-xl text-base text-white/70">
+            Enrol in a course today and take the first step toward a certificate, a reward, and an opportunity.
+          </p>
+          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <ButtonLink href="/auth/signup">Create free account</ButtonLink>
+            <ButtonLink href="/courses" variant="secondary">Browse courses</ButtonLink>
           </div>
         </div>
       </section>
