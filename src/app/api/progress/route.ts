@@ -1,4 +1,5 @@
-import { badRequest, created } from "@/lib/api/responses";
+import { badRequest, created, serverError, unauthorized } from "@/lib/api/responses";
+import { bridgePost, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 
 export async function POST(request: Request) {
   const payload = await request.json().catch(() => null);
@@ -7,10 +8,25 @@ export async function POST(request: Request) {
     return badRequest("lessonSlug is required");
   }
 
-  return created({
-    progressId: `progress-${Date.now()}`,
-    lessonSlug: payload.lessonSlug,
-    completed: Boolean(payload.completed),
-    syncState: "queued-for-database",
-  });
+  if (!isBridgeConfigured()) {
+    return created({
+      progressId: `progress-${Date.now()}`,
+      lessonSlug: payload.lessonSlug,
+      completed: Boolean(payload.completed),
+      syncState: "local-only",
+    });
+  }
+
+  try {
+    return created(
+      await bridgePost("/progress", {
+        lessonSlug: payload.lessonSlug,
+        completed: Boolean(payload.completed),
+      }),
+    );
+  } catch (e) {
+    if (e instanceof BridgeError && e.status === 401) return unauthorized();
+    if (e instanceof BridgeError) return serverError(e.message);
+    return serverError("Failed to save progress");
+  }
 }

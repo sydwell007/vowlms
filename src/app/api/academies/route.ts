@@ -1,6 +1,14 @@
-import { ok } from "@/lib/api/responses";
+import { ok, serverError } from "@/lib/api/responses";
 import { getAcademies } from "@/lib/data";
+import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 
 export async function GET() {
-  return ok(getAcademies());
+  if (!isBridgeConfigured()) return ok(getAcademies());
+
+  try {
+    return ok(await bridgeGet("/academies", { noAuth: true }));
+  } catch (e) {
+    if (e instanceof BridgeError) return serverError(e.message);
+    return serverError("Failed to fetch academies");
+  }
 }

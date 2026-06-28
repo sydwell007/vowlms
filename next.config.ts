@@ -1,11 +1,23 @@
 import type { NextConfig } from "next";
 
+function getBridgeOrigin(): string | null {
+  const url = process.env.BRIDGE_BASE_URL;
+  if (!url) return null;
+  try {
+    return new URL(url).origin;
+  } catch {
+    return null;
+  }
+}
+
 const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
   async headers() {
-    return [
+    const bridgeOrigin = getBridgeOrigin();
+
+    const rules = [
       {
         source: "/(.*)",
         headers: [
@@ -22,6 +34,19 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
+
+    if (bridgeOrigin) {
+      rules.push({
+        source: "/api/(.*)",
+        headers: [
+          { key: "Access-Control-Allow-Origin", value: bridgeOrigin },
+          { key: "Access-Control-Allow-Methods", value: "GET,POST,OPTIONS" },
+          { key: "Access-Control-Allow-Headers", value: "Content-Type,Authorization,X-Bridge-Key" },
+        ],
+      });
+    }
+
+    return rules;
   },
 };
 
