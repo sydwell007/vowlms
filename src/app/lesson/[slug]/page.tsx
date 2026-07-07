@@ -3,12 +3,24 @@ import { getLessonBySlug } from "@/lib/data";
 import { LessonPlayer } from "@/components/learning/LessonPlayer";
 import { bridgeGet, isBridgeConfigured } from "@/lib/bridge";
 import type { Course, CourseModule, Lesson } from "@/types/lms";
+import type { LessonResource } from "@/components/learning/LessonPlayer";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const result = getLessonBySlug(slug);
   return { title: result?.lesson.title ?? "Lesson" };
 }
+
+// ── Bridge response types ─────────────────────────────────────────────────────
+
+type BridgeResource = {
+  type: "pdf" | "video" | "audio" | "image" | "other";
+  filename: string;
+  content_hash: string | null;
+  file_url: string | null;
+  filesize: number;
+  mime_type: string | null;
+};
 
 type BridgeLessonResponse = {
   lesson: {
@@ -18,6 +30,7 @@ type BridgeLessonResponse = {
     type: string;
     content: string | null;
     video_url: string | null;
+    video_hash: string | null;
     duration_minutes: number;
     position: number;
     module_id: string;
@@ -48,28 +61,51 @@ type BridgeLessonResponse = {
   }>;
   prev_lesson: { slug: string; title: string; duration_minutes: number } | null;
   next_lesson: { slug: string; title: string; duration_minutes: number } | null;
+  resources: BridgeResource[];
 };
 
+// ── Build file serve URL ───────────────────────────────────────────────────────
+// Priority:
+// 1. content_hash → serve from Moodle filedir via PHP (fastest, no token in URL)
+// 2. file_url     → use Moodle pluginfile URL directly (token in URL; fine for
+//                   educational content and works without CORS issues in iframes)
+function buildServeUrl(r: BridgeResource): string {
+  const bridgeBase = (process.env.BRIDGE_BASE_URL ?? "").replace(/\/$/, "");
+
+  if (r.content_hash && bridgeBase) {
+    return `${bridgeBase}/files/serve?hash=${r.content_hash}&name=${encodeURIComponent(r.filename)}`;
+  }
+
+  // Use Moodle URL directly — iframes/video tags load cross-origin without CORS
+  return r.file_url ?? "";
+}
+
+// ── Normalize bridge response → LessonPlayer props ────────────────────────────
 function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
   const isAssessment = d.lesson.type === "assessment";
   const isVR = d.lesson.type === "vr-practice";
+
+  // Determine video URL — prefer uploaded video (via serve.php) over YouTube embed
+  let videoUrl: string | undefined;
+  if (d.lesson.video_hash) {
+    const bridgeBase = (process.env.BRIDGE_BASE_URL ?? "").replace(/\/$/, "");
+    videoUrl = `${bridgeBase}/files/serve?hash=${d.lesson.video_hash}&name=video.mp4`;
+  } else if (d.lesson.video_url) {
+    videoUrl = d.lesson.video_url;
+  }
 
   const lesson: Lesson = {
     slug: d.lesson.slug,
     title: d.lesson.title,
     type: (d.lesson.type as Lesson["type"]) ?? "text",
     content: d.lesson.content ?? "",
-    videoUrl: d.lesson.video_url ?? undefined,
+    videoUrl,
     hasAssessment: isAssessment,
     hasVRPractice: isVR,
     durationMinutes: d.lesson.duration_minutes ?? 10,
   };
 
-  const module: CourseModule = {
-    title: d.module.title,
-    order: d.module.position,
-    lessons: [],
-  };
+  const module: CourseModule = { title: d.module.title, order: d.module.position, lessons: [] };
 
   const allModules: CourseModule[] = d.all_modules.map((m) => ({
     title: m.title,
@@ -115,13 +151,30 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
     ? { slug: d.next_lesson.slug, title: d.next_lesson.title, type: "text", content: "", hasAssessment: false, hasVRPractice: false, durationMinutes: d.next_lesson.duration_minutes ?? 10 }
     : null;
 
-  return { lesson, module, course, allModules, prevLesson, nextLesson };
+  // Build resource URLs server-side so BRIDGE_BASE_URL stays server-only
+  const resources: LessonResource[] = (d.resources ?? [])
+    .reduce<LessonResource[]>((acc, r) => {
+      const url = buildServeUrl(r);
+      if (!url) return acc;
+      acc.push({
+        type: r.type,
+        filename: r.filename,
+        url,
+        filesize: r.filesize ?? 0,
+        mimeType: r.mime_type ?? undefined,
+      });
+      return acc;
+    }, []);
+
+  return { lesson, module, course, allModules, prevLesson, nextLesson, resources };
 }
+
+// ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function LessonPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  // When bridge is configured, fetch from PHP which has real content + video URLs
+  // When bridge is configured, fetch from PHP (real content + resources)
   if (isBridgeConfigured()) {
     try {
       const data = await bridgeGet<BridgeLessonResponse>(`/lessons/${slug}`, { noAuth: true });
@@ -136,6 +189,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
             nextLesson={props.nextLesson}
             allModules={props.allModules}
             currentLessonSlug={slug}
+            resources={props.resources}
           />
         );
       }
@@ -163,6 +217,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       nextLesson={nextLesson}
       allModules={course.modules}
       currentLessonSlug={slug}
+      resources={[]}
     />
   );
 }

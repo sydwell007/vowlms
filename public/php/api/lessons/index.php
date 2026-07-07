@@ -23,7 +23,7 @@ $db = getDb();
 
 // ── 1. Fetch the lesson ───────────────────────────────────────────────────────
 $stmt = $db->prepare(
-    'SELECT l.id, l.slug, l.title, l.type, l.content, l.video_url,
+    'SELECT l.id, l.slug, l.title, l.type, l.content, l.video_url, l.video_hash,
             l.duration_minutes, l.position, l.module_id
      FROM lessons l
      WHERE l.slug = ? LIMIT 1'
@@ -91,7 +91,17 @@ $nextLesson = $currentIdx >= 0 && $currentIdx < count($flatLessons) - 1 ? [
     'duration_minutes' => $flatLessons[$currentIdx + 1]['duration_minutes'],
 ] : null;
 
-// ── 6. Return ─────────────────────────────────────────────────────────────────
+// ── 6. Fetch lesson resources (PDFs, videos, etc.) ───────────────────────────
+$resStmt = $db->prepare(
+    'SELECT type, filename, content_hash, file_url, filesize, mime_type, position
+     FROM lesson_resources
+     WHERE lesson_id = ?
+     ORDER BY position ASC'
+);
+$resStmt->execute([$lesson['id']]);
+$resources = $resStmt->fetchAll();
+
+// ── 7. Return ─────────────────────────────────────────────────────────────────
 jsonOk([
     'lesson'      => $lesson,
     'module'      => [
@@ -112,4 +122,5 @@ jsonOk([
     'all_modules' => $allModules,
     'prev_lesson' => $prevLesson,
     'next_lesson' => $nextLesson,
+    'resources'   => $resources,
 ]);

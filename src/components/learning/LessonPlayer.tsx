@@ -5,6 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Lesson, Course, CourseModule } from "@/types/lms";
 
+export type LessonResource = {
+  type: "pdf" | "video" | "audio" | "image" | "other";
+  filename: string;
+  url: string;
+  filesize: number;
+  mimeType?: string;
+};
+
 type Props = {
   lesson: Lesson;
   course: Course;
@@ -13,6 +21,7 @@ type Props = {
   nextLesson: Lesson | null;
   allModules: CourseModule[];
   currentLessonSlug: string;
+  resources?: LessonResource[];
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -23,44 +32,55 @@ function extractYouTubeId(url: string): string | null {
 }
 
 function extractYouTubeFromHtml(html: string): string | null {
-  // iframe src containing youtube
   const m = html.match(/src=["']([^"']*(?:youtube|youtu\.be)[^"']*)["']/i);
-  if (m) { const id = extractYouTubeId(m[1]); return id ? id : null; }
-  // href link to youtube
+  if (m) { const id = extractYouTubeId(m[1]); return id || null; }
   const m2 = html.match(/href=["']([^"']*(?:youtube\.com\/watch\?v=|youtu\.be\/)[^"']*)["']/i);
-  if (m2) { const id = extractYouTubeId(m2[1]); return id ? id : null; }
+  if (m2) { const id = extractYouTubeId(m2[1]); return id || null; }
   return null;
 }
 
-function getVideoInfo(lesson: Lesson, content: string): { type: "youtube" | "video" | "none"; src: string | null } {
-  const raw = lesson.videoUrl ?? "";
+type VideoInfo =
+  | { type: "youtube"; ytId: string }
+  | { type: "mp4"; url: string; mimeType?: string }
+  | { type: "none" };
 
-  // Skip placeholder values from seed data
-  if (raw && !raw.includes("placeholder") && !raw.includes("video.vowlms")) {
-    const ytId = extractYouTubeId(raw);
-    if (ytId) return { type: "youtube", src: ytId };
-    if (raw.match(/\.(mp4|webm|ogg)(\?|$)/i)) return { type: "video", src: raw };
-    // Check if it's already an embed URL
-    if (raw.includes("youtube-nocookie.com/embed/") || raw.includes("youtube.com/embed/")) {
-      const id = extractYouTubeId(raw);
-      if (id) return { type: "youtube", src: id };
-    }
+function getVideoInfo(lesson: Lesson, content: string, resources: LessonResource[]): VideoInfo {
+  // 1. Uploaded video file (fastest — served from Moodle filedir via PHP)
+  const vidResource = resources.find((r) => r.type === "video");
+  if (vidResource?.url) {
+    return { type: "mp4", url: vidResource.url, mimeType: vidResource.mimeType };
   }
 
-  // Extract YouTube from content HTML
+  // 2. lesson.videoUrl — could be YouTube embed or uploaded-video serve URL
+  const raw = lesson.videoUrl ?? "";
+  if (raw && !raw.includes("placeholder") && !raw.includes("video.vowlms")) {
+    // Uploaded video served via PHP (URL contains /files/serve?hash=)
+    if (raw.includes("files/serve")) {
+      return { type: "mp4", url: raw };
+    }
+    // YouTube
+    const ytId = extractYouTubeId(raw);
+    if (ytId) return { type: "youtube", ytId };
+    // Already an embed URL
+    const embedMatch = raw.match(/youtube(?:-nocookie)?\.com\/embed\/([A-Za-z0-9_-]{11})/);
+    if (embedMatch) return { type: "youtube", ytId: embedMatch[1] };
+    // Direct video file URL
+    if (raw.match(/\.(mp4|webm|ogg|mov)(\?|$)/i)) return { type: "mp4", url: raw };
+  }
+
+  // 3. YouTube embed inside HTML content
   if (content) {
     const id = extractYouTubeFromHtml(content);
-    if (id) return { type: "youtube", src: id };
+    if (id) return { type: "youtube", ytId: id };
   }
 
-  return { type: "none", src: null };
+  return { type: "none" };
 }
 
 function isHtmlContent(content: string): boolean {
   return /<[a-z][\s\S]*>/i.test(content);
 }
 
-/** Remove scripts and event handlers but keep YouTube iframes */
 function sanitizeHtml(html: string): string {
   return html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
@@ -68,33 +88,57 @@ function sanitizeHtml(html: string): string {
     .replace(/javascript:/gi, "#")
     .replace(
       /<iframe([^>]*)src=["']([^"']*)["']([^>]*)>/gi,
-      (_match, pre, src, post) => {
+      (_m, pre, src, post) => {
         if (/youtube/.test(src)) {
-          // Normalise to youtube-nocookie
           const clean = src
             .replace("www.youtube.com/embed/", "www.youtube-nocookie.com/embed/")
             .replace("youtube.com/embed/", "youtube-nocookie.com/embed/");
           return `<iframe${pre}src="${clean}"${post} style="width:100%;aspect-ratio:16/9;border:0;" allowfullscreen>`;
         }
-        return ""; // strip non-YouTube iframes
+        return "";
       }
     );
 }
 
+function formatBytes(bytes: number): string {
+  if (!bytes) return "";
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
-export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, allModules, currentLessonSlug }: Props) {
+export function LessonPlayer({
+  lesson, course, module, prevLesson, nextLesson,
+  allModules, currentLessonSlug, resources = [],
+}: Props) {
   const router = useRouter();
   const [completed, setCompleted] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [completedSlugs, setCompletedSlugs] = useState<string[]>([]);
+  const [activePdf, setActivePdf] = useState<LessonResource | null>(null);
 
   const assessment = course.assessments.find((a) => a.lessonSlug === lesson.slug);
   const vrPractice = course.vrPractices.find((v) => v.lessonSlug === lesson.slug);
 
-  const video = getVideoInfo(lesson, lesson.content ?? "");
-  const hasHtml = isHtmlContent(lesson.content ?? "");
-  const hasContent = (lesson.content ?? "").replace(/<[^>]+>/g, "").trim().length > 0;
+  const content = lesson.content ?? "";
+  const videoInfo = getVideoInfo(lesson, content, resources);
+
+  // Remove YouTube iframes from HTML content (shown in video player above)
+  const cleanContent = isHtmlContent(content)
+    ? sanitizeHtml(content)
+        .replace(/<iframe[^>]*src=["'][^"']*youtube[^"']*["'][^>]*>[\s\S]*?<\/iframe>/gi, "")
+        .replace(/<iframe[^>]*src=["'][^"']*youtube[^"']*["'][^>]*>/gi, "")
+    : content;
+
+  const hasContent = cleanContent.replace(/<[^>]+>/g, "").trim().length > 0;
+  const htmlContent = isHtmlContent(cleanContent);
+
+  // Separate resource types
+  const pdfResources = resources.filter((r) => r.type === "pdf");
+  const audioResources = resources.filter((r) => r.type === "audio");
+  const otherResources = resources.filter((r) => r.type === "other" || r.type === "image");
 
   useEffect(() => {
     try {
@@ -105,8 +149,14 @@ export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, a
     } catch { /* ignore */ }
   }, [course.slug, lesson.slug]);
 
+  // Auto-open the first PDF if this lesson type is "resource"
+  useEffect(() => {
+    if (pdfResources.length > 0 && !hasContent && videoInfo.type === "none") {
+      setActivePdf(pdfResources[0]);
+    }
+  }, [pdfResources, hasContent, videoInfo.type]);
+
   const markComplete = useCallback(async () => {
-    // Persist to localStorage immediately (offline-safe)
     const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
     if (!progress[course.slug]) progress[course.slug] = { completedLessons: [], assessmentPassed: false };
     const done: string[] = progress[course.slug].completedLessons ?? [];
@@ -116,24 +166,17 @@ export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, a
     setCompleted(true);
     setCompletedSlugs([...done]);
 
-    // Sync to bridge in background (non-blocking)
+    // Sync to bridge in background
     fetch("/api/progress", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ lessonSlug: lesson.slug, courseSlug: course.slug }),
-    }).catch(() => { /* offline — localStorage is source of truth */ });
+    }).catch(() => {});
 
     if (nextLesson) {
       setTimeout(() => router.push(`/lesson/${nextLesson.slug}`), 600);
     }
   }, [course.slug, lesson.slug, nextLesson, router]);
-
-  // Remove iframe/youtube from sanitized HTML since we show it in the video player above
-  const cleanContent = hasHtml
-    ? sanitizeHtml(lesson.content ?? "")
-        .replace(/<iframe[^>]*src=["'][^"']*youtube[^"']*["'][^>]*>[\s\S]*?<\/iframe>/gi, "")
-        .replace(/<iframe[^>]*src=["'][^"']*youtube[^"']*["'][^>]*>/gi, "")
-    : lesson.content ?? "";
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f8fbfe]">
@@ -195,7 +238,6 @@ export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, a
           </div>
         </aside>
 
-        {/* Overlay for mobile sidebar */}
         {sidebarOpen && (
           <div className="fixed inset-0 z-10 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
         )}
@@ -203,19 +245,22 @@ export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, a
         {/* Main content */}
         <main className="flex-1 min-w-0">
           <div className="mx-auto max-w-4xl px-5 py-8 sm:px-6 lg:px-10">
-            {/* Module breadcrumb */}
+
+            {/* Breadcrumb */}
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">
               Module {module.order} · {module.title}
             </p>
             <h1 className="mt-3 text-balance text-3xl font-semibold text-ink sm:text-4xl">{lesson.title}</h1>
-            <p className="mt-2 text-sm text-muted">{lesson.durationMinutes} min · {lesson.type === "vr-practice" ? "VR Practice" : lesson.type === "assessment" ? "Assessment" : "Lesson"}</p>
+            <p className="mt-2 text-sm text-muted">
+              {lesson.durationMinutes} min · {lesson.type === "vr-practice" ? "VR Practice" : lesson.type === "assessment" ? "Assessment" : "Lesson"}
+            </p>
 
-            {/* ── Video player ─────────────────────────────────────────── */}
-            {video.type === "youtube" && (
+            {/* ── VIDEO PLAYER ────────────────────────────────────────── */}
+            {videoInfo.type === "youtube" && (
               <div className="mt-6 overflow-hidden rounded-2xl bg-black">
                 <div className="aspect-video">
                   <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${video.src}?rel=0&modestbranding=1`}
+                    src={`https://www.youtube-nocookie.com/embed/${videoInfo.ytId}?rel=0&modestbranding=1`}
                     className="h-full w-full border-0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
@@ -225,24 +270,71 @@ export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, a
               </div>
             )}
 
-            {video.type === "video" && (
+            {videoInfo.type === "mp4" && (
               <div className="mt-6 overflow-hidden rounded-2xl bg-black">
                 <video
-                  src={video.src!}
                   controls
+                  preload="metadata"
                   className="w-full"
                   style={{ maxHeight: "540px" }}
                   title={lesson.title}
-                />
+                >
+                  <source src={videoInfo.url} type={videoInfo.mimeType ?? "video/mp4"} />
+                  Your browser does not support video playback.
+                </video>
               </div>
             )}
 
-            {/* ── Lesson content ───────────────────────────────────────── */}
+            {/* ── PDF VIEWER (inline embed) ────────────────────────────── */}
+            {pdfResources.length > 0 && (
+              <div className="mt-6 space-y-3">
+                {/* PDF tab pills when multiple PDFs */}
+                {pdfResources.length > 1 && (
+                  <div className="flex flex-wrap gap-2">
+                    {pdfResources.map((r) => (
+                      <button
+                        key={r.url}
+                        onClick={() => setActivePdf(r)}
+                        className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${activePdf?.url === r.url ? "bg-[#1166c8] text-white" : "border border-slate-200 bg-white text-ink hover:bg-slate-50"}`}
+                      >
+                        📄 {r.filename}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Active PDF embed */}
+                {(activePdf ?? pdfResources[0]) && (
+                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                    <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5">
+                      <span className="text-xs font-semibold text-ink truncate">
+                        📄 {(activePdf ?? pdfResources[0]).filename}
+                      </span>
+                      <a
+                        href={(activePdf ?? pdfResources[0]).url}
+                        download
+                        className="ml-3 shrink-0 rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold text-ink hover:bg-slate-200 transition"
+                      >
+                        Download
+                      </a>
+                    </div>
+                    <iframe
+                      src={(activePdf ?? pdfResources[0]).url + "#toolbar=1&navpanes=1&scrollbar=1"}
+                      className="w-full border-0"
+                      style={{ height: "640px" }}
+                      title={(activePdf ?? pdfResources[0]).filename}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── TEXT / HTML CONTENT ──────────────────────────────────── */}
             {hasContent && (
-              <div className="mt-8 space-y-5">
+              <div className="mt-8">
                 <div className="premium-card rounded-xl p-6">
                   <h2 className="text-lg font-semibold text-ink mb-4">Lesson content</h2>
-                  {hasHtml ? (
+                  {htmlContent ? (
                     <div
                       className="lesson-html-content text-base leading-8 text-slate-700"
                       dangerouslySetInnerHTML={{ __html: cleanContent }}
@@ -254,40 +346,79 @@ export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, a
               </div>
             )}
 
-            {/* ── Assessment / VR placeholder when no content ──────────── */}
-            {!hasContent && lesson.type === "assessment" && (
-              <div className="mt-8 premium-card rounded-xl p-6 text-center">
-                <p className="text-3xl mb-3">📝</p>
-                <h2 className="text-lg font-semibold text-ink mb-2">Assessment</h2>
-                <p className="text-sm text-muted">Complete the assessment below to test your knowledge.</p>
+            {/* ── AUDIO RESOURCES ─────────────────────────────────────── */}
+            {audioResources.length > 0 && (
+              <div className="mt-6 space-y-3">
+                {audioResources.map((r) => (
+                  <div key={r.url} className="premium-card rounded-xl p-4">
+                    <p className="mb-2 text-xs font-semibold text-ink">🎵 {r.filename}</p>
+                    <audio controls preload="metadata" className="w-full">
+                      <source src={r.url} type={r.mimeType ?? "audio/mpeg"} />
+                    </audio>
+                  </div>
+                ))}
               </div>
             )}
 
-            {!hasContent && lesson.type === "vr-practice" && (
-              <div className="mt-8 premium-card rounded-xl p-6 text-center">
-                <p className="text-3xl mb-3">🥽</p>
-                <h2 className="text-lg font-semibold text-ink mb-2">VR Practice</h2>
-                <p className="text-sm text-muted">Launch the VR simulation to practice your skills.</p>
+            {/* ── OTHER DOWNLOADABLE FILES ─────────────────────────────── */}
+            {otherResources.length > 0 && (
+              <div className="mt-6 premium-card-soft rounded-xl p-5">
+                <h3 className="mb-3 text-sm font-semibold text-ink">Downloads</h3>
+                <div className="space-y-2">
+                  {otherResources.map((r) => (
+                    <a
+                      key={r.url}
+                      href={r.url}
+                      download
+                      className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3 transition hover:border-[#1166c8]/30"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">📎</span>
+                        <div>
+                          <p className="text-sm font-medium text-ink">{r.filename}</p>
+                          {r.filesize > 0 && <p className="text-xs text-muted">{formatBytes(r.filesize)}</p>}
+                        </div>
+                      </div>
+                      <span className="rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold text-ink">Download</span>
+                    </a>
+                  ))}
+                </div>
               </div>
             )}
 
-            {!hasContent && video.type === "none" && lesson.type === "text" && (
-              <div className="mt-8 premium-card-soft rounded-xl p-6">
-                <p className="text-sm text-muted text-center">
-                  Lesson content will appear here once the migration is complete.
-                  <br />
-                  <span className="text-xs">{lesson.slug}</span>
-                </p>
-              </div>
+            {/* ── PLACEHOLDER when nothing to show ────────────────────── */}
+            {!hasContent && videoInfo.type === "none" && pdfResources.length === 0 && (
+              <>
+                {lesson.type === "assessment" && (
+                  <div className="mt-8 premium-card rounded-xl p-6 text-center">
+                    <p className="text-3xl mb-3">📝</p>
+                    <h2 className="text-lg font-semibold text-ink mb-2">Assessment</h2>
+                    <p className="text-sm text-muted">Complete the assessment below to test your knowledge and earn points.</p>
+                  </div>
+                )}
+                {lesson.type === "vr-practice" && (
+                  <div className="mt-8 premium-card rounded-xl p-6 text-center">
+                    <p className="text-3xl mb-3">🥽</p>
+                    <h2 className="text-lg font-semibold text-ink mb-2">VR Practice</h2>
+                    <p className="text-sm text-muted">Launch the VR simulation to practise your skills in a real-world scenario.</p>
+                  </div>
+                )}
+                {lesson.type === "text" && (
+                  <div className="mt-8 premium-card-soft rounded-xl p-6 text-center">
+                    <p className="text-sm text-muted">Content is being loaded. Please check back shortly.</p>
+                    <p className="mt-1 text-xs text-muted font-mono">{lesson.slug}</p>
+                  </div>
+                )}
+              </>
             )}
 
-            {/* ── Actions ──────────────────────────────────────────────── */}
+            {/* ── ACTIONS ──────────────────────────────────────────────── */}
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex gap-3">
                 {assessment && (
                   <Link href={`/assessment/${assessment.slug}`}
                     className="rounded-lg bg-[#1166c8] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0d55b0]">
-                    📝 Assessment
+                    📝 Take Assessment
                   </Link>
                 )}
                 {vrPractice && (
@@ -306,7 +437,7 @@ export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, a
               </button>
             </div>
 
-            {/* ── Prev / Next navigation ────────────────────────────────── */}
+            {/* ── PREV / NEXT ──────────────────────────────────────────── */}
             <div className="mt-8 grid grid-cols-2 gap-4 border-t border-slate-200 pt-8">
               {prevLesson ? (
                 <Link href={`/lesson/${prevLesson.slug}`}
@@ -330,6 +461,7 @@ export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, a
                 </div>
               )}
             </div>
+
           </div>
         </main>
       </div>

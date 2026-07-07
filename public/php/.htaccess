@@ -20,6 +20,9 @@ RewriteRule ^courses/([^/]+)/?$       api/courses/index.php?slug=$1 [L,QSA]
 # ── Lessons ───────────────────────────────────────────────────────────────────
 RewriteRule ^lessons/([^/]+)/?$       api/lessons/index.php?slug=$1 [L,QSA]
 
+# ── File serving (no Bridge-Key — browser accesses directly) ──────────────────
+RewriteRule ^files/serve/?$           api/files/serve.php [L,QSA]
+
 # ── Academies ─────────────────────────────────────────────────────────────────
 RewriteRule ^academies/?$             api/academies/index.php [L,QSA]
 RewriteRule ^academies/([^/]+)/?$     api/academies/index.php?slug=$1 [L,QSA]
