@@ -45,7 +45,7 @@ export async function POST(request: Request) {
         email: payload.email,
         password: payload.password,
         phone: payload.phone ?? null,
-        role: "learner",
+        role: payload.role ?? "learner",
       },
       { noAuth: true },
     );

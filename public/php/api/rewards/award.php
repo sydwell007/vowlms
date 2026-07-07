@@ -26,9 +26,6 @@ $db->prepare(
     'INSERT INTO reward_events (id, user_id, event, points, metadata) VALUES (?, ?, ?, ?, ?)'
 )->execute([$id, $targetId, $event, $points, $metadata ? json_encode($metadata) : null]);
 
-$total = (int)$db->prepare('SELECT COALESCE(SUM(points),0) FROM reward_events WHERE user_id = ?')
-                  ->execute([$targetId]) ? $db->query("SELECT COALESCE(SUM(points),0) FROM reward_events WHERE user_id = '{$targetId}'")->fetchColumn() : 0;
-
 $balStmt = $db->prepare('SELECT COALESCE(SUM(points),0) FROM reward_events WHERE user_id = ?');
 $balStmt->execute([$targetId]);
 $balance = (int)$balStmt->fetchColumn();

@@ -43,13 +43,13 @@ $talent = $talentStmt->fetchAll();
 
 // Recent VR assessment high-scorers
 $vrStmt = $db->query(
-    'SELECT u.name, u.email, u.city, vr.score, vr.submitted_at, c.title AS course_title
+    'SELECT u.name, u.email, u.city, vr.score, vr.attempted_at, c.title AS course_title
      FROM vr_attempts vr
      JOIN users u ON u.id = vr.user_id
-     JOIN vr_practices vp ON vp.id = vr.vr_id
+     JOIN vr_practices vp ON vp.id = vr.vr_practice_id
      JOIN courses c ON c.id = vp.course_id
      WHERE vr.score >= 80
-     ORDER BY vr.submitted_at DESC LIMIT 10'
+     ORDER BY vr.attempted_at DESC LIMIT 10'
 );
 $vrHighScorers = $vrStmt->fetchAll();
 

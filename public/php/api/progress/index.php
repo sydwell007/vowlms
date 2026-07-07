@@ -49,19 +49,13 @@ $courseComplete     = false;
 if ($courseRow) {
     $courseId = $courseRow['course_id'];
 
-    $totalLessons = (int)$db->prepare(
+    $totStmt = $db->prepare(
         'SELECT COUNT(l.id) FROM lessons l JOIN modules m ON m.id = l.module_id WHERE m.course_id = ?'
-    )->execute([$courseId]) ? $db->query("SELECT COUNT(l.id) FROM lessons l JOIN modules m ON m.id = l.module_id WHERE m.course_id = '{$courseId}'")->fetchColumn() : 0;
+    );
+    $totStmt->execute([$courseId]);
+    $totalLessons = (int)$totStmt->fetchColumn();
 
     if ($totalLessons > 0) {
-        $doneLessons = (int)$db->prepare(
-            'SELECT COUNT(p.id) FROM progress p
-             JOIN lessons l ON l.id = p.lesson_id
-             JOIN modules m ON m.id = l.module_id
-             WHERE m.course_id = ? AND p.user_id = ? AND p.completed = 1'
-        )->execute([$courseId, $userId]) ? 0 : 0;
-
-        // Direct query for accuracy
         $doneStmt = $db->prepare(
             'SELECT COUNT(p.id) FROM progress p
              JOIN lessons l ON l.id = p.lesson_id

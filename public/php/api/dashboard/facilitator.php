@@ -46,7 +46,7 @@ $totalLearners = (int)$learnerCountStmt->fetchColumn();
 
 // Assessments recently submitted in facilitator's courses
 $assessStmt = $db->prepare(
-    'SELECT aa.id, aa.user_id, u.name AS learner_name, aa.score, aa.passed, aa.submitted_at,
+    'SELECT aa.id, aa.user_id, u.name AS learner_name, aa.score, aa.passed, aa.attempted_at,
             a.title AS assessment_title, c.title AS course_title
      FROM assessment_attempts aa
      JOIN assessments a ON a.id = aa.assessment_id
