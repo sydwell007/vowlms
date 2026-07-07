@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 // ── Bridge response types ─────────────────────────────────────────────────────
 
 type BridgeResource = {
+  id: string;
   type: "pdf" | "video" | "audio" | "image" | "other";
   filename: string;
   content_hash: string | null;
@@ -65,18 +66,30 @@ type BridgeLessonResponse = {
 };
 
 // ── Build file serve URL ───────────────────────────────────────────────────────
+// All files go through the PHP proxy so we can:
+//   - Strip X-Frame-Options (Moodle sends SAMEORIGIN, blocking iframes)
+//   - Override Content-Disposition: attachment → inline (forcedownload=1 fix)
+//   - Forward Range requests for video seeking
 // Priority:
-// 1. content_hash → serve from Moodle filedir via PHP (fastest, no token in URL)
-// 2. file_url     → use Moodle pluginfile URL directly (token in URL; fine for
-//                   educational content and works without CORS issues in iframes)
+// 1. content_hash + bridgeBase → serve from filesystem via hash (fastest)
+// 2. id + bridgeBase           → proxy from Moodle, stripping hostile headers
+// 3. file_url                  → direct Moodle URL (last resort; likely blocked in iframes)
 function buildServeUrl(r: BridgeResource): string {
   const bridgeBase = (process.env.BRIDGE_BASE_URL ?? "").replace(/\/$/, "");
 
-  if (r.content_hash && bridgeBase) {
+  if (!bridgeBase) {
+    // No bridge configured — direct URL is the only option
+    return r.file_url ?? "";
+  }
+
+  if (r.content_hash) {
     return `${bridgeBase}/files/serve?hash=${r.content_hash}&name=${encodeURIComponent(r.filename)}`;
   }
 
-  // Use Moodle URL directly — iframes/video tags load cross-origin without CORS
+  if (r.id) {
+    return `${bridgeBase}/files/serve?id=${encodeURIComponent(r.id)}&name=${encodeURIComponent(r.filename)}`;
+  }
+
   return r.file_url ?? "";
 }
 

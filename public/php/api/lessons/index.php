@@ -93,7 +93,7 @@ $nextLesson = $currentIdx >= 0 && $currentIdx < count($flatLessons) - 1 ? [
 
 // ── 6. Fetch lesson resources (PDFs, videos, etc.) ───────────────────────────
 $resStmt = $db->prepare(
-    'SELECT type, filename, content_hash, file_url, filesize, mime_type, position
+    'SELECT id, type, filename, content_hash, file_url, filesize, mime_type, position
      FROM lesson_resources
      WHERE lesson_id = ?
      ORDER BY position ASC'
