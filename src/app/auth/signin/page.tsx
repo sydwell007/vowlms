@@ -4,11 +4,17 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+const DASHBOARD: Record<string, string> = {
+  learner: "/dashboard/learner",
+  facilitator: "/dashboard/facilitator",
+  employer: "/dashboard/employer",
+  admin: "/dashboard/admin",
+};
+
 export default function SignInPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"learner" | "facilitator" | "employer" | "admin">("learner");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -17,27 +23,27 @@ export default function SignInPage() {
     setLoading(true);
     setError("");
 
-    // Mock auth — replace with Auth.js signIn() when database is connected
-    await new Promise((r) => setTimeout(r, 800));
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (!email || !password) {
-      setError("Please enter your email and password.");
+      const json = await res.json();
+
+      if (!json.ok) {
+        setError(json.error ?? "Invalid email or password.");
+        return;
+      }
+
+      const role: string = json.data?.role ?? "learner";
+      router.push(DASHBOARD[role] ?? "/dashboard/learner");
+    } catch {
+      setError("Unable to connect. Please check your connection and try again.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    // Store mock session in sessionStorage for client-side role routing
-    const session = { user: { email, role, name: email.split("@")[0] } };
-    sessionStorage.setItem("vowlms_session", JSON.stringify(session));
-
-    const dashboardMap = {
-      learner: "/dashboard/learner",
-      facilitator: "/dashboard/facilitator",
-      employer: "/dashboard/employer",
-      admin: "/dashboard/admin",
-    };
-
-    router.push(dashboardMap[role]);
   }
 
   return (
@@ -93,23 +99,6 @@ export default function SignInPage() {
               placeholder="••••••••"
               className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition"
             />
-          </div>
-
-          <div>
-            <label htmlFor="role" className="block text-sm font-semibold text-ink mb-1.5">
-              Sign in as
-            </label>
-            <select
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value as typeof role)}
-              className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition"
-            >
-              <option value="learner">Learner</option>
-              <option value="facilitator">Facilitator</option>
-              <option value="employer">Employer</option>
-              <option value="admin">Administrator</option>
-            </select>
           </div>
 
           <button

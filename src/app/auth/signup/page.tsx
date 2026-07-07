@@ -8,7 +8,7 @@ const academyOptions = [
   "Upskilling Academy",
   "Skills Training Academy",
   "Chef Academy",
-  "Private School",
+  "GoalVow Schools",
   "Business School",
   "University Online",
 ];
@@ -37,33 +37,49 @@ export default function SignUpPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
     if (step === 1) {
-      if (form.password !== form.confirm) {
-        setError("Passwords do not match.");
-        return;
-      }
-      if (form.password.length < 8) {
-        setError("Password must be at least 8 characters.");
-        return;
-      }
+      if (form.password !== form.confirm) { setError("Passwords do not match."); return; }
+      if (form.password.length < 8) { setError("Password must be at least 8 characters."); return; }
       setError("");
       setStep(2);
       return;
     }
 
-    if (!form.agreeTerms) {
-      setError("Please accept the terms to continue.");
-      return;
-    }
+    if (!form.agreeTerms) { setError("Please accept the terms to continue."); return; }
 
     setLoading(true);
     setError("");
-    // Mock registration — replace with real API call when DB is connected
-    await new Promise((r) => setTimeout(r, 1000));
 
-    const session = { user: { email: form.email, role: form.role, name: form.name } };
-    sessionStorage.setItem("vowlms_session", JSON.stringify(session));
-    router.push("/dashboard/learner");
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          password: form.password,
+          phone: form.phone || null,
+          role: form.role,
+          city: form.city || null,
+          country: form.country,
+          preferredAcademy: form.academy || null,
+        }),
+      });
+
+      const json = await res.json();
+
+      if (!json.ok) {
+        setError(json.error ?? "Registration failed. Please try again.");
+        return;
+      }
+
+      router.push("/dashboard/learner");
+    } catch {
+      setError("Unable to connect. Please check your connection.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -80,9 +96,9 @@ export default function SignUpPage() {
         {/* Step indicator */}
         <div className="mb-6 flex items-center gap-3">
           {[1, 2].map((s) => (
-            <div key={s} className="flex items-center gap-3">
-              <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition ${step >= s ? "bg-gold text-[#06111f]" : "bg-slate-100 text-muted"}`}>
-                {s}
+            <div key={s} className="flex flex-1 items-center gap-3">
+              <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition ${step >= s ? "bg-gold text-[#06111f]" : "bg-slate-100 text-muted"}`}>
+                {step > s ? "✓" : s}
               </div>
               <span className={`text-xs font-medium ${step >= s ? "text-ink" : "text-muted"}`}>
                 {s === 1 ? "Account details" : "Profile & preferences"}
@@ -94,9 +110,7 @@ export default function SignUpPage() {
 
         <form onSubmit={handleSubmit} className="premium-card rounded-2xl p-8 space-y-5">
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              {error}
-            </div>
+            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
           )}
 
           {step === 1 && (
@@ -115,14 +129,12 @@ export default function SignUpPage() {
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
                 </div>
               </div>
-
               <div>
                 <label htmlFor="signup-email" className="block text-sm font-semibold text-ink mb-1.5">Email address</label>
                 <input id="signup-email" type="email" required value={form.email} onChange={(e) => update("email", e.target.value)}
                   placeholder="you@example.com"
                   className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
               </div>
-
               <div>
                 <label htmlFor="role-select" className="block text-sm font-semibold text-ink mb-1.5">I am a</label>
                 <select id="role-select" value={form.role} onChange={(e) => update("role", e.target.value)}
@@ -132,7 +144,6 @@ export default function SignUpPage() {
                   <option value="employer">Employer / Partner</option>
                 </select>
               </div>
-
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="pwd" className="block text-sm font-semibold text-ink mb-1.5">Password</label>
@@ -147,9 +158,8 @@ export default function SignUpPage() {
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
                 </div>
               </div>
-
               <button type="submit"
-                className="w-full rounded-lg bg-gold px-6 py-3 text-sm font-semibold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.25)] transition hover:bg-[#e8b830] hover:shadow-[0_14px_28px_rgba(245,197,66,0.32)]">
+                className="w-full rounded-lg bg-gold px-6 py-3 text-sm font-semibold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.25)] transition hover:bg-[#e8b830]">
                 Continue to profile →
               </button>
             </>
@@ -165,21 +175,19 @@ export default function SignUpPage() {
                   {academyOptions.map((a) => <option key={a} value={a}>{a}</option>)}
                 </select>
               </div>
-
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="city" className="block text-sm font-semibold text-ink mb-1.5">City</label>
                   <input id="city" type="text" value={form.city} onChange={(e) => update("city", e.target.value)}
-                    placeholder="Johannesburg"
+                    placeholder="Cape Town"
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
                 </div>
                 <div>
                   <label htmlFor="country" className="block text-sm font-semibold text-ink mb-1.5">Country</label>
                   <input id="country" type="text" value={form.country} onChange={(e) => update("country", e.target.value)}
-                    className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
+                    className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
                 </div>
               </div>
-
               <label className="flex items-start gap-3 cursor-pointer">
                 <input type="checkbox" checked={form.agreeTerms} onChange={(e) => update("agreeTerms", e.target.checked)}
                   className="mt-0.5 h-4 w-4 rounded border-slate-300 accent-[#1166c8]" />
@@ -191,7 +199,6 @@ export default function SignUpPage() {
                   {" "}of GoalVow Holdings.
                 </span>
               </label>
-
               <div className="flex gap-3">
                 <button type="button" onClick={() => setStep(1)}
                   className="flex-1 rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:bg-slate-50">
@@ -207,9 +214,7 @@ export default function SignUpPage() {
 
           <p className="text-center text-sm text-muted">
             Already have an account?{" "}
-            <Link href="/auth/signin" className="font-semibold text-[#1166c8] hover:underline">
-              Sign in
-            </Link>
+            <Link href="/auth/signin" className="font-semibold text-[#1166c8] hover:underline">Sign in</Link>
           </p>
         </form>
       </div>

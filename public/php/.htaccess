@@ -1,0 +1,49 @@
+Options -Indexes
+RewriteEngine On
+
+# Block direct access to config and lib
+RewriteRule ^config/ - [F,L]
+RewriteRule ^lib/ - [F,L]
+
+# ── Auth ──────────────────────────────────────────────────────────────────────
+RewriteRule ^auth/login/?$            api/auth/login.php [L,QSA]
+RewriteRule ^auth/register/?$         api/auth/register.php [L,QSA]
+RewriteRule ^auth/logout/?$           api/auth/logout.php [L,QSA]
+RewriteRule ^auth/me/?$               api/auth/me.php [L,QSA]
+RewriteRule ^auth/forgot-password/?$  api/auth/forgot-password.php [L,QSA]
+RewriteRule ^auth/reset-password/?$   api/auth/reset-password.php [L,QSA]
+
+# ── Courses ───────────────────────────────────────────────────────────────────
+RewriteRule ^courses/?$               api/courses/index.php [L,QSA]
+RewriteRule ^courses/([^/]+)/?$       api/courses/index.php?slug=$1 [L,QSA]
+
+# ── Academies ─────────────────────────────────────────────────────────────────
+RewriteRule ^academies/?$             api/academies/index.php [L,QSA]
+RewriteRule ^academies/([^/]+)/?$     api/academies/index.php?slug=$1 [L,QSA]
+
+# ── Data endpoints ────────────────────────────────────────────────────────────
+RewriteRule ^enrollments/?$           api/enrollments/index.php [L,QSA]
+RewriteRule ^progress/?$              api/progress/index.php [L,QSA]
+RewriteRule ^certificates/?$          api/certificates/index.php [L,QSA]
+RewriteRule ^certificates/generate/?$ api/certificates/generate.php [L,QSA]
+RewriteRule ^assessments/submit/?$    api/assessments/submit.php [L,QSA]
+RewriteRule ^vr/submit/?$             api/vr/submit.php [L,QSA]
+RewriteRule ^rewards/award/?$         api/rewards/award.php [L,QSA]
+RewriteRule ^opportunities/?$         api/opportunities/index.php [L,QSA]
+RewriteRule ^learning-hubs/?$         api/learning-hubs/index.php [L,QSA]
+
+# ── Dashboards ────────────────────────────────────────────────────────────────
+RewriteRule ^dashboard/learner/?$     api/dashboard/learner.php [L,QSA]
+RewriteRule ^dashboard/admin/?$       api/dashboard/admin.php [L,QSA]
+RewriteRule ^dashboard/facilitator/?$ api/dashboard/facilitator.php [L,QSA]
+RewriteRule ^dashboard/employer/?$    api/dashboard/employer.php [L,QSA]
+
+# ── User profile ──────────────────────────────────────────────────────────────
+RewriteRule ^user/profile/?$          api/user/profile.php [L,QSA]
+
+# ── Payments ──────────────────────────────────────────────────────────────────
+RewriteRule ^payments/payfast-create/?$ api/payments/payfast-create.php [L,QSA]
+RewriteRule ^payments/payfast-notify/?$ api/payments/payfast-notify.php [L,QSA]
+
+# ── Health ────────────────────────────────────────────────────────────────────
+RewriteRule ^health/?$                api/health.php [L,QSA]
