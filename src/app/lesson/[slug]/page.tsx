@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import { getLessonBySlug } from "@/lib/data";
 import { LessonPlayer } from "@/components/learning/LessonPlayer";
+import { bridgeGet, isBridgeConfigured } from "@/lib/bridge";
+import type { Course, CourseModule, Lesson } from "@/types/lms";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -8,15 +10,145 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return { title: result?.lesson.title ?? "Lesson" };
 }
 
+type BridgeLessonResponse = {
+  lesson: {
+    id: string;
+    slug: string;
+    title: string;
+    type: string;
+    content: string | null;
+    video_url: string | null;
+    duration_minutes: number;
+    position: number;
+    module_id: string;
+  };
+  module: { id: string; title: string; position: number };
+  course: {
+    id: string;
+    slug: string;
+    title: string;
+    academy_slug: string;
+    academy_name: string;
+    level: string;
+    price: number;
+    is_free: boolean;
+  };
+  all_modules: Array<{
+    id: string;
+    title: string;
+    position: number;
+    lessons: Array<{
+      id: string;
+      slug: string;
+      title: string;
+      type: string;
+      duration_minutes: number;
+      position: number;
+    }>;
+  }>;
+  prev_lesson: { slug: string; title: string; duration_minutes: number } | null;
+  next_lesson: { slug: string; title: string; duration_minutes: number } | null;
+};
+
+function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
+  const isAssessment = d.lesson.type === "assessment";
+  const isVR = d.lesson.type === "vr-practice";
+
+  const lesson: Lesson = {
+    slug: d.lesson.slug,
+    title: d.lesson.title,
+    type: (d.lesson.type as Lesson["type"]) ?? "text",
+    content: d.lesson.content ?? "",
+    videoUrl: d.lesson.video_url ?? undefined,
+    hasAssessment: isAssessment,
+    hasVRPractice: isVR,
+    durationMinutes: d.lesson.duration_minutes ?? 10,
+  };
+
+  const module: CourseModule = {
+    title: d.module.title,
+    order: d.module.position,
+    lessons: [],
+  };
+
+  const allModules: CourseModule[] = d.all_modules.map((m) => ({
+    title: m.title,
+    order: m.position,
+    lessons: m.lessons.map((l) => ({
+      slug: l.slug,
+      title: l.title,
+      type: (l.type as Lesson["type"]) ?? "text",
+      content: "",
+      hasAssessment: l.type === "assessment",
+      hasVRPractice: l.type === "vr-practice",
+      durationMinutes: l.duration_minutes ?? 10,
+    })),
+  }));
+
+  const course = {
+    slug: d.course.slug,
+    title: d.course.title,
+    moodleId: null,
+    academySlug: d.course.academy_slug,
+    description: "",
+    level: (d.course.level as Course["level"]) ?? "Foundation",
+    duration: "",
+    price: d.course.price ?? 0,
+    status: "published" as Course["status"],
+    modules: allModules,
+    outcomes: [],
+    rewards: 0,
+    opportunityPathways: [],
+    assessments: isAssessment
+      ? [{ slug: currentSlug, lessonSlug: currentSlug, title: lesson.title, passMark: 70, questions: [] }]
+      : [],
+    vrPractices: isVR
+      ? [{ slug: currentSlug, lessonSlug: currentSlug, title: lesson.title, scenario: "", skillsPracticed: [], scorePlaceholder: 0 }]
+      : [],
+  } satisfies Course;
+
+  const prevLesson: Lesson | null = d.prev_lesson
+    ? { slug: d.prev_lesson.slug, title: d.prev_lesson.title, type: "text", content: "", hasAssessment: false, hasVRPractice: false, durationMinutes: d.prev_lesson.duration_minutes ?? 10 }
+    : null;
+
+  const nextLesson: Lesson | null = d.next_lesson
+    ? { slug: d.next_lesson.slug, title: d.next_lesson.title, type: "text", content: "", hasAssessment: false, hasVRPractice: false, durationMinutes: d.next_lesson.duration_minutes ?? 10 }
+    : null;
+
+  return { lesson, module, course, allModules, prevLesson, nextLesson };
+}
+
 export default async function LessonPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const result = getLessonBySlug(slug);
 
+  // When bridge is configured, fetch from PHP which has real content + video URLs
+  if (isBridgeConfigured()) {
+    try {
+      const data = await bridgeGet<BridgeLessonResponse>(`/lessons/${slug}`, { noAuth: true });
+      if (data?.lesson) {
+        const props = bridgeToProps(data, slug);
+        return (
+          <LessonPlayer
+            lesson={props.lesson}
+            course={props.course}
+            module={props.module}
+            prevLesson={props.prevLesson}
+            nextLesson={props.nextLesson}
+            allModules={props.allModules}
+            currentLessonSlug={slug}
+          />
+        );
+      }
+    } catch {
+      // Fall through to static seed data
+    }
+  }
+
+  // Static seed-data fallback (development / pre-DB)
+  const result = getLessonBySlug(slug);
   if (!result) notFound();
 
   const { lesson, course, module } = result;
-
-  // Build flat lesson list for prev/next navigation
   const allLessons = course.modules.flatMap((m) => m.lessons);
   const currentIndex = allLessons.findIndex((l) => l.slug === slug);
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;

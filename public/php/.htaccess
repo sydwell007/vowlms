@@ -17,6 +17,9 @@ RewriteRule ^auth/reset-password/?$   api/auth/reset-password.php [L,QSA]
 RewriteRule ^courses/?$               api/courses/index.php [L,QSA]
 RewriteRule ^courses/([^/]+)/?$       api/courses/index.php?slug=$1 [L,QSA]
 
+# ── Lessons ───────────────────────────────────────────────────────────────────
+RewriteRule ^lessons/([^/]+)/?$       api/lessons/index.php?slug=$1 [L,QSA]
+
 # ── Academies ─────────────────────────────────────────────────────────────────
 RewriteRule ^academies/?$             api/academies/index.php [L,QSA]
 RewriteRule ^academies/([^/]+)/?$     api/academies/index.php?slug=$1 [L,QSA]

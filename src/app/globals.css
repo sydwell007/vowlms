@@ -121,3 +121,33 @@ a {
   box-shadow: 0 28px 80px rgba(2, 10, 24, 0.28);
   backdrop-filter: blur(18px);
 }
+
+/* ── Moodle lesson HTML content ────────────────────────────────────────────── */
+.lesson-html-content { line-height: 1.8; color: #334155; }
+.lesson-html-content h1,
+.lesson-html-content h2,
+.lesson-html-content h3,
+.lesson-html-content h4 { font-weight: 600; color: #08111b; margin: 1.4em 0 0.6em; line-height: 1.3; }
+.lesson-html-content h1 { font-size: 1.6rem; }
+.lesson-html-content h2 { font-size: 1.35rem; }
+.lesson-html-content h3 { font-size: 1.15rem; }
+.lesson-html-content h4 { font-size: 1rem; }
+.lesson-html-content p { margin: 0.75em 0; }
+.lesson-html-content ul, .lesson-html-content ol { padding-left: 1.6em; margin: 0.75em 0; }
+.lesson-html-content li { margin: 0.35em 0; }
+.lesson-html-content a { color: #1166c8; text-decoration: underline; }
+.lesson-html-content a:hover { color: #0d55b0; }
+.lesson-html-content strong, .lesson-html-content b { font-weight: 600; color: #08111b; }
+.lesson-html-content em, .lesson-html-content i { font-style: italic; }
+.lesson-html-content blockquote { border-left: 3px solid #1166c8; padding-left: 1em; color: #5f7288; margin: 1em 0; }
+.lesson-html-content pre, .lesson-html-content code {
+  font-family: "Geist Mono", ui-monospace, monospace;
+  background: #f1f5f9; border-radius: 4px; font-size: 0.875em;
+}
+.lesson-html-content pre { padding: 1em; overflow-x: auto; }
+.lesson-html-content code { padding: 0.15em 0.35em; }
+.lesson-html-content table { width: 100%; border-collapse: collapse; margin: 1em 0; font-size: 0.9rem; }
+.lesson-html-content th, .lesson-html-content td { border: 1px solid #e2e8f0; padding: 0.5em 0.75em; text-align: left; }
+.lesson-html-content th { background: #f8fafc; font-weight: 600; }
+.lesson-html-content img { max-width: 100%; height: auto; border-radius: 8px; margin: 0.5em 0; }
+.lesson-html-content iframe { width: 100%; aspect-ratio: 16/9; border: 0; border-radius: 8px; margin: 0.75em 0; }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Lesson, Course, CourseModule } from "@/types/lms";
@@ -15,44 +15,125 @@ type Props = {
   currentLessonSlug: string;
 };
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function extractYouTubeId(url: string): string | null {
+  const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+function extractYouTubeFromHtml(html: string): string | null {
+  // iframe src containing youtube
+  const m = html.match(/src=["']([^"']*(?:youtube|youtu\.be)[^"']*)["']/i);
+  if (m) { const id = extractYouTubeId(m[1]); return id ? id : null; }
+  // href link to youtube
+  const m2 = html.match(/href=["']([^"']*(?:youtube\.com\/watch\?v=|youtu\.be\/)[^"']*)["']/i);
+  if (m2) { const id = extractYouTubeId(m2[1]); return id ? id : null; }
+  return null;
+}
+
+function getVideoInfo(lesson: Lesson, content: string): { type: "youtube" | "video" | "none"; src: string | null } {
+  const raw = lesson.videoUrl ?? "";
+
+  // Skip placeholder values from seed data
+  if (raw && !raw.includes("placeholder") && !raw.includes("video.vowlms")) {
+    const ytId = extractYouTubeId(raw);
+    if (ytId) return { type: "youtube", src: ytId };
+    if (raw.match(/\.(mp4|webm|ogg)(\?|$)/i)) return { type: "video", src: raw };
+    // Check if it's already an embed URL
+    if (raw.includes("youtube-nocookie.com/embed/") || raw.includes("youtube.com/embed/")) {
+      const id = extractYouTubeId(raw);
+      if (id) return { type: "youtube", src: id };
+    }
+  }
+
+  // Extract YouTube from content HTML
+  if (content) {
+    const id = extractYouTubeFromHtml(content);
+    if (id) return { type: "youtube", src: id };
+  }
+
+  return { type: "none", src: null };
+}
+
+function isHtmlContent(content: string): boolean {
+  return /<[a-z][\s\S]*>/i.test(content);
+}
+
+/** Remove scripts and event handlers but keep YouTube iframes */
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+    .replace(/\son\w+\s*=\s*["'][^"']*["']/gi, "")
+    .replace(/javascript:/gi, "#")
+    .replace(
+      /<iframe([^>]*)src=["']([^"']*)["']([^>]*)>/gi,
+      (_match, pre, src, post) => {
+        if (/youtube/.test(src)) {
+          // Normalise to youtube-nocookie
+          const clean = src
+            .replace("www.youtube.com/embed/", "www.youtube-nocookie.com/embed/")
+            .replace("youtube.com/embed/", "youtube-nocookie.com/embed/");
+          return `<iframe${pre}src="${clean}"${post} style="width:100%;aspect-ratio:16/9;border:0;" allowfullscreen>`;
+        }
+        return ""; // strip non-YouTube iframes
+      }
+    );
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
+
 export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, allModules, currentLessonSlug }: Props) {
   const router = useRouter();
   const [completed, setCompleted] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [completedSlugs, setCompletedSlugs] = useState<string[]>([]);
 
   const assessment = course.assessments.find((a) => a.lessonSlug === lesson.slug);
   const vrPractice = course.vrPractices.find((v) => v.lessonSlug === lesson.slug);
 
+  const video = getVideoInfo(lesson, lesson.content ?? "");
+  const hasHtml = isHtmlContent(lesson.content ?? "");
+  const hasContent = (lesson.content ?? "").replace(/<[^>]+>/g, "").trim().length > 0;
+
   useEffect(() => {
-    const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
-    const courseProgress = progress[course.slug] ?? {};
-    const completedLessons: string[] = courseProgress.completedLessons ?? [];
-    setCompleted(completedLessons.includes(lesson.slug));
+    try {
+      const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
+      const done: string[] = progress[course.slug]?.completedLessons ?? [];
+      setCompletedSlugs(done);
+      setCompleted(done.includes(lesson.slug));
+    } catch { /* ignore */ }
   }, [course.slug, lesson.slug]);
 
-  function markComplete() {
+  const markComplete = useCallback(async () => {
+    // Persist to localStorage immediately (offline-safe)
     const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
     if (!progress[course.slug]) progress[course.slug] = { completedLessons: [], assessmentPassed: false };
-    const completedLessons: string[] = progress[course.slug].completedLessons ?? [];
-    if (!completedLessons.includes(lesson.slug)) {
-      completedLessons.push(lesson.slug);
-    }
-    progress[course.slug].completedLessons = completedLessons;
+    const done: string[] = progress[course.slug].completedLessons ?? [];
+    if (!done.includes(lesson.slug)) done.push(lesson.slug);
+    progress[course.slug].completedLessons = done;
     localStorage.setItem("vowlms_progress", JSON.stringify(progress));
     setCompleted(true);
+    setCompletedSlugs([...done]);
+
+    // Sync to bridge in background (non-blocking)
+    fetch("/api/progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lessonSlug: lesson.slug, courseSlug: course.slug }),
+    }).catch(() => { /* offline — localStorage is source of truth */ });
 
     if (nextLesson) {
       setTimeout(() => router.push(`/lesson/${nextLesson.slug}`), 600);
     }
-  }
+  }, [course.slug, lesson.slug, nextLesson, router]);
 
-  const allLessons = allModules.flatMap((m) => m.lessons);
-  const completedSlugs = (() => {
-    try {
-      const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
-      return (progress[course.slug]?.completedLessons ?? []) as string[];
-    } catch { return []; }
-  })();
+  // Remove iframe/youtube from sanitized HTML since we show it in the video player above
+  const cleanContent = hasHtml
+    ? sanitizeHtml(lesson.content ?? "")
+        .replace(/<iframe[^>]*src=["'][^"']*youtube[^"']*["'][^>]*>[\s\S]*?<\/iframe>/gi, "")
+        .replace(/<iframe[^>]*src=["'][^"']*youtube[^"']*["'][^>]*>/gi, "")
+    : lesson.content ?? "";
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f8fbfe]">
@@ -127,62 +208,80 @@ export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, a
               Module {module.order} · {module.title}
             </p>
             <h1 className="mt-3 text-balance text-3xl font-semibold text-ink sm:text-4xl">{lesson.title}</h1>
-            <p className="mt-2 text-sm text-muted">{lesson.durationMinutes} min · {lesson.type === "vr-practice" ? "VR Practice" : lesson.type === "assessment" ? "Assessment" : "Text lesson"}</p>
+            <p className="mt-2 text-sm text-muted">{lesson.durationMinutes} min · {lesson.type === "vr-practice" ? "VR Practice" : lesson.type === "assessment" ? "Assessment" : "Lesson"}</p>
 
-            {/* Video area */}
-            <div className="mt-6 overflow-hidden rounded-2xl bg-gradient-to-br from-[#071526] to-[#0d2239]">
-              <div className="aspect-video flex items-center justify-center p-8">
-                <div className="text-center">
-                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-white/20 bg-white/10 text-2xl backdrop-blur-sm">
-                    ▶
-                  </div>
-                  <p className="text-sm font-semibold text-gold">Video lesson</p>
-                  <p className="mt-2 text-xs text-white/60">Mux video integration · Coming soon</p>
-                  <p className="mt-1 text-xs font-mono text-white/40 truncate max-w-[240px]">{lesson.videoUrl}</p>
+            {/* ── Video player ─────────────────────────────────────────── */}
+            {video.type === "youtube" && (
+              <div className="mt-6 overflow-hidden rounded-2xl bg-black">
+                <div className="aspect-video">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${video.src}?rel=0&modestbranding=1`}
+                    className="h-full w-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    title={lesson.title}
+                  />
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Lesson content */}
-            <div className="mt-8 space-y-5">
-              <div className="premium-card rounded-xl p-6">
-                <h2 className="text-lg font-semibold text-ink mb-3">Lesson content</h2>
-                <p className="text-base leading-8 text-slate-700">{lesson.content}</p>
-                <p className="mt-4 text-base leading-7 text-slate-600">
-                  This lesson is part of the {course.title} course in the GoalVow Academy ecosystem.
-                  Apply what you learn here directly to your practical skills pathway.
-                </p>
-                <p className="mt-4 text-base leading-7 text-slate-600">
-                  Offline lesson text and saved progress sync are available as PWA features for learners at GoalVow Learning Hubs with limited connectivity.
-                </p>
+            {video.type === "video" && (
+              <div className="mt-6 overflow-hidden rounded-2xl bg-black">
+                <video
+                  src={video.src!}
+                  controls
+                  className="w-full"
+                  style={{ maxHeight: "540px" }}
+                  title={lesson.title}
+                />
               </div>
+            )}
 
-              {/* Resources */}
-              <div className="premium-card-soft rounded-xl p-5">
-                <h3 className="text-sm font-semibold text-ink mb-3">Resources</h3>
-                <div className="space-y-2">
-                  {[
-                    { name: "Lesson notes PDF", size: "142 KB", icon: "📄" },
-                    { name: "Worksheet template", size: "38 KB", icon: "📋" },
-                  ].map((resource) => (
-                    <div key={resource.name} className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg">{resource.icon}</span>
-                        <div>
-                          <p className="text-sm font-medium text-ink">{resource.name}</p>
-                          <p className="text-xs text-muted">{resource.size}</p>
-                        </div>
-                      </div>
-                      <button className="rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold text-ink hover:bg-slate-200 transition">
-                        Download
-                      </button>
-                    </div>
-                  ))}
+            {/* ── Lesson content ───────────────────────────────────────── */}
+            {hasContent && (
+              <div className="mt-8 space-y-5">
+                <div className="premium-card rounded-xl p-6">
+                  <h2 className="text-lg font-semibold text-ink mb-4">Lesson content</h2>
+                  {hasHtml ? (
+                    <div
+                      className="lesson-html-content text-base leading-8 text-slate-700"
+                      dangerouslySetInnerHTML={{ __html: cleanContent }}
+                    />
+                  ) : (
+                    <p className="text-base leading-8 text-slate-700">{cleanContent}</p>
+                  )}
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Actions */}
+            {/* ── Assessment / VR placeholder when no content ──────────── */}
+            {!hasContent && lesson.type === "assessment" && (
+              <div className="mt-8 premium-card rounded-xl p-6 text-center">
+                <p className="text-3xl mb-3">📝</p>
+                <h2 className="text-lg font-semibold text-ink mb-2">Assessment</h2>
+                <p className="text-sm text-muted">Complete the assessment below to test your knowledge.</p>
+              </div>
+            )}
+
+            {!hasContent && lesson.type === "vr-practice" && (
+              <div className="mt-8 premium-card rounded-xl p-6 text-center">
+                <p className="text-3xl mb-3">🥽</p>
+                <h2 className="text-lg font-semibold text-ink mb-2">VR Practice</h2>
+                <p className="text-sm text-muted">Launch the VR simulation to practice your skills.</p>
+              </div>
+            )}
+
+            {!hasContent && video.type === "none" && lesson.type === "text" && (
+              <div className="mt-8 premium-card-soft rounded-xl p-6">
+                <p className="text-sm text-muted text-center">
+                  Lesson content will appear here once the migration is complete.
+                  <br />
+                  <span className="text-xs">{lesson.slug}</span>
+                </p>
+              </div>
+            )}
+
+            {/* ── Actions ──────────────────────────────────────────────── */}
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex gap-3">
                 {assessment && (
@@ -207,7 +306,7 @@ export function LessonPlayer({ lesson, course, module, prevLesson, nextLesson, a
               </button>
             </div>
 
-            {/* Prev / Next navigation */}
+            {/* ── Prev / Next navigation ────────────────────────────────── */}
             <div className="mt-8 grid grid-cols-2 gap-4 border-t border-slate-200 pt-8">
               {prevLesson ? (
                 <Link href={`/lesson/${prevLesson.slug}`}
