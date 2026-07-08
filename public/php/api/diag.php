@@ -112,4 +112,49 @@ try {
     $r['sample']['first_resource'] = $row ?: 'table OK but empty — import 010_resources_data.sql';
 } catch (Throwable $e) { $r['sample']['first_resource'] = '✗ table missing — import 009_lesson_resources.sql'; }
 
+// ── Academy / course JOIN diagnostic ─────────────────────────────────────────
+try {
+    $academies = $pdo->query("SELECT id, slug, name FROM academies ORDER BY slug")->fetchAll();
+    $r['academy_ids'] = array_map(fn($a) => $a['id'] . ' (' . $a['slug'] . ')', $academies);
+} catch (Throwable $e) { $r['academy_ids'] = 'error: ' . $e->getMessage(); }
+
+try {
+    $row = $pdo->query("SELECT id, slug, academy_id FROM courses LIMIT 1")->fetch();
+    $r['sample']['first_course_academy_id'] = $row ? $row['academy_id'] : 'no courses';
+} catch (Throwable $e) { $r['sample']['first_course_academy_id'] = 'error'; }
+
+try {
+    $row = $pdo->query(
+        "SELECT c.id AS course_id, c.academy_id, a.id AS matched_academy
+         FROM courses c LEFT JOIN academies a ON a.id = c.academy_id
+         LIMIT 1"
+    )->fetch();
+    $r['sample']['course_academy_join'] = $row
+        ? ['course_academy_id' => $row['course_academy_id'] ?? $row['academy_id'], 'matched_academy' => $row['matched_academy'] ?? 'NULL — JOIN BROKEN']
+        : 'no courses';
+} catch (Throwable $e) { $r['sample']['course_academy_join'] = 'error'; }
+
+// ── Count lessons with empty/null slug ───────────────────────────────────────
+try {
+    $r['counts']['lessons_empty_slug']  = (int) $pdo->query("SELECT COUNT(*) FROM lessons WHERE slug = '' OR slug IS NULL")->fetchColumn();
+    $r['counts']['lessons_with_slug']   = (int) $pdo->query("SELECT COUNT(*) FROM lessons WHERE slug != '' AND slug IS NOT NULL")->fetchColumn();
+    $row = $pdo->query("SELECT slug FROM lessons WHERE slug != '' AND slug IS NOT NULL LIMIT 5")->fetchAll(PDO::FETCH_COLUMN);
+    $r['sample']['lesson_slugs_sample'] = $row;
+} catch (Throwable $e) { $r['counts']['lessons_empty_slug'] = 'error'; }
+
+// ── lesson_resources linkage diagnostic ──────────────────────────────────────
+try {
+    // How many resources have a lesson_id that actually exists in lessons?
+    $r['counts']['resources_linked'] = (int) $pdo->query(
+        "SELECT COUNT(*) FROM lesson_resources lr JOIN lessons l ON l.id = lr.lesson_id"
+    )->fetchColumn();
+    $r['counts']['resources_orphaned'] = (int) $pdo->query(
+        "SELECT COUNT(*) FROM lesson_resources lr LEFT JOIN lessons l ON l.id = lr.lesson_id WHERE l.id IS NULL"
+    )->fetchColumn();
+
+    // Show the lesson_id values actually stored in resources
+    $rows = $pdo->query("SELECT lesson_id, COUNT(*) AS cnt FROM lesson_resources GROUP BY lesson_id LIMIT 5")->fetchAll();
+    $r['sample']['resource_lesson_ids'] = $rows;
+} catch (Throwable $e) { $r['counts']['resources_linked'] = 'error: ' . $e->getMessage(); }
+
 echo json_encode($r, JSON_PRETTY_PRINT);
