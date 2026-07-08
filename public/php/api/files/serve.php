@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * File serving proxy for VowLMS lesson resources.
  *
@@ -27,7 +27,7 @@
  * So:  dirname(dirname(__DIR__)) . '/courses'  resolves correctly.
  */
 
-require_once __DIR__ . '/../../../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';

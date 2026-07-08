@@ -51,5 +51,6 @@ RewriteRule ^user/profile/?$          api/user/profile.php [L,QSA]
 RewriteRule ^payments/payfast-create/?$ api/payments/payfast-create.php [L,QSA]
 RewriteRule ^payments/payfast-notify/?$ api/payments/payfast-notify.php [L,QSA]
 
-# ── Health ────────────────────────────────────────────────────────────────────
+# ── Health / Diagnostics ──────────────────────────────────────────────────────
 RewriteRule ^health/?$                api/health.php [L,QSA]
+RewriteRule ^diag/?$                  api/diag.php [L,QSA]

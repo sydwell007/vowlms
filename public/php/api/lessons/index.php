@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * GET /lessons/[slug]
  * Returns a single lesson with its content, module, course, prev/next,
@@ -7,10 +7,10 @@
  * No auth required: lesson content is visible to any enrolled learner.
  * Bridge-key check is still enforced so only our Next.js app can call this.
  */
-require_once __DIR__ . '/../../../config/cors.php';
-require_once __DIR__ . '/../../../config/db.php';
-require_once __DIR__ . '/../../../lib/auth.php';
-require_once __DIR__ . '/../../../lib/response.php';
+require_once __DIR__ . '/../../config/cors.php';
+require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../../lib/auth.php';
+require_once __DIR__ . '/../../lib/response.php';
 
 setCors();
 requireBridgeKey();
@@ -92,14 +92,20 @@ $nextLesson = $currentIdx >= 0 && $currentIdx < count($flatLessons) - 1 ? [
 ] : null;
 
 // ── 6. Fetch lesson resources (PDFs, videos, etc.) ───────────────────────────
-$resStmt = $db->prepare(
-    'SELECT id, type, filename, content_hash, file_url, filesize, mime_type, position
-     FROM lesson_resources
-     WHERE lesson_id = ?
-     ORDER BY position ASC'
-);
-$resStmt->execute([$lesson['id']]);
-$resources = $resStmt->fetchAll();
+$resources = [];
+try {
+    $resStmt = $db->prepare(
+        'SELECT id, type, filename, content_hash, file_url, filesize, mime_type, position
+         FROM lesson_resources
+         WHERE lesson_id = ?
+         ORDER BY position ASC'
+    );
+    $resStmt->execute([$lesson['id']]);
+    $resources = $resStmt->fetchAll();
+} catch (Throwable $e) {
+    // lesson_resources table may not exist yet — return empty list rather than crashing
+    $resources = [];
+}
 
 // ── 7. Return ─────────────────────────────────────────────────────────────────
 jsonOk([

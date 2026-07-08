@@ -1,7 +1,7 @@
-<?php
-require_once __DIR__ . '/../../../config/cors.php';
-require_once __DIR__ . '/../../../lib/auth.php';
-require_once __DIR__ . '/../../../lib/response.php';
+﻿<?php
+require_once __DIR__ . '/../../config/cors.php';
+require_once __DIR__ . '/../../lib/auth.php';
+require_once __DIR__ . '/../../lib/response.php';
 
 setCors();
 requireBridgeKey();
