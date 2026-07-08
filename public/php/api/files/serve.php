@@ -1,11 +1,10 @@
 <?php
-// ob_start() MUST be the very first statement — it captures the UTF-8 BOM
-// that PHP emits when any included file was saved with BOM encoding.
-// We call ob_end_clean() right before streaming binary content so that
-// the correct Content-Type header (not text/html) reaches the browser.
+// Capture the UTF-8 BOM that PHP emits when any included file was saved
+// with BOM encoding, then immediately discard it before anything else runs.
+// This must be the FIRST two statements so all subsequent header() calls work.
 ob_start();
-
 require_once __DIR__ . '/../../config/db.php';
+ob_end_clean();
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
 $origin  = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -25,16 +24,8 @@ header("Access-Control-Allow-Methods: GET, HEAD, OPTIONS");
 header("Access-Control-Allow-Headers: Range");
 header("Access-Control-Expose-Headers: Content-Range, Accept-Ranges, Content-Length, Content-Type");
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    ob_end_clean();
-    http_response_code(204);
-    exit;
-}
-if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true)) {
-    ob_end_clean();
-    http_response_code(405);
-    exit;
-}
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
+if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true)) { http_response_code(405); exit; }
 
 $hash    = trim($_GET['hash'] ?? '');
 $id      = trim($_GET['id']   ?? '');
@@ -42,7 +33,6 @@ $url     = trim($_GET['url']  ?? '');   // Mode C — direct Moodle URL proxy
 $reqName = trim($_GET['name'] ?? '');
 
 if ($hash === '' && $id === '' && $url === '') {
-    ob_end_clean();
     http_response_code(400);
     header('Content-Type: application/json');
     echo json_encode(['ok' => false, 'error' => 'hash, id, or url parameter required']);
@@ -50,13 +40,11 @@ if ($hash === '' && $id === '' && $url === '') {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MODE C — Direct URL proxy (for Moodle pluginfile.php URLs embedded in
-//           lesson HTML content; restricted to known Moodle hosts only)
+// MODE C — Direct URL proxy (for pluginfile.php URLs embedded in lesson HTML)
+// Restricted to known Moodle hosts only to prevent open-proxy abuse.
 // ─────────────────────────────────────────────────────────────────────────────
 if ($url !== '' && $hash === '' && $id === '') {
-    // Security: only allow known Moodle domains to prevent open-proxy abuse
     if (!preg_match('#^https?://(goalvow\.com|www\.goalvow\.com)/#i', $url)) {
-        ob_end_clean();
         http_response_code(403);
         header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'URL domain not allowed']);
@@ -77,7 +65,6 @@ $db = getDb();
 // ─────────────────────────────────────────────────────────────────────────────
 if ($hash !== '') {
     if (!preg_match('/^[a-f0-9]{40}$/i', $hash)) {
-        ob_end_clean();
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'Invalid hash format']);
@@ -85,7 +72,6 @@ if ($hash !== '') {
     }
     $hash = strtolower($hash);
 
-    // Security: hash must be in our DB
     $stmt = $db->prepare(
         'SELECT id, type, filename, mime_type, filesize, file_url
          FROM lesson_resources WHERE content_hash = ? LIMIT 1'
@@ -104,7 +90,6 @@ if ($hash !== '') {
     }
 
     if (!$resource) {
-        ob_end_clean();
         http_response_code(404);
         header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'Resource not found']);
@@ -123,7 +108,6 @@ if ($hash !== '') {
     }
 
     if (!($resource['id'] ?? null)) {
-        ob_end_clean();
         http_response_code(404);
         header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'File not on filesystem']);
@@ -137,7 +121,6 @@ if ($hash !== '') {
 // ─────────────────────────────────────────────────────────────────────────────
 if ($id !== '') {
     if (!preg_match('/^[a-z0-9\-]{1,64}$/i', $id)) {
-        ob_end_clean();
         http_response_code(400);
         header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'Invalid id format']);
@@ -152,7 +135,6 @@ if ($id !== '') {
     $resource = $stmt->fetch();
 
     if (!$resource) {
-        ob_end_clean();
         http_response_code(404);
         header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'Resource not found']);
@@ -174,7 +156,6 @@ if ($id !== '') {
 
     $fileUrl = $resource['file_url'] ?? '';
     if ($fileUrl === '') {
-        ob_end_clean();
         http_response_code(404);
         header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'No file URL stored for this resource']);
@@ -190,20 +171,17 @@ if ($id !== '') {
     exit;
 }
 
-ob_end_clean();
 http_response_code(400);
 header('Content-Type: application/json');
 echo json_encode(['ok' => false, 'error' => 'Nothing to serve']);
 exit;
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Serve directly from the courses/ symlink (Moodle filedir).
+// Serve directly from the Moodle filedir (hash-based filesystem path).
 // Supports HTTP Range requests for video seeking.
 // ─────────────────────────────────────────────────────────────────────────────
 function serveFromFilesystem(string $path, int $size, string $mimeType, string $filename): void
 {
-    ob_end_clean();  // Discard BOM + any stray output before binary headers
-
     $safe = rawurlencode(preg_replace('/[^\w.\- ]/u', '_', $filename));
 
     header("Content-Type: {$mimeType}");
@@ -255,13 +233,12 @@ function serveFromFilesystem(string $path, int $size, string $mimeType, string $
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Proxy a file from Moodle via cURL.
-// Strips X-Frame-Options, forces Content-Disposition: inline,
-// and streams the binary body directly without buffering it in PHP memory.
+// All response headers are set in the WRITEFUNCTION on the first data chunk,
+// after the output buffer has already been cleaned at script start.
 // ─────────────────────────────────────────────────────────────────────────────
 function proxyFromMoodle(string $url, string $mimeType, string $filename): void
 {
     if (!function_exists('curl_init')) {
-        ob_end_clean();
         header("Location: {$url}", true, 302);
         exit;
     }
@@ -295,13 +272,14 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         return strlen($headerLine);
     });
 
+    // ob_end_clean() was already called at script start — headers are clean.
+    // This WRITEFUNCTION just sets response headers on the first chunk and
+    // streams body bytes directly without any additional buffering.
     $headersSet = false;
     curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use (
         &$headersSet, &$moodleHeaders, $mimeType, $safe, $range
     ) {
         if (!$headersSet) {
-            ob_end_clean();  // Discard BOM + any pre-response output
-
             $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
             if ($httpCode === 206 || ($range !== '' && $httpCode === 200)) {
@@ -313,7 +291,6 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
                 http_response_code($httpCode >= 400 ? $httpCode : 200);
             }
 
-            // Always use our declared type — never trust Moodle's Content-Type
             header("Content-Type: {$mimeType}");
             header("Content-Disposition: inline; filename=\"{$safe}\"");
             header("Accept-Ranges: bytes");
@@ -338,7 +315,6 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
     curl_close($ch);
 
     if ($err && !$headersSet) {
-        ob_end_clean();
         http_response_code(502);
         header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'Proxy fetch failed: ' . $err]);

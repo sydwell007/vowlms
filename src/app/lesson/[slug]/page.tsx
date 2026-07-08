@@ -130,7 +130,15 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
   if (d.lesson.video_hash) {
     videoUrl = `${bridgeBase}/files/serve?hash=${d.lesson.video_hash}&name=video.mp4`;
   } else if (d.lesson.video_url) {
-    videoUrl = d.lesson.video_url;
+    const rawVideo = d.lesson.video_url;
+    // Moodle pluginfile.php URLs require a session — proxy through serve.php Mode C
+    if (/pluginfile\.php/i.test(rawVideo) && bridgeBase) {
+      const pathPart = rawVideo.split("?")[0];
+      const name = encodeURIComponent(decodeURIComponent(pathPart.split("/").pop() ?? "video.mp4") || "video.mp4");
+      videoUrl = `${bridgeBase}/files/serve?url=${encodeURIComponent(rawVideo)}&name=${name}`;
+    } else {
+      videoUrl = rawVideo;
+    }
   }
 
   const lesson: Lesson = {
