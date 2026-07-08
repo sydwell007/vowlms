@@ -66,21 +66,24 @@ type BridgeLessonResponse = {
 };
 
 // ── Rewrite Moodle pluginfile URLs in lesson HTML ────────────────────────────
-// Moodle embeds video/audio/image source URLs using pluginfile.php which
-// requires a Moodle browser session. We rewrite them server-side to go
-// through serve.php (Mode C) so the PHP proxy fetches them server-to-server.
+// Moodle embeds video/audio/image URLs via pluginfile.php (regular or
+// webservice variant). Both require a Moodle browser session / token.
+// We rewrite src= AND href= attributes server-side to go through
+// serve.php Mode C so PHP proxies them server-to-server (no login needed).
 function rewriteMoodleUrls(html: string, bridgeBase: string): string {
   if (!html || !bridgeBase) return html;
   const base = bridgeBase.replace(/\/$/, "");
   return html.replace(
-    /\bsrc="(https?:\/\/[^"]*\/webservice\/pluginfile\.php\/[^"]*)"/gi,
-    (_, moodleUrl: string) => {
+    /\b(src|href)="(https?:\/\/[^"]*\/(?:webservice\/)?pluginfile\.php\/[^"]*)"/gi,
+    (_, attr: string, moodleUrl: string) => {
       const clean = moodleUrl
         .replace(/([?&])forcedownload=\d+&?/g, "$1")
         .replace(/[?&]$/, "");
-      const ext = clean.split(".").pop()?.split("?")[0]?.toLowerCase() ?? "mp4";
-      const name = encodeURIComponent(`media.${ext}`);
-      return `src="${base}/files/serve?url=${encodeURIComponent(clean)}&name=${name}"`;
+      // Extract filename from the URL path for correct MIME guessing
+      const pathPart = clean.split("?")[0];
+      const filename = decodeURIComponent(pathPart.split("/").pop() ?? "file");
+      const name = encodeURIComponent(filename || "file");
+      return `${attr}="${base}/files/serve?url=${encodeURIComponent(clean)}&name=${name}"`;
     }
   );
 }
