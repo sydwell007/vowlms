@@ -23,6 +23,13 @@ $_ENV['BRIDGE_API_KEY'] = 'qVeXCDPQPLV7xihO62EhIzbw0IowhKxPT4XnvWG3Z9zsdaaY4Oxje
 // ── JWT (must match Next.js JWT_SECRET) ───────────────────────────────────────
 $_ENV['JWT_SECRET'] = 'qVeXCDPQPLV7xihO62EhIzbw0IowhKxPT4XnvWG3Z9zsdaaY4OxjehjZqgy7jL4X';
 
+// ── Moodle Webservice Token ───────────────────────────────────────────────────
+// Required for serve.php to proxy lesson videos and files from Moodle.
+// Moodle admin: Site administration → Server → Web services → Manage tokens
+// Create a token for an admin account, then paste it below.
+// The token allows server-to-server fetching of pluginfile.php without a session.
+$_ENV['MOODLE_TOKEN'] = 'PASTE_YOUR_MOODLE_TOKEN_HERE';
+
 // ── App URLs ──────────────────────────────────────────────────────────────────
 $_ENV['APP_URL']         = 'https://vowlms.vercel.app';
 $_ENV['FRONTEND_ORIGIN'] = 'https://vowlms.vercel.app';

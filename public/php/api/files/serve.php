@@ -42,6 +42,8 @@ if ($hash === '' && $id === '' && $url === '') {
 // ─────────────────────────────────────────────────────────────────────────────
 // MODE C — Direct URL proxy (for pluginfile.php URLs embedded in lesson HTML)
 // Restricted to known Moodle hosts only to prevent open-proxy abuse.
+// Plain pluginfile.php requires a browser session; we convert it to the
+// webservice variant and append the MOODLE_TOKEN so PHP can fetch server-side.
 // ─────────────────────────────────────────────────────────────────────────────
 if ($url !== '' && $hash === '' && $id === '') {
     if (!preg_match('#^https?://(goalvow\.com|www\.goalvow\.com)/#i', $url)) {
@@ -52,6 +54,21 @@ if ($url !== '' && $hash === '' && $id === '') {
     }
     $cleanUrl = preg_replace('/([?&])forcedownload=\d+&?/', '$1', $url);
     $cleanUrl = rtrim($cleanUrl, '?&');
+
+    // Convert plain pluginfile.php → webservice/pluginfile.php and add token.
+    // webservice/pluginfile.php accepts a token instead of a session cookie,
+    // allowing server-to-server file fetching without a logged-in browser.
+    $moodleToken = getenv('MOODLE_TOKEN');
+    if (!$moodleToken) $moodleToken = $_ENV['MOODLE_TOKEN'] ?? '';
+    if ($moodleToken !== ''
+        && preg_match('#/pluginfile\.php/#i', $cleanUrl)
+        && !preg_match('#/webservice/pluginfile\.php/#i', $cleanUrl)
+    ) {
+        $cleanUrl = preg_replace('#/pluginfile\.php/#i', '/webservice/pluginfile.php/', $cleanUrl);
+        $sep      = (strpos($cleanUrl, '?') !== false) ? '&' : '?';
+        $cleanUrl .= $sep . 'token=' . urlencode($moodleToken);
+    }
+
     $filename = $reqName ?: basename(parse_url($cleanUrl, PHP_URL_PATH) ?: 'file');
     $mimeType = guessMime($filename);
     proxyFromMoodle($cleanUrl, $mimeType, $filename);
