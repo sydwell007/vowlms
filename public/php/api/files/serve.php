@@ -1,36 +1,14 @@
-﻿<?php
-/**
- * File serving proxy for VowLMS lesson resources.
- *
- * TWO modes:
- *
- * Mode A — Hash (fast, no Moodle round-trip):
- *   GET /files/serve?hash=SHA1_HASH&name=filename.pdf
- *   Serves directly from the `courses/` symlink (Moodle filedir).
- *   Requires content_hash to be populated in lesson_resources.
- *   Supports HTTP Range requests for video seeking.
- *
- * Mode B — ID proxy (standard, works without hash):
- *   GET /files/serve?id=RESOURCE_ID&name=filename.pdf
- *   Looks up file_url from lesson_resources by ID, then proxies
- *   the file from Moodle via cURL — stripping Moodle's
- *   X-Frame-Options and forcing Content-Disposition: inline so
- *   PDFs render in <iframe> instead of triggering a download.
- *
- * No Bridge-Key required — the browser calls this directly.
- * Security: only resources stored in lesson_resources table are served.
- *
- * The `courses/` symlink lives at:
- *   api.goalvow.com/courses  →  moodledata/filedir
- * This script is at:
- *   api.goalvow.com/api/files/serve.php
- * So:  dirname(dirname(__DIR__)) . '/courses'  resolves correctly.
- */
+<?php
+// ob_start() MUST be the very first statement — it captures the UTF-8 BOM
+// that PHP emits when any included file was saved with BOM encoding.
+// We call ob_end_clean() right before streaming binary content so that
+// the correct Content-Type header (not text/html) reaches the browser.
+ob_start();
 
 require_once __DIR__ . '/../../config/db.php';
 
 // ── CORS ─────────────────────────────────────────────────────────────────────
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin  = $_SERVER['HTTP_ORIGIN'] ?? '';
 $allowed = [
     'https://vowlms.vercel.app',
     'https://vowlms.goalvow.com',
@@ -47,19 +25,48 @@ header("Access-Control-Allow-Methods: GET, HEAD, OPTIONS");
 header("Access-Control-Allow-Headers: Range");
 header("Access-Control-Expose-Headers: Content-Range, Accept-Ranges, Content-Length, Content-Type");
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    ob_end_clean();
+    http_response_code(204);
+    exit;
+}
 if (!in_array($_SERVER['REQUEST_METHOD'], ['GET', 'HEAD'], true)) {
-    http_response_code(405); exit;
+    ob_end_clean();
+    http_response_code(405);
+    exit;
 }
 
 $hash    = trim($_GET['hash'] ?? '');
 $id      = trim($_GET['id']   ?? '');
+$url     = trim($_GET['url']  ?? '');   // Mode C — direct Moodle URL proxy
 $reqName = trim($_GET['name'] ?? '');
 
-if ($hash === '' && $id === '') {
+if ($hash === '' && $id === '' && $url === '') {
+    ob_end_clean();
     http_response_code(400);
     header('Content-Type: application/json');
-    echo json_encode(['ok' => false, 'error' => 'hash or id parameter required']);
+    echo json_encode(['ok' => false, 'error' => 'hash, id, or url parameter required']);
+    exit;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MODE C — Direct URL proxy (for Moodle pluginfile.php URLs embedded in
+//           lesson HTML content; restricted to known Moodle hosts only)
+// ─────────────────────────────────────────────────────────────────────────────
+if ($url !== '' && $hash === '' && $id === '') {
+    // Security: only allow known Moodle domains to prevent open-proxy abuse
+    if (!preg_match('#^https?://(goalvow\.com|www\.goalvow\.com)/#i', $url)) {
+        ob_end_clean();
+        http_response_code(403);
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => false, 'error' => 'URL domain not allowed']);
+        exit;
+    }
+    $cleanUrl = preg_replace('/([?&])forcedownload=\d+&?/', '$1', $url);
+    $cleanUrl = rtrim($cleanUrl, '?&');
+    $filename = $reqName ?: basename(parse_url($cleanUrl, PHP_URL_PATH) ?: 'file');
+    $mimeType = guessMime($filename);
+    proxyFromMoodle($cleanUrl, $mimeType, $filename);
     exit;
 }
 
@@ -70,7 +77,9 @@ $db = getDb();
 // ─────────────────────────────────────────────────────────────────────────────
 if ($hash !== '') {
     if (!preg_match('/^[a-f0-9]{40}$/i', $hash)) {
+        ob_end_clean();
         http_response_code(400);
+        header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'Invalid hash format']);
         exit;
     }
@@ -85,17 +94,17 @@ if ($hash !== '') {
     $resource = $stmt->fetch();
 
     if (!$resource) {
-        // Also check lessons.video_hash
         $ls = $db->prepare('SELECT video_url AS file_url FROM lessons WHERE video_hash = ? LIMIT 1');
         $ls->execute([$hash]);
         $lr = $ls->fetch();
         if ($lr) {
             $resource = ['type' => 'video', 'filename' => $reqName ?: 'video.mp4',
-                         'mime_type' => 'video/mp4', 'filesize' => 0, 'file_url' => null];
+                         'mime_type' => 'video/mp4', 'filesize' => 0, 'file_url' => null, 'id' => null];
         }
     }
 
     if (!$resource) {
+        ob_end_clean();
         http_response_code(404);
         header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'Resource not found']);
@@ -113,10 +122,10 @@ if ($hash !== '') {
         exit;
     }
 
-    // Hash-based but file missing on filesystem — fall through to ID proxy below
-    // if we also have a resource ID, or fail
-    if (!$resource['id'] ?? null) {
+    if (!($resource['id'] ?? null)) {
+        ob_end_clean();
         http_response_code(404);
+        header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'File not on filesystem']);
         exit;
     }
@@ -127,9 +136,10 @@ if ($hash !== '') {
 // MODE B — ID-based proxy (fetch from Moodle, control all headers)
 // ─────────────────────────────────────────────────────────────────────────────
 if ($id !== '') {
-    // Allow only our ID format (prevents injection)
     if (!preg_match('/^[a-z0-9\-]{1,64}$/i', $id)) {
+        ob_end_clean();
         http_response_code(400);
+        header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'Invalid id format']);
         exit;
     }
@@ -142,15 +152,15 @@ if ($id !== '') {
     $resource = $stmt->fetch();
 
     if (!$resource) {
+        ob_end_clean();
         http_response_code(404);
         header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'Resource not found']);
         exit;
     }
 
-    // If a hash is now available (DB updated later), try filesystem first
     if (!empty($resource['content_hash'])) {
-        $hashVal  = strtolower($resource['content_hash']);
+        $hashVal    = strtolower($resource['content_hash']);
         $domainRoot = dirname(dirname(__DIR__));
         $filePath   = $domainRoot . '/courses/' . substr($hashVal, 0, 2) . '/' . substr($hashVal, 2, 2) . '/' . $hashVal;
         if (file_exists($filePath) && is_file($filePath)) {
@@ -164,15 +174,15 @@ if ($id !== '') {
 
     $fileUrl = $resource['file_url'] ?? '';
     if ($fileUrl === '') {
+        ob_end_clean();
         http_response_code(404);
+        header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'No file URL stored for this resource']);
         exit;
     }
 
-    // Strip forcedownload=1 so Moodle doesn't send Content-Disposition:attachment
-    $fileUrl = preg_replace('/([?&])forcedownload=\d+&?/', '$1', $fileUrl);
-    $fileUrl = rtrim($fileUrl, '?&');
-
+    $fileUrl  = preg_replace('/([?&])forcedownload=\d+&?/', '$1', $fileUrl);
+    $fileUrl  = rtrim($fileUrl, '?&');
     $filename = $reqName ?: ($resource['filename'] ?? 'file');
     $mimeType = $resource['mime_type'] ?? guessMime($filename);
 
@@ -180,7 +190,9 @@ if ($id !== '') {
     exit;
 }
 
+ob_end_clean();
 http_response_code(400);
+header('Content-Type: application/json');
 echo json_encode(['ok' => false, 'error' => 'Nothing to serve']);
 exit;
 
@@ -190,6 +202,8 @@ exit;
 // ─────────────────────────────────────────────────────────────────────────────
 function serveFromFilesystem(string $path, int $size, string $mimeType, string $filename): void
 {
+    ob_end_clean();  // Discard BOM + any stray output before binary headers
+
     $safe = rawurlencode(preg_replace('/[^\w.\- ]/u', '_', $filename));
 
     header("Content-Type: {$mimeType}");
@@ -197,8 +211,8 @@ function serveFromFilesystem(string $path, int $size, string $mimeType, string $
     header("Accept-Ranges: bytes");
     header("Cache-Control: private, max-age=86400");
     header("X-Content-Type-Options: nosniff");
-    // Remove any frame restrictions so the iframe works
     header_remove('X-Frame-Options');
+    header("Cross-Origin-Resource-Policy: cross-origin");
 
     $range = $_SERVER['HTTP_RANGE'] ?? '';
     if ($range === '') {
@@ -212,8 +226,8 @@ function serveFromFilesystem(string $path, int $size, string $mimeType, string $
         header("Content-Range: bytes */{$size}");
         return;
     }
-    $start = $m[1] !== '' ? (int)$m[1] : 0;
-    $end   = $m[2] !== '' ? (int)$m[2] : $size - 1;
+    $start  = $m[1] !== '' ? (int)$m[1] : 0;
+    $end    = $m[2] !== '' ? (int)$m[2] : $size - 1;
     if ($start > $end || $end >= $size) {
         http_response_code(416);
         header("Content-Range: bytes */{$size}");
@@ -226,7 +240,7 @@ function serveFromFilesystem(string $path, int $size, string $mimeType, string $
 
     if ($_SERVER['REQUEST_METHOD'] === 'HEAD') return;
 
-    $fp = fopen($path, 'rb');
+    $fp   = fopen($path, 'rb');
     fseek($fp, $start);
     $left = $length;
     while ($left > 0 && !feof($fp)) {
@@ -241,14 +255,13 @@ function serveFromFilesystem(string $path, int $size, string $mimeType, string $
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Proxy a file from Moodle via cURL.
-// Strips X-Frame-Options and forces Content-Disposition: inline
-// so PDFs display in <iframe> instead of triggering a download.
-// For video: forwards Range header so browser can seek.
+// Strips X-Frame-Options, forces Content-Disposition: inline,
+// and streams the binary body directly without buffering it in PHP memory.
 // ─────────────────────────────────────────────────────────────────────────────
 function proxyFromMoodle(string $url, string $mimeType, string $filename): void
 {
     if (!function_exists('curl_init')) {
-        // cURL unavailable — redirect as last resort (iframe will likely be blocked)
+        ob_end_clean();
         header("Location: {$url}", true, 302);
         exit;
     }
@@ -268,12 +281,10 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         CURLOPT_BUFFERSIZE     => 65536,
     ]);
 
-    // Forward Range header for video seeking
     if ($range !== '') {
         curl_setopt($ch, CURLOPT_RANGE, str_replace('bytes=', '', $range));
     }
 
-    // Capture response headers from Moodle so we can relay Content-Length
     $moodleHeaders = [];
     curl_setopt($ch, CURLOPT_HEADERFUNCTION, function ($ch, $headerLine) use (&$moodleHeaders) {
         $h = trim($headerLine);
@@ -284,15 +295,15 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         return strlen($headerLine);
     });
 
-    // Stream body directly to the client
     $headersSet = false;
     curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use (
         &$headersSet, &$moodleHeaders, $mimeType, $safe, $range
     ) {
         if (!$headersSet) {
+            ob_end_clean();  // Discard BOM + any pre-response output
+
             $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-            // Relay appropriate HTTP status (200 or 206 for Range)
             if ($httpCode === 206 || ($range !== '' && $httpCode === 200)) {
                 http_response_code(206);
                 if (isset($moodleHeaders['content-range'])) {
@@ -302,17 +313,15 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
                 http_response_code($httpCode >= 400 ? $httpCode : 200);
             }
 
-            // Set our controlled headers (override everything from Moodle)
+            // Always use our declared type — never trust Moodle's Content-Type
             header("Content-Type: {$mimeType}");
             header("Content-Disposition: inline; filename=\"{$safe}\"");
             header("Accept-Ranges: bytes");
             header("Cache-Control: private, max-age=3600");
             header("X-Content-Type-Options: nosniff");
-            // Never block framing — this is the whole point of the proxy
-            header("X-Frame-Options: ALLOWALL");
-            header("Content-Security-Policy: default-src 'self'");
+            header_remove('X-Frame-Options');
+            header("Cross-Origin-Resource-Policy: cross-origin");
 
-            // Relay Content-Length so the browser can show a progress bar
             if (isset($moodleHeaders['content-length'])) {
                 header("Content-Length: {$moodleHeaders['content-length']}");
             }
@@ -329,7 +338,9 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
     curl_close($ch);
 
     if ($err && !$headersSet) {
+        ob_end_clean();
         http_response_code(502);
+        header('Content-Type: application/json');
         echo json_encode(['ok' => false, 'error' => 'Proxy fetch failed: ' . $err]);
     }
 }
