@@ -88,7 +88,7 @@ for (const c of courses) {
   const isFree    = price === 0 ? 1 : 0;
 
   lines.push(
-    `INSERT INTO courses (id, slug, academy_id, moodle_id, title, description, level, duration, price, is_free, status) VALUES (` +
+    `INSERT IGNORE INTO courses (id, slug, academy_id, moodle_id, title, description, level, duration, price, is_free, status) VALUES (` +
     [
       esc(cId), esc(c.slug), esc(academyId), esc(c.moodleId ?? null),
       esc(c.title), esc(c.description ?? ""),
@@ -107,7 +107,7 @@ for (const c of courses) {
     const mSlug = `${c.slug}--mod-${modPos}`;
 
     lines.push(
-      `INSERT INTO modules (id, slug, course_id, title, position) VALUES (` +
+      `INSERT IGNORE INTO modules (id, slug, course_id, title, position) VALUES (` +
       [esc(mId), esc(mSlug), esc(cId), esc(mod.title), esc(modPos)].join(", ") +
       `);`
     );
@@ -120,7 +120,7 @@ for (const c of courses) {
       const lType = lessonType(les.type);
 
       lines.push(
-        `INSERT INTO lessons (id, slug, module_id, title, type, duration_minutes, position) VALUES (` +
+        `INSERT IGNORE INTO lessons (id, slug, module_id, title, type, duration_minutes, position) VALUES (` +
         [
           esc(lId), esc(les.slug ?? ""), esc(mId),
           esc(les.title), esc(lType),
