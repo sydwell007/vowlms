@@ -54,6 +54,14 @@ function buildHeaders(token?: string): HeadersInit {
   return h;
 }
 
+// Appends _bk= to the URL so the bridge key reaches PHP even when Apache
+// strips custom request headers (common on PHP-FPM / shared hosting).
+function withBridgeKey(url: string): string {
+  if (!API_KEY) return url;
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}_bk=${encodeURIComponent(API_KEY)}`;
+}
+
 async function resolveToken(opts?: BridgeOpts): Promise<string | undefined> {
   if (opts?.noAuth) return undefined;
   return opts?.token ?? (await getAuthToken());
@@ -69,7 +77,7 @@ export async function bridgeGet<T>(path: string, opts?: BridgeOpts): Promise<T> 
   let res: Response;
 
   try {
-    res = await fetch(`${BASE}${path}`, {
+    res = await fetch(withBridgeKey(`${BASE}${path}`), {
       method: "GET",
       headers: buildHeaders(token),
       cache: "no-store",
@@ -100,7 +108,7 @@ export async function bridgePost<T>(
   let res: Response;
 
   try {
-    res = await fetch(`${BASE}${path}`, {
+    res = await fetch(withBridgeKey(`${BASE}${path}`), {
       method: "POST",
       headers: buildHeaders(token),
       body: JSON.stringify(body),

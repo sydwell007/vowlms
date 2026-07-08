@@ -1,6 +1,12 @@
 Options -Indexes
 RewriteEngine On
 
+# Pass X-Bridge-Key header through to PHP-FPM/CGI as an env variable.
+# In mod_php this is automatic; in CGI/FPM mode custom headers are stripped
+# by Apache unless explicitly forwarded. PHP reads this as $_SERVER['BRIDGE_KEY_HEADER'].
+RewriteCond %{HTTP:X-Bridge-Key} ^(.+)$
+RewriteRule .* - [E=BRIDGE_KEY_HEADER:%1]
+
 # Block direct access to config and lib
 RewriteRule ^config/ - [F,L]
 RewriteRule ^lib/ - [F,L]

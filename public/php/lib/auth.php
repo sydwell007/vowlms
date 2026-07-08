@@ -5,9 +5,41 @@ require_once __DIR__ . '/response.php';
 
 function requireBridgeKey(): void {
     $expected = env('BRIDGE_API_KEY');
+
+    // 1. mod_php — header arrives in $_SERVER directly
     $provided = $_SERVER['HTTP_X_BRIDGE_KEY'] ?? '';
+
+    // 2. PHP-FPM / CGI — use getallheaders() (works in PHP 8+)
+    if ($provided === '' && function_exists('getallheaders')) {
+        $all = getallheaders();
+        // Apache lowercases header names in FPM mode
+        $provided = $all['X-Bridge-Key']
+                 ?? $all['x-bridge-key']
+                 ?? $all['X-BRIDGE-KEY']
+                 ?? '';
+    }
+
+    // 3. apache_request_headers() fallback (alias of getallheaders())
+    if ($provided === '' && function_exists('apache_request_headers')) {
+        $hdrs = apache_request_headers();
+        $provided = $hdrs['X-Bridge-Key']
+                 ?? $hdrs['x-bridge-key']
+                 ?? '';
+    }
+
+    // 4. .htaccess RewriteRule may inject it as a custom env var
+    if ($provided === '') {
+        $provided = $_SERVER['BRIDGE_KEY_HEADER'] ?? '';
+    }
+
+    // 5. Last resort: query string (for hosts that strip all custom headers)
+    if ($provided === '') {
+        $provided = $_GET['_bk'] ?? '';
+    }
+
     if ($expected === '' || !hash_equals($expected, $provided)) {
-        jsonError('Forbidden', 403);
+        // Return the method that was tried so we can diagnose
+        jsonError('Forbidden — bridge key mismatch (provided len: ' . strlen($provided) . ')', 403);
     }
 }
 
@@ -18,6 +50,15 @@ function requireAuth(): array {
 
     if (str_starts_with($auth, 'Bearer ')) {
         $token = substr($auth, 7);
+    }
+
+    // PHP-FPM fallback for Authorization header
+    if ($token === '' && function_exists('getallheaders')) {
+        $all  = getallheaders();
+        $auth = $all['Authorization'] ?? $all['authorization'] ?? '';
+        if (str_starts_with($auth, 'Bearer ')) {
+            $token = substr($auth, 7);
+        }
     }
 
     if ($token === '') {

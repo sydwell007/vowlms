@@ -49,6 +49,19 @@ $r['env']['DB_HOST_VAL'] = diagEnv('DB_HOST') ?? '(not set)';
 $r['env']['DB_NAME_VAL'] = diagEnv('DB_NAME') ?? '(not set)';
 $r['env']['BRIDGE_KEY_LEN'] = strlen(diagEnv('BRIDGE_API_KEY') ?? '') . ' chars';
 
+// ── Bridge key header diagnostics ─────────────────────────────────────────────
+$r['bridge_key_debug'] = [
+    '_SERVER_HTTP_X_BRIDGE_KEY'  => isset($_SERVER['HTTP_X_BRIDGE_KEY'])  ? 'present ('.strlen($_SERVER['HTTP_X_BRIDGE_KEY']).' chars)' : 'ABSENT',
+    '_SERVER_BRIDGE_KEY_HEADER'  => isset($_SERVER['BRIDGE_KEY_HEADER'])  ? 'present ('.strlen($_SERVER['BRIDGE_KEY_HEADER']).' chars)' : 'ABSENT',
+    '_GET__bk'                   => isset($_GET['_bk'])                    ? 'present ('.strlen($_GET['_bk']).' chars)'                 : 'ABSENT',
+    'getallheaders_available'    => function_exists('getallheaders') ? 'yes' : 'no',
+];
+if (function_exists('getallheaders')) {
+    $all = getallheaders();
+    $r['bridge_key_debug']['getallheaders_X_Bridge_Key'] = isset($all['X-Bridge-Key']) ? 'present ('.strlen($all['X-Bridge-Key']).' chars)' : 'ABSENT';
+    $r['bridge_key_debug']['getallheaders_x_bridge_key'] = isset($all['x-bridge-key']) ? 'present' : 'absent';
+}
+
 // ── DB connection ─────────────────────────────────────────────────────────────
 $dbHost = diagEnv('DB_HOST');
 $dbName = diagEnv('DB_NAME');
