@@ -65,6 +65,26 @@ type BridgeLessonResponse = {
   resources: BridgeResource[];
 };
 
+// ── Rewrite Moodle pluginfile URLs in lesson HTML ────────────────────────────
+// Moodle embeds video/audio/image source URLs using pluginfile.php which
+// requires a Moodle browser session. We rewrite them server-side to go
+// through serve.php (Mode C) so the PHP proxy fetches them server-to-server.
+function rewriteMoodleUrls(html: string, bridgeBase: string): string {
+  if (!html || !bridgeBase) return html;
+  const base = bridgeBase.replace(/\/$/, "");
+  return html.replace(
+    /\bsrc="(https?:\/\/[^"]*\/webservice\/pluginfile\.php\/[^"]*)"/gi,
+    (_, moodleUrl: string) => {
+      const clean = moodleUrl
+        .replace(/([?&])forcedownload=\d+&?/g, "$1")
+        .replace(/[?&]$/, "");
+      const ext = clean.split(".").pop()?.split("?")[0]?.toLowerCase() ?? "mp4";
+      const name = encodeURIComponent(`media.${ext}`);
+      return `src="${base}/files/serve?url=${encodeURIComponent(clean)}&name=${name}"`;
+    }
+  );
+}
+
 // ── Build file serve URL ───────────────────────────────────────────────────────
 // All files go through the PHP proxy so we can:
 //   - Strip X-Frame-Options (Moodle sends SAMEORIGIN, blocking iframes)
@@ -98,10 +118,13 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
   const isAssessment = d.lesson.type === "assessment";
   const isVR = d.lesson.type === "vr-practice";
 
+  const bridgeBase = (process.env.BRIDGE_BASE_URL ?? "").replace(/\/$/, "");
+  const rawContent = d.lesson.content ?? "";
+  const content = rewriteMoodleUrls(rawContent, bridgeBase);
+
   // Determine video URL — prefer uploaded video (via serve.php) over YouTube embed
   let videoUrl: string | undefined;
   if (d.lesson.video_hash) {
-    const bridgeBase = (process.env.BRIDGE_BASE_URL ?? "").replace(/\/$/, "");
     videoUrl = `${bridgeBase}/files/serve?hash=${d.lesson.video_hash}&name=video.mp4`;
   } else if (d.lesson.video_url) {
     videoUrl = d.lesson.video_url;
@@ -111,7 +134,7 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
     slug: d.lesson.slug,
     title: d.lesson.title,
     type: (d.lesson.type as Lesson["type"]) ?? "text",
-    content: d.lesson.content ?? "",
+    content,
     videoUrl,
     hasAssessment: isAssessment,
     hasVRPractice: isVR,
