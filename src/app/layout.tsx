@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { AcademyTopBar } from "@/components/layout/AcademyTopBar";
+import { EcosystemSidebar } from "@/components/layout/EcosystemSidebar";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration";
@@ -18,26 +19,36 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  applicationName: "VowLMS",
+  applicationName: "VowLMS · GoalVow Holdings",
   title: {
-    default: "VowLMS | GoalVow Learning Platform",
-    template: "%s | VowLMS",
+    default: "VowLMS · Africa's Learn-to-Earn Ecosystem | GoalVow Holdings",
+    template: "%s | VowLMS · GoalVow",
   },
   description:
-    "A premium GoalVow learning platform for skills, schools, business, VR practice, rewards, and opportunity pathways.",
-  keywords: ["LMS", "learning management", "GoalVow", "online learning", "skills training", "South Africa", "academy"],
-  metadataBase: new URL("https://vowlms.co.za"),
+    "GoalVow Holdings is Africa's Learn → Practice → Apply ecosystem. Connect academies, support systems, rewards, tools, learning hubs, VR simulations, and opportunity pathways — all on one platform.",
+  keywords: [
+    "VowLMS", "GoalVow", "GoalVow Holdings", "LMS", "online learning", "Africa",
+    "South Africa", "skills training", "academy", "PlugConnect", "VowRewards",
+    "learn to earn", "learning ecosystem"
+  ],
+  metadataBase: new URL("https://vowlms.vercel.app"),
   manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
-    siteName: "VowLMS",
-    title: "VowLMS | GoalVow Learning Platform",
-    description: "Premium GoalVow LMS for skills, schools, business, and opportunity pathways.",
+    siteName: "VowLMS · GoalVow Holdings",
+    title: "VowLMS · Africa's Learn-to-Earn Ecosystem",
+    description:
+      "GoalVow connects academies, support, rewards, tools, hubs, simulations and opportunities so every African learner can build skills and apply them in the real world.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VowLMS · GoalVow Holdings",
+    description: "Africa's Learn → Practice → Apply ecosystem.",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#06111f",
+  themeColor: "#1e3a8a",
 };
 
 export default function RootLayout({
@@ -53,7 +64,13 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col antialiased">
         <AcademyTopBar />
         <Header />
-        {children}
+
+        {/* Main layout with optional sidebar */}
+        <div className="flex flex-1">
+          <div className="flex-1 min-w-0">{children}</div>
+          <EcosystemSidebar />
+        </div>
+
         <Footer />
         <ServiceWorkerRegistration />
         <Toaster
