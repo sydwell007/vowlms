@@ -28,13 +28,16 @@ export async function POST(request: Request) {
   }
 
   if (!isBridgeConfigured()) {
-    const mockResponse = created({
+    const user = {
       id: `mock-${Date.now()}`,
       name: payload.name,
       email: payload.email,
-      role: "learner",
-    });
-    return setAuthCookie(mockResponse, "dev-mock-token");
+      role: (payload.role ?? "learner") as string,
+    };
+    // Encode user data in the mock token so /api/auth/me can return the real name
+    const token = `dev.${Buffer.from(JSON.stringify(user)).toString("base64")}`;
+    const mockResponse = created(user);
+    return setAuthCookie(mockResponse, token);
   }
 
   try {

@@ -19,12 +19,10 @@ export async function POST(request: Request) {
   }
 
   if (!isBridgeConfigured()) {
-    // Dev fallback — accept any credentials
-    const mockResponse = ok({
-      token: "dev-mock-token",
-      user: { id: "mock-1", name: "Dev User", email: payload.email, role: "learner" },
-    });
-    return setAuthCookie(mockResponse, "dev-mock-token");
+    // Dev fallback — accept any credentials, encode user data in token for /api/auth/me
+    const user = { id: "mock-1", name: "Dev User", email: payload.email, role: "learner" };
+    const token = `dev.${Buffer.from(JSON.stringify(user)).toString("base64")}`;
+    return setAuthCookie(ok(user), token);
   }
 
   try {

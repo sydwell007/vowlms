@@ -107,7 +107,9 @@ export function Header() {
         {/* Desktop right actions */}
         <div className="hidden items-center gap-2 lg:flex">
           {isAuthed && <NotificationBell />}
-          {isAuthed ? (
+          {session.status === "loading" ? (
+            <div className="h-9 w-20 animate-pulse rounded-lg bg-white/10" />
+          ) : isAuthed ? (
             <>
               <Link
                 href="/profile"
@@ -176,7 +178,9 @@ export function Header() {
               );
             })}
             <div className="mt-1 flex gap-2">
-              {isAuthed ? (
+              {session.status === "loading" ? (
+                <div className="h-12 flex-1 animate-pulse rounded-md bg-white/10" />
+              ) : isAuthed ? (
                 <>
                   <Link href="/profile" onClick={closeMenu}
                     className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12">
