@@ -21,7 +21,7 @@ export const academies: Academy[] = [
     audience: "Job seekers, workers, youth, and community learners",
     category: "upskilling",
     heroMessage: "Turn everyday ambition into visible progress and opportunity readiness.",
-    sampleCourseSlugs: ["improving-your-mental-health","module-3-employee-ethics","module-1-business-ethics-fundamentals"],
+    sampleCourseSlugs: ["business-ethics","leadership","marketing"],
   },
   {
     slug: "skills-training-academy",
