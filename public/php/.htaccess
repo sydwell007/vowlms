@@ -7,6 +7,12 @@ RewriteEngine On
 RewriteCond %{HTTP:X-Bridge-Key} ^(.+)$
 RewriteRule .* - [E=BRIDGE_KEY_HEADER:%1]
 
+# Pass Authorization header through to PHP-FPM.
+# Apache CGI/FPM mode strips Authorization by default; this env var makes
+# it visible as $_SERVER['HTTP_AUTHORIZATION'] or $_SERVER['REDIRECT_HTTP_AUTHORIZATION'].
+RewriteCond %{HTTP:Authorization} .+
+RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 # Block direct access to config and lib
 RewriteRule ^config/ - [F,L]
 RewriteRule ^lib/ - [F,L]

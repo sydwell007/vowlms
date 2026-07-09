@@ -52,10 +52,19 @@ function requireAuth(): array {
         $token = substr($auth, 7);
     }
 
-    // PHP-FPM fallback for Authorization header
+    // PHP-FPM fallback: getallheaders() sometimes surfaces the header when $_SERVER doesn't
     if ($token === '' && function_exists('getallheaders')) {
         $all  = getallheaders();
         $auth = $all['Authorization'] ?? $all['authorization'] ?? '';
+        if (str_starts_with($auth, 'Bearer ')) {
+            $token = substr($auth, 7);
+        }
+    }
+
+    // Apache internal-redirect fallback: .htaccess [E=HTTP_AUTHORIZATION:...] survives
+    // rewrites as REDIRECT_HTTP_AUTHORIZATION when Apache passes the request to PHP-FPM
+    if ($token === '') {
+        $auth = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
         if (str_starts_with($auth, 'Bearer ')) {
             $token = substr($auth, 7);
         }
