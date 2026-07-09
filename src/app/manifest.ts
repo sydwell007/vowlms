@@ -12,6 +12,11 @@ export default function manifest(): MetadataRoute.Manifest {
     theme_color: "#06111f",
     icons: [
       {
+        src: "/images/goalvow-logo.png",
+        sizes: "1024x1024",
+        type: "image/png",
+      },
+      {
         src: "/icons/vowlms-icon.svg",
         sizes: "192x192",
         type: "image/svg+xml",

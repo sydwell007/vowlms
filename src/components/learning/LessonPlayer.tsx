@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { visualAssets } from "@/lib/visual-assets";
 import type { Lesson, Course, CourseModule } from "@/types/lms";
 
 export type LessonResource = {
@@ -136,25 +138,26 @@ export function LessonPlayer({
   const htmlContent = isHtmlContent(cleanContent);
 
   // Separate resource types
-  const pdfResources = resources.filter((r) => r.type === "pdf");
-  const audioResources = resources.filter((r) => r.type === "audio");
-  const otherResources = resources.filter((r) => r.type === "other" || r.type === "image");
+  const pdfResources = useMemo(() => resources.filter((r) => r.type === "pdf"), [resources]);
+  const audioResources = useMemo(() => resources.filter((r) => r.type === "audio"), [resources]);
+  const otherResources = useMemo(() => resources.filter((r) => r.type === "other" || r.type === "image"), [resources]);
+  const selectedPdf = activePdf ?? pdfResources[0] ?? null;
 
   useEffect(() => {
-    try {
-      const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
-      const done: string[] = progress[course.slug]?.completedLessons ?? [];
-      setCompletedSlugs(done);
-      setCompleted(done.includes(lesson.slug));
-    } catch { /* ignore */ }
+    let cancelled = false;
+    Promise.resolve().then(() => {
+      if (cancelled) return;
+      try {
+        const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
+        const done: string[] = progress[course.slug]?.completedLessons ?? [];
+        setCompletedSlugs(done);
+        setCompleted(done.includes(lesson.slug));
+      } catch { /* ignore */ }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [course.slug, lesson.slug]);
-
-  // Auto-open the first PDF if this lesson type is "resource"
-  useEffect(() => {
-    if (pdfResources.length > 0 && !hasContent && videoInfo.type === "none") {
-      setActivePdf(pdfResources[0]);
-    }
-  }, [pdfResources, hasContent, videoInfo.type]);
 
   const markComplete = useCallback(async () => {
     const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
@@ -203,8 +206,15 @@ export function LessonPlayer({
         <aside className={`fixed inset-y-0 left-0 z-20 w-72 transform bg-white shadow-2xl transition-transform duration-200 lg:relative lg:translate-x-0 lg:shadow-none lg:border-r lg:border-slate-200 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
           <div className="flex h-full flex-col overflow-y-auto">
             <div className="border-b border-slate-100 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">{course.title}</p>
-              <h2 className="mt-1 text-sm font-semibold text-ink">{module.title}</h2>
+              <div className="flex items-center gap-3">
+                <span className="brand-mark-frame flex h-9 w-9 shrink-0 items-center justify-center rounded-lg p-1.5">
+                  <Image src={visualAssets.logo} alt="GoalVow logo" width={32} height={32} className="h-full w-full object-contain" />
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">{course.title}</p>
+                  <h2 className="mt-1 truncate text-sm font-semibold text-ink">{module.title}</h2>
+                </div>
+              </div>
             </div>
             <nav className="flex-1 p-3 space-y-4">
               {allModules.map((m) => (
@@ -295,7 +305,7 @@ export function LessonPlayer({
                       <button
                         key={r.url}
                         onClick={() => setActivePdf(r)}
-                        className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${activePdf?.url === r.url ? "bg-[#1166c8] text-white" : "border border-slate-200 bg-white text-ink hover:bg-slate-50"}`}
+                        className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${selectedPdf?.url === r.url ? "bg-[#1166c8] text-white" : "border border-slate-200 bg-white text-ink hover:bg-slate-50"}`}
                       >
                         📄 {r.filename}
                       </button>
@@ -304,14 +314,14 @@ export function LessonPlayer({
                 )}
 
                 {/* Active PDF embed */}
-                {(activePdf ?? pdfResources[0]) && (
+                {selectedPdf && (
                   <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
                     <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5">
                       <span className="text-xs font-semibold text-ink truncate">
-                        📄 {(activePdf ?? pdfResources[0]).filename}
+                        📄 {selectedPdf.filename}
                       </span>
                       <a
-                        href={(activePdf ?? pdfResources[0]).url}
+                        href={selectedPdf.url}
                         download
                         className="ml-3 shrink-0 rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold text-ink hover:bg-slate-200 transition"
                       >
@@ -319,10 +329,10 @@ export function LessonPlayer({
                       </a>
                     </div>
                     <iframe
-                      src={(activePdf ?? pdfResources[0]).url + "#toolbar=1&navpanes=1&scrollbar=1"}
+                      src={selectedPdf.url + "#toolbar=1&navpanes=1&scrollbar=1"}
                       className="w-full border-0"
                       style={{ height: "640px" }}
-                      title={(activePdf ?? pdfResources[0]).filename}
+                      title={selectedPdf.filename}
                     />
                   </div>
                 )}

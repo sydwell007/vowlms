@@ -152,7 +152,7 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
     durationMinutes: d.lesson.duration_minutes ?? 10,
   };
 
-  const module: CourseModule = { title: d.module.title, order: d.module.position, lessons: [] };
+  const courseModule: CourseModule = { title: d.module.title, order: d.module.position, lessons: [] };
 
   const allModules: CourseModule[] = d.all_modules.map((m) => ({
     title: m.title,
@@ -213,7 +213,7 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
       return acc;
     }, []);
 
-  return { lesson, module, course, allModules, prevLesson, nextLesson, resources };
+  return { lesson, module: courseModule, course, allModules, prevLesson, nextLesson, resources };
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -223,25 +223,29 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
 
   // When bridge is configured, fetch from PHP (real content + resources)
   if (isBridgeConfigured()) {
+    let bridgeProps: ReturnType<typeof bridgeToProps> | null = null;
     try {
       const data = await bridgeGet<BridgeLessonResponse>(`/lessons/${slug}`, { noAuth: true });
       if (data?.lesson) {
-        const props = bridgeToProps(data, slug);
-        return (
-          <LessonPlayer
-            lesson={props.lesson}
-            course={props.course}
-            module={props.module}
-            prevLesson={props.prevLesson}
-            nextLesson={props.nextLesson}
-            allModules={props.allModules}
-            currentLessonSlug={slug}
-            resources={props.resources}
-          />
-        );
+        bridgeProps = bridgeToProps(data, slug);
       }
     } catch {
       // Fall through to static seed data
+    }
+
+    if (bridgeProps) {
+      return (
+        <LessonPlayer
+          lesson={bridgeProps.lesson}
+          course={bridgeProps.course}
+          module={bridgeProps.module}
+          prevLesson={bridgeProps.prevLesson}
+          nextLesson={bridgeProps.nextLesson}
+          allModules={bridgeProps.allModules}
+          currentLessonSlug={slug}
+          resources={bridgeProps.resources}
+        />
+      );
     }
   }
 
@@ -249,7 +253,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   const result = getLessonBySlug(slug);
   if (!result) notFound();
 
-  const { lesson, course, module } = result;
+  const { lesson, course, module: courseModule } = result;
   const allLessons = course.modules.flatMap((m) => m.lessons);
   const currentIndex = allLessons.findIndex((l) => l.slug === slug);
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
@@ -259,7 +263,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
     <LessonPlayer
       lesson={lesson}
       course={course}
-      module={module}
+      module={courseModule}
       prevLesson={prevLesson}
       nextLesson={nextLesson}
       allModules={course.modules}

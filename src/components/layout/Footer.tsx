@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import { visualAssets } from "@/lib/visual-assets";
 
 const columns = [
   {
@@ -24,16 +26,15 @@ const columns = [
     ],
   },
   {
-    title: "Platform",
+    title: "Other Services",
     links: [
-      { href: "/catalogue", label: "Course Catalogue" },
       { href: "/rewards", label: "VowRewards" },
+      { href: "/support", label: "VowSupport" },
       { href: "/opportunities", label: "PlugConnect" },
       { href: "/learning-hubs", label: "Learning Hubs" },
-      { href: "/announcements", label: "Announcements" },
-      { href: "/calendar", label: "Learning Calendar" },
-      { href: "/search", label: "Search Courses" },
-      { href: "/pricing", label: "Pricing" },
+      { href: "/skillsshop", label: "SkillsShop" },
+      { href: "/vowtools", label: "VowTools" },
+      { href: "/cheforder", label: "ChefOrder" },
     ],
   },
 ];
@@ -49,7 +50,19 @@ const legalLinks = [
 export function Footer() {
   return (
     <footer className="mt-auto border-t-2 border-gold bg-[#0d2239] text-white">
-      <div className="mx-auto grid w-full max-w-7xl gap-10 px-5 py-12 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-5 pt-12 sm:px-6 lg:px-8">
+        <Link href="/" className="flex w-fit items-center gap-3">
+          <span className="brand-mark-frame flex h-12 w-12 items-center justify-center rounded-xl p-1.5">
+            <Image src={visualAssets.logo} alt="GoalVow logo" width={44} height={44} className="h-full w-full object-contain" />
+          </span>
+          <span>
+            <span className="block text-lg font-bold">VowLMS</span>
+            <span className="block text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-white/50">GoalVow learning ecosystem</span>
+          </span>
+        </Link>
+      </div>
+
+      <div className="mx-auto grid w-full max-w-7xl gap-10 px-5 py-10 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:px-8">
         {columns.map((column) => (
           <div key={column.title}>
             <h2 className="border-b border-white/12 pb-3 text-lg font-semibold">{column.title}</h2>

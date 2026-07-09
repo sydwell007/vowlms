@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
 import { EnrollButton } from "@/components/courses/EnrollButton";
 import { formatCurrency, getAcademyBySlug, getCourseBySlug } from "@/lib/data";
+import { visualAssets } from "@/lib/visual-assets";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -80,7 +82,14 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
           </div>
 
           {/* Enrollment card */}
-          <aside className="premium-card rounded-2xl p-6 text-ink self-start">
+          <aside className="space-y-4 self-start">
+            <ImagePanel
+              src={practice ? visualAssets.vrPracticeLab : visualAssets.dashboardExperience}
+              alt={`${course.title} learning experience`}
+              aspect="video"
+              className="hidden lg:block"
+            />
+            <div className="premium-card rounded-2xl p-6 text-ink">
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#1166c8]">Enrol now</p>
             <p className="mt-3 text-4xl font-bold text-ink">{formatCurrency(course.price)}</p>
             {course.price > 0 && <p className="mt-1 text-xs text-muted">One-time payment · PayFast secure</p>}
@@ -107,6 +116,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
             <div className="mt-6 border-t border-slate-100 pt-4">
               <p className="text-xs font-semibold text-muted uppercase tracking-[0.12em] mb-2">Duration</p>
               <p className="text-sm font-semibold text-ink">{course.duration}</p>
+            </div>
             </div>
           </aside>
         </div>

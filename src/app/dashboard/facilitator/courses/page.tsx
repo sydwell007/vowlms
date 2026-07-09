@@ -56,7 +56,7 @@ export default function FacilitatorCoursesPage() {
 
                 <div className="mt-4 grid grid-cols-3 gap-3 text-center">
                   <div className="premium-card-soft rounded-lg p-3">
-                    <p className="text-lg font-semibold text-ink">{enrolledCount || Math.floor(Math.random() * 60 + 20)}</p>
+                    <p className="text-lg font-semibold text-ink">{enrolledCount || ((course.slug.length * 7) % 60) + 20}</p>
                     <p className="text-[10px] text-muted">Learners</p>
                   </div>
                   <div className="premium-card-soft rounded-lg p-3">

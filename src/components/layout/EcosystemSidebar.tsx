@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { visualAssets } from "@/lib/visual-assets";
 
 const STORAGE_KEY = "gv_sidebar_open";
 
@@ -132,10 +134,17 @@ export function EcosystemSidebar() {
             <div className="flex flex-col gap-0">
               {/* Header */}
               <div className="border-b border-slate-100 px-4 py-3">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#1e3a8a]">
-                  GoalVow Ecosystem
-                </p>
-                <p className="mt-0.5 text-xs text-muted">Support services</p>
+                <div className="flex items-center gap-3">
+                  <span className="brand-mark-frame flex h-9 w-9 shrink-0 items-center justify-center rounded-lg p-1.5">
+                    <Image src={visualAssets.logo} alt="GoalVow logo" width={32} height={32} className="h-full w-full object-contain" />
+                  </span>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#1e3a8a]">
+                      GoalVow Ecosystem
+                    </p>
+                    <p className="mt-0.5 text-xs text-muted">Support services</p>
+                  </div>
+                </div>
               </div>
 
               {/* Services */}

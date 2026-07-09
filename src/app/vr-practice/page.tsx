@@ -1,6 +1,8 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
 import { getCourses } from "@/lib/data";
+import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "VR Practice",
@@ -16,6 +18,25 @@ export default function VRPracticeIndexPage() {
 
   return (
     <main>
+      <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">VR Practice</p>
+            <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">
+              Practice skills before the real-world moment
+            </h1>
+            <p className="mt-5 max-w-2xl text-lg leading-8 text-white/74">
+              Guided simulation pathways help learners build confidence, capture evidence, and prepare for workplace scenarios.
+            </p>
+          </div>
+          <ImagePanel
+            src={visualAssets.vrPracticeLab}
+            alt="VowLMS VR practice lab for immersive skills simulation"
+            priority
+            aspect="video"
+          />
+        </div>
+      </section>
       <Section
         tone="light"
         eyebrow="VR Practice"

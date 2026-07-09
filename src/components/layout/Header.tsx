@@ -1,23 +1,31 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { useSession, clearSessionCache } from "@/lib/auth/useSession";
+import { visualAssets } from "@/lib/visual-assets";
 
 const navItems = [
   { href: "/academies", label: "Academies" },
   { href: "/courses", label: "Courses" },
-  { href: "/learn", label: "Learn" },
-  { href: "/practice", label: "Practice" },
-  { href: "/apply", label: "Apply" },
-  { href: "/support", label: "Support" },
+  { href: "/vr-practice", label: "VR Practice" },
   { href: "/rewards", label: "Rewards" },
   { href: "/opportunities", label: "Opportunities" },
-  { href: "/investors", label: "Investors" },
+  { href: "/learning-hubs", label: "Learning Hubs" },
   { href: "/dashboard/learner", label: "Dashboard", activePrefix: "/dashboard" },
+];
+
+const mobileExtraItems = [
+  { href: "/learn", label: "Learn pathway" },
+  { href: "/practice", label: "Practice pathway" },
+  { href: "/apply", label: "Apply pathway" },
+  { href: "/support", label: "Support" },
+  { href: "/ecosystem", label: "Ecosystem" },
+  { href: "/investors", label: "Investors" },
 ];
 
 function isActive(pathname: string, href: string, activePrefix?: string) {
@@ -53,18 +61,25 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#06111f]/92 text-white shadow-[0_20px_48px_rgba(2,10,24,0.35)] backdrop-blur-xl">
-      <div className="mx-auto flex min-h-[72px] w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#06111f]/94 text-white shadow-[0_20px_48px_rgba(2,10,24,0.32)] backdrop-blur-xl">
+      <div className="mx-auto flex min-h-[76px] w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
 
         {/* Logo */}
         <Link href="/" onClick={closeMenu} className="flex shrink-0 items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[#1e3a8a] to-[#06b6d4] text-xs font-black text-white shadow-[0_8px_20px_rgba(6,182,212,0.3)]">
-            GV
+          <span className="brand-mark-frame flex h-11 w-11 items-center justify-center rounded-xl p-1.5 shadow-[0_12px_28px_rgba(6,182,212,0.16)]">
+            <Image
+              src={visualAssets.logo}
+              alt="GoalVow logo"
+              width={40}
+              height={40}
+              className="h-full w-full object-contain"
+              priority
+            />
           </span>
           <span className="flex flex-col">
-            <span className="text-base font-bold tracking-tight sm:text-[17px]">VowLMS</span>
-            <span className="text-[0.62rem] font-medium uppercase tracking-[0.2em] text-white/50">
-              GoalVow Platform
+            <span className="text-base font-bold tracking-tight sm:text-lg">VowLMS</span>
+            <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-white/52">
+              GoalVow LMS
             </span>
           </span>
         </Link>
@@ -82,14 +97,14 @@ export function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="ml-auto hidden items-center gap-px lg:flex">
+        <nav className="ml-auto hidden items-center gap-1 lg:flex">
           {navItems.map((item) => {
             const active = isActive(pathname, item.href, item.activePrefix);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative rounded-md px-2.5 py-2 text-[13px] font-medium transition ${
+                className={`relative rounded-md px-2.5 py-2 text-[13px] font-semibold transition ${
                   active ? "bg-white/8 text-white" : "text-white/68 hover:bg-white/6 hover:text-white"
                 }`}
               >
@@ -126,8 +141,8 @@ export function Header() {
               </button>
             </>
           ) : (
-            <ButtonLink href="/auth/signin" className="min-h-9 px-4 py-2 text-sm">
-              Sign in
+            <ButtonLink href="/auth/signup" className="min-h-9 px-4 py-2 text-sm">
+              Start Learning
             </ButtonLink>
           )}
         </div>
@@ -177,6 +192,17 @@ export function Header() {
                 </Link>
               );
             })}
+            <div className="my-2 border-t border-white/10" />
+            {mobileExtraItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={closeMenu}
+                className="rounded-md px-4 py-2.5 text-sm font-medium text-white/68 transition hover:bg-white/8 hover:text-white"
+              >
+                {item.label}
+              </Link>
+            ))}
             <div className="mt-1 flex gap-2">
               {session.status === "loading" ? (
                 <div className="h-12 flex-1 animate-pulse rounded-md bg-white/10" />
@@ -197,8 +223,8 @@ export function Header() {
                     className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12">
                     Profile
                   </Link>
-                  <ButtonLink href="/auth/signin" className="flex-1 justify-center" onClick={closeMenu}>
-                    Sign in
+                  <ButtonLink href="/auth/signup" className="flex-1 justify-center" onClick={closeMenu}>
+                    Start Learning
                   </ButtonLink>
                 </>
               )}

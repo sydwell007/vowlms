@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { ImagePanel } from "@/components/ui/ImagePanel";
+import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "Support · GoalVow Learner Support Systems",
@@ -57,7 +59,8 @@ export default function SupportPage() {
     <main>
       {/* Hero */}
       <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
-        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
+          <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#06b6d4]">Support systems</p>
           <h1 className="mt-3 max-w-2xl text-balance text-4xl font-semibold sm:text-5xl">
             Every learner, fully supported
@@ -69,6 +72,12 @@ export default function SupportPage() {
             <ButtonLink href="/vowsupport" variant="primary">Get support now</ButtonLink>
             <ButtonLink href="/learning-hubs" variant="secondary">Find a learning hub</ButtonLink>
           </div>
+          </div>
+          <ImagePanel
+            src={visualAssets.vrPracticeLab}
+            alt="GoalVow learning hub and support environment for guided practical learning"
+            aspect="video"
+          />
         </div>
       </section>
 

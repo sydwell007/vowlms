@@ -1,5 +1,7 @@
 "use client";
 
+"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -75,7 +77,7 @@ export default function CourseDiscussionPage({ params }: { params: Promise<{ slu
   function submitPost() {
     if (!newPost.trim()) return;
     const post: Post = {
-      id: `p${Date.now()}`,
+      id: `p-local-${posts.length + 1}`,
       author: "You (Amina Mokoena)",
       initials: "AM",
       role: "learner",
@@ -90,7 +92,7 @@ export default function CourseDiscussionPage({ params }: { params: Promise<{ slu
   function submitReply(postId: string) {
     if (!replyText.trim()) return;
     const reply: Reply = {
-      id: `r${Date.now()}`,
+      id: `r-local-${postId}-${(posts.find((post) => post.id === postId)?.replies.length ?? 0) + 1}`,
       author: "You (Amina Mokoena)",
       initials: "AM",
       role: "learner",

@@ -115,7 +115,7 @@ async function main() {
 
       // ─── Modules + Lessons ────────────────────────────────────────
       for (const mod of c.modules || []) {
-        const module = await prisma.module.upsert({
+        const courseModule = await prisma.module.upsert({
           where: { courseId_order: { courseId: course.id, order: mod.order } },
           update: { title: mod.title },
           create: {
@@ -140,7 +140,7 @@ async function main() {
             },
             create: {
               id: cid(`lesson:${lesson.slug}`),
-              moduleId: module.id,
+              moduleId: courseModule.id,
               slug: lesson.slug,
               title: lesson.title,
               type: lessonTypeEnum(lesson.type),

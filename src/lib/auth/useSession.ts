@@ -21,7 +21,9 @@ export function useSession(): SessionState {
 
   useEffect(() => {
     if (cachedUser) {
-      setState({ status: "authenticated", user: cachedUser });
+      Promise.resolve().then(() => {
+        if (cachedUser) setState({ status: "authenticated", user: cachedUser });
+      });
       return;
     }
 

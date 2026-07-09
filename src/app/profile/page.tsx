@@ -26,16 +26,24 @@ export default function ProfilePage() {
     timezone: "Africa/Johannesburg",
   });
 
+  const sessionUser = session.status === "authenticated" ? session.user : null;
+
   useEffect(() => {
-    if (session.status === "authenticated") {
-      const u = session.user;
-      setForm((f) => ({
-        ...f,
-        name: u.name || f.name,
-        email: u.email || f.email,
-      }));
+    let cancelled = false;
+    if (sessionUser) {
+      Promise.resolve().then(() => {
+        if (cancelled) return;
+        setForm((f) => ({
+          ...f,
+          name: sessionUser.name || f.name,
+          email: sessionUser.email || f.email,
+        }));
+      });
     }
-  }, [session.status]);
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionUser]);
 
   function update(field: keyof typeof form, value: string | boolean) {
     setForm((f) => ({ ...f, [field]: value }));

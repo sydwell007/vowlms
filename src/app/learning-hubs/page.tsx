@@ -1,6 +1,8 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
 import { getLearningHubs } from "@/lib/data";
+import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "Learning Hubs — VowLMS",
@@ -19,7 +21,8 @@ export default function LearningHubsPage() {
     <main>
       {/* Hero */}
       <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
-        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
+          <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">GoalVow Learning Hubs</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">
             Community learning. Everywhere.
@@ -28,6 +31,12 @@ export default function LearningHubsPage() {
             GoalVow Learning Hubs bring facilitator-led courses, VR practice sessions, and community support to neighbourhoods across South Africa — with full PWA offline access.
           </p>
           <ButtonLink href="/courses" className="mt-8">Find a course near you</ButtonLink>
+          </div>
+          <ImagePanel
+            src={visualAssets.vrPracticeLab}
+            alt="GoalVow learning hub with VR practice and facilitator support"
+            aspect="video"
+          />
         </div>
       </section>
 

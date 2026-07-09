@@ -6,6 +6,7 @@ import { EcosystemSidebar } from "@/components/layout/EcosystemSidebar";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration";
+import { visualAssets } from "@/lib/visual-assets";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -39,13 +40,13 @@ export const metadata: Metadata = {
     title: "VowLMS · Africa's Learn-to-Earn Ecosystem",
     description:
       "GoalVow connects academies, support, rewards, tools, hubs, simulations and opportunities so every African learner can build skills and apply them in the real world.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "VowLMS · GoalVow Holdings" }],
+    images: [{ url: visualAssets.ecosystemHero, width: 1792, height: 1024, alt: "VowLMS · GoalVow Holdings" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "VowLMS · GoalVow Holdings",
     description: "Africa's Learn → Practice → Apply ecosystem.",
-    images: ["/og-image.png"],
+    images: [visualAssets.ecosystemHero],
   },
 };
 

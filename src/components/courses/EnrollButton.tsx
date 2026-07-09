@@ -13,8 +13,15 @@ export function EnrollButton({ course }: Props) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const enrollments = JSON.parse(localStorage.getItem("vowlms_enrollments") ?? "[]") as string[];
-    setEnrolled(enrollments.includes(course.slug));
+    let cancelled = false;
+    Promise.resolve().then(() => {
+      if (cancelled) return;
+      const enrollments = JSON.parse(localStorage.getItem("vowlms_enrollments") ?? "[]") as string[];
+      setEnrolled(enrollments.includes(course.slug));
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [course.slug]);
 
   async function handleEnroll() {

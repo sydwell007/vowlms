@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { ImagePanel } from "@/components/ui/ImagePanel";
+import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "GoalVow Ecosystem · One Platform, Eight Verticals",
@@ -113,7 +115,8 @@ export default function EcosystemPage() {
     <main>
       {/* Hero */}
       <section className="gv-hero py-20 text-white md:py-28">
-        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
+          <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">
             GoalVow Holdings
           </p>
@@ -130,6 +133,13 @@ export default function EcosystemPage() {
             <ButtonLink href="/academies" variant="primary">Explore academies</ButtonLink>
             <ButtonLink href="/investors" variant="secondary">Investor overview</ButtonLink>
           </div>
+          </div>
+          <ImagePanel
+            src={visualAssets.ecosystemHero}
+            alt="GoalVow ecosystem connecting learning, VR practice, rewards, and opportunities"
+            priority
+            aspect="video"
+          />
         </div>
       </section>
 

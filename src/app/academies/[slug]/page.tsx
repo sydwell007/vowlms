@@ -1,7 +1,9 @@
 import { notFound } from "next/navigation";
 import { Section } from "@/components/ui/Section";
+import { ImagePanel } from "@/components/ui/ImagePanel";
 import { getAcademyBySlug, getCoursesByAcademy, getCourses } from "@/lib/data";
 import { AcademyCourseGrid } from "@/components/academies/AcademyCourseGrid";
+import { visualAssets } from "@/lib/visual-assets";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -35,7 +37,8 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
     <main>
       {/* Hero */}
       <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
-        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
+          <div>
           <div className="flex items-center gap-3">
             <span
               className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em]"
@@ -68,6 +71,13 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
               <span className="ml-2 text-white/60">free courses</span>
             </div>
           </div>
+          </div>
+          <ImagePanel
+            src={visualAssets.academyNetwork}
+            alt={`${academy.name} in the GoalVow academy network`}
+            priority
+            aspect="video"
+          />
         </div>
       </section>
 

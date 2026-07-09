@@ -3,7 +3,9 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { CourseCard } from "@/components/courses/CourseCard";
+import { ImagePanel } from "@/components/ui/ImagePanel";
 import { getCourses, getAcademies } from "@/lib/data";
+import { visualAssets } from "@/lib/visual-assets";
 
 const ALL_COURSES = getCourses();
 const ALL_ACADEMIES = getAcademies();
@@ -51,7 +53,8 @@ export default function CoursesPage() {
     <main>
       {/* Hero */}
       <section className="premium-section-dark surface-grid py-14 text-white md:py-20">
-        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-8 px-5 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
+          <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">GoalVow Academy Network</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-5xl">
             {ALL_COURSES.length.toLocaleString()} courses across 6 academies
@@ -76,6 +79,13 @@ export default function CoursesPage() {
               <button onClick={() => { setQuery(""); setPage(1); }} className="text-white/40 hover:text-white text-xs">✕</button>
             )}
           </div>
+          </div>
+          <ImagePanel
+            src={visualAssets.academyNetwork}
+            alt="GoalVow academy network course catalogue visual"
+            aspect="video"
+            className="hidden lg:block"
+          />
         </div>
       </section>
 

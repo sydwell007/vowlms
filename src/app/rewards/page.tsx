@@ -1,5 +1,7 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
+import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "VowRewards — VowLMS",
@@ -24,7 +26,8 @@ export default function RewardsPage() {
     <main>
       {/* Hero */}
       <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
-        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
+          <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">VowRewards</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">
             Every lesson earns. Every completion counts.
@@ -36,6 +39,12 @@ export default function RewardsPage() {
             <ButtonLink href="/auth/signup">Start earning</ButtonLink>
             <ButtonLink href="/courses" variant="secondary">Browse courses</ButtonLink>
           </div>
+          </div>
+          <ImagePanel
+            src={visualAssets.dashboardExperience}
+            alt="VowLMS dashboard showing rewards, certificates, progress, and learner milestones"
+            aspect="video"
+          />
         </div>
       </section>
 
