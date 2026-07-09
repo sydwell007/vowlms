@@ -57,7 +57,7 @@ export function Header() {
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
-          Search courses, lessons…
+          Search…
           <kbd className="ml-auto rounded border border-white/20 px-1.5 py-0.5 text-[10px] text-white/40">⌘K</kbd>
         </Link>
 
@@ -114,7 +114,7 @@ export function Header() {
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              Search courses and lessons…
+              Search…
             </Link>
             {navItems.map((item) => {
               const active = isActive(pathname, item.href, item.activePrefix);
