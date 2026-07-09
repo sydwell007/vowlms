@@ -11,7 +11,6 @@ export async function POST(request: Request) {
   const body = await request.text();
 
   if (!isBridgeConfigured()) {
-    console.log("[PayFast ITN] Bridge not configured — logging payload:", body);
     return ok({ received: true, mode: "dev-placeholder" });
   }
 

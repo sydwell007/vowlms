@@ -74,7 +74,12 @@ export default function SignUpPage() {
         return;
       }
 
-      router.push("/dashboard/learner");
+      const dashboardByRole: Record<string, string> = {
+        learner: "/dashboard/learner",
+        facilitator: "/dashboard/facilitator",
+        employer: "/dashboard/employer",
+      };
+      router.push(dashboardByRole[form.role] ?? "/dashboard/learner");
     } catch {
       setError("Unable to connect. Please check your connection.");
     } finally {

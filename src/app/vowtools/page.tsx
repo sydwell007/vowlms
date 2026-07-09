@@ -1,4 +1,7 @@
-export const metadata = { title: "VowTools · Career Readiness Toolkit" };
+export const metadata = {
+  title: "VowTools · Career Readiness Toolkit",
+  description: "Free career readiness tools from GoalVow: CV builder, interview prep, business setup guides, and more. Built for South African learners.",
+};
 
 const tools = [
   { icon: "📄", title: "CV Builder", desc: "Build a professional CV pre-populated with your GoalVow certificates, completed courses, and VowRewards achievements.", status: "Coming soon" },

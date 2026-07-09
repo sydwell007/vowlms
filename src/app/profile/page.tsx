@@ -1,21 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSession } from "@/lib/auth/useSession";
 
 const tabs = ["Profile", "Security", "Notifications", "Preferences"] as const;
 type Tab = typeof tabs[number];
 
 export default function ProfilePage() {
+  const session = useSession();
   const [activeTab, setActiveTab] = useState<Tab>("Profile");
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [form, setForm] = useState({
-    name: "Amina Mokoena",
-    email: "amina@goalvow.com",
-    phone: "+27 82 123 4567",
-    city: "Johannesburg",
+    name: "",
+    email: "",
+    phone: "",
+    city: "",
     country: "South Africa",
-    bio: "Passionate learner on the GoalVow upskilling pathway. Currently enrolled in the Career Readiness Accelerator and Small Business Launchpad.",
+    bio: "",
     academy: "Upskilling Academy",
     emailNotifications: true,
     smsNotifications: false,
@@ -23,13 +26,51 @@ export default function ProfilePage() {
     timezone: "Africa/Johannesburg",
   });
 
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      const u = session.user;
+      setForm((f) => ({
+        ...f,
+        name: u.name || f.name,
+        email: u.email || f.email,
+      }));
+    }
+  }, [session.status]);
+
   function update(field: keyof typeof form, value: string | boolean) {
     setForm((f) => ({ ...f, [field]: value }));
   }
 
+  const initials = form.name
+    ? form.name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase()
+    : "??";
+
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    await new Promise((r) => setTimeout(r, 600));
+    setSaveError("");
+    try {
+      const res = await fetch("/api/user/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone || null,
+          city: form.city || null,
+          country: form.country || null,
+          bio: form.bio || null,
+          preferred_academy: form.academy || null,
+          language: form.language,
+          timezone: form.timezone,
+          email_notifications: form.emailNotifications,
+          sms_notifications: form.smsNotifications,
+        }),
+      });
+      const json = await res.json();
+      if (!json.ok) { setSaveError(json.error ?? "Failed to save."); return; }
+    } catch {
+      setSaveError("Connection error. Changes not saved.");
+      return;
+    }
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   }
@@ -48,7 +89,7 @@ export default function ProfilePage() {
         <div className="premium-section-dark rounded-2xl p-8 text-white mb-6">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
             <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gold text-3xl font-black text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)]">
-              AM
+              {initials}
             </div>
             <div className="flex-1">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">Learner profile</p>
@@ -211,6 +252,9 @@ export default function ProfilePage() {
             </div>
           )}
 
+          {saveError && (
+            <div className="mt-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{saveError}</div>
+          )}
           <div className="mt-5 flex items-center justify-between">
             <Link href="/dashboard/learner" className="text-sm text-muted hover:text-ink transition">
               ← Back to dashboard

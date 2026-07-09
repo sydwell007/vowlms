@@ -1,6 +1,9 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 
-export const metadata = { title: "ChefOrder · Chef Business & Food Platform" };
+export const metadata = {
+  title: "ChefOrder · Chef Business & Food Platform",
+  description: "ChefOrder connects GoalVow Chef Academy graduates with catering clients, food orders, and entrepreneurship support to launch their culinary businesses.",
+};
 
 const features = [
   { icon: "🍽️", title: "Online food ordering", desc: "Customers discover and order from GoalVow Chef Academy graduates — supporting learner entrepreneurs with real revenue from day one." },

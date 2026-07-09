@@ -1,4 +1,7 @@
-export const metadata = { title: "SkillsShop · Learning Kits & Equipment" };
+export const metadata = {
+  title: "SkillsShop · Learning Kits & Equipment",
+  description: "Shop learning kits, tools, and equipment curated for GoalVow learners. Everything you need to practice real skills outside the classroom.",
+};
 
 const categories = [
   { icon: "🍳", label: "Chef Academy kits", desc: "Professional knives, aprons, kitchen tools, and food safety kits for culinary learners." },

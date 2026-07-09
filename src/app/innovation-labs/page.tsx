@@ -1,6 +1,9 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 
-export const metadata = { title: "Innovation Labs · VR, AI & R&D at GoalVow" };
+export const metadata = {
+  title: "Innovation Labs · VR, AI & R&D at GoalVow",
+  description: "GoalVow Innovation Labs: VR training simulations, AI-powered learning paths, blockchain credentials, and R&D partnerships shaping Africa's EdTech future.",
+};
 
 const projects = [
   { icon: "🥽", title: "VR Skill Simulations", status: "In development", desc: "WebXR-powered immersive skill practice scenarios — kitchen safety, workplace ethics, business negotiations, and more. Built with React Three Fiber." },

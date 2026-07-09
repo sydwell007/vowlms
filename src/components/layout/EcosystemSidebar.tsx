@@ -83,7 +83,7 @@ const statusStyle: Record<ServiceStatus, string> = {
 };
 
 export function EcosystemSidebar() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   // Hydrate from localStorage after mount — use a ref flag so setState is in a callback, not the body

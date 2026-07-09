@@ -119,7 +119,7 @@ export default function AboutPage() {
           <p className="mt-4 text-base text-white/70">614 courses. 6 academies. Real certificates. Real opportunities.</p>
           <div className="mt-8 flex justify-center gap-3">
             <ButtonLink href="/auth/signup">Create free account</ButtonLink>
-            <ButtonLink href="/contact" variant="secondary">Contact us</ButtonLink>
+            <ButtonLink href="/support" variant="secondary">Contact us</ButtonLink>
           </div>
         </div>
       </section>

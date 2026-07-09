@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { useSession, clearSessionCache } from "@/lib/auth/useSession";
 
 const navItems = [
   { href: "/academies", label: "Academies" },
@@ -26,8 +27,22 @@ function isActive(pathname: string, href: string, activePrefix?: string) {
 
 export function Header() {
   const pathname = usePathname();
+  const router = useRouter();
+  const session = useSession();
   const [openForPath, setOpenForPath] = useState<string | null>(null);
   const menuOpen = openForPath === pathname;
+
+  const isAuthed = session.status === "authenticated";
+  const user = session.status === "authenticated" ? session.user : null;
+  const initials = user?.name
+    ? user.name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase()
+    : "?";
+
+  async function handleLogout() {
+    clearSessionCache();
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/auth/signin");
+  }
 
   function toggleMenu() {
     setOpenForPath((value) => (value === pathname ? null : pathname));
@@ -91,17 +106,28 @@ export function Header() {
 
         {/* Desktop right actions */}
         <div className="hidden items-center gap-2 lg:flex">
-          <NotificationBell />
-          <Link
-            href="/profile"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/14 bg-white/6 text-xs font-bold text-[#f5c542] transition hover:bg-white/10"
-            title="Profile"
-          >
-            AM
-          </Link>
-          <ButtonLink href="/auth/signin" className="min-h-9 px-4 py-2 text-sm">
-            Sign in
-          </ButtonLink>
+          {isAuthed && <NotificationBell />}
+          {isAuthed ? (
+            <>
+              <Link
+                href="/profile"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/14 bg-white/6 text-xs font-bold text-[#f5c542] transition hover:bg-white/10"
+                title={user?.name ?? "Profile"}
+              >
+                {initials}
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="min-h-9 rounded-lg border border-white/14 bg-white/6 px-4 py-2 text-sm font-semibold text-white/80 transition hover:bg-white/10"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <ButtonLink href="/auth/signin" className="min-h-9 px-4 py-2 text-sm">
+              Sign in
+            </ButtonLink>
+          )}
         </div>
 
         {/* Mobile hamburger */}
@@ -150,13 +176,28 @@ export function Header() {
               );
             })}
             <div className="mt-1 flex gap-2">
-              <Link href="/profile" onClick={closeMenu}
-                className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12">
-                Profile
-              </Link>
-              <ButtonLink href="/auth/signin" className="flex-1 justify-center" onClick={closeMenu}>
-                Sign in
-              </ButtonLink>
+              {isAuthed ? (
+                <>
+                  <Link href="/profile" onClick={closeMenu}
+                    className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12">
+                    Profile ({initials})
+                  </Link>
+                  <button onClick={() => { closeMenu(); handleLogout(); }}
+                    className="flex-1 rounded-md bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/80 hover:bg-white/12">
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/profile" onClick={closeMenu}
+                    className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12">
+                    Profile
+                  </Link>
+                  <ButtonLink href="/auth/signin" className="flex-1 justify-center" onClick={closeMenu}>
+                    Sign in
+                  </ButtonLink>
+                </>
+              )}
             </div>
           </div>
         </nav>

@@ -57,7 +57,7 @@ const mockNotifications: Notification[] = [
     body: "You have an incomplete lesson: VR Practice Studio in Career Readiness.",
     time: "2 days ago",
     read: true,
-    href: "/lesson/career-readiness-accelerator-vr-studio",
+    href: "/vr-practice",
   },
 ];
 
