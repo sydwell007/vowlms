@@ -1,4 +1,5 @@
 <?php
+ob_start();
 /**
  * VowLMS Diagnostic Tool — v2 (correct paths)
  * config/ is at: /home/goalvxiw/api.goalvow.com/config/
@@ -10,6 +11,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 
+ob_end_clean();
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 

@@ -9,9 +9,11 @@
  *     { "itnRaw": "m_payment_id=...&..." } when API_BASE_URL is not configured.
  *     In this mode the Bridge-Key header is present; we validate it and parse itnRaw.
  */
+ob_start();
 require_once __DIR__ . '/../../config/env.php';
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../lib/response.php';
+ob_end_clean();
 
 header('Content-Type: text/plain');
 
