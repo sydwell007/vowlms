@@ -54,5 +54,6 @@ try {
     respond(true, $rows);
 
 } catch (Throwable $e) {
-    respond(false, null, 'Internal error: ' . $e->getMessage(), 500);
+    error_log('ecosystem-services failed: ' . $e->getMessage());
+    respond(false, null, 'Internal server error', 500);
 }

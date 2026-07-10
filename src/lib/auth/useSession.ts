@@ -27,7 +27,7 @@ export function useSession(): SessionState {
       return;
     }
 
-    fetch("/api/auth/me")
+    fetch("/api/auth/session")
       .then((r) => r.json())
       .then((json) => {
         if (json.ok && json.data) {

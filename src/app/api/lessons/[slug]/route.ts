@@ -1,4 +1,4 @@
-import { ok, notFound, serverError } from "@/lib/api/responses";
+import { ok, notFound } from "@/lib/api/responses";
 import { bridgeGet, isBridgeConfigured } from "@/lib/bridge";
 import { getLessonBySlug } from "@/lib/data";
 
@@ -101,9 +101,6 @@ function pick(l: { slug: string; title: string; durationMinutes: number }) {
 }
 
 function normalizeBridgeLesson(d: BridgeLessonResponse) {
-  const allLessons = d.all_modules.flatMap((m) => m.lessons);
-  const idx = allLessons.findIndex((l) => l.slug === d.lesson.slug);
-
   const isAssessment = d.lesson.type === "assessment";
   const isVR = d.lesson.type === "vr-practice";
 

@@ -2,8 +2,8 @@ import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
-  title: "VowTools · Career Readiness Toolkit",
-  description: "Free career readiness tools from GoalVow: CV builder, interview prep, business setup guides, and more. Built for South African learners.",
+  title: "VowTools - Planned Career Readiness Toolkit",
+  description: "Review the proposed VowTools roadmap for future learner career-readiness features.",
 };
 
 const tools = [
@@ -26,7 +26,7 @@ export default function VowToolsPage() {
           </span>
           <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">VowTools</h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-white/72">
-            A career readiness toolkit built into GoalVow — CV builder, skill gap diagnostics, interview prep, and productivity tools that turn credentials into opportunity.
+            A proposed career-readiness toolkit covering CV preparation, skills reflection, interview practice, and planning. These tools are not yet available in VowLMS.
           </p>
           <div className="mt-8">
             <a href="mailto:support@goalvow.com" className="inline-flex items-center gap-2 rounded-lg bg-[#f97316] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#ea580c]">

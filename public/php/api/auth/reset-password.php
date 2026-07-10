@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/response.php';
+require_once __DIR__ . '/../../lib/rate-limit.php';
 ob_end_clean();
 
 setCors();
@@ -17,6 +18,7 @@ $password = $body['password'] ?? '';
 if (!$token || strlen($password) < 8) {
     jsonError('token and password (min 8 chars) are required');
 }
+requireRateLimit('reset-password', hash('sha256', $token), 10, 3600);
 
 $db   = getDb();
 $stmt = $db->prepare(
@@ -26,7 +28,7 @@ $stmt = $db->prepare(
      WHERE pr.token = ? AND pr.expires_at > NOW()
      LIMIT 1'
 );
-$stmt->execute([$token]);
+$stmt->execute([hash('sha256', $token)]);
 $reset = $stmt->fetch();
 
 if (!$reset) {
@@ -34,7 +36,15 @@ if (!$reset) {
 }
 
 $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
-$db->prepare('UPDATE users SET password_hash = ? WHERE id = ?')->execute([$hash, $reset['user_id']]);
-$db->prepare('DELETE FROM password_resets WHERE id = ?')->execute([$reset['id']]);
+try {
+    $db->beginTransaction();
+    $db->prepare('UPDATE users SET password_hash = ? WHERE id = ?')->execute([$hash, $reset['user_id']]);
+    $db->prepare('DELETE FROM password_resets WHERE id = ?')->execute([$reset['id']]);
+    $db->commit();
+} catch (Throwable $error) {
+    if ($db->inTransaction()) $db->rollBack();
+    error_log('Password reset failed: ' . $error->getMessage());
+    jsonError('Password could not be reset', 500);
+}
 
 jsonOk(['reset' => true]);

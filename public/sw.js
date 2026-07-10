@@ -1,4 +1,4 @@
-const CACHE_NAME = "vowlms-shell-v1";
+const CACHE_NAME = "vowlms-shell-v2";
 const OFFLINE_URL = "/offline";
 const CORE_ASSETS = ["/", "/offline", "/academies", "/courses", "/manifest.webmanifest"];
 
@@ -20,21 +20,36 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const request = event.request;
+  const url = new URL(request.url);
 
-  if (request.method !== "GET") {
+  if (
+    request.method !== "GET" ||
+    url.origin !== self.location.origin ||
+    url.pathname.startsWith("/api/") ||
+    url.pathname.startsWith("/dashboard/") ||
+    url.pathname.startsWith("/lesson/") ||
+    url.pathname.startsWith("/assessment/") ||
+    url.pathname.startsWith("/profile") ||
+    url.pathname.startsWith("/certificates") ||
+    url.pathname.startsWith("/results/")
+  ) {
     return;
   }
 
   event.respondWith(
     fetch(request)
       .then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+        if (response.ok && response.type === "basic") {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+        }
         return response;
       })
       .catch(async () => {
         const cached = await caches.match(request);
-        return cached || caches.match(OFFLINE_URL);
+        if (cached) return cached;
+        if (request.mode === "navigate") return caches.match(OFFLINE_URL);
+        return Response.error();
       }),
   );
 });

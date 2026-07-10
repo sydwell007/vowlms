@@ -5,6 +5,7 @@ require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/jwt.php';
 require_once __DIR__ . '/../../lib/response.php';
+require_once __DIR__ . '/../../lib/rate-limit.php';
 ob_end_clean();
 
 setCors();
@@ -18,6 +19,7 @@ $password = $body['password'] ?? '';
 if (!$email || !$password) {
     jsonError('email and password are required');
 }
+requireRateLimit('login', $email, 10, 900);
 
 $db   = getDb();
 $stmt = $db->prepare('SELECT id, name, email, password_hash, role FROM users WHERE email = ? AND is_active = 1 LIMIT 1');

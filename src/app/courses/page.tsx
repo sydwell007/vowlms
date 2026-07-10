@@ -60,7 +60,7 @@ export default function CoursesPage() {
             {ALL_COURSES.length.toLocaleString()} courses across 6 academies
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-white/70">
-            Browse upskilling, skills training, culinary, school, business, and university pathways — each with assessments, certificates, and VowRewards.
+            Browse upskilling, skills training, culinary, school, business, and university pathways. Each course page shows its current content, price, assessment, reward, and certificate details.
           </p>
 
           {/* Search bar */}
@@ -70,13 +70,14 @@ export default function CoursesPage() {
             </svg>
             <input
               type="search"
+              aria-label="Search courses"
               placeholder="Search courses by title or topic…"
               value={query}
               onChange={(e) => { setQuery(e.target.value); setPage(1); }}
               className="flex-1 bg-transparent text-sm text-white placeholder-white/40 outline-none"
             />
             {query && (
-              <button onClick={() => { setQuery(""); setPage(1); }} className="text-white/40 hover:text-white text-xs">✕</button>
+              <button type="button" aria-label="Clear course search" onClick={() => { setQuery(""); setPage(1); }} className="text-white/40 hover:text-white text-xs">✕</button>
             )}
           </div>
           </div>

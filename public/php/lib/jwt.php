@@ -17,6 +17,9 @@ class JWT {
 
     public static function encode(array $payload, int $ttl = 2592000): string {
         $secret = env('JWT_SECRET');
+        if (strlen($secret) < 32) {
+            throw new RuntimeException('JWT secret is not configured securely');
+        }
         $header = self::b64e(['typ' => 'JWT', 'alg' => 'HS256']);
         $payload['iat'] = time();
         $payload['exp'] = time() + $ttl;
@@ -27,6 +30,7 @@ class JWT {
 
     public static function decode(string $token): ?array {
         $secret = env('JWT_SECRET');
+        if (strlen($secret) < 32) return null;
         $parts  = explode('.', $token);
         if (count($parts) !== 3) return null;
 

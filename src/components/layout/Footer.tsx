@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { visualAssets } from "@/lib/visual-assets";
+import { siteConfig } from "@/lib/site";
 
 const columns = [
   {
@@ -21,6 +22,7 @@ const columns = [
       { href: "/academies/skills-training", label: "Skills Training" },
       { href: "/academies/chef-academy", label: "Chef Academy" },
       { href: "/academies/private-school", label: "Private School" },
+      { href: "/academies/sports-academy", label: "Sports Academy" },
       { href: "/academies/business-school", label: "Business School" },
       { href: "/academies/university-online", label: "University Online" },
     ],
@@ -79,15 +81,15 @@ export function Footer() {
         <div>
           <h2 className="border-b border-white/12 pb-3 text-lg font-semibold">Contact Us</h2>
           <div className="mt-4 flex flex-col gap-2.5 text-sm text-white/78">
-            <a href="tel:+27632706787" className="transition hover:text-gold">
-              Phone: +27632706787
+            <a href={siteConfig.contact.phoneHref} className="transition hover:text-gold">
+              Phone: {siteConfig.contact.phoneDisplay}
             </a>
-            <a href="mailto:support@goalvow.com" className="transition hover:text-gold">
-              Email: support@goalvow.com
+            <a href={`mailto:${siteConfig.contact.email}`} className="transition hover:text-gold">
+              Email: {siteConfig.contact.email}
             </a>
-            <p>Address: 17 Vultee Cape Town</p>
-            <a href="https://wa.me/27839488894" className="transition hover:text-gold">
-              WhatsApp: +27839488894
+            <p>Address: {siteConfig.contact.address}</p>
+            <a href={siteConfig.contact.whatsappHref} className="transition hover:text-gold">
+              WhatsApp: {siteConfig.contact.whatsappDisplay}
             </a>
           </div>
         </div>

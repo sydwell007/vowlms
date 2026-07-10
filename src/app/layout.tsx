@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration";
 import { visualAssets } from "@/lib/visual-assets";
+import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,32 +21,32 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  applicationName: "VowLMS · GoalVow Holdings",
+  applicationName: "VowLMS - GoalVow Holdings",
   title: {
-    default: "VowLMS · Africa's Learn-to-Earn Ecosystem | GoalVow Holdings",
-    template: "%s | VowLMS · GoalVow",
+    default: "VowLMS | GoalVow Learning Platform",
+    template: "%s | VowLMS",
   },
-  description:
-    "GoalVow Holdings is Africa's Learn → Practice → Apply ecosystem. Connect academies, support systems, rewards, tools, learning hubs, VR simulations, and opportunity pathways — all on one platform.",
+  description: siteConfig.description,
   keywords: [
     "VowLMS", "GoalVow", "GoalVow Holdings", "LMS", "online learning", "Africa",
     "South Africa", "skills training", "academy", "PlugConnect", "VowRewards",
     "learn to earn", "learning ecosystem"
   ],
-  metadataBase: new URL("https://vowlms.vercel.app"),
+  metadataBase: new URL(siteConfig.url),
+  alternates: { canonical: "/" },
   manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
-    siteName: "VowLMS · GoalVow Holdings",
-    title: "VowLMS · Africa's Learn-to-Earn Ecosystem",
-    description:
-      "GoalVow connects academies, support, rewards, tools, hubs, simulations and opportunities so every African learner can build skills and apply them in the real world.",
-    images: [{ url: visualAssets.ecosystemHero, width: 1792, height: 1024, alt: "VowLMS · GoalVow Holdings" }],
+    siteName: "VowLMS - GoalVow Holdings",
+    title: "VowLMS | GoalVow Learning Platform",
+    description: siteConfig.description,
+    url: siteConfig.url,
+    images: [{ url: visualAssets.ecosystemHero, width: 1728, height: 910, alt: "VowLMS learning platform" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "VowLMS · GoalVow Holdings",
-    description: "Africa's Learn → Practice → Apply ecosystem.",
+    title: "VowLMS | GoalVow Learning Platform",
+    description: siteConfig.description,
     images: [visualAssets.ecosystemHero],
   },
 };
@@ -65,12 +66,17 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full`}
     >
       <body className="flex min-h-full flex-col antialiased">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <AcademyTopBar />
         <Header />
 
         {/* Main layout with optional sidebar */}
         <div className="flex flex-1">
-          <div className="flex-1 min-w-0">{children}</div>
+          <div id="main-content" tabIndex={-1} className="min-w-0 flex-1">
+            {children}
+          </div>
           <EcosystemSidebar />
         </div>
 

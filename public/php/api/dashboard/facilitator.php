@@ -55,7 +55,7 @@ $assessStmt = $db->prepare(
      JOIN courses c ON c.id = a.course_id
      JOIN users u ON u.id = aa.user_id
      WHERE c.facilitator_id = ?
-     ORDER BY aa.submitted_at DESC LIMIT 20'
+     ORDER BY aa.attempted_at DESC LIMIT 20'
 );
 $assessStmt->execute([$facilitatorId]);
 $recentAttempts = $assessStmt->fetchAll();

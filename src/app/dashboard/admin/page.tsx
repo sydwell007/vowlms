@@ -1,117 +1,104 @@
+"use client";
+
 import Link from "next/link";
 import { DashboardShell } from "@/components/dashboards/DashboardShell";
-import { getAdminDashboard, getAcademies, getCourses } from "@/lib/data";
+import { useDashboardEndpoint } from "@/lib/auth/useDashboardEndpoint";
+import { formatCurrency } from "@/lib/data";
+import type { DashboardMetric } from "@/types/lms";
 
-export const metadata = { title: "Admin Dashboard" };
+type AdminData = {
+  totals: {
+    users: number;
+    courses: number;
+    enrollments: number;
+    certificates: number;
+    revenue: number;
+  };
+  roleCounts: Record<string, number>;
+  recentUsers: Array<{ id: string; name: string; email: string; role: string; created_at: string }>;
+  topCourses: Array<{ title: string; slug: string; enrolment_count: number | string }>;
+  academyStats: Array<{ name: string; course_count: number | string; total_enrolments: number | string }>;
+  mode?: string;
+};
 
-const platformHealth = [
-  { label: "API health", value: "99.9%", status: "ok" },
-  { label: "PWA cache", value: "Active", status: "ok" },
-  { label: "Database", value: "Connected (mock)", status: "ok" },
-  { label: "Auth service", value: "Mock (ready)", status: "warn" },
-  { label: "PayFast", value: "Pending config", status: "warn" },
-  { label: "VowRewards API", value: "Placeholder", status: "info" },
+const pendingMetrics: DashboardMetric[] = [
+  { label: "Users", value: "-", detail: "Loading" },
+  { label: "Courses", value: "-", detail: "Loading" },
+  { label: "Enrolments", value: "-", detail: "Loading" },
+  { label: "Paid revenue", value: "-", detail: "Loading" },
+];
+
+const modules = [
+  { title: "Users and roles", href: "/dashboard/admin/users", description: "Review account and role administration" },
+  { title: "Analytics readiness", href: "/dashboard/admin/analytics", description: "Review authorised reporting sources" },
+  { title: "Courses", href: "/courses", description: "Review the published course catalogue" },
+  { title: "Settings", href: "/dashboard/admin/settings", description: "Review platform integration settings" },
 ];
 
 export default function AdminDashboardPage() {
-  const dashboard = getAdminDashboard();
-  const academies = getAcademies();
-  const courses = getCourses();
-
-  const adminModules = [
-    { title: "User management", href: "/dashboard/admin/users", icon: "👥", desc: "Manage learners, facilitators, and employers", badge: "1,284 users" },
-    { title: "Analytics", href: "/dashboard/admin/analytics", icon: "📊", desc: "Charts, revenue, and engagement insights", badge: "Live" },
-    { title: "Academies", href: "/academies", icon: "🏫", desc: `${academies.length} GoalVow academies active`, badge: `${academies.length}` },
-    { title: "Courses", href: "/courses", icon: "📚", desc: `${courses.length} published courses`, badge: `${courses.length}` },
-    { title: "Announcements", href: "/announcements", icon: "📣", desc: "Platform-wide and academy-specific news", badge: "7 posts" },
-    { title: "Calendar", href: "/calendar", icon: "📅", desc: "Sessions, deadlines, cohorts, and events", badge: "6 upcoming" },
-    { title: "Opportunities", href: "/opportunities", icon: "🎯", desc: "PlugConnect and partner opportunity pipeline", badge: "4 active" },
-    { title: "Learning hubs", href: "/learning-hubs", icon: "🏢", desc: "Physical and virtual hub management", badge: "3 hubs" },
-    { title: "Platform settings", href: "/dashboard/admin/settings", icon: "⚙️", desc: "Integrations, API keys, and system config", badge: "" },
-  ];
+  const { data, error, loading } = useDashboardEndpoint<AdminData>("/api/dashboard/admin");
+  const metrics: DashboardMetric[] = data
+    ? [
+        { label: "Users", value: data.totals.users.toLocaleString(), detail: "Active accounts" },
+        { label: "Courses", value: data.totals.courses.toLocaleString(), detail: "Published catalogue" },
+        { label: "Enrolments", value: data.totals.enrollments.toLocaleString(), detail: "All statuses" },
+        { label: "Paid revenue", value: formatCurrency(Number(data.totals.revenue) || 0), detail: "Verified payment records" },
+      ]
+    : pendingMetrics;
 
   return (
     <DashboardShell
       role="admin"
-      title={dashboard.name}
-      description="Platform oversight for GoalVow Holdings — academies, learners, completions, revenue, integrations, and API health."
-      metrics={dashboard.metrics}
+      title="VowLMS administration"
+      description="Review authorised platform totals, academy activity, users, and operational controls. Production actions remain enforced by backend role checks."
+      metrics={metrics}
     >
-      <div className="space-y-6">
-        {/* Admin modules grid */}
-        <section>
-          <h2 className="text-lg font-semibold text-ink mb-4">Administration modules</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {adminModules.map((mod) => (
-              <Link key={mod.title} href={mod.href}
-                className="premium-card group flex items-start gap-4 rounded-xl p-5 transition hover:border-[#1166c8]/30 hover:shadow-[0_20px_56px_rgba(6,17,31,0.12)]">
-                <span className="text-2xl mt-0.5">{mod.icon}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="font-semibold text-ink group-hover:text-[#1166c8] transition">{mod.title}</p>
-                    {mod.badge && <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-muted">{mod.badge}</span>}
-                  </div>
-                  <p className="mt-0.5 text-xs text-muted leading-4">{mod.desc}</p>
+      {error ? <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">{error}</div> : null}
+      {data?.mode === "development" ? (
+        <div className="mt-5 rounded-lg border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-900">Development mode: account and enrolment totals are intentionally zero rather than fabricated.</div>
+      ) : null}
+
+      <section className="mt-6">
+        <h2 className="text-xl font-semibold text-ink">Administration areas</h2>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {modules.map((module) => (
+            <Link key={module.href} href={module.href} className="rounded-lg border border-slate-200 bg-white p-5 transition hover:border-[#1166c8]/35">
+              <h3 className="text-base font-semibold text-ink">{module.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">{module.description}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <section className="rounded-lg border border-slate-200 bg-white p-6">
+          <h2 className="text-lg font-semibold text-ink">Academy activity</h2>
+          {loading ? <div className="mt-4 h-32 animate-pulse rounded bg-slate-100" /> : (
+            <div className="mt-4 divide-y divide-slate-100">
+              {(data?.academyStats ?? []).map((academy) => (
+                <div key={academy.name} className="flex items-center justify-between gap-4 py-3 text-sm">
+                  <span className="font-medium text-ink">{academy.name}</span>
+                  <span className="text-muted">{academy.course_count} courses | {academy.total_enrolments ?? 0} enrolments</span>
                 </div>
-              </Link>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
-        {/* Platform health + Analytics events */}
-        <div className="grid gap-5 lg:grid-cols-2">
-          <section className="premium-card rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-ink mb-4">Platform health</h2>
-            <div className="space-y-2">
-              {platformHealth.map((item) => (
-                <div key={item.label} className="flex items-center justify-between rounded-lg bg-slate-50 px-4 py-2.5">
-                  <p className="text-sm text-ink">{item.label}</p>
-                  <div className="flex items-center gap-2">
-                    <div className={`h-2 w-2 rounded-full ${item.status === "ok" ? "bg-emerald-500" : item.status === "warn" ? "bg-yellow-500" : "bg-slate-400"}`} />
-                    <p className={`text-xs font-semibold ${item.status === "ok" ? "text-emerald-600" : item.status === "warn" ? "text-yellow-600" : "text-muted"}`}>
-                      {item.value}
-                    </p>
-                  </div>
-                </div>
+        <section className="rounded-lg border border-slate-200 bg-white p-6">
+          <h2 className="text-lg font-semibold text-ink">Top courses</h2>
+          {data?.topCourses.length ? (
+            <div className="mt-4 divide-y divide-slate-100">
+              {data.topCourses.map((course) => (
+                <Link key={course.slug} href={`/courses/${course.slug}`} className="flex items-center justify-between gap-4 py-3 text-sm hover:text-[#1166c8]">
+                  <span className="font-medium">{course.title}</span>
+                  <span className="text-muted">{course.enrolment_count} enrolments</span>
+                </Link>
               ))}
             </div>
-          </section>
-
-          <section className="premium-card rounded-2xl p-6">
-            <h2 className="text-base font-semibold text-ink mb-4">Analytics event stream</h2>
-            <div className="space-y-1.5">
-              {dashboard.analyticsEvents.map((event) => (
-                <div key={event} className="flex items-center gap-3 rounded-lg bg-slate-50 px-3 py-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
-                  <p className="font-mono text-xs text-slate-600">{event}</p>
-                  <p className="ml-auto text-[10px] text-muted">active</p>
-                </div>
-              ))}
-            </div>
-            <Link href="/dashboard/admin/analytics" className="mt-4 block text-center text-xs font-semibold text-[#1166c8] hover:underline">
-              View full analytics dashboard →
-            </Link>
-          </section>
-        </div>
-
-        {/* Quick links */}
-        <section>
-          <h2 className="text-base font-semibold text-ink mb-3">Quick actions</h2>
-          <div className="flex flex-wrap gap-3">
-            {[
-              { label: "Invite learner", href: "/dashboard/admin/users" },
-              { label: "View opportunities", href: "/opportunities" },
-              { label: "Check API health", href: "/api/health" },
-              { label: "Review announcements", href: "/announcements" },
-              { label: "Learning hubs", href: "/learning-hubs" },
-              { label: "Pricing settings", href: "/pricing" },
-            ].map((action) => (
-              <Link key={action.label} href={action.href}
-                className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-[#1166c8]/30 hover:text-[#1166c8]">
-                {action.label}
-              </Link>
-            ))}
-          </div>
+          ) : (
+            <p className="mt-4 text-sm leading-6 text-muted">No verified enrolment ranking is available yet.</p>
+          )}
         </section>
       </div>
     </DashboardShell>

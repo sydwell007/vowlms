@@ -16,9 +16,6 @@ export default function AdminAnalyticsPage() {
             <Link href="/dashboard/admin" className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:bg-slate-50">
               ← Dashboard
             </Link>
-            <button className="rounded-lg bg-[#06111f] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#0d2239]">
-              Export CSV
-            </button>
           </div>
         </div>
         <AnalyticsDashboard />

@@ -43,6 +43,10 @@ $sandbox     = env('PAYFAST_SANDBOX', 'true') === 'true';
 $appUrl      = env('APP_URL', 'https://vowlms.vercel.app');
 $apiBase     = env('API_BASE_URL', '');   // e.g. https://api.vowlms.co.za
 
+if ($merchantId === '' || $merchantKey === '') {
+    jsonError('Payment service is not configured', 503);
+}
+
 // Create pending payment record
 $paymentId = generateId();
 $db->prepare(
@@ -65,12 +69,12 @@ $data = [
     'return_url'    => "{$appUrl}/courses/{$courseSlug}?payment=success",
     'cancel_url'    => "{$appUrl}/courses/{$courseSlug}?payment=cancelled",
     'notify_url'    => $notifyUrl,
-    'm_payment_id'  => $paymentId,
-    'amount'        => number_format((float)$course['price'], 2, '.', ''),
-    'item_name'     => substr($course['title'], 0, 100),
     'name_first'    => explode(' ', $user['name'])[0],
     'name_last'     => implode(' ', array_slice(explode(' ', $user['name']), 1)) ?: '-',
     'email_address' => $user['email'],
+    'm_payment_id'  => $paymentId,
+    'amount'        => number_format((float)$course['price'], 2, '.', ''),
+    'item_name'     => substr($course['title'], 0, 100),
 ];
 
 // Build signature

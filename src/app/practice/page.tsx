@@ -4,36 +4,36 @@ import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
-  title: "Practice · Skill Simulations & Learning Hubs",
-  description: "Practice your skills at GoalVow learning hubs, VR simulations, and mentor-led exercises. Turn learning into demonstrable evidence.",
+  title: "Skills Practice - VowLMS",
+  description: "Explore current VowLMS practice previews and the planned GoalVow Skills Practice model.",
 };
 
 const practiceTypes = [
   {
     icon: "🏫",
-    title: "Learning Hubs",
-    desc: "Visit a GoalVow community learning hub for in-person practical development, device access, mentoring sessions, and hands-on exercises.",
+    title: "Learning Hub model",
+    desc: "Review the proposed partner model for supported access and selected practical activities. No public locations are confirmed yet.",
     href: "/learning-hubs",
     color: "#06b6d4",
   },
   {
     icon: "🥽",
-    title: "VR Skill Simulations",
-    desc: "Immersive WebXR-powered scenarios that put you in realistic work environments — practice kitchen safety, workplace ethics, business negotiations, and more.",
+    title: "Simulation previews",
+    desc: "Use the current guided practice preview where a course includes one. Full WebXR simulation environments remain in development.",
     href: "/vr-practice",
     color: "#8b5cf6",
   },
   {
     icon: "👤",
-    title: "Mentor Exercises",
-    desc: "Structured practical tasks assigned by GoalVow facilitators to be completed in real-world settings and logged as verified skill evidence.",
+    title: "Facilitated practical work",
+    desc: "A planned workflow for approved, supervised tasks with clear evidence and assessment requirements.",
     href: "/vowsupport",
     color: "#19c37d",
   },
   {
     icon: "📋",
-    title: "Skill Evidence Portfolio",
-    desc: "Every completed practical task, VR session, and mentor exercise is logged to your learner portfolio — creating a verifiable evidence base for employers.",
+    title: "Account-owned practice records",
+    desc: "Submitted practice attempts must belong to an enrolled learner and are stored separately from rewards and certificates.",
     href: "/dashboard/learner",
     color: "#1e3a8a",
   },
@@ -62,16 +62,16 @@ export default function PracticePage() {
             <span className="bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">Practice</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-white/72">
-            Learning hubs, VR simulations, mentor exercises, and practical tasks that transform academic knowledge into demonstrable, verifiable skill evidence.
+            Explore the current practice-preview experience and the controls needed before simulations, facilitated tasks, or partner venues can produce trusted evidence.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href="/learning-hubs" variant="primary">Find a learning hub</ButtonLink>
-            <ButtonLink href="/innovation-labs" variant="secondary">VR simulations</ButtonLink>
+            <ButtonLink href="/vr-practice" variant="primary">Explore Skills Practice</ButtonLink>
+            <ButtonLink href="/innovation-labs" variant="secondary">Development roadmap</ButtonLink>
           </div>
           </div>
           <ImagePanel
             src={visualAssets.vrPracticeLab}
-            alt="GoalVow VR practice and learning hub simulation lab"
+            alt="Concept image for GoalVow Skills Practice and simulation development"
             priority
             aspect="video"
           />
@@ -101,8 +101,8 @@ export default function PracticePage() {
       <section className="gv-section-blue py-14">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-widest text-[#06b6d4]">Innovation Labs</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">VR skill simulation scenarios</h2>
-          <p className="mt-2 text-sm text-muted">Each simulation is academy-aligned and produces verifiable skill evidence logs.</p>
+          <h2 className="mt-2 text-2xl font-semibold text-ink">Potential Skills Practice contexts</h2>
+          <p className="mt-2 text-sm text-muted">These are design directions, not claims that a production simulation is available for every academy.</p>
           <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
             {vrScenarios.map((s) => (
               <div key={s.label} className="gv-card rounded-xl p-5 text-center">

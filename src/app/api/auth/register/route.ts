@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       id: `mock-${Date.now()}`,
       name: payload.name,
       email: payload.email,
-      role: (payload.role ?? "learner") as string,
+      role: "learner",
     };
     // Encode user data in the mock token so /api/auth/me can return the real name
     const token = `dev.${Buffer.from(JSON.stringify(user)).toString("base64")}`;
@@ -48,7 +48,10 @@ export async function POST(request: Request) {
         email: payload.email,
         password: payload.password,
         phone: payload.phone ?? null,
-        role: payload.role ?? "learner",
+        role: "learner",
+        city: payload.city ?? null,
+        country: payload.country ?? "South Africa",
+        preferredAcademy: payload.preferredAcademy ?? null,
       },
       { noAuth: true },
     );

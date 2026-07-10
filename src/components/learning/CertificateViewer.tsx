@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { visualAssets } from "@/lib/visual-assets";
 import type { Course } from "@/types/lms";
 
 type Props = {
@@ -78,7 +80,7 @@ export function CertificateViewer({ course, academyName, learnerName, completion
       doc.setTextColor(200, 200, 200);
       doc.text(`Completed: ${completionDate}`, 40, 175);
       doc.text(`Certificate ID: ${certificateId}`, 148.5, 175, { align: "center" });
-      doc.text(`VowLMS · vowlms.co.za`, 258, 175, { align: "right" });
+      doc.text("VowLMS - GoalVow Holdings", 258, 175, { align: "right" });
 
       // Divider line
       doc.setDrawColor(245, 197, 66);
@@ -132,8 +134,8 @@ export function CertificateViewer({ course, academyName, learnerName, completion
 
                 <div className="text-center">
                   {/* Logo */}
-                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gold text-xl font-black text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)]">
-                    VL
+                  <div className="brand-mark-frame mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg p-2 shadow-[0_10px_24px_rgba(245,197,66,0.2)]">
+                    <Image src={visualAssets.logo} alt="GoalVow" width={48} height={48} className="h-full w-full object-contain" />
                   </div>
 
                   <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold mb-2">GoalVow Holdings</p>
@@ -151,14 +153,10 @@ export function CertificateViewer({ course, academyName, learnerName, completion
 
                   <div className="my-8 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
-                  <div className="grid grid-cols-3 gap-4 text-center">
+                  <div className="grid gap-4 text-center sm:grid-cols-2">
                     <div>
                       <p className="text-xs text-white/50 uppercase tracking-[0.14em]">Completed</p>
                       <p className="mt-1 text-sm font-semibold text-white">{completionDate}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/50 uppercase tracking-[0.14em]">Rewards earned</p>
-                      <p className="mt-1 text-sm font-semibold text-gold">{course.rewards} VowPoints</p>
                     </div>
                     <div>
                       <p className="text-xs text-white/50 uppercase tracking-[0.14em]">Certificate ID</p>
@@ -167,7 +165,7 @@ export function CertificateViewer({ course, academyName, learnerName, completion
                   </div>
 
                   <p className="mt-6 text-xs text-white/40">
-                    Issued by VowLMS · GoalVow Holdings · vowlms.co.za
+                    Issued by VowLMS - GoalVow Holdings
                   </p>
                 </div>
               </div>
@@ -198,8 +196,8 @@ export function CertificateViewer({ course, academyName, learnerName, completion
         {/* Next steps */}
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {[
-            { title: "Collect rewards", desc: `${course.rewards} VowRewards points await in your wallet.`, href: "/rewards" },
-            { title: "View opportunities", desc: "PlugConnect matches are ready based on this achievement.", href: "/opportunities" },
+            { title: "Review rewards", desc: "Open VowRewards to review learning rewards recorded for your account.", href: "/rewards" },
+            { title: "View opportunities", desc: "Review opportunity pathways currently published by GoalVow.", href: "/opportunities" },
             { title: "Continue learning", desc: "Explore more courses in the GoalVow academy ecosystem.", href: "/courses" },
           ].map((item) => (
             <Link key={item.title} href={item.href} className="premium-card-soft rounded-xl p-5 transition hover:border-[#1166c8]/20">

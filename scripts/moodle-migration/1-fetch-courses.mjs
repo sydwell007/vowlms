@@ -9,6 +9,7 @@ import https from "https";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { requireMoodleToken } from "./env.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.join(__dirname, "data");
@@ -19,48 +20,48 @@ const ACADEMIES = [
     id: "upskilling",
     name: "Upskilling Academy",
     vowSlug: "upskilling-academy",
-    base: "https://goalvow.com/upskilling",
-    token: "00536e412fb8d765b656ee064bf9ca2c",
+    base: process.env.UPSKILLING_MOODLE_BASE_URL || "https://goalvow.com/upskilling",
+    token: requireMoodleToken("upskilling"),
     category: "upskilling",
   },
   {
     id: "skills-training",
     name: "Skills Training Academy",
     vowSlug: "skills-training-academy",
-    base: "https://goalvow.com/skills-training",
-    token: "6b5f00ce3889922a6eb1df2b4a8c45aa",
+    base: process.env.SKILLS_TRAINING_MOODLE_BASE_URL || "https://goalvow.com/skillstraining",
+    token: requireMoodleToken("skills-training"),
     category: "skills-training",
   },
   {
     id: "chef-academy",
     name: "Chef Academy",
     vowSlug: "chef-academy",
-    base: "https://goalvow.com/chef-academy",
-    token: "8d20fcaa2fd8b8a738a78bae517c1b05",
+    base: process.env.CHEF_ACADEMY_MOODLE_BASE_URL || "https://goalvow.com/chefacademy",
+    token: requireMoodleToken("chef-academy"),
     category: "chef-academy",
   },
   {
     id: "schools",
     name: "GoalVow Schools",
     vowSlug: "private-school",
-    base: "https://goalvow.com/schools",
-    token: "3e6e821581b3ff80e1e9871355b30088",
+    base: process.env.GOALVOW_SCHOOLS_MOODLE_BASE_URL || "https://goalvow.com/schools",
+    token: requireMoodleToken("schools"),
     category: "private-school",
   },
   {
     id: "business-school",
     name: "Business School",
     vowSlug: "business-school",
-    base: "https://goalvow.com/business-school",
-    token: "2a5f4b9743138fe641ccdc03f047f27d",
+    base: process.env.BUSINESS_SCHOOL_MOODLE_BASE_URL || "https://goalvow.com/businessschool",
+    token: requireMoodleToken("business-school"),
     category: "business-school",
   },
   {
     id: "university",
     name: "University Online",
     vowSlug: "university-online",
-    base: "https://goalvow.com/university",
-    token: "4a20221e056e4cfe6350254fc8630a29",
+    base: process.env.GOALVOW_UNIVERSITY_MOODLE_BASE_URL || "https://goalvow.com/university",
+    token: requireMoodleToken("university"),
     category: "university-online",
   },
 ];
@@ -68,7 +69,7 @@ const ACADEMIES = [
 function get(url) {
   return new Promise((resolve, reject) => {
     https
-      .get(url, { rejectUnauthorized: false }, (res) => {
+      .get(url, (res) => {
         let data = "";
         res.on("data", (c) => (data += c));
         res.on("end", () => {

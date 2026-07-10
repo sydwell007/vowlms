@@ -7,15 +7,17 @@
 
 ob_start();
 require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../../lib/auth.php';
 ob_end_clean();
 
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: https://vowlms.vercel.app');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: X-Bridge-Key, Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') { http_response_code(204); exit; }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST')    { http_response_code(405); echo json_encode(['ok'=>false,'error'=>'Method not allowed','timestamp'=>date('c')]); exit; }
+requireBridgeKey();
 
 function respond(bool $ok, mixed $data = null, string $error = '', int $code = 200): void {
     http_response_code($code);
@@ -41,5 +43,6 @@ try {
 
     respond(true, ['id' => $id], '', 201);
 } catch (Throwable $e) {
-    respond(false, null, 'Internal error: ' . $e->getMessage(), 500);
+    error_log('service-interest-create failed: ' . $e->getMessage());
+    respond(false, null, 'Internal server error', 500);
 }

@@ -6,7 +6,7 @@ import { getAcademies, getCourses } from "@/lib/data";
 import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
-  title: "Academies — GoalVow LMS",
+  title: "GoalVow Academies",
 };
 
 export default function AcademiesPage() {
@@ -21,10 +21,10 @@ export default function AcademiesPage() {
           <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">GoalVow Holdings</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">
-            6 academies. {courses.length.toLocaleString()} courses. One platform.
+            6 connected academies. {courses.length.toLocaleString()} courses. One platform.
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-white/74">
-            From workplace upskilling and culinary arts to university degrees — every GoalVow Academy delivers verified certificates, VowRewards points, and PlugConnect opportunity matching.
+            From workplace upskilling and culinary learning to school, business, and university-level online study, VowLMS brings the current GoalVow catalogues into one place.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/courses">Browse all courses</ButtonLink>
@@ -45,7 +45,7 @@ export default function AcademiesPage() {
         tone="light"
         eyebrow="Academy network"
         title="Choose your learning pathway"
-        description="Each academy serves a distinct learner audience with purpose-built courses, facilitator support, and a direct route from completion to real-world opportunities."
+        description="Each academy serves a distinct learner audience. Review the current catalogue and course details before choosing a pathway."
       >
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {academies.map((academy) => {
@@ -67,23 +67,19 @@ export default function AcademiesPage() {
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {[
               {
-                icon: "🏅",
-                title: "Verified certificates",
-                description: "Every completed course generates a downloadable, shareable GoalVow certificate with a unique verification ID.",
+                title: "Account-owned records",
+                description: "Enrolment, progress, assessment, and certificate records are tied to the authenticated learner account.",
               },
               {
-                icon: "⭐",
-                title: "VowRewards points",
-                description: "Earn points for every lesson, assessment pass, VR practice session, and course completion — redeemable across the ecosystem.",
+                title: "Recorded milestones",
+                description: "Eligible lesson, assessment, course, and certificate milestones can create auditable VowRewards events.",
               },
               {
-                icon: "🎯",
-                title: "Opportunity matching",
-                description: "Course completions route directly into PlugConnect for employment, internship, supplier, and entrepreneurship opportunities.",
+                title: "Progression pathways",
+                description: "Published opportunities and future PlugConnect services can build on learner-controlled completion evidence.",
               },
             ].map((item) => (
               <div key={item.title} className="premium-card-dark rounded-2xl p-6">
-                <div className="text-3xl mb-4">{item.icon}</div>
                 <h3 className="text-xl font-semibold text-white">{item.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-white/68">{item.description}</p>
               </div>

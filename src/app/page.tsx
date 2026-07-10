@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { AcademyCard } from "@/components/academies/AcademyCard";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { ButtonLink } from "@/components/ui/ButtonLink";
@@ -6,13 +7,6 @@ import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
 import { getAcademies, getCourses } from "@/lib/data";
 import { visualAssets } from "@/lib/visual-assets";
-
-const stats = [
-  { value: "6", label: "Academies" },
-  { value: "614+", label: "Courses" },
-  { value: "8", label: "Ecosystem services" },
-  { value: "PWA", label: "Mobile ready" },
-];
 
 const journey = [
   {
@@ -24,28 +18,35 @@ const journey = [
   {
     step: "02",
     title: "Practice",
-    description: "Learning hubs, facilitator support, and VR practice pathways turn knowledge into usable skill evidence.",
+    description: "Guided Skills Practice previews and planned facilitated pathways help learners move beyond course content.",
     href: "/practice",
   },
   {
     step: "03",
     title: "Apply",
-    description: "VowRewards, PlugConnect, and verified portfolios connect learners to work, study, and enterprise routes.",
+    description: "Carry account-owned progress and certificate records into confirmed study, work, and enterprise routes.",
     href: "/apply",
   },
 ];
 
 const trustSignals = [
   "Role-based dashboards for learners, facilitators, employers, and admins",
-  "Certificates, rewards, opportunities, hubs, and support in one learner identity",
-  "Mobile-first PWA foundation with offline-ready learning flows",
-  "GoalVow ecosystem services designed for retention beyond course completion",
+  "Account-owned enrolment, progress, assessment, and certificate records",
+  "Mobile-first PWA foundation with a safe public offline fallback",
+  "Planned ecosystem services labelled separately from live capabilities",
 ];
 
 export default function Home() {
   const academies = getAcademies();
   const courses = getCourses();
+  const connectedAcademies = academies.filter((academy) => academy.slug !== "sports-academy").length;
   const featuredCourses = courses.slice(0, 4);
+  const stats = [
+    { value: connectedAcademies.toLocaleString(), label: "Connected academies" },
+    { value: courses.length.toLocaleString(), label: "Courses" },
+    { value: "1", label: "Planned academy" },
+    { value: "PWA", label: "Mobile ready" },
+  ];
 
   return (
     <main>
@@ -69,7 +70,7 @@ export default function Home() {
             VowLMS
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-white/76">
-            A premium learning platform for academies, skills training, VR practice, rewards, learning hubs, and opportunity pathways across the GoalVow Holdings ecosystem.
+            A connected learning platform for GoalVow academies, Skills Practice, support, reward records, and carefully staged progression pathways.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/auth/signup" variant="primary">
@@ -77,9 +78,6 @@ export default function Home() {
             </ButtonLink>
             <ButtonLink href="/academies" variant="secondary">
               Explore Academies
-            </ButtonLink>
-            <ButtonLink href="/investors" variant="outline">
-              Investor Hub
             </ButtonLink>
           </div>
           <div className="mt-12 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
@@ -97,7 +95,7 @@ export default function Home() {
         tone="light"
         eyebrow="Academy network"
         title="One LMS for the GoalVow learning ecosystem"
-        description="Upskilling, skills training, Chef Academy, private school, business school, and university online share a connected learner journey."
+        description="Skills, culinary, school, sport, business, and online learning pathways share a connected learner journey."
       >
         <div className="grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <ImagePanel
@@ -130,11 +128,11 @@ export default function Home() {
           </h2>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {journey.map((item) => (
-              <a key={item.title} href={item.href} className="premium-card-dark rounded-2xl p-6 transition hover:-translate-y-1">
+              <Link key={item.title} href={item.href} className="premium-card-dark rounded-lg p-6 transition hover:-translate-y-1">
                 <p className="text-sm font-semibold text-gold">{item.step}</p>
                 <h3 className="mt-4 text-2xl font-semibold">{item.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-white/66">{item.description}</p>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -161,7 +159,7 @@ export default function Home() {
       <section className="border-y border-slate-100 bg-white py-16 md:py-24">
         <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#1166c8]">Investor-ready trust</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#1166c8]">Platform foundation</p>
             <h2 className="mt-3 text-balance text-3xl font-semibold text-ink sm:text-4xl">
               A focused LMS now, a scalable ecosystem platform next
             </h2>
@@ -192,7 +190,7 @@ export default function Home() {
 
       <section className="gv-hero py-16 text-white md:py-24">
         <div className="mx-auto w-full max-w-3xl px-5 text-center sm:px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">Ready for launch</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">Your next step</p>
           <h2 className="mt-3 text-balance text-3xl font-semibold sm:text-4xl">
             Build skill, earn rewards, and move into opportunity
           </h2>

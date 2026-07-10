@@ -97,14 +97,14 @@ export function Header() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="ml-auto hidden items-center gap-1 lg:flex">
+        <nav className="ml-auto hidden items-center gap-1 xl:flex">
           {navItems.map((item) => {
             const active = isActive(pathname, item.href, item.activePrefix);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative rounded-md px-2.5 py-2 text-[13px] font-semibold transition ${
+                className={`relative whitespace-nowrap rounded-md px-2.5 py-2 text-[13px] font-semibold transition ${
                   active ? "bg-white/8 text-white" : "text-white/68 hover:bg-white/6 hover:text-white"
                 }`}
               >
@@ -120,7 +120,7 @@ export function Header() {
         </nav>
 
         {/* Desktop right actions */}
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden items-center gap-2 xl:flex">
           {isAuthed && <NotificationBell />}
           {session.status === "loading" ? (
             <div className="h-9 w-20 animate-pulse rounded-lg bg-white/10" />
@@ -141,9 +141,17 @@ export function Header() {
               </button>
             </>
           ) : (
-            <ButtonLink href="/auth/signup" className="min-h-9 px-4 py-2 text-sm">
-              Start Learning
-            </ButtonLink>
+            <>
+              <Link
+                href="/auth/signin"
+                className="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold text-white/76 transition hover:bg-white/8 hover:text-white"
+              >
+                Sign in
+              </Link>
+              <ButtonLink href="/auth/signup" className="min-h-9 whitespace-nowrap px-4 py-2 text-sm">
+                Start Learning
+              </ButtonLink>
+            </>
           )}
         </div>
 
@@ -153,7 +161,7 @@ export function Header() {
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           onClick={toggleMenu}
-          className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/14 bg-white/6 text-white transition hover:bg-white/10 lg:hidden"
+          className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/14 bg-white/6 text-white transition hover:bg-white/10 xl:hidden"
         >
           <span className="flex w-5 flex-col gap-1.5">
             <span className={`h-0.5 rounded-full bg-current transition ${menuOpen ? "translate-y-2 rotate-45" : ""}`} />
@@ -166,7 +174,7 @@ export function Header() {
       {/* Mobile menu */}
       {menuOpen && (
         <nav
-          className="border-t border-white/10 bg-[#081626]/96 px-4 py-4 lg:hidden"
+          className="border-t border-white/10 bg-[#081626]/96 px-4 py-4 xl:hidden"
           aria-label="Mobile navigation"
         >
           <div className="mx-auto grid w-full max-w-7xl gap-1.5">
@@ -219,9 +227,9 @@ export function Header() {
                 </>
               ) : (
                 <>
-                  <Link href="/profile" onClick={closeMenu}
+                  <Link href="/auth/signin" onClick={closeMenu}
                     className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12">
-                    Profile
+                    Sign in
                   </Link>
                   <ButtonLink href="/auth/signup" className="flex-1 justify-center" onClick={closeMenu}>
                     Start Learning

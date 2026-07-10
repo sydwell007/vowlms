@@ -1,9 +1,29 @@
 import { ok, serverError, unauthorized } from "@/lib/api/responses";
-import { getAdminDashboard } from "@/lib/data";
+import { getAcademies, getCourses } from "@/lib/data";
 import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 
 export async function GET() {
-  if (!isBridgeConfigured()) return ok(getAdminDashboard());
+  if (!isBridgeConfigured()) {
+    return ok({
+      totals: {
+        users: 0,
+        courses: getCourses().length,
+        enrollments: 0,
+        certificates: 0,
+        revenue: 0,
+      },
+      roleCounts: {},
+      recentUsers: [],
+      topCourses: [],
+      academyStats: getAcademies().map((academy) => ({
+        name: academy.name,
+        course_count: getCourses().filter((course) => course.academySlug === academy.slug).length,
+        total_enrolments: 0,
+      })),
+      monthlyRevenue: [],
+      mode: "development",
+    });
+  }
 
   try {
     return ok(await bridgeGet("/dashboard/admin"));

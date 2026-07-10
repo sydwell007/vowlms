@@ -1,6 +1,5 @@
-import { badRequest, created, notFound, ok, serverError, unauthorized } from "@/lib/api/responses";
+import { badRequest, bridgeUnavailable, created, notFound, ok, serverError, unauthorized } from "@/lib/api/responses";
 import { buildCertificatePdfBytes } from "@/lib/certificates/pdf";
-import { getCourseBySlug } from "@/lib/data";
 import { bridgeGet, bridgePost, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 
 type CertificateData = {
@@ -10,14 +9,21 @@ type CertificateData = {
   certificateId: string;
 };
 
-function mockCertificate(courseSlug: string): CertificateData | null {
-  const course = getCourseBySlug(courseSlug);
-  if (!course) return null;
+function normaliseCertificate(value: unknown): CertificateData {
+  if (!value || typeof value !== "object") throw new Error("Invalid certificate response");
+  const record = value as Record<string, unknown>;
+  const issuedAt = String(record.issuedAt ?? record.issued_at ?? "");
+  const issuedDate = issuedAt ? new Date(issuedAt) : null;
+  const completionDate = record.completionDate
+    ? String(record.completionDate)
+    : issuedDate && !Number.isNaN(issuedDate.getTime())
+      ? new Intl.DateTimeFormat("en-ZA", { dateStyle: "long" }).format(issuedDate)
+      : "";
   return {
-    learnerName: "Amina Mokoena",
-    courseName: course.title,
-    completionDate: "13 June 2026",
-    certificateId: `VOWLMS-${course.slug.toUpperCase().slice(0, 10)}-2026`,
+    learnerName: String(record.learnerName ?? record.learner_name ?? "GoalVow learner"),
+    courseName: String(record.courseName ?? record.course_name ?? "Completed course"),
+    completionDate,
+    certificateId: String(record.certificateId ?? record.certificate_id ?? ""),
   };
 }
 
@@ -30,15 +36,12 @@ export async function GET(request: Request) {
 
   let certificate: CertificateData;
 
-  if (!isBridgeConfigured()) {
-    const c = mockCertificate(courseSlug);
-    if (!c) return notFound("Course not found");
-    certificate = c;
-  } else {
+  if (!isBridgeConfigured()) return bridgeUnavailable();
+
+  {
     try {
-      certificate = await bridgeGet<CertificateData>(
-        `/certificates?courseSlug=${encodeURIComponent(courseSlug)}`,
-      );
+      const result = await bridgeGet<unknown>(`/certificates?courseSlug=${encodeURIComponent(courseSlug)}`);
+      certificate = normaliseCertificate(result);
     } catch (e) {
       if (e instanceof BridgeError && e.status === 401) return unauthorized();
       if (e instanceof BridgeError && e.status === 404) return notFound("Certificate not found");
@@ -65,14 +68,11 @@ export async function POST(request: Request) {
     return badRequest("courseSlug is required");
   }
 
-  if (!isBridgeConfigured()) {
-    const c = mockCertificate(payload.courseSlug);
-    if (!c) return notFound("Course not found");
-    return created(c);
-  }
+  if (!isBridgeConfigured()) return bridgeUnavailable();
 
   try {
-    return created(await bridgePost<CertificateData>("/certificates/generate", { courseSlug: payload.courseSlug }));
+    const result = await bridgePost<unknown>("/certificates/generate", { courseSlug: payload.courseSlug });
+    return created(normaliseCertificate(result));
   } catch (e) {
     if (e instanceof BridgeError && e.status === 401) return unauthorized();
     return serverError("Failed to generate certificate");

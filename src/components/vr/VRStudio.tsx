@@ -32,9 +32,10 @@ export function VRStudio({ practice }: { practice: VRPractice }) {
             </div>
           ))}
         </div>
-        <div className="mt-5 rounded-xl border border-[#f5c542]/30 bg-[#fff5d1] p-4">
-          <p className="text-sm font-semibold text-[#8a6100]">Score placeholder</p>
-          <p className="mt-1 text-3xl font-semibold text-ink">{practice.scorePlaceholder}%</p>
+        <div className="mt-5 rounded-lg border border-[#f5c542]/30 bg-[#fff5d1] p-4">
+          <p className="text-sm font-semibold text-[#8a6100]">Practice status</p>
+          <p className="mt-1 text-base font-semibold text-ink">Simulation preview</p>
+          <p className="mt-1 text-xs leading-5 text-[#765a16]">Scoring opens only in an enabled practice session.</p>
         </div>
       </aside>
     </div>

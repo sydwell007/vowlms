@@ -3,17 +3,17 @@ import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
-  title: "ChefOrder · Chef Business & Food Platform",
-  description: "ChefOrder connects GoalVow Chef Academy graduates with catering clients, food orders, and entrepreneurship support to launch their culinary businesses.",
+  title: "ChefOrder - Planned Chef Business Platform",
+  description: "Review the proposed ChefOrder pathway for future Chef Academy enterprise services.",
 };
 
 const features = [
-  { icon: "🍽️", title: "Online food ordering", desc: "Customers discover and order from GoalVow Chef Academy graduates — supporting learner entrepreneurs with real revenue from day one." },
-  { icon: "🧑‍🍳", title: "Chef business profiles", desc: "Each Chef Academy graduate gets a professional ChefOrder profile showcasing their menu, credentials, and GoalVow certificates." },
-  { icon: "📦", title: "Catering bookings", desc: "Individuals and businesses can book GoalVow-trained chefs for events, corporate catering, and pop-up restaurant experiences." },
-  { icon: "🏆", title: "Verified credentials", desc: "All chefs on ChefOrder are verified GoalVow academy graduates — giving customers confidence in their food safety and professional training." },
-  { icon: "💰", title: "Revenue from learning", desc: "Chef Academy learners build income pathways before they even graduate by listing trial offerings during their practical training phase." },
-  { icon: "🌍", title: "Community food hubs", desc: "ChefOrder integrates with GoalVow learning hubs to create community kitchen programmes and food enterprise incubators." },
+  { icon: "🍽️", title: "Ordering concept", desc: "Explore how approved culinary businesses could publish products or menus through a future ordering service." },
+  { icon: "🧑‍🍳", title: "Business profiles", desc: "Define identity, menu, service area, availability, and evidence requirements before profiles can be published." },
+  { icon: "📦", title: "Catering enquiries", desc: "Assess a structured enquiry and booking workflow with clear provider and customer protections." },
+  { icon: "🏆", title: "Credential consent", desc: "A chef would choose which eligible GoalVow records can be associated with a public business profile." },
+  { icon: "💰", title: "Commercial model", desc: "Fees, payouts, refunds, disputes, taxes, and provider eligibility require approval before launch." },
+  { icon: "🌍", title: "Partner operations", desc: "Any kitchen, hub, incubator, or delivery partnership must be confirmed before it is presented publicly." },
 ];
 
 export default function ChefOrderPage() {
@@ -27,10 +27,10 @@ export default function ChefOrderPage() {
           </span>
           <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">ChefOrder</h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-white/72">
-            A food-ordering and chef-business platform that creates commercial revenue pathways for GoalVow Chef Academy graduates and culinary entrepreneurs.
+            A proposed food-ordering and chef-business pathway for GoalVow Chef Academy learners and culinary entrepreneurs.
           </p>
           <div className="mt-6 text-white/60 text-sm">
-            ChefOrder connects learning to earning for every Chef Academy graduate.
+            Product, provider, payment, food-safety, and fulfilment rules are still being defined.
           </div>
           <div className="mt-6">
             <a href="mailto:support@goalvow.com" className="inline-flex items-center gap-2 rounded-lg bg-[#f97316] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#ea580c]">
@@ -47,7 +47,7 @@ export default function ChefOrderPage() {
       </section>
       <section className="gv-section-blue py-14">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold text-ink">How ChefOrder works</h2>
+          <h2 className="text-2xl font-semibold text-ink">Concept areas under review</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
               <article key={f.title} className="gv-card rounded-xl p-6">
@@ -62,7 +62,7 @@ export default function ChefOrderPage() {
       <section className="gv-section-dark py-12 text-white text-center">
         <div className="mx-auto max-w-xl px-5">
           <h2 className="text-2xl font-semibold">Are you a Chef Academy learner?</h2>
-          <p className="mt-3 text-sm text-white/66">Enrol in the Chef Academy today and position yourself to be one of the first chefs on ChefOrder at launch.</p>
+          <p className="mt-3 text-sm text-white/66">Explore the current Chef Academy catalogue while the ChefOrder business model is validated separately.</p>
           <div className="mt-6">
             <ButtonLink href="/academies/chef-academy" variant="primary">Explore Chef Academy →</ButtonLink>
           </div>

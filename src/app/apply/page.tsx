@@ -4,31 +4,31 @@ import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
-  title: "Apply · Certificates, Opportunities & Entrepreneurship",
-  description: "Apply your GoalVow skills through certificates, PlugConnect job matching, entrepreneurship support, and VowRewards ecosystem benefits.",
+  title: "Apply - Certificates and Progression Pathways",
+  description: "Use learner-owned GoalVow records and review confirmed progression pathways as they are published.",
 };
 
 const applyPaths = [
   {
     icon: "🏅",
-    title: "Verified Certificates",
-    desc: "GoalVow certificates are issued per course with a unique verification ID. Share digitally with employers, upload to LinkedIn, or print at your nearest learning hub.",
+    title: "Certificate records",
+    desc: "Eligible certificates are issued only after the platform validates course completion for the authenticated learner.",
     href: "/certificates",
     color: "#1e3a8a",
     badge: "Available",
   },
   {
     icon: "🔗",
-    title: "PlugConnect Opportunities",
-    desc: "Your verified achievements are matched to job listings, internships, freelance projects, and entrepreneurship opportunities in the PlugConnect employer network.",
+    title: "PlugConnect pathway",
+    desc: "A planned consent-led route from learner-controlled evidence to confirmed jobs, projects, internships, and enterprise opportunities.",
     href: "/opportunities",
     color: "#8b5cf6",
-    badge: "Connected",
+    badge: "Planned",
   },
   {
     icon: "💼",
     title: "Entrepreneurship Support",
-    desc: "GoalVow supports learner entrepreneurs with ChefOrder for culinary graduates, SkillsShop product pathways, and VowTools for business setup guidance.",
+    desc: "ChefOrder, SkillsShop, and VowTools are planned ecosystem services. Their commercial and support offers require separate confirmation.",
     href: "/innovation-labs",
     color: "#f97316",
     badge: "Ecosystem",
@@ -36,7 +36,7 @@ const applyPaths = [
   {
     icon: "⭐",
     title: "VowRewards Ecosystem",
-    desc: "Your earned VowRewards points unlock SkillsShop credits, GoalVow ecosystem discounts, community recognition, and PlugConnect employer priority.",
+    desc: "Eligible platform milestones create VowRewards records. Redemption products and ecosystem benefits are not yet live.",
     href: "/rewards",
     color: "#f5c542",
     badge: "Built-in",
@@ -51,8 +51,8 @@ const applyPaths = [
   },
   {
     icon: "📊",
-    title: "Verified Skill Portfolio",
-    desc: "Your learner dashboard holds a complete record of completed courses, assessment scores, VR sessions, and certificates — a portable proof of capability.",
+    title: "Learner record",
+    desc: "Your dashboard shows authorised enrolment, progress, reward, and certificate data. A broader evidence portfolio remains planned.",
     href: "/dashboard/learner",
     color: "#19c37d",
     badge: "Live",
@@ -60,10 +60,10 @@ const applyPaths = [
 ];
 
 const outcomeStats = [
-  { value: "100%", label: "Digital certificates", detail: "Unique verification ID per certificate" },
-  { value: "PlugConnect", label: "Job matching", detail: "Verified credential routing" },
-  { value: "VowRewards", label: "Ecosystem value", detail: "Points redeemable across GoalVow" },
-  { value: "6+", label: "Employer pathways", detail: "Per academy vertical" },
+  { value: "Account", label: "Owned records", detail: "Identity and ownership checks" },
+  { value: "Consent", label: "Opportunity routing", detail: "Planned privacy boundary" },
+  { value: "Events", label: "Reward history", detail: "Server-owned milestones" },
+  { value: "Staged", label: "Ecosystem rollout", detail: "Services labelled by status" },
 ];
 
 export default function ApplyPage() {
@@ -80,10 +80,10 @@ export default function ApplyPage() {
             <span className="bg-gradient-to-r from-orange-300 to-amber-300 bg-clip-text text-transparent">Apply</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-white/72">
-            Certificates, portfolios, PlugConnect opportunities, entrepreneurship support, jobs, projects, and business growth — this is where your learning pays off.
+            Carry trustworthy progress and certificate records forward, then choose from confirmed opportunity and ecosystem routes as they become available.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href="/opportunities" variant="primary">Browse opportunities</ButtonLink>
+            <ButtonLink href="/opportunities" variant="primary">Review opportunity status</ButtonLink>
             <ButtonLink href="/dashboard/learner" variant="secondary">View my portfolio</ButtonLink>
           </div>
           </div>
@@ -137,7 +137,7 @@ export default function ApplyPage() {
       <section className="gv-section-dark py-14 text-white">
         <div className="mx-auto w-full max-w-2xl px-5 text-center sm:px-6">
           <h2 className="text-2xl font-semibold">Ready to apply your skills?</h2>
-          <p className="mt-3 text-sm text-white/66">Complete a course, earn your certificate, and let GoalVow connect you to the right opportunity.</p>
+          <p className="mt-3 text-sm text-white/66">Start with a course, build an account-owned record, and review only confirmed next-step options.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <ButtonLink href="/auth/signup" variant="primary">Start for free</ButtonLink>
             <ButtonLink href="/courses" variant="secondary">Browse courses</ButtonLink>

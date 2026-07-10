@@ -77,4 +77,3 @@ RewriteRule ^service-interest/?$      api/service-interest-create.php [L,QSA]
 
 # ── Health / Diagnostics ──────────────────────────────────────────────────────
 RewriteRule ^health/?$                api/health.php [L,QSA]
-RewriteRule ^diag/?$                  api/diag.php [L,QSA]

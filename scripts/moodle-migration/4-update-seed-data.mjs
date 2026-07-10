@@ -24,21 +24,6 @@ function q(str) {
   return JSON.stringify(str);
 }
 
-function slugify(str) {
-  return str
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 80);
-}
-
-function detectLevel(title) {
-  const t = title.toLowerCase();
-  if (/advanced|senior|masters|phd|degree|bsc|bachelor|bba/.test(t)) return "Advanced";
-  if (/intermediate|diploma|professional/.test(t)) return "Intermediate";
-  return "Foundation";
-}
-
 function buildModuleCode(courseSlug, modules) {
   return modules
     .map((mod) => {

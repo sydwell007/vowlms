@@ -31,11 +31,31 @@ $hash    = trim($_GET['hash'] ?? '');
 $id      = trim($_GET['id']   ?? '');
 $url     = trim($_GET['url']  ?? '');   // Mode C — direct Moodle URL proxy
 $reqName = trim($_GET['name'] ?? '');
+$expires = (int)($_GET['expires'] ?? 0);
+$signature = trim($_GET['sig'] ?? '');
 
 if ($hash === '' && $id === '' && $url === '') {
     http_response_code(400);
     header('Content-Type: application/json');
     echo json_encode(['ok' => false, 'error' => 'hash, id, or url parameter required']);
+    exit;
+}
+
+$selector = $hash !== '' ? 'hash:' . $hash : ($id !== '' ? 'id:' . $id : 'url:' . $url);
+$signingSecret = env('RESOURCE_SIGNING_SECRET', '');
+$expectedSignature = $expires > 0 && $signingSecret !== ''
+    ? hash_hmac('sha256', $selector . '|' . $expires, $signingSecret)
+    : '';
+if (
+    $expires < time() ||
+    $expires > time() + 3600 ||
+    $signature === '' ||
+    $expectedSignature === '' ||
+    !hash_equals($expectedSignature, $signature)
+) {
+    http_response_code(403);
+    header('Content-Type: application/json');
+    echo json_encode(['ok' => false, 'error' => 'Invalid or expired resource link']);
     exit;
 }
 
@@ -255,9 +275,19 @@ function serveFromFilesystem(string $path, int $size, string $mimeType, string $
 // ─────────────────────────────────────────────────────────────────────────────
 function proxyFromMoodle(string $url, string $mimeType, string $filename): void
 {
+    $host = strtolower((string)parse_url($url, PHP_URL_HOST));
+    if (!in_array($host, ['goalvow.com', 'www.goalvow.com'], true)) {
+        http_response_code(403);
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => false, 'error' => 'Resource host not allowed']);
+        return;
+    }
+
     if (!function_exists('curl_init')) {
-        header("Location: {$url}", true, 302);
-        exit;
+        http_response_code(503);
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => false, 'error' => 'Resource service unavailable']);
+        return;
     }
 
     $safe  = rawurlencode(preg_replace('/[^\w.\- ]/u', '_', $filename));
@@ -267,8 +297,8 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => false,
         CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_SSL_VERIFYPEER => false,
-        CURLOPT_SSL_VERIFYHOST => 0,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
         CURLOPT_USERAGENT      => 'VowLMS-FileProxy/1.0',
         CURLOPT_TIMEOUT        => 120,
         CURLOPT_CONNECTTIMEOUT => 15,
@@ -334,7 +364,8 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
     if ($err && !$headersSet) {
         http_response_code(502);
         header('Content-Type: application/json');
-        echo json_encode(['ok' => false, 'error' => 'Proxy fetch failed: ' . $err]);
+        error_log('Moodle resource proxy failed: ' . $err);
+        echo json_encode(['ok' => false, 'error' => 'Resource fetch failed']);
     }
 }
 

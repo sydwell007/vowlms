@@ -4,7 +4,7 @@ import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
-  title: "GoalVow Ecosystem · One Platform, Eight Verticals",
+  title: "GoalVow Ecosystem · Connected Learning Services",
   description: "Explore the full GoalVow Holdings ecosystem — academies, learning hubs, VowSupport, VowRewards, VowTools, PlugConnect, SkillsShop, ChefOrder, and Innovation Labs.",
 };
 
@@ -12,7 +12,7 @@ const pillars = [
   {
     icon: "🎓",
     name: "Academies",
-    tagline: "6 structured learning pathways",
+    tagline: "6 connected academy catalogues",
     desc: "Upskilling, Skills Training, Chef Academy, Private School, Business School, and University Online — all sharing one learner identity and reward system.",
     href: "/academies",
     status: "Live",
@@ -23,18 +23,18 @@ const pillars = [
     icon: "🏫",
     name: "Learning Hubs",
     tagline: "Hybrid community access points",
-    desc: "Physical hubs across South Africa providing devices, mentoring, printing, study rooms, and in-person practical training — reducing the digital divide.",
+    desc: "A proposed partner model for supported device access, facilitated study, and selected Skills Practice activities.",
     href: "/learning-hubs",
-    status: "Connected",
-    statusColor: "bg-blue-100 text-blue-700",
+    status: "Planned",
+    statusColor: "bg-amber-100 text-amber-700",
     color: "#06b6d4",
   },
   {
     icon: "🤝",
     name: "VowSupport",
-    tagline: "Tutoring, mentoring & registration help",
-    desc: "End-to-end learner support covering academic tutoring, career mentoring, study coaching, and administrative registration assistance.",
-    href: "/vowsupport",
+    tagline: "Account, learning & registration help",
+    desc: "A verified support route for access, registration, course, assessment, and partnership enquiries.",
+    href: "/support",
     status: "Built-in",
     statusColor: "bg-emerald-100 text-emerald-700",
     color: "#19c37d",
@@ -42,8 +42,8 @@ const pillars = [
   {
     icon: "⭐",
     name: "VowRewards",
-    tagline: "Rewards for every learning milestone",
-    desc: "VowRewards points are earned for lessons, assessments, VR sessions, and course completions — redeemable across the full GoalVow ecosystem.",
+    tagline: "Rewards for eligible learning milestones",
+    desc: "The platform records VowRewards events for configured lesson, assessment, course, and certificate milestones.",
     href: "/rewards",
     status: "Built-in",
     statusColor: "bg-emerald-100 text-emerald-700",
@@ -63,10 +63,10 @@ const pillars = [
     icon: "🔗",
     name: "PlugConnect",
     tagline: "Jobs, internships & projects",
-    desc: "Verified learner achievements are matched to employer requirements, freelance projects, and entrepreneurship opportunities in the PlugConnect network.",
+    desc: "A planned consent-led route from learner-controlled evidence to confirmed employment, project, and enterprise opportunities.",
     href: "/opportunities",
-    status: "Connected",
-    statusColor: "bg-blue-100 text-blue-700",
+    status: "Planned",
+    statusColor: "bg-amber-100 text-amber-700",
     color: "#8b5cf6",
   },
   {
@@ -92,8 +92,8 @@ const pillars = [
   {
     icon: "🔬",
     name: "Innovation Labs",
-    tagline: "VR/AR simulations & AI support",
-    desc: "WebXR-powered skill simulations, AI-driven learning personalisation, and R&D for next-generation education technology built by the GoalVow tech team.",
+    tagline: "Skills Practice research and development",
+    desc: "A development pathway for safe simulations, future WebXR experiences, and evidence-led learning tools.",
     href: "/innovation-labs",
     status: "In development",
     statusColor: "bg-cyan-100 text-cyan-700",
@@ -101,13 +101,13 @@ const pillars = [
   },
 ];
 
-const dataFlow = [
-  { from: "Learner enrols", to: "Academy course", via: "Platform" },
-  { from: "Lesson completed", to: "VowRewards +20pts", via: "Reward engine" },
-  { from: "Assessment passed", to: "Certificate issued", via: "Verify system" },
-  { from: "Certificate verified", to: "PlugConnect match", via: "Opportunity router" },
-  { from: "Points earned", to: "SkillsShop credit", via: "Redemption layer" },
-  { from: "VR session done", to: "Skill evidence logged", via: "Innovation Labs" },
+const platformFlow = [
+  { from: "Learner enrols", to: "Account-owned enrolment", via: "Platform" },
+  { from: "Activity accepted", to: "Progress updated", via: "Progress service" },
+  { from: "Eligible milestone", to: "Reward event recorded", via: "Reward service" },
+  { from: "Completion validated", to: "Certificate eligibility", via: "Certificate service" },
+  { from: "Learner consents", to: "Future opportunity routing", via: "PlugConnect plan" },
+  { from: "Practice submitted", to: "Skills Practice record", via: "Practice service" },
 ];
 
 export default function EcosystemPage() {
@@ -121,13 +121,13 @@ export default function EcosystemPage() {
             GoalVow Holdings
           </p>
           <h1 className="mt-3 max-w-3xl text-balance text-4xl font-semibold sm:text-5xl lg:text-6xl">
-            One Platform.{" "}
+            One platform.{" "}
             <span className="bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">
-              Eight Verticals.
+              Connected services.
             </span>
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-white/72 sm:text-lg">
-            GoalVow Holdings is Africa&apos;s Learn → Practice → Apply ecosystem — connecting academies, support systems, rewards, tools, hubs, marketplaces, and opportunity pathways into one coherent learner journey.
+            VowLMS connects academy learning with support, rewards, Skills Practice, and carefully staged ecosystem services in one coherent learner journey.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/academies" variant="primary">Explore academies</ButtonLink>
@@ -147,9 +147,9 @@ export default function EcosystemPage() {
       <section className="border-b border-slate-100 bg-white py-12">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#06b6d4]">How it flows</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">The GoalVow data flywheel</h2>
+          <h2 className="mt-2 text-2xl font-semibold text-ink">How learner records move through the platform</h2>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {dataFlow.map((flow) => (
+            {platformFlow.map((flow) => (
               <div key={flow.from} className="gv-card rounded-xl p-4">
                 <p className="text-sm font-semibold text-ink">{flow.from}</p>
                 <div className="my-2 flex items-center gap-2 text-xs text-muted">
@@ -195,7 +195,7 @@ export default function EcosystemPage() {
         <div className="mx-auto w-full max-w-3xl px-5 text-center sm:px-6">
           <h2 className="text-3xl font-semibold">Ready to explore GoalVow?</h2>
           <p className="mt-3 text-base text-white/66">
-            Start as a learner, partner as an institution, or invest in Africa&apos;s most connected learning ecosystem.
+            Start as a learner, explore a partnership, or review the current GoalVow platform foundation.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <ButtonLink href="/auth/signup" variant="primary">Create free account</ButtonLink>

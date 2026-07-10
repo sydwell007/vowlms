@@ -224,9 +224,6 @@ async function main() {
 
   // ─── 3. Admin user ─────────────────────────────────────────────────
   console.log("\nSeeding admin user...");
-  const bcrypt = await import("bcryptjs");
-  const adminPassword = await bcrypt.hash("Admin@VowLMS2025", 12);
-
   await prisma.user.upsert({
     where: { email: "admin@vowlms.co.za" },
     update: {},

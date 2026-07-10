@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { Section } from "@/components/ui/Section";
 
 export const metadata = {
   title: "GoalVow eLearning Course Catalogue — VowLMS",

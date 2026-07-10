@@ -13,6 +13,7 @@ import https from "https";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { requireMoodleToken } from "./env.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.join(__dirname, "data");
@@ -29,7 +30,7 @@ const ONLY = args.academy || null;
 function get(url) {
   return new Promise((resolve, reject) => {
     https
-      .get(url, { rejectUnauthorized: false }, (res) => {
+      .get(url, (res) => {
         let data = "";
         res.on("data", (c) => (data += c));
         res.on("end", () => {
@@ -169,15 +170,7 @@ async function processAcademy(academyId) {
 }
 
 function getToken(academyId) {
-  const tokens = {
-    "upskilling": "00536e412fb8d765b656ee064bf9ca2c",
-    "skills-training": "6b5f00ce3889922a6eb1df2b4a8c45aa",
-    "chef-academy": "8d20fcaa2fd8b8a738a78bae517c1b05",
-    "schools": "3e6e821581b3ff80e1e9871355b30088",
-    "business-school": "2a5f4b9743138fe641ccdc03f047f27d",
-    "university": "4a20221e056e4cfe6350254fc8630a29",
-  };
-  return tokens[academyId];
+  return requireMoodleToken(academyId);
 }
 
 async function main() {

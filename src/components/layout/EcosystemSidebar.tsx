@@ -21,14 +21,14 @@ const services: Service[] = [
   {
     icon: "🤝",
     name: "VowSupport",
-    tagline: "Tutoring, mentoring & coaching",
+    tagline: "Account and learning support",
     status: "Support",
-    href: "/vowsupport",
+    href: "/support",
   },
   {
     icon: "⭐",
     name: "VowRewards",
-    tagline: "Earn points on every lesson",
+    tagline: "Eligible learning milestones",
     status: "Built-in",
     href: "/rewards",
   },
@@ -42,8 +42,8 @@ const services: Service[] = [
   {
     icon: "🔗",
     name: "PlugConnect",
-    tagline: "Jobs, internships & projects",
-    status: "Connected",
+    tagline: "Planned opportunity routing",
+    status: "Coming soon",
     href: "/opportunities",
   },
   {
@@ -56,8 +56,8 @@ const services: Service[] = [
   {
     icon: "🏫",
     name: "Learning Hubs",
-    tagline: "Hybrid in-person access points",
-    status: "Connected",
+    tagline: "Planned partner access model",
+    status: "Coming soon",
     href: "/learning-hubs",
   },
   {
@@ -113,12 +113,12 @@ export function EcosystemSidebar() {
   return (
     <>
       {/* ── Desktop sidebar ─────────────────────────────────────────────── */}
-      <aside className="hidden xl:flex">
+      <aside className="fixed right-0 top-[7.5rem] z-30 hidden items-start xl:flex">
         {/* Toggle tab */}
         <button
           onClick={toggle}
           aria-label={open ? "Collapse ecosystem sidebar" : "Expand ecosystem sidebar"}
-          className="sticky top-24 ml-1 flex h-fit items-center gap-1.5 rounded-l-xl border border-r-0 border-slate-200 bg-white px-2 py-6 text-[10px] font-bold uppercase tracking-widest text-muted shadow-md transition hover:text-ink"
+          className="flex h-fit items-center gap-1.5 rounded-l-xl border border-r-0 border-slate-200 bg-white px-2 py-6 text-[10px] font-bold uppercase tracking-widest text-muted shadow-md transition hover:text-ink"
           style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
         >
           {open ? "✕ Ecosystem" : "Ecosystem ▸"}
@@ -126,8 +126,10 @@ export function EcosystemSidebar() {
 
         {/* Panel */}
         <div
-          className={`sticky top-20 h-[calc(100vh-5rem)] w-64 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-[0_8px_40px_rgba(30,58,138,0.08)] transition-all duration-250 ${
-            open ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full pointer-events-none w-0 border-0 p-0 overflow-hidden"
+          className={`h-[calc(100vh-7.5rem)] overflow-y-auto shadow-[0_8px_40px_rgba(30,58,138,0.08)] transition-all duration-250 ${
+            open
+              ? "w-64 translate-x-0 rounded-l-xl border border-r-0 border-slate-200 bg-white opacity-100"
+              : "pointer-events-none w-0 translate-x-full overflow-hidden border-0 opacity-0"
           }`}
         >
           {open && (

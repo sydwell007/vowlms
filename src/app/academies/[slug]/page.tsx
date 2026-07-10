@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { Section } from "@/components/ui/Section";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import { getAcademyBySlug, getCoursesByAcademy, getCourses } from "@/lib/data";
@@ -27,6 +28,7 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
     "skills-training": "#19c37d",
     "chef-academy": "#ff7a59",
     "private-school": "#9b59b6",
+    "sports-academy": "#f97316",
     "business-school": "#f5c542",
     "university-online": "#20c7ff",
   };
@@ -91,21 +93,21 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted mb-4">Other GoalVow academies</p>
           <div className="flex flex-wrap gap-3">
-            {["upskilling-academy", "skills-training-academy", "chef-academy", "private-school", "business-school", "university-online"]
+            {["upskilling-academy", "skills-training-academy", "chef-academy", "private-school", "sports-academy", "business-school", "university-online"]
               .filter((s) => s !== academy.slug)
               .map((s) => {
                 const a = getAcademyBySlug(s);
                 if (!a) return null;
                 const count = allCourses.filter((c) => c.academySlug === a.slug).length;
                 return (
-                  <a
+                  <Link
                     key={s}
                     href={`/academies/${a.category}`}
                     className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-[#1166c8]/40 hover:text-[#1166c8]"
                   >
                     {a.name}
                     <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-muted">{count}</span>
-                  </a>
+                  </Link>
                 );
               })}
           </div>

@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/jwt.php';
 require_once __DIR__ . '/../../lib/response.php';
 require_once __DIR__ . '/../../lib/mail.php';
+require_once __DIR__ . '/../../lib/rate-limit.php';
 ob_end_clean();
 
 setCors();
@@ -17,7 +18,7 @@ $name     = trim($body['name'] ?? '');
 $email    = trim(strtolower($body['email'] ?? ''));
 $password = $body['password'] ?? '';
 $phone    = trim($body['phone'] ?? '');
-$role     = in_array($body['role'] ?? '', ['learner','facilitator','employer'], true) ? $body['role'] : 'learner';
+$role     = 'learner'; // Elevated roles are assigned only by an authorised administrator.
 $city     = trim($body['city'] ?? '');
 $country  = trim($body['country'] ?? 'ZA');
 
@@ -27,6 +28,7 @@ if (!$name || !$email || strlen($password) < 8) {
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     jsonError('Invalid email address');
 }
+requireRateLimit('register', $email, 5, 3600);
 
 $db = getDb();
 
@@ -39,19 +41,29 @@ if ($check->fetch()) {
 $id   = generateId();
 $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 10]);
 
-$stmt = $db->prepare(
-    'INSERT INTO users (id, name, email, password_hash, role, phone, city, country, preferred_academy)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
-);
-$stmt->execute([
-    $id, $name, $email, $hash, $role,
-    $phone ?: null, $city ?: null, $country,
-    $body['preferredAcademy'] ?? null,
-]);
+try {
+    $db->beginTransaction();
+    $stmt = $db->prepare(
+        'INSERT INTO users (id, name, email, password_hash, role, phone, city, country, preferred_academy)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    );
+    $stmt->execute([
+        $id, $name, $email, $hash, $role,
+        $phone ?: null, $city ?: null, $country,
+        $body['preferredAcademy'] ?? null,
+    ]);
 
-// Award registration points
-$db->prepare('INSERT INTO reward_events (id, user_id, event, points) VALUES (?, ?, ?, ?)')
-   ->execute([generateId(), $id, 'register', 100]);
+    $db->prepare('INSERT INTO reward_events (id, user_id, event, points) VALUES (?, ?, ?, ?)')
+       ->execute([generateId(), $id, 'register', 100]);
+    $db->commit();
+} catch (Throwable $error) {
+    if ($db->inTransaction()) $db->rollBack();
+    error_log('Registration failed: ' . $error->getMessage());
+    if ($error instanceof PDOException && $error->getCode() === '23000') {
+        jsonError('An account with this email already exists', 409);
+    }
+    jsonError('Registration failed', 500);
+}
 
 // Welcome email
 sendMail($email, 'Welcome to VowLMS — GoalVow Holdings', welcomeEmail($name));

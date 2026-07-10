@@ -54,7 +54,7 @@ export default function OGImage() {
             fontSize: 64,
             fontWeight: 800,
             color: "white",
-            letterSpacing: "-2px",
+            letterSpacing: 0,
             textAlign: "center",
             lineHeight: 1.1,
           }}
@@ -71,7 +71,7 @@ export default function OGImage() {
             fontWeight: 500,
           }}
         >
-          Africa&apos;s Learn → Practice → Apply Ecosystem
+          GoalVow&apos;s Learn → Practice → Apply platform
         </div>
         {/* Stats row */}
         <div
@@ -81,7 +81,7 @@ export default function OGImage() {
             gap: 32,
           }}
         >
-          {[["614", "Courses"], ["6", "Academies"], ["500K+", "Learners"]].map(([val, label]) => (
+          {[["6", "Connected academies"], ["Skills", "Practice pathways"], ["Account", "Owned progress"]].map(([val, label]) => (
             <div
               key={label}
               style={{
@@ -109,7 +109,7 @@ export default function OGImage() {
             letterSpacing: "0.1em",
           }}
         >
-          goalvow.com · vowlms.vercel.app
+          vowlms.vercel.app
         </div>
       </div>
     ),

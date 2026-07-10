@@ -7,6 +7,7 @@ import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "Opportunities — VowLMS",
+  description: "Review opportunity pathways published by GoalVow and prepare learner-controlled evidence for future matching.",
 };
 
 const TYPE_COLOR: Record<string, string> = {
@@ -39,9 +40,9 @@ export default function OpportunitiesPage() {
             Learning that leads somewhere
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-white/74">
-            Complete a GoalVow course, earn a certificate, and unlock direct pathways to employment, internships, supplier contracts, entrepreneurship grants, and further study.
+            Build a reliable learning record and review employment, enterprise, supplier, internship, or further-study pathways when GoalVow publishes them.
           </p>
-          <ButtonLink href="/courses" className="mt-8">Start a course to unlock opportunities</ButtonLink>
+          <ButtonLink href="/courses" className="mt-8">Build your learning record</ButtonLink>
           </div>
           <ImagePanel
             src={visualAssets.dashboardExperience}
@@ -54,12 +55,13 @@ export default function OpportunitiesPage() {
       {/* Opportunity cards */}
       <Section
         tone="light"
-        eyebrow="Available pathways"
-        title="Current GoalVow opportunity matches"
-        description="Opportunities are matched to learners based on completed courses, earned certificates, and assessment scores."
+        eyebrow="Published pathways"
+        title="Current GoalVow opportunities"
+        description="Only confirmed opportunities with an approved application route are displayed."
       >
-        <div className="grid gap-5 md:grid-cols-2">
-          {opportunities.map((opp) => {
+        {opportunities.length ? (
+          <div className="grid gap-5 md:grid-cols-2">
+            {opportunities.map((opp) => {
             const color = TYPE_COLOR[opp.type] ?? "#1166c8";
             const icon = TYPE_ICON[opp.type] ?? "🎯";
             return (
@@ -82,12 +84,18 @@ export default function OpportunitiesPage() {
                   href="/auth/signup"
                   className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-[#1166c8]/30 hover:text-[#1166c8] self-start"
                 >
-                  Apply via PlugConnect →
+                  Review application route →
                 </Link>
               </article>
             );
-          })}
-        </div>
+            })}
+          </div>
+        ) : (
+          <div className="rounded-lg border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
+            <h2 className="text-xl font-semibold text-ink">No public opportunities are confirmed yet</h2>
+            <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted">The page is ready to publish approved listings without presenting sample employers, grants, or contracts as live.</p>
+          </div>
+        )}
       </Section>
 
       {/* How it works */}
@@ -98,9 +106,9 @@ export default function OpportunitiesPage() {
           <div className="mt-10 grid gap-5 md:grid-cols-4">
             {[
               { step: "01", title: "Complete a course", detail: "Finish all modules and pass the assessment." },
-              { step: "02", title: "Earn your certificate", detail: "Download and share your GoalVow verified certificate." },
-              { step: "03", title: "Collect VowRewards", detail: "Build your reward balance across the ecosystem." },
-              { step: "04", title: "Match to opportunities", detail: "PlugConnect surfaces roles, gigs, grants, and study pathways matched to your profile." },
+              { step: "02", title: "Complete eligible evidence", detail: "Use course, assessment, and certificate records issued to your account." },
+              { step: "03", title: "Control your profile", detail: "Choose which relevant evidence may be used for an opportunity application." },
+              { step: "04", title: "Review published routes", detail: "Apply only through the approved process shown on a confirmed listing." },
             ].map((s) => (
               <div key={s.step} className="premium-card-dark rounded-xl p-6">
                 <p className="text-3xl font-semibold text-gold">{s.step}</p>

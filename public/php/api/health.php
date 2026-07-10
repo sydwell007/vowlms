@@ -15,10 +15,9 @@ try {
 
 jsonOk([
     'service' => 'VowLMS Bridge',
-    'status'  => 'healthy',
+    'status'  => $dbStatus === 'healthy' ? 'healthy' : 'degraded',
     'version' => '1.0.0',
     'checks'  => [
         'db'  => $dbStatus,
-        'php' => PHP_VERSION,
     ],
 ]);

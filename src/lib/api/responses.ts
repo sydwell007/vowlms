@@ -1,5 +1,10 @@
 function envelope<T>(ok: boolean, payload: Record<string, unknown> & { data?: T }) {
-  return { ok, timestamp: new Date().toISOString(), ...payload };
+  return {
+    ok,
+    requestId: crypto.randomUUID(),
+    timestamp: new Date().toISOString(),
+    ...payload,
+  };
 }
 
 export function ok<T>(data: T, init?: ResponseInit) {

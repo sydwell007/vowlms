@@ -3,7 +3,22 @@ import { getEmployerDashboard } from "@/lib/data";
 import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 
 export async function GET() {
-  if (!isBridgeConfigured()) return ok(getEmployerDashboard());
+  if (!isBridgeConfigured()) {
+    const dashboard = getEmployerDashboard();
+    return ok({
+      employer: dashboard.name,
+      company: "Development organisation",
+      metrics: dashboard.metrics,
+      opportunities: dashboard.opportunities.map((opportunity) => ({
+        ...opportunity,
+        company: opportunity.partner,
+        is_active: true,
+      })),
+      talent: [],
+      vrHighScorers: [],
+      upcomingEvents: [],
+    });
+  }
 
   try {
     return ok(await bridgeGet("/dashboard/employer"));

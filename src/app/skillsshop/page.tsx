@@ -2,8 +2,8 @@ import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
-  title: "SkillsShop · Learning Kits & Equipment",
-  description: "Shop learning kits, tools, and equipment curated for GoalVow learners. Everything you need to practice real skills outside the classroom.",
+  title: "SkillsShop - Planned Learning Marketplace",
+  description: "Review the proposed SkillsShop model for academy-aligned learning resources.",
 };
 
 const categories = [
@@ -12,7 +12,7 @@ const categories = [
   { icon: "💻", label: "Digital starter packs", desc: "Device bundles, data packs, and productivity software for upskilling academy learners." },
   { icon: "📚", label: "Study materials", desc: "Textbooks, workbooks, stationery packs, and printed course materials across all academies." },
   { icon: "🎓", label: "Uniform bundles", desc: "Academy uniforms, branded merchandise, and professional attire for formal programmes." },
-  { icon: "⭐", label: "Rewards redemption", desc: "Redeem VowRewards points for SkillsShop credits — every lesson brings you closer to free gear." },
+  { icon: "⭐", label: "Future rewards integration", desc: "Redemption rules, point value, eligible products, and account controls require approval before launch." },
 ];
 
 export default function SkillsShopPage() {
@@ -26,7 +26,7 @@ export default function SkillsShopPage() {
           </span>
           <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">SkillsShop</h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-white/72">
-            Academy-aligned learning kits, tools, equipment, and product bundles — with VowRewards redemption built in. Everything a GoalVow learner needs, in one shop.
+            A proposed marketplace for academy-aligned learning kits, tools, equipment, and study resources. Products, suppliers, pricing, fulfilment, and VowRewards redemption are not yet live.
           </p>
           <div className="mt-8">
             <a href="mailto:support@goalvow.com" className="inline-flex items-center gap-2 rounded-lg bg-[#06b6d4] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0891b2]">

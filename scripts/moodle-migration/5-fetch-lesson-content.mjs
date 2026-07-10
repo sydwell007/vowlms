@@ -19,6 +19,7 @@ import https from "https";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { requireMoodleToken } from "./env.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SQL_OUT = path.join(__dirname, "../../public/sql/008_lesson_content.sql");
@@ -29,19 +30,19 @@ const args = Object.fromEntries(
 const ONLY = args.academy || null;
 
 const ACADEMIES = [
-  { id: "upskilling",      base: "https://goalvow.com/upskilling",      token: "00536e412fb8d765b656ee064bf9ca2c", vowSlug: "upskilling-academy",   name: "Upskilling Academy" },
-  { id: "skills-training", base: "https://goalvow.com/skills-training",  token: "6b5f00ce3889922a6eb1df2b4a8c45aa", vowSlug: "skills-training-academy", name: "Skills Training" },
-  { id: "chef-academy",    base: "https://goalvow.com/chef-academy",     token: "8d20fcaa2fd8b8a738a78bae517c1b05", vowSlug: "chef-academy",          name: "Chef Academy" },
-  { id: "schools",         base: "https://goalvow.com/schools",          token: "3e6e821581b3ff80e1e9871355b30088", vowSlug: "private-school",        name: "GoalVow Schools" },
-  { id: "business-school", base: "https://goalvow.com/business-school",  token: "2a5f4b9743138fe641ccdc03f047f27d", vowSlug: "business-school",       name: "Business School" },
-  { id: "university",      base: "https://goalvow.com/university",       token: "4a20221e056e4cfe6350254fc8630a29", vowSlug: "university-online",     name: "University Online" },
+  { id: "upskilling",      base: process.env.UPSKILLING_MOODLE_BASE_URL || "https://goalvow.com/upskilling", token: requireMoodleToken("upskilling"), vowSlug: "upskilling-academy", name: "Upskilling Academy" },
+  { id: "skills-training", base: process.env.SKILLS_TRAINING_MOODLE_BASE_URL || "https://goalvow.com/skillstraining", token: requireMoodleToken("skills-training"), vowSlug: "skills-training-academy", name: "Skills Training" },
+  { id: "chef-academy",    base: process.env.CHEF_ACADEMY_MOODLE_BASE_URL || "https://goalvow.com/chefacademy", token: requireMoodleToken("chef-academy"), vowSlug: "chef-academy", name: "Chef Academy" },
+  { id: "schools",         base: process.env.GOALVOW_SCHOOLS_MOODLE_BASE_URL || "https://goalvow.com/schools", token: requireMoodleToken("schools"), vowSlug: "private-school", name: "GoalVow Schools" },
+  { id: "business-school", base: process.env.BUSINESS_SCHOOL_MOODLE_BASE_URL || "https://goalvow.com/businessschool", token: requireMoodleToken("business-school"), vowSlug: "business-school", name: "Business School" },
+  { id: "university",      base: process.env.GOALVOW_UNIVERSITY_MOODLE_BASE_URL || "https://goalvow.com/university", token: requireMoodleToken("university"), vowSlug: "university-online", name: "University Online" },
 ];
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function get(url) {
   return new Promise((resolve, reject) => {
-    https.get(url, { rejectUnauthorized: false }, (res) => {
+    https.get(url, (res) => {
       let data = "";
       res.on("data", c => (data += c));
       res.on("end", () => {
@@ -94,12 +95,6 @@ function extractYouTubeFromHtml(html) {
     return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
   }
   return null;
-}
-
-function buildEmbedUrl(rawUrl) {
-  if (!rawUrl) return null;
-  const id = extractYouTubeId(rawUrl);
-  return id ? `https://www.youtube-nocookie.com/embed/${id}` : null;
 }
 
 function stripScript(html) {

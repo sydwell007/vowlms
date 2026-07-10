@@ -16,3 +16,5 @@ function env(string $key, string $default = ''): string {
     if ($val !== false) return (string)$val;
     return $_ENV[$key] ?? $default;
 }
+
+date_default_timezone_set(env('APP_TIMEZONE', 'Africa/Johannesburg'));

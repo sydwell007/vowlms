@@ -18,6 +18,7 @@ $score        = isset($body['score']) ? (int)$body['score'] : null;
 $feedback     = $body['feedback'] ?? null;
 
 if (!$practiceSlug) jsonError('practiceSlug is required');
+if ($score === null || $score < 0 || $score > 100) jsonError('score must be between 0 and 100');
 
 $db   = getDb();
 $stmt = $db->prepare('SELECT * FROM vr_practices WHERE slug = ? LIMIT 1');
@@ -25,21 +26,24 @@ $stmt->execute([$practiceSlug]);
 $practice = $stmt->fetch();
 if (!$practice) jsonError('VR practice not found', 404);
 
-$finalScore = $score ?? $practice['score_placeholder'];
+$enrolment = $db->prepare(
+    'SELECT id FROM enrollments
+     WHERE user_id = ? AND course_id = ? AND status IN ("active", "completed") LIMIT 1'
+);
+$enrolment->execute([$userId, $practice['course_id']]);
+if (!$enrolment->fetch()) jsonError('An active enrolment is required', 403);
+
+$finalScore = $score;
 $attemptId  = generateId();
 
 $db->prepare(
     'INSERT INTO vr_attempts (id, user_id, vr_practice_id, score, feedback) VALUES (?, ?, ?, ?, ?)'
 )->execute([$attemptId, $userId, $practice['id'], $finalScore, $feedback]);
 
-if ($finalScore >= 70) {
-    $db->prepare('INSERT INTO reward_events (id, user_id, event, points) VALUES (?, ?, ?, ?)')
-       ->execute([generateId(), $userId, 'vr_practice_pass', 75]);
-}
-
 jsonCreated([
     'vrAttemptId'  => $attemptId,
     'practiceSlug' => $practiceSlug,
     'score'        => $finalScore,
     'passed'       => $finalScore >= 70,
+    'rewarded'     => false,
 ]);

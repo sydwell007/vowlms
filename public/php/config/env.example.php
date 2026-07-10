@@ -1,0 +1,33 @@
+<?php
+/**
+ * Local Afrihost configuration template.
+ *
+ * Copy this file to config/env.local.php on the Afrihost host, fill in real
+ * values there, and never commit or include that file in a Vercel deployment.
+ */
+
+$_ENV['DB_HOST'] = 'localhost';
+$_ENV['DB_NAME'] = 'replace_with_database_name';
+$_ENV['DB_USER'] = 'replace_with_database_user';
+$_ENV['DB_PASS'] = 'replace_with_database_password';
+
+$_ENV['BRIDGE_API_KEY'] = 'replace_with_a_long_random_bridge_key';
+$_ENV['JWT_SECRET'] = 'replace_with_a_different_long_random_jwt_secret';
+$_ENV['RESOURCE_SIGNING_SECRET'] = 'replace_with_a_third_long_random_secret';
+$_ENV['MOODLE_TOKEN'] = 'replace_with_server_side_moodle_token';
+
+$_ENV['APP_URL'] = 'https://vowlms.vercel.app';
+$_ENV['FRONTEND_ORIGIN'] = 'https://vowlms.vercel.app';
+$_ENV['API_BASE_URL'] = 'https://api.goalvow.com';
+$_ENV['APP_TIMEZONE'] = 'Africa/Johannesburg';
+
+$_ENV['PAYFAST_MERCHANT_ID'] = '';
+$_ENV['PAYFAST_MERCHANT_KEY'] = '';
+$_ENV['PAYFAST_PASSPHRASE'] = '';
+$_ENV['PAYFAST_SANDBOX'] = 'true';
+
+$_ENV['SMTP_HOST'] = '';
+$_ENV['SMTP_PORT'] = '587';
+$_ENV['SMTP_USER'] = '';
+$_ENV['SMTP_PASS'] = '';
+$_ENV['SMTP_FROM'] = 'support@goalvow.com';

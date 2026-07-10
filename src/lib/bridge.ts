@@ -32,7 +32,9 @@ export class BridgeError extends Error {
 }
 
 export function isBridgeConfigured() {
-  return BASE.length > 0;
+  // Production fails closed instead of exposing development mock data when
+  // backend configuration is missing.
+  return BASE.length > 0 || process.env.NODE_ENV === "production";
 }
 
 async function getAuthToken(): Promise<string | undefined> {
@@ -54,14 +56,6 @@ function buildHeaders(token?: string): HeadersInit {
   return h;
 }
 
-// Appends _bk= to the URL so the bridge key reaches PHP even when Apache
-// strips custom request headers (common on PHP-FPM / shared hosting).
-function withBridgeKey(url: string): string {
-  if (!API_KEY) return url;
-  const sep = url.includes("?") ? "&" : "?";
-  return `${url}${sep}_bk=${encodeURIComponent(API_KEY)}`;
-}
-
 async function resolveToken(opts?: BridgeOpts): Promise<string | undefined> {
   if (opts?.noAuth) return undefined;
   return opts?.token ?? (await getAuthToken());
@@ -77,13 +71,13 @@ export async function bridgeGet<T>(path: string, opts?: BridgeOpts): Promise<T> 
   let res: Response;
 
   try {
-    res = await fetch(withBridgeKey(`${BASE}${path}`), {
+    res = await fetch(`${BASE}${path}`, {
       method: "GET",
       headers: buildHeaders(token),
       cache: "no-store",
     });
-  } catch (e) {
-    throw new BridgeError(`Bridge unreachable: ${String(e)}`, 503);
+  } catch {
+    throw new BridgeError("Backend service unavailable", 503);
   }
 
   const json: BridgeEnvelope<T> = await res.json().catch(() => ({
@@ -108,14 +102,14 @@ export async function bridgePost<T>(
   let res: Response;
 
   try {
-    res = await fetch(withBridgeKey(`${BASE}${path}`), {
+    res = await fetch(`${BASE}${path}`, {
       method: "POST",
       headers: buildHeaders(token),
       body: JSON.stringify(body),
       cache: "no-store",
     });
-  } catch (e) {
-    throw new BridgeError(`Bridge unreachable: ${String(e)}`, 503);
+  } catch {
+    throw new BridgeError("Backend service unavailable", 503);
   }
 
   const json: BridgeEnvelope<T> = await res.json().catch(() => ({
@@ -134,9 +128,10 @@ export async function bridgePost<T>(
 /** Sets the JWT cookie in a Next.js response */
 export function setAuthCookie(response: Response, token: string): Response {
   const res = new Response(response.body, response);
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
   res.headers.append(
     "Set-Cookie",
-    `vowlms_token=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${60 * 60 * 24 * 30}`,
+    `vowlms_token=${token}; HttpOnly${secure}; SameSite=Lax; Path=/; Max-Age=${60 * 60 * 24 * 30}`,
   );
   return res;
 }
@@ -144,9 +139,10 @@ export function setAuthCookie(response: Response, token: string): Response {
 /** Clears the JWT cookie */
 export function clearAuthCookie(response: Response): Response {
   const res = new Response(response.body, response);
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
   res.headers.append(
     "Set-Cookie",
-    "vowlms_token=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0",
+    `vowlms_token=; HttpOnly${secure}; SameSite=Lax; Path=/; Max-Age=0`,
   );
   return res;
 }

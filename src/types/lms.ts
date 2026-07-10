@@ -5,6 +5,7 @@ export type AcademyCategory =
   | "skills-training"
   | "chef-academy"
   | "private-school"
+  | "sports-academy"
   | "business-school"
   | "university-online";
 

@@ -32,14 +32,8 @@ function requireBridgeKey(): void {
         $provided = $_SERVER['BRIDGE_KEY_HEADER'] ?? '';
     }
 
-    // 5. Last resort: query string (for hosts that strip all custom headers)
-    if ($provided === '') {
-        $provided = $_GET['_bk'] ?? '';
-    }
-
     if ($expected === '' || !hash_equals($expected, $provided)) {
-        // Return the method that was tried so we can diagnose
-        jsonError('Forbidden — bridge key mismatch (provided len: ' . strlen($provided) . ')', 403);
+        jsonError('Forbidden', 403);
     }
 }
 

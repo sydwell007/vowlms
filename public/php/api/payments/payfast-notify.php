@@ -1,163 +1,190 @@
-﻿<?php
-/*
- * PayFast ITN (Instant Transaction Notification) handler.
+<?php
+/**
+ * PayFast ITN handler.
  *
- * TWO CALL MODES:
- *  A) Direct — PayFast POSTs application/x-www-form-urlencoded to this URL.
- *     No Bridge-Key check (PayFast cannot send it). IP + signature validated instead.
- *  B) Proxy — Next.js /api/payments/payfast/notify forwards a JSON body
- *     { "itnRaw": "m_payment_id=...&..." } when API_BASE_URL is not configured.
- *     In this mode the Bridge-Key header is present; we validate it and parse itnRaw.
+ * Direct PayFast posts and Next.js relay posts are accepted. Both paths must
+ * pass signature, merchant, amount, and PayFast server validation before a
+ * paid enrolment is activated.
  */
 ob_start();
 require_once __DIR__ . '/../../config/env.php';
 require_once __DIR__ . '/../../config/db.php';
-require_once __DIR__ . '/../../lib/response.php';
 ob_end_clean();
 
-header('Content-Type: text/plain');
+header('Content-Type: text/plain; charset=utf-8');
 
-$sandbox     = env('PAYFAST_SANDBOX', 'true') === 'true';
-$passphrase  = env('PAYFAST_PASSPHRASE', '');
-$merchantId  = env('PAYFAST_MERCHANT_ID', '');
-$bridgeKey   = env('BRIDGE_API_KEY', '');
+function finishText(string $message, int $status = 200): never {
+    http_response_code($status);
+    echo $message;
+    exit;
+}
 
-// Detect call mode
+function payfastParamString(array $data): string {
+    $pairs = [];
+    foreach ($data as $key => $value) {
+        if ($key === 'signature' || $value === '' || $value === null) continue;
+        $pairs[] = $key . '=' . urlencode(trim((string)$value));
+    }
+    return implode('&', $pairs);
+}
+
+function validPayfastSource(string $sourceIp): bool {
+    $hosts = [
+        'www.payfast.co.za',
+        'w1w.payfast.co.za',
+        'w2w.payfast.co.za',
+        'sandbox.payfast.co.za',
+    ];
+    $validIps = [];
+    foreach ($hosts as $host) {
+        $resolved = gethostbynamel($host);
+        if ($resolved !== false) $validIps = array_merge($validIps, $resolved);
+    }
+    return in_array($sourceIp, array_unique($validIps), true);
+}
+
+$sandbox = env('PAYFAST_SANDBOX', 'true') === 'true';
+$passphrase = env('PAYFAST_PASSPHRASE', '');
+$merchantId = env('PAYFAST_MERCHANT_ID', '');
+$bridgeKey = env('BRIDGE_API_KEY', '');
+
+if ($merchantId === '') finishText('payment-not-configured', 503);
+
 $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-$isProxy     = str_contains($contentType, 'application/json');
+$isProxy = str_contains($contentType, 'application/json');
 
 if ($isProxy) {
-    // Mode B: proxied through Next.js bridge
-    $provided = $_SERVER['HTTP_X_BRIDGE_KEY'] ?? '';
+    $provided = $_SERVER['HTTP_X_BRIDGE_KEY'] ?? $_SERVER['BRIDGE_KEY_HEADER'] ?? '';
     if ($bridgeKey === '' || !hash_equals($bridgeKey, $provided)) {
-        http_response_code(403);
-        echo 'forbidden';
-        exit;
+        finishText('forbidden', 403);
     }
-    $raw = file_get_contents('php://input');
-    $json = json_decode($raw, true);
-    $itnRaw = $json['itnRaw'] ?? '';
+
+    $json = json_decode(file_get_contents('php://input'), true);
+    $itnRaw = is_array($json) ? ($json['itnRaw'] ?? '') : '';
     parse_str($itnRaw, $pfData);
 } else {
-    // Mode A: direct PayFast POST
-    // Validate source IP
-    $pfValidIps = $sandbox
-        ? ['197.97.145.144', '197.97.145.145', '197.97.145.146', '197.97.145.147']
-        : ['41.74.179.194', '41.74.179.195', '41.74.179.196', '41.74.179.197',
-           '41.74.179.198', '41.74.179.199', '41.74.179.200', '41.74.179.201',
-           '41.74.179.202', '41.74.179.203'];
-
-    $sourceIp = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '')[0]);
-    if (!$sandbox && !in_array($sourceIp, $pfValidIps, true)) {
-        http_response_code(403);
-        echo 'invalid-source';
-        exit;
-    }
+    $sourceIp = $_SERVER['REMOTE_ADDR'] ?? '';
+    if (!validPayfastSource($sourceIp)) finishText('invalid-source', 403);
     $pfData = $_POST;
 }
 
-if (empty($pfData)) {
-    http_response_code(400);
-    echo 'empty-payload';
-    exit;
+if (empty($pfData)) finishText('empty-payload', 400);
+
+$providedSignature = (string)($pfData['signature'] ?? '');
+$parameterString = payfastParamString($pfData);
+if ($passphrase !== '') $parameterString .= '&passphrase=' . urlencode($passphrase);
+$expectedSignature = md5($parameterString);
+if ($providedSignature === '' || !hash_equals($expectedSignature, $providedSignature)) {
+    finishText('invalid-signature', 400);
 }
 
-// Validate signature
-$pfSig = $pfData['signature'] ?? '';
-$sigData = $pfData;
-unset($sigData['signature']);
-ksort($sigData);
-$sigStr = http_build_query($sigData);
-if ($passphrase !== '') $sigStr .= '&passphrase=' . urlencode($passphrase);
-if (!hash_equals(md5($sigStr), $pfSig)) {
-    http_response_code(400);
-    echo 'invalid-signature';
-    exit;
+if (!hash_equals($merchantId, (string)($pfData['merchant_id'] ?? ''))) {
+    finishText('merchant-mismatch', 400);
 }
 
-// Verify with PayFast (only in direct mode — can't do this through proxy)
-if (!$isProxy) {
-    $pfHost   = $sandbox ? 'sandbox.payfast.co.za' : 'www.payfast.co.za';
-    $postStr  = http_build_query($pfData);
-    $ch = curl_init("https://{$pfHost}/eng/query/validate");
-    curl_setopt_array($ch, [
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => $postStr,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 10,
-        CURLOPT_SSL_VERIFYPEER => true,
-    ]);
-    $verifyResponse = curl_exec($ch);
-    curl_close($ch);
-    if (strtolower(trim($verifyResponse)) !== 'valid') {
-        http_response_code(400);
-        echo 'payfast-verify-failed';
-        exit;
-    }
+$pfHost = $sandbox ? 'sandbox.payfast.co.za' : 'www.payfast.co.za';
+$ch = curl_init("https://{$pfHost}/eng/query/validate");
+curl_setopt_array($ch, [
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => http_build_query($pfData),
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_TIMEOUT => 10,
+    CURLOPT_SSL_VERIFYHOST => 2,
+    CURLOPT_SSL_VERIFYPEER => true,
+]);
+$verifyResponse = curl_exec($ch);
+$curlError = curl_error($ch);
+curl_close($ch);
+if ($verifyResponse === false || strtolower(trim((string)$verifyResponse)) !== 'valid') {
+    error_log('PayFast validation failed: ' . ($curlError ?: 'invalid response'));
+    finishText('payfast-verify-failed', 400);
 }
 
-// Check merchant ID
-if (($pfData['merchant_id'] ?? '') !== $merchantId) {
-    http_response_code(400);
-    echo 'merchant-mismatch';
-    exit;
-}
+$paymentId = trim((string)($pfData['m_payment_id'] ?? ''));
+$pfPaymentId = trim((string)($pfData['pf_payment_id'] ?? ''));
+$paymentStatus = strtoupper(trim((string)($pfData['payment_status'] ?? '')));
+$amountGross = $pfData['amount_gross'] ?? null;
 
-$paymentStatus = $pfData['payment_status'] ?? '';
-$paymentId     = $pfData['m_payment_id']   ?? '';
-$pfPaymentId   = $pfData['pf_payment_id']  ?? '';
+if ($paymentId === '' || $pfPaymentId === '' || $amountGross === null) {
+    finishText('missing-payment-fields', 400);
+}
 
 $db = getDb();
 
-$pStmt = $db->prepare('SELECT * FROM payments WHERE id = ? LIMIT 1');
-$pStmt->execute([$paymentId]);
-$payment = $pStmt->fetch();
+try {
+    $db->beginTransaction();
 
-if (!$payment) {
-    http_response_code(404);
-    echo 'payment-not-found';
-    exit;
-}
-
-function generateId(): string {
-    return sprintf(
-        '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-        mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-        mt_rand(0, 0xffff),
-        mt_rand(0, 0x0fff) | 0x4000,
-        mt_rand(0, 0x3fff) | 0x8000,
-        mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
-    );
-}
-
-if (strtoupper($paymentStatus) === 'COMPLETE') {
-    $db->prepare(
-        'UPDATE payments SET status = "paid", payfast_payment_id = ?, updated_at = NOW() WHERE id = ?'
-    )->execute([$pfPaymentId, $paymentId]);
-
-    $userId   = $payment['user_id'];
-    $courseId = $payment['course_id'];
-
-    $enrCheck = $db->prepare('SELECT id FROM enrollments WHERE user_id = ? AND course_id = ? LIMIT 1');
-    $enrCheck->execute([$userId, $courseId]);
-    if (!$enrCheck->fetchColumn()) {
-        $enrId = generateId();
-        $db->prepare(
-            'INSERT INTO enrollments (id, user_id, course_id, status, progress) VALUES (?, ?, ?, "active", 0)'
-        )->execute([$enrId, $userId, $courseId]);
-
-        $rewId = generateId();
-        $db->prepare(
-            'INSERT INTO reward_events (id, user_id, event, points, metadata) VALUES (?, ?, ?, ?, ?)'
-        )->execute([$rewId, $userId, 'enroll', 50, json_encode(['course_id' => $courseId, 'source' => 'payment'])]);
+    $paymentStmt = $db->prepare('SELECT * FROM payments WHERE id = ? LIMIT 1 FOR UPDATE');
+    $paymentStmt->execute([$paymentId]);
+    $payment = $paymentStmt->fetch();
+    if (!$payment) {
+        $db->rollBack();
+        finishText('payment-not-found', 404);
     }
-    echo 'OK';
-} elseif (strtoupper($paymentStatus) === 'CANCELLED') {
-    $db->prepare('UPDATE payments SET status = "cancelled" WHERE id = ?')->execute([$paymentId]);
-    echo 'OK';
-} elseif (strtoupper($paymentStatus) === 'FAILED') {
-    $db->prepare('UPDATE payments SET status = "failed" WHERE id = ?')->execute([$paymentId]);
-    echo 'OK';
-} else {
-    echo 'unhandled-status';
+
+    if (abs((float)$payment['amount'] - (float)$amountGross) > 0.01) {
+        $db->rollBack();
+        finishText('amount-mismatch', 400);
+    }
+
+    if ($payment['status'] === 'paid') {
+        $sameProviderReference = hash_equals((string)$payment['payfast_payment_id'], $pfPaymentId);
+        $db->commit();
+        finishText($sameProviderReference ? 'OK' : 'payment-reference-conflict', $sameProviderReference ? 200 : 409);
+    }
+
+    $itnData = json_encode($pfData, JSON_UNESCAPED_SLASHES);
+
+    if ($paymentStatus === 'COMPLETE') {
+        $update = $db->prepare(
+            'UPDATE payments
+             SET status = "paid", payfast_payment_id = ?, itn_data = ?, updated_at = NOW()
+             WHERE id = ? AND status = "pending"'
+        );
+        $update->execute([$pfPaymentId, $itnData, $paymentId]);
+        if ($update->rowCount() !== 1) {
+            $db->rollBack();
+            finishText('invalid-payment-transition', 409);
+        }
+
+        $enrolmentId = generateId();
+        $enrol = $db->prepare(
+            'INSERT IGNORE INTO enrollments (id, user_id, course_id, status, progress)
+             VALUES (?, ?, ?, "active", 0)'
+        );
+        $enrol->execute([$enrolmentId, $payment['user_id'], $payment['course_id']]);
+
+        if ($enrol->rowCount() === 1) {
+            $db->prepare(
+                'INSERT INTO reward_events (id, user_id, event, points, metadata)
+                 VALUES (?, ?, ?, ?, ?)'
+            )->execute([
+                generateId(),
+                $payment['user_id'],
+                'enroll',
+                50,
+                json_encode(['course_id' => $payment['course_id'], 'source' => 'payment']),
+            ]);
+        }
+    } elseif ($paymentStatus === 'CANCELLED') {
+        $db->prepare(
+            'UPDATE payments SET status = "cancelled", payfast_payment_id = ?, itn_data = ?, updated_at = NOW()
+             WHERE id = ? AND status = "pending"'
+        )->execute([$pfPaymentId, $itnData, $paymentId]);
+    } elseif ($paymentStatus === 'FAILED') {
+        $db->prepare(
+            'UPDATE payments SET status = "failed", payfast_payment_id = ?, itn_data = ?, updated_at = NOW()
+             WHERE id = ? AND status = "pending"'
+        )->execute([$pfPaymentId, $itnData, $paymentId]);
+    } else {
+        $db->rollBack();
+        finishText('unhandled-status', 400);
+    }
+
+    $db->commit();
+    finishText('OK');
+} catch (Throwable $error) {
+    if ($db->inTransaction()) $db->rollBack();
+    error_log('PayFast ITN processing failed: ' . $error->getMessage());
+    finishText('processing-failed', 500);
 }

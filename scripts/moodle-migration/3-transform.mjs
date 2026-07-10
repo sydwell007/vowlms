@@ -73,7 +73,7 @@ function slugify(str) {
     .slice(0, 80);
 }
 
-function detectLevel(title, sections) {
+function detectLevel(title) {
   const t = title.toLowerCase();
   if (/advanced|senior|masters|phd|degree/.test(t)) return "Advanced";
   if (/intermediate|diploma|bsc|bba|bachelor/.test(t)) return "Intermediate";
@@ -261,7 +261,7 @@ function buildVRPractice(courseSlug, courseTitle) {
 function transformCourse(moodleCourse, academyId, academyVowSlug) {
   const slug = moodleCourse.slug || slugify(moodleCourse.fullname);
   const sections = moodleCourse.sections || [];
-  const level = detectLevel(moodleCourse.fullname, sections);
+  const level = detectLevel(moodleCourse.fullname);
   const duration = detectDuration(sections);
   const price = detectPrice(academyId);
 

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { createHmac } from "node:crypto";
 import { getLessonBySlug } from "@/lib/data";
 import { LessonPlayer } from "@/components/learning/LessonPlayer";
 import { bridgeGet, isBridgeConfigured } from "@/lib/bridge";
@@ -70,6 +71,35 @@ type BridgeLessonResponse = {
 // webservice variant). Both require a Moodle browser session / token.
 // We rewrite src= AND href= attributes server-side to go through
 // serve.php Mode C so PHP proxies them server-to-server (no login needed).
+function signedServeUrl(
+  bridgeBase: string,
+  selector: { hash?: string; id?: string; url?: string },
+  filename: string,
+) {
+  const secret = process.env.RESOURCE_SIGNING_SECRET ?? "";
+  if (!bridgeBase || !secret) return "";
+
+  const [kind, value] = selector.hash
+    ? ["hash", selector.hash]
+    : selector.id
+      ? ["id", selector.id]
+      : ["url", selector.url ?? ""];
+  if (!value) return "";
+
+  const expires = Math.floor(Date.now() / 1000) + 60 * 60;
+  const signature = createHmac("sha256", secret)
+    .update(`${kind}:${value}|${expires}`)
+    .digest("hex");
+  const query = new URLSearchParams({
+    [kind]: value,
+    name: filename,
+    expires: String(expires),
+    sig: signature,
+  });
+
+  return `${bridgeBase.replace(/\/$/, "")}/files/serve?${query}`;
+}
+
 function rewriteMoodleUrls(html: string, bridgeBase: string): string {
   if (!html || !bridgeBase) return html;
   const base = bridgeBase.replace(/\/$/, "");
@@ -82,8 +112,8 @@ function rewriteMoodleUrls(html: string, bridgeBase: string): string {
       // Extract filename from the URL path for correct MIME guessing
       const pathPart = clean.split("?")[0];
       const filename = decodeURIComponent(pathPart.split("/").pop() ?? "file");
-      const name = encodeURIComponent(filename || "file");
-      return `${attr}="${base}/files/serve?url=${encodeURIComponent(clean)}&name=${name}"`;
+      const serveUrl = signedServeUrl(base, { url: clean }, filename || "file");
+      return serveUrl ? `${attr}="${serveUrl}"` : `${attr}="${clean}"`;
     }
   );
 }
@@ -106,11 +136,11 @@ function buildServeUrl(r: BridgeResource): string {
   }
 
   if (r.content_hash) {
-    return `${bridgeBase}/files/serve?hash=${r.content_hash}&name=${encodeURIComponent(r.filename)}`;
+    return signedServeUrl(bridgeBase, { hash: r.content_hash }, r.filename);
   }
 
   if (r.id) {
-    return `${bridgeBase}/files/serve?id=${encodeURIComponent(r.id)}&name=${encodeURIComponent(r.filename)}`;
+    return signedServeUrl(bridgeBase, { id: r.id }, r.filename);
   }
 
   return r.file_url ?? "";
@@ -128,14 +158,14 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
   // Determine video URL — prefer uploaded video (via serve.php) over YouTube embed
   let videoUrl: string | undefined;
   if (d.lesson.video_hash) {
-    videoUrl = `${bridgeBase}/files/serve?hash=${d.lesson.video_hash}&name=video.mp4`;
+    videoUrl = signedServeUrl(bridgeBase, { hash: d.lesson.video_hash }, "video.mp4") || undefined;
   } else if (d.lesson.video_url) {
     const rawVideo = d.lesson.video_url;
     // Moodle pluginfile.php URLs require a session — proxy through serve.php Mode C
     if (/pluginfile\.php/i.test(rawVideo) && bridgeBase) {
       const pathPart = rawVideo.split("?")[0];
-      const name = encodeURIComponent(decodeURIComponent(pathPart.split("/").pop() ?? "video.mp4") || "video.mp4");
-      videoUrl = `${bridgeBase}/files/serve?url=${encodeURIComponent(rawVideo)}&name=${name}`;
+      const name = decodeURIComponent(pathPart.split("/").pop() ?? "video.mp4") || "video.mp4";
+      videoUrl = signedServeUrl(bridgeBase, { url: rawVideo }, name) || undefined;
     } else {
       videoUrl = rawVideo;
     }

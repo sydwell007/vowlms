@@ -5,6 +5,7 @@ require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/response.php';
 require_once __DIR__ . '/../../lib/mail.php';
+require_once __DIR__ . '/../../lib/rate-limit.php';
 ob_end_clean();
 
 setCors();
@@ -17,6 +18,7 @@ $email = trim(strtolower($body['email'] ?? ''));
 if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     jsonError('A valid email address is required');
 }
+requireRateLimit('forgot-password', $email, 5, 3600);
 
 $db   = getDb();
 $stmt = $db->prepare('SELECT id, name FROM users WHERE email = ? AND is_active = 1 LIMIT 1');
@@ -26,13 +28,14 @@ $user = $stmt->fetch();
 // Always return success — don't reveal if email exists
 if ($user) {
     $token     = bin2hex(random_bytes(32));
+    $tokenHash = hash('sha256', $token);
     $expiresAt = date('Y-m-d H:i:s', time() + 3600); // 1 hour
 
     // Remove old tokens for this email
     $db->prepare('DELETE FROM password_resets WHERE email = ?')->execute([$email]);
 
     $db->prepare('INSERT INTO password_resets (id, email, token, expires_at) VALUES (?, ?, ?, ?)')
-       ->execute([generateId(), $email, $token, $expiresAt]);
+       ->execute([generateId(), $email, $tokenHash, $expiresAt]);
 
     sendMail($email, 'Reset your VowLMS password', resetPasswordEmail($user['name'], $token));
 }

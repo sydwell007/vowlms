@@ -9,6 +9,7 @@ const academyLinks = [
   { href: "/academies/skills-training", label: "For Skills Training" },
   { href: "/academies/chef-academy", label: "For Chef Academy" },
   { href: "/academies/private-school", label: "For Private School" },
+  { href: "/academies/sports-academy", label: "For Sports Academy" },
   { href: "/academies/business-school", label: "For Business School" },
   { href: "/academies/university-online", label: "For University Online" },
 ];

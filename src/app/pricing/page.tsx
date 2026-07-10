@@ -1,152 +1,80 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Section } from "@/components/ui/Section";
+import { getCourses } from "@/lib/data";
+import { siteConfig } from "@/lib/site";
 
 export const metadata = {
-  title: "Pricing — VowLMS",
+  title: "Course Pricing and Funding - VowLMS",
+  description: "Understand how VowLMS displays free, paid, and organisation learning options.",
 };
 
-const plans = [
-  {
-    name: "Learner Free",
-    price: "Free",
-    description: "Start your learning journey with no cost.",
-    features: [
-      "Access to all free upskilling courses",
-      "Learner dashboard and progress tracking",
-      "Assessment attempts and results",
-      "VowRewards points on completion",
-      "GoalVow certificate on completion",
-    ],
-    cta: "Start free",
-    href: "/auth/signup",
-    highlight: false,
-  },
-  {
-    name: "Academy Course",
-    price: "From R199",
-    description: "Enrol in a single paid academy course with full access.",
-    features: [
-      "Full course access: all lessons and modules",
-      "Interactive assessments with scoring",
-      "VR practice sessions",
-      "Verified digital certificate",
-      "250 VowRewards points on completion",
-      "PayFast secure ZAR payment",
-    ],
-    cta: "Browse courses",
-    href: "/courses",
-    highlight: true,
-  },
-  {
-    name: "Learning Hub Cohort",
-    price: "Custom",
-    description: "Facilitator-led group cohorts for organisations and communities.",
-    features: [
-      "Bulk learner enrolments",
-      "Facilitator dashboard and oversight",
-      "VR session coordination",
-      "Partner reporting and analytics",
-      "Certificate and rewards bulk issuance",
-      "Learning hub on-site support",
-    ],
-    cta: "Contact GoalVow",
-    href: "mailto:support@goalvow.com",
-    highlight: false,
-  },
-];
-
 export default function PricingPage() {
+  const courses = getCourses();
+  const freeCourses = courses.filter((course) => course.price === 0).length;
+  const paidCourses = courses.filter((course) => course.price > 0).length;
+  const organisationSubject = encodeURIComponent("GoalVow organisation learning enquiry");
+
   return (
     <main>
-      {/* Hero */}
       <section className="premium-section-dark surface-grid py-16 text-white md:py-20">
-        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8 text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Transparent pricing</p>
-          <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-5xl">
-            Start free. Grow with GoalVow.
-          </h1>
-          <p className="mt-5 mx-auto max-w-2xl text-lg leading-8 text-white/70">
-            Free courses for every learner. Affordable paid courses with real certificates. Custom cohort pricing for communities and organisations.
+        <div className="mx-auto w-full max-w-7xl px-5 text-center sm:px-6 lg:px-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Course pricing and funding</p>
+          <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-5xl">See the price before you enrol</h1>
+          <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-white/70">
+            VowLMS uses course-level pricing. The amount shown on a course page is the source of truth for that enrolment.
           </p>
         </div>
       </section>
 
-      {/* Plans */}
-      <Section tone="light" eyebrow="Plans" title="Choose the right plan for you">
+      <Section tone="light" eyebrow="Current catalogue" title="Learning options on VowLMS">
         <div className="grid gap-5 md:grid-cols-3">
-          {plans.map((plan) => (
-            <article
-              key={plan.name}
-              className={`flex flex-col rounded-2xl p-7 ${plan.highlight ? "bg-[#06111f] text-white shadow-[0_32px_80px_rgba(6,17,31,0.22)] ring-1 ring-gold/40" : "premium-card text-ink"}`}
-            >
-              <p className={`text-xs font-semibold uppercase tracking-[0.16em] ${plan.highlight ? "text-gold" : "text-[#1166c8]"}`}>{plan.name}</p>
-              <p className={`mt-4 text-4xl font-bold ${plan.highlight ? "text-gold" : "text-ink"}`}>{plan.price}</p>
-              <p className={`mt-2 text-sm ${plan.highlight ? "text-white/70" : "text-muted"}`}>{plan.description}</p>
+          <article className="premium-card rounded-lg p-7">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">Free courses</p>
+            <p className="mt-4 text-4xl font-bold text-ink">{freeCourses.toLocaleString()}</p>
+            <p className="mt-3 text-sm leading-6 text-muted">Catalogue courses currently marked free can be enrolled in without a payment step.</p>
+            <ButtonLink href="/courses" variant="outline" className="mt-6">Browse courses</ButtonLink>
+          </article>
 
-              <ul className="mt-6 flex-1 space-y-2.5">
-                {plan.features.map((f) => (
-                  <li key={f} className={`flex items-start gap-2.5 text-sm ${plan.highlight ? "text-white/80" : "text-muted"}`}>
-                    <span className={`shrink-0 mt-0.5 font-bold ${plan.highlight ? "text-gold" : "text-[#1166c8]"}`}>✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
+          <article className="rounded-lg bg-[#06111f] p-7 text-white shadow-[0_28px_70px_rgba(6,17,31,0.2)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">Paid courses</p>
+            <p className="mt-4 text-4xl font-bold text-gold">{paidCourses.toLocaleString()}</p>
+            <p className="mt-3 text-sm leading-6 text-white/70">Each paid course displays its own ZAR price. Access activates only after verified server-to-server payment confirmation.</p>
+            <ButtonLink href="/courses" className="mt-6">Compare course prices</ButtonLink>
+          </article>
 
-              <div className="mt-7">
-                {plan.href.startsWith("mailto") ? (
-                  <a
-                    href={plan.href}
-                    className={`flex w-full items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition ${plan.highlight ? "bg-gold text-[#06111f] hover:bg-gold/90" : "border border-slate-200 bg-white text-ink hover:bg-slate-50"}`}
-                  >
-                    {plan.cta}
-                  </a>
-                ) : (
-                  <ButtonLink
-                    href={plan.href}
-                    className={`w-full justify-center ${plan.highlight ? "" : ""}`}
-                    variant={plan.highlight ? undefined : "ink"}
-                  >
-                    {plan.cta}
-                  </ButtonLink>
-                )}
-              </div>
-            </article>
-          ))}
+          <article className="premium-card rounded-lg p-7">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">Organisations</p>
+            <p className="mt-4 text-3xl font-bold text-ink">Scoped quote</p>
+            <p className="mt-3 text-sm leading-6 text-muted">Cohort pricing requires confirmed learner numbers, course scope, support, reporting, and delivery requirements.</p>
+            <a href={`mailto:${siteConfig.contact.email}?subject=${organisationSubject}`} className="mt-6 inline-flex rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:border-[#1166c8]/35">
+              Request a discussion
+            </a>
+          </article>
         </div>
       </Section>
 
-      {/* PayFast trust section */}
       <section className="border-t border-slate-100 bg-white py-12">
-        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center gap-6 text-center md:flex-row md:text-left md:justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-ink">Secure ZAR payments powered by PayFast</h2>
-              <p className="mt-2 text-sm text-muted max-w-lg">All paid courses are processed through PayFast — South Africa's trusted payment gateway. No hidden fees, no subscriptions unless you choose one.</p>
-            </div>
-            <div className="flex flex-wrap gap-3 shrink-0">
-              {["Visa & Mastercard", "EFT / Instant EFT", "Mobicred", "MoreTyme"].map((method) => (
-                <span key={method} className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-semibold text-ink">
-                  {method}
-                </span>
-              ))}
-            </div>
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+          <div>
+            <h2 className="text-xl font-semibold text-ink">Paid enrolment integrity</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">VowLMS creates a pending payment and uses the configured PayFast flow. A browser return alone never activates paid course access.</p>
           </div>
+          <ButtonLink href="/support" variant="outline" className="shrink-0">Payment support</ButtonLink>
         </div>
       </section>
 
-      {/* FAQ */}
-      <Section tone="light" eyebrow="FAQ" title="Common questions">
+      <Section tone="light" eyebrow="Before you enrol" title="Common questions">
         <div className="grid gap-4 md:grid-cols-2">
           {[
-            ["Can I get a refund?", "Yes. If you're unsatisfied within 7 days of purchase and have not yet downloaded your certificate, contact support@goalvow.com for a full refund."],
-            ["Do free courses include a certificate?", "Yes. All completed GoalVow courses — free or paid — generate a downloadable, verifiable GoalVow certificate."],
-            ["How do I pay for a course?", "Click 'Enrol' on any paid course, sign in or create an account, and checkout via PayFast. Payment is one-time per course."],
-            ["What are VowRewards?", "VowRewards points are earned for every lesson completed, assessment passed, VR session, and course finished. Points can be used across the GoalVow ecosystem."],
-          ].map(([q, a]) => (
-            <div key={q} className="premium-card rounded-xl p-6">
-              <h3 className="font-semibold text-ink">{q}</h3>
-              <p className="mt-2 text-sm leading-6 text-muted">{a}</p>
-            </div>
+            ["Where is the current price?", "Use the amount displayed on the individual course page. Catalogue data may change as academy records are updated."],
+            ["When does paid access begin?", "Only after VowLMS receives and verifies the payment provider's server notification."],
+            ["Are certificates included?", "Certificate eligibility depends on the course configuration and completion requirements shown for that course."],
+            ["What are the refund terms?", "Paid enrolment refund and cancellation rules require final business and legal approval before production sales are enabled. Contact VowSupport for the current position."],
+          ].map(([question, answer]) => (
+            <article key={question} className="premium-card rounded-lg p-6">
+              <h3 className="font-semibold text-ink">{question}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">{answer}</p>
+            </article>
           ))}
         </div>
       </Section>

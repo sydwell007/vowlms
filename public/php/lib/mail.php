@@ -47,7 +47,7 @@ function welcomeEmail(string $name): string {
         <h2 style='margin:16px 0 4px;color:#06111f;'>Welcome to VowLMS!</h2>
       </div>
       <p style='color:#374151;'>Hi {$name},</p>
-      <p style='color:#374151;'>Your GoalVow LMS account is ready. Start exploring 614 courses across 6 academies, earn VowRewards points, and connect to real opportunities.</p>
+      <p style='color:#374151;'>Your VowLMS account is ready. Sign in to explore the current GoalVow academy catalogue and manage learning activity recorded to your account.</p>
       <div style='text-align:center;margin:32px 0;'>
         <a href='{$url}/courses' style='display:inline-block;background:#f5c542;color:#06111f;font-weight:700;font-size:14px;padding:14px 28px;border-radius:10px;text-decoration:none;'>Explore courses</a>
       </div>

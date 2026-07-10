@@ -1,0 +1,8 @@
+# Afrihost/phpMyAdmin deployment packages must never be served by Vercel.
+public/php/**
+public/sql/**
+public/php.zip
+
+# Local migration output and secrets.
+scripts/moodle-migration/data/**
+.env*

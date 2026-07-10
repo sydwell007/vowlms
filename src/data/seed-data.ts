@@ -4,13 +4,10 @@
 
 import type {
   Academy,
-  Assessment,
   Course,
-  CourseModule,
   EnrolledCourse,
   LearningHub,
   Opportunity,
-  VRPractice,
 } from "@/types/lms";
 
 export const academies: Academy[] = [
@@ -62,10 +59,10 @@ export const academies: Academy[] = [
   {
     slug: "university-online",
     name: "GoalVow University Online",
-    description: "Degree and diploma programmes in technology, business, and education delivered fully online.",
-    audience: "Degree seekers, professionals, and career changers",
+    description: "Online higher-education readiness and professional learning pathways in technology, business, and education.",
+    audience: "Adult learners, professionals, and career changers",
     category: "university-online",
-    heroMessage: "Your degree. Your schedule. Your future.",
+    heroMessage: "Build study readiness and professional knowledge on a flexible schedule.",
     sampleCourseSlugs: ["bsc-in-artificial-intelligence-amp-data-science","bsc-in-software-development-cloud-cybersecurity-robotics","bba-bachelor-of-business-administration"],
   }
 ];

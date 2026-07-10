@@ -6,19 +6,20 @@ import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "Learn · GoalVow Academies",
-  description: "Start learning across 6 GoalVow academies. 614+ courses in upskilling, trades, culinary, school, business, and university pathways.",
+  description: "Explore GoalVow courses in upskilling, trades, culinary, school, business, and university-level online pathways.",
 };
 
 const studyModes = [
-  { icon: "💻", title: "Online Self-Paced", desc: "Study at your own speed, on any device. Complete lessons, take assessments, and earn certificates on your schedule." },
-  { icon: "🏫", title: "Learning Hub Access", desc: "Join a community learning hub for device access, mentoring, printing, and in-person guidance from facilitators." },
-  { icon: "🎥", title: "Video Lessons", desc: "Watch expert-led video lessons embedded directly in the course flow — no external platform needed." },
-  { icon: "📝", title: "Structured Assessments", desc: "Test your knowledge with multiple-choice and scenario assessments. Earn VowRewards on every pass." },
+  { icon: "💻", title: "Online self-paced", desc: "Study on a supported device and resume from progress recorded to your learner account." },
+  { icon: "🏫", title: "Support pathways", desc: "Use VowSupport for access, registration, and learning guidance while the Learning Hub model is developed." },
+  { icon: "🎥", title: "Mixed course media", desc: "Courses can include text, images, video, and downloadable resources where supplied by the academy." },
+  { icon: "📝", title: "Structured assessments", desc: "Eligible courses can use knowledge checks and assessments with server-owned result records." },
 ];
 
 export default function LearnPage() {
   const academies = getAcademies();
   const courses = getCourses();
+  const connectedAcademies = academies.filter((academy) => academy.slug !== "sports-academy").length;
 
   return (
     <main>
@@ -33,14 +34,14 @@ export default function LearnPage() {
             <span className="bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">Learn</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-white/72">
-            Structured online learning across 6 GoalVow academies. Guided pathways, video lessons, assessments, and flexible study environments designed for real-world outcomes.
+            Structured online learning across {connectedAcademies} connected GoalVow academies, with a planned Sports Academy pathway clearly separated from the live catalogue.
           </p>
           <div className="mt-4 flex items-center gap-3 text-sm text-white/50">
-            <span>{courses.length}+ courses</span>
+            <span>{courses.length.toLocaleString()} courses</span>
             <span>·</span>
-            <span>{academies.length} academies</span>
+            <span>{connectedAcademies} connected academies</span>
             <span>·</span>
-            <span>Earn VowRewards on every step</span>
+            <span>Eligible milestones can earn VowRewards</span>
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/courses" variant="primary">Browse all courses</ButtonLink>
@@ -85,7 +86,7 @@ export default function LearnPage() {
               >
                 <h3 className="text-base font-semibold text-[#1e3a8a]">{a.name}</h3>
                 <p className="mt-2 text-sm leading-5 text-muted">{a.description}</p>
-                <p className="mt-4 text-xs font-semibold text-[#06b6d4]">Enrol now →</p>
+                <p className="mt-4 text-xs font-semibold text-[#06b6d4]">View academy →</p>
               </Link>
             ))}
           </div>

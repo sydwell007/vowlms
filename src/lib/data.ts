@@ -1,17 +1,26 @@
 import {
-  academies,
-  analyticsEvents,
+  academies as seededAcademies,
   courses as rawCourses,
-  enrolledCourses,
-  learningHubs,
-  opportunities,
 } from "@/data/seed-data";
 import {
   allGroupings,
   consumedSlugs,
   parentPlaceholderSlugs,
 } from "@/data/course-groupings";
-import type { Course, CourseModule } from "@/types/lms";
+import type { Academy, Course, CourseModule, LearningHub, Opportunity } from "@/types/lms";
+
+const sportsAcademy: Academy = {
+  slug: "sports-academy",
+  name: "Sports Academy",
+  description:
+    "Sport, wellness, coaching, and performance learning pathways. Course availability will be published after programme confirmation.",
+  audience: "Athletes, coaches, clubs, schools, and wellness practitioners",
+  category: "sports-academy",
+  heroMessage: "Build knowledge for safer participation, stronger performance, and sustainable sport pathways.",
+  sampleCourseSlugs: [],
+};
+
+const academies = [...seededAcademies, sportsAcademy];
 
 /**
  * Build a flat map of slug → Course from the raw seed data.
@@ -183,68 +192,51 @@ export function getVRPracticeBySlug(slug: string) {
 
 export function getLearnerDashboard() {
   return {
-    learner: "Amina Mokoena",
-    enrolledCourses: enrolledCourses.map((item) => ({
-      ...item,
-      course: getCourseBySlug(item.courseSlug),
-      nextLesson: getLessonBySlug(item.nextLessonSlug)?.lesson,
-    })),
+    learner: "Development learner",
+    enrolledCourses: [],
+    certificates: [],
+    rewardPoints: 0,
     metrics: [
-      { label: "Progress", value: "61%", detail: "Across active courses" },
-      { label: "Rewards", value: "370", detail: "VowRewards points earned" },
-      { label: "Certificates", value: "2", detail: "Ready for download" },
-      { label: "Opportunities", value: "4", detail: "Matched through PlugConnect" },
+      { label: "Courses enrolled", value: "0", detail: "Development mode" },
+      { label: "Completed", value: "0", detail: "Development mode" },
+      { label: "Certificates", value: "0", detail: "Development mode" },
+      { label: "Reward points", value: "0 pts", detail: "Development mode" },
     ],
   };
 }
 
 export function getFacilitatorDashboard() {
   return {
-    name: "Facilitator Studio",
+    name: "Development facilitator",
     metrics: [
-      { label: "Assigned courses", value: "6", detail: "Across three academies" },
-      { label: "Learners", value: "248", detail: "Active this month" },
-      { label: "Assessment pass rate", value: "82%", detail: "Latest cohort average" },
-      { label: "VR attempts", value: "156", detail: "Practice sessions logged" },
+      { label: "My courses", value: "0", detail: "Development mode" },
+      { label: "Total learners", value: "0", detail: "Development mode" },
+      { label: "Total enrolments", value: "0", detail: "Development mode" },
+      { label: "Completions", value: "0", detail: "Development mode" },
     ],
-    focusCourses: courses.slice(0, 4),
+    focusCourses: [] as Course[],
   };
 }
 
 export function getEmployerDashboard() {
   return {
-    name: "Employer Pipeline",
+    name: "Development organisation",
     metrics: [
-      { label: "Verified learners", value: "96", detail: "Ready for review" },
-      { label: "Completions", value: "41", detail: "This month" },
-      { label: "Open opportunities", value: "7", detail: "Posting placeholders" },
-      { label: "Certificates viewed", value: "118", detail: "Employer activity" },
+      { label: "Opportunities posted", value: "0", detail: "Development mode" },
+      { label: "Active listings", value: "0", detail: "Development mode" },
+      { label: "Assigned learners", value: "Restricted", detail: "Consent required" },
+      { label: "Skills evidence", value: "Restricted", detail: "Authorisation required" },
     ],
-    opportunities,
-  };
-}
-
-export function getAdminDashboard() {
-  return {
-    name: "VowLMS Command Centre",
-    metrics: [
-      { label: "Academies", value: String(academies.length), detail: "GoalVow ecosystem pillars" },
-      { label: "Courses", value: String(courses.length), detail: "Published pathways" },
-      { label: "Learners", value: "1,284", detail: "Mock local analytics" },
-      { label: "Revenue", value: "R 84k", detail: "PayFast-ready placeholder" },
-      { label: "Completions", value: "312", detail: "Certificates issued" },
-      { label: "Health", value: "99.9%", detail: "API and PWA checks" },
-    ],
-    analyticsEvents,
+    opportunities: [] as Opportunity[],
   };
 }
 
 export function getOpportunities() {
-  return opportunities;
+  return [] as Opportunity[];
 }
 
 export function getLearningHubs() {
-  return learningHubs;
+  return [] as LearningHub[];
 }
 
 export function formatCurrency(amount: number) {

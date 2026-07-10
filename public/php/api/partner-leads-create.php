@@ -51,5 +51,6 @@ try {
 
     respond(true, ['id' => $id], '', 201);
 } catch (Throwable $e) {
-    respond(false, null, 'Internal error: ' . $e->getMessage(), 500);
+    error_log('partner-leads-create failed: ' . $e->getMessage());
+    respond(false, null, 'Internal server error', 500);
 }

@@ -3,13 +3,11 @@ import { bridgeGet, isBridgeConfigured } from "@/lib/bridge";
 import { cookies } from "next/headers";
 
 export async function GET() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("vowlms_token")?.value;
+  if (!token) return unauthorized();
+
   if (!isBridgeConfigured()) {
-    // Mock mode: require a cookie so unauthenticated visitors aren't shown as logged in
-    const cookieStore = await cookies();
-    const token = cookieStore.get("vowlms_token")?.value;
-
-    if (!token) return unauthorized();
-
     // Tokens starting with "dev." contain base64-encoded user JSON
     if (token.startsWith("dev.")) {
       try {

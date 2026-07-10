@@ -1,191 +1,172 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DashboardShell } from "@/components/dashboards/DashboardShell";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { getLearnerDashboard } from "@/lib/data";
 import { useSession } from "@/lib/auth/useSession";
+import type { DashboardMetric } from "@/types/lms";
 
-const dashboardData = getLearnerDashboard();
+type Enrollment = {
+  courseSlug?: string;
+  course_slug?: string;
+  courseTitle?: string;
+  course_title?: string;
+  description?: string;
+  academy_name?: string;
+  progress: number;
+  status: string;
+  nextLessonSlug?: string;
+  course?: { title?: string; description?: string };
+};
+
+type Certificate = {
+  certificate_id?: string;
+  course_name?: string;
+  course_slug?: string;
+};
+
+type LearnerDashboard = {
+  metrics: DashboardMetric[];
+  enrolledCourses: Enrollment[];
+  certificates?: Certificate[];
+  rewardPoints?: number;
+};
+
+const loadingMetrics: DashboardMetric[] = [
+  { label: "Courses enrolled", value: "-", detail: "Loading" },
+  { label: "Completed", value: "-", detail: "Loading" },
+  { label: "Certificates", value: "-", detail: "Loading" },
+  { label: "Reward points", value: "-", detail: "Loading" },
+];
 
 const quickLinks = [
-  { label: "Grades & results", href: "/dashboard/learner/grades", icon: "📊" },
-  { label: "Announcements", href: "/announcements", icon: "📣" },
-  { label: "Calendar", href: "/calendar", icon: "📅" },
-  { label: "Search courses", href: "/search", icon: "🔍" },
-  { label: "Profile settings", href: "/profile", icon: "👤" },
-  { label: "Learning hubs", href: "/learning-hubs", icon: "🏫" },
+  { label: "Browse courses", href: "/courses" },
+  { label: "Certificates", href: "/certificates" },
+  { label: "VowRewards", href: "/rewards" },
+  { label: "VowSupport", href: "/support" },
 ];
+
+function normaliseDashboard(raw: LearnerDashboard): LearnerDashboard {
+  return {
+    ...raw,
+    metrics: (raw.metrics ?? []).map((metric) => ({
+      ...metric,
+      detail: metric.detail ?? "Verified account data",
+    })),
+    enrolledCourses: raw.enrolledCourses ?? [],
+  };
+}
 
 export default function LearnerDashboardPage() {
   const session = useSession();
   const router = useRouter();
+  const [dashboard, setDashboard] = useState<LearnerDashboard | null>(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
-      router.replace("/auth/signin");
+      router.replace("/auth/signin?returnTo=/dashboard/learner");
+      return;
     }
+    if (session.status !== "authenticated") return;
+
+    const controller = new AbortController();
+    fetch("/api/dashboard/learner", {
+      cache: "no-store",
+      credentials: "same-origin",
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        const payload = await response.json();
+        if (!response.ok || !payload.ok) throw new Error(payload.error ?? "Dashboard could not be loaded.");
+        setDashboard(normaliseDashboard(payload.data));
+      })
+      .catch((reason) => {
+        if (reason?.name !== "AbortError") setError(reason instanceof Error ? reason.message : "Dashboard could not be loaded.");
+      });
+
+    return () => controller.abort();
   }, [session.status, router]);
 
-  const userName =
-    session.status === "authenticated"
-      ? session.user.name
-      : session.status === "loading"
-      ? ""
-      : "";
-
-  const isLoading = session.status === "loading";
+  const userName = session.status === "authenticated" ? session.user.name : "";
 
   return (
     <DashboardShell
       role="learner"
-      title={isLoading ? "Welcome back…" : `Welcome back, ${userName}`}
-      description="Track active courses, next lessons, grades, rewards, certificates, and opportunities from your GoalVow learner dashboard."
-      metrics={dashboardData.metrics}
+      title={userName ? `Welcome back, ${userName}` : "Learner dashboard"}
+      description="Continue learning, review verified progress, access certificates, and move into the wider GoalVow ecosystem."
+      metrics={dashboard?.metrics.length ? dashboard.metrics : loadingMetrics}
     >
-      <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
-        <div className="space-y-5">
-          {/* Quick links */}
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-            {quickLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="premium-card flex flex-col items-center gap-1.5 rounded-xl p-3 text-center transition hover:border-[#1166c8]/30"
-              >
-                <span className="text-xl">{link.icon}</span>
-                <p className="text-[10px] font-semibold text-muted leading-3">{link.label}</p>
-              </Link>
-            ))}
+      {error ? (
+        <div role="alert" className="mb-6 rounded-lg border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">
+          {error} <button type="button" onClick={() => window.location.reload()} className="ml-2 font-semibold underline">Retry</button>
+        </div>
+      ) : null}
+
+      <nav aria-label="Learner shortcuts" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {quickLinks.map((link) => (
+          <Link key={link.href} href={link.href} className="rounded-lg border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-ink transition hover:border-[#1166c8]/35 hover:text-[#1166c8]">
+            {link.label}
+          </Link>
+        ))}
+      </nav>
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px]">
+        <section>
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="text-xl font-semibold text-ink">Your courses</h2>
+            <Link href="/courses" className="text-sm font-semibold text-[#1166c8] hover:underline">Browse courses</Link>
           </div>
 
-          {/* Enrolled courses */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold text-ink">Enrolled courses</h2>
-              <Link href="/courses" className="text-sm font-medium text-[#1166c8] hover:underline">
-                Browse more →
-              </Link>
+          {!dashboard && !error ? (
+            <div className="mt-4 h-48 animate-pulse rounded-lg border border-slate-200 bg-white" />
+          ) : dashboard?.enrolledCourses.length ? (
+            <div className="mt-4 space-y-4">
+              {dashboard.enrolledCourses.map((item) => {
+                const slug = item.courseSlug ?? item.course_slug ?? "";
+                const title = item.course?.title ?? item.courseTitle ?? item.course_title ?? "Course";
+                const description = item.course?.description ?? item.description;
+                const continueHref = item.nextLessonSlug ? `/lesson/${item.nextLessonSlug}` : `/courses/${slug}`;
+                return (
+                  <article key={`${slug}-${title}`} className="rounded-lg border border-slate-200 bg-white p-6 shadow-[0_14px_38px_rgba(6,17,31,0.05)]">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#1166c8]">{item.academy_name ?? "Enrolled course"}</p>
+                    <h3 className="mt-2 text-xl font-semibold text-ink">{title}</h3>
+                    {description ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">{description}</p> : null}
+                    <div className="mt-5"><ProgressBar value={Number(item.progress) || 0} /></div>
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      <ButtonLink href={continueHref} variant="ink">{item.progress > 0 ? "Continue learning" : "Open course"}</ButtonLink>
+                      <ButtonLink href={`/courses/${slug}`} variant="outline">Course details</ButtonLink>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
-            {dashboardData.enrolledCourses.length === 0 ? (
-              <div className="premium-card rounded-xl p-8 text-center">
-                <p className="text-2xl mb-2">📚</p>
-                <p className="font-semibold text-ink">No enrolled courses yet</p>
-                <p className="mt-1 text-sm text-muted">Browse our 595 courses and start learning today.</p>
-                <ButtonLink href="/courses" variant="ink" className="mt-4 inline-flex">
-                  Browse courses
-                </ButtonLink>
-              </div>
-            ) : (
-              dashboardData.enrolledCourses.map((item) => (
-                <article key={item.courseSlug} className="premium-card rounded-xl p-6 mb-4">
-                  <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#1166c8]">
-                    Enrolled course
-                  </p>
-                  <h3 className="mt-3 text-2xl font-semibold">{item.course?.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{item.course?.description}</p>
-                  <div className="mt-5">
-                    <ProgressBar value={item.progress} />
-                  </div>
-                  <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                    <ButtonLink href={`/lesson/${item.nextLessonSlug}`} variant="ink">
-                      Continue lesson
-                    </ButtonLink>
-                    <ButtonLink href={`/courses/${item.courseSlug}`} variant="outline">
-                      Course details
-                    </ButtonLink>
-                    <Link
-                      href={`/courses/${item.courseSlug}/discussion`}
-                      className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-slate-50"
-                    >
-                      💬 Discussion
-                    </Link>
-                  </div>
-                </article>
-              ))
-            )}
-          </div>
-        </div>
+          ) : (
+            <div className="mt-4 rounded-lg border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+              <h3 className="text-lg font-semibold text-ink">No enrolled courses yet</h3>
+              <p className="mt-2 text-sm text-muted">Choose a course that fits your next learning goal.</p>
+              <ButtonLink href="/courses" variant="ink" className="mt-5 inline-flex">Browse courses</ButtonLink>
+            </div>
+          )}
+        </section>
 
         <aside className="space-y-4">
-          {/* Opportunity path */}
-          <div className="premium-card rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-ink">Next opportunity path</h3>
+          <div className="rounded-lg border border-slate-200 bg-white p-5">
+            <h2 className="text-base font-semibold text-ink">Certificates</h2>
             <p className="mt-2 text-sm leading-6 text-muted">
-              Complete a course, generate the certificate, collect rewards, then move into
-              PlugConnect matching.
+              {dashboard?.certificates?.length
+                ? `${dashboard.certificates.length} certificate record${dashboard.certificates.length === 1 ? "" : "s"} available.`
+                : "Completed, eligible courses will appear here."}
             </p>
-            <div className="mt-4 space-y-2">
-              {[
-                { step: "Enrol in a course", done: false },
-                { step: "Complete lessons", done: false },
-                { step: "Pass assessment", done: false },
-                { step: "Generate certificate", done: false },
-                { step: "Open PlugConnect match", done: false },
-              ].map((item) => (
-                <div
-                  key={item.step}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium ${
-                    item.done
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "premium-card-soft text-ink"
-                  }`}
-                >
-                  <span>{item.done ? "✓" : "○"}</span>
-                  {item.step}
-                </div>
-              ))}
-            </div>
+            <Link href="/certificates" className="mt-4 inline-block text-sm font-semibold text-[#1166c8] hover:underline">View certificates</Link>
           </div>
-
-          {/* Upcoming events */}
-          <div className="premium-card rounded-xl p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-semibold text-ink">Upcoming events</h3>
-              <Link href="/calendar" className="text-xs font-medium text-[#1166c8] hover:underline">
-                View all →
-              </Link>
-            </div>
-            <div className="space-y-2">
-              {[
-                { title: "Live session: Career Readiness", date: "24 Jun", type: "live" },
-                { title: "Assessment deadline: Solar Inst.", date: "27 Jun", type: "deadline" },
-                { title: "VR Kitchen session", date: "28 Jun", type: "vr" },
-              ].map((event) => (
-                <Link
-                  key={event.title}
-                  href="/calendar"
-                  className="flex items-center gap-3 rounded-lg border border-slate-100 bg-slate-50 px-3 py-2.5 transition hover:border-[#1166c8]/20"
-                >
-                  <span className="text-lg shrink-0">
-                    {event.type === "live" ? "📹" : event.type === "deadline" ? "⏰" : "🥽"}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-semibold text-ink truncate">{event.title}</p>
-                    <p className="text-[10px] text-muted">{event.date}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Certificates */}
-          <div className="premium-card rounded-xl p-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-semibold text-ink">Certificates</h3>
-              <Link href="/certificates" className="text-xs font-medium text-[#1166c8] hover:underline">
-                View all →
-              </Link>
-            </div>
-            <div className="rounded-lg border border-dashed border-slate-200 p-4 text-center">
-              <p className="text-sm text-muted">Complete a course to earn your first certificate.</p>
-              <Link href="/courses" className="mt-2 inline-block text-xs font-semibold text-[#1166c8] hover:underline">
-                Browse courses →
-              </Link>
-            </div>
+          <div className="rounded-lg border border-slate-200 bg-white p-5">
+            <h2 className="text-base font-semibold text-ink">Need help?</h2>
+            <p className="mt-2 text-sm leading-6 text-muted">Get help with access, course progress, assessments, or your next step.</p>
+            <Link href="/support" className="mt-4 inline-block text-sm font-semibold text-[#1166c8] hover:underline">Open VowSupport</Link>
           </div>
         </aside>
       </div>

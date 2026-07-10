@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
+import { visualAssets } from "@/lib/visual-assets";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -34,8 +36,8 @@ export default function ForgotPasswordPage() {
     <main className="flex min-h-screen items-center justify-center px-4 py-20">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gold text-xl font-black text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)]">
-            VL
+          <div className="brand-mark-frame mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg p-2 shadow-[0_10px_24px_rgba(6,17,31,0.14)]">
+            <Image src={visualAssets.logo} alt="GoalVow" width={48} height={48} className="h-full w-full object-contain" priority />
           </div>
           <h1 className="text-3xl font-semibold text-ink">Reset your password</h1>
           <p className="mt-2 text-sm text-muted">We&apos;ll send a reset link to your email address.</p>

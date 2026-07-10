@@ -1,19 +1,20 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
+import { siteConfig } from "@/lib/site";
 import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
-  title: "Innovation Labs · VR, AI & R&D at GoalVow",
-  description: "GoalVow Innovation Labs: VR training simulations, AI-powered learning paths, blockchain credentials, and R&D partnerships shaping Africa's EdTech future.",
+  title: "Innovation Labs - GoalVow R&D",
+  description: "Review GoalVow's current platform experiments and clearly labelled research roadmap.",
 };
 
 const projects = [
-  { icon: "🥽", title: "VR Skill Simulations", status: "In development", desc: "WebXR-powered immersive skill practice scenarios — kitchen safety, workplace ethics, business negotiations, and more. Built with React Three Fiber." },
-  { icon: "🤖", title: "AI Learning Support", status: "Research phase", desc: "Personalised learning pace adjustments, intelligent course recommendations, and AI-powered assessment feedback aligned to GoalVow curriculum." },
-  { icon: "📊", title: "Outcome Analytics Engine", status: "In development", desc: "Real-time learner progress dashboards for facilitators, admins, and employers — tracking completion, assessment performance, and opportunity matches." },
-  { icon: "📱", title: "Progressive Web App", status: "Live", desc: "Full offline capability, service worker, and PWA manifest — GoalVow works on any device, even in low-connectivity communities." },
-  { icon: "🔐", title: "Verifiable Credentials", status: "Live", desc: "Cryptographically verifiable digital certificates that employers can authenticate without contacting GoalVow directly." },
-  { icon: "🌐", title: "Multi-language Support", status: "Planned", desc: "Afrikaans, isiZulu, isiXhosa, and Sesotho language support for courses, assessments, and platform navigation." },
+  { icon: "🥽", title: "Skills Practice previews", status: "In development", desc: "Guided practice-preview interfaces with future WebXR work gated by content, device, safety, and assessment requirements." },
+  { icon: "🤖", title: "AI learning support", status: "Research phase", desc: "Potential assistance features require privacy, curriculum, accuracy, safeguarding, and human-review controls before implementation." },
+  { icon: "📊", title: "Outcome analytics", status: "In development", desc: "Role-scoped dashboard foundations are present; published outcome reporting remains blocked until data governance is approved." },
+  { icon: "📱", title: "Progressive Web App foundation", status: "Live", desc: "A manifest, service worker, and public offline fallback are present. Private and API routes are deliberately excluded from caching." },
+  { icon: "🔐", title: "Certificate records", status: "Live", desc: "Account-owned certificate identifiers are supported. External public verification and advanced credential standards remain future work." },
+  { icon: "🌐", title: "Multi-language support", status: "Planned", desc: "Language priorities, translation ownership, curriculum review, and accessible localisation require business confirmation." },
 ];
 
 const statusColors: Record<string, string> = {
@@ -34,14 +35,14 @@ export default function InnovationLabsPage() {
           </span>
           <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">Innovation Labs</h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-white/72">
-            GoalVow&apos;s Innovation Labs builds the next generation of learning technology — VR skill simulations, AI personalisation, verifiable credentials, and platform R&D that creates a sustainable competitive moat.
+            GoalVow Innovation Labs is the clearly labelled research and development pathway for Skills Practice, analytics, accessibility, and future learning tools.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
-              href="mailto:tech@goalvow.com"
+              href={`mailto:${siteConfig.contact.email}?subject=GoalVow%20Innovation%20Labs%20enquiry`}
               className="inline-flex items-center gap-2 rounded-lg bg-[#06b6d4] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0891b2]"
             >
-              Partner with our tech team →
+              Discuss an R&amp;D enquiry →
             </a>
             <ButtonLink href="/investors" variant="secondary">Innovation investment case</ButtonLink>
           </div>
@@ -79,14 +80,14 @@ export default function InnovationLabsPage() {
         <div className="mx-auto max-w-xl px-5">
           <h2 className="text-2xl font-semibold">Collaborate with GoalVow Innovation Labs</h2>
           <p className="mt-3 text-sm text-white/66">
-            We work with tech partners, researchers, and VR developers to build the next generation of African learning technology.
+            Use the verified GoalVow support channel to introduce a research, accessibility, content, or technology proposal.
           </p>
           <div className="mt-6">
             <a
-              href="mailto:tech@goalvow.com"
+              href={`mailto:${siteConfig.contact.email}?subject=GoalVow%20Innovation%20Labs%20enquiry`}
               className="inline-flex items-center gap-2 rounded-lg bg-[#06b6d4] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#0891b2]"
             >
-              tech@goalvow.com →
+              Contact GoalVow →
             </a>
           </div>
         </div>

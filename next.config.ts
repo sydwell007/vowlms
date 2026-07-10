@@ -1,22 +1,10 @@
 import type { NextConfig } from "next";
 
-function getBridgeOrigin(): string | null {
-  const url = process.env.BRIDGE_BASE_URL;
-  if (!url) return null;
-  try {
-    return new URL(url).origin;
-  } catch {
-    return null;
-  }
-}
-
 const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
   async headers() {
-    const bridgeOrigin = getBridgeOrigin();
-
     const rules = [
       {
         source: "/(.*)",
@@ -24,7 +12,24 @@ const nextConfig: NextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "DENY" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(self)" },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
         ],
+      },
+      {
+        source: "/api/(.*)",
+        headers: [{ key: "Cache-Control", value: "no-store" }],
+      },
+      {
+        source: "/dashboard/(.*)",
+        headers: [
+          { key: "Cache-Control", value: "private, no-store" },
+          { key: "X-Robots-Tag", value: "noindex, nofollow" },
+        ],
+      },
+      {
+        source: "/auth/(.*)",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
       },
       {
         source: "/sw.js",
@@ -35,14 +40,10 @@ const nextConfig: NextConfig = {
       },
     ];
 
-    if (bridgeOrigin) {
+    if (process.env.NODE_ENV === "production") {
       rules.push({
-        source: "/api/(.*)",
-        headers: [
-          { key: "Access-Control-Allow-Origin", value: bridgeOrigin },
-          { key: "Access-Control-Allow-Methods", value: "GET,POST,OPTIONS" },
-          { key: "Access-Control-Allow-Headers", value: "Content-Type,Authorization,X-Bridge-Key" },
-        ],
+        source: "/(.*)",
+        headers: [{ key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" }],
       });
     }
 

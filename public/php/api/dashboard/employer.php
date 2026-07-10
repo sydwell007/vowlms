@@ -28,32 +28,11 @@ $oppStmt = $db->prepare(
 $oppStmt->execute([$employerId]);
 $opportunities = $oppStmt->fetchAll();
 
-// Platform-wide talent pool: learners with at least one certificate
-$talentStmt = $db->query(
-    'SELECT u.id, u.name, u.email, u.city,
-            COUNT(DISTINCT cert.id) AS certificate_count,
-            COALESCE(SUM(re.points),0) AS reward_points
-     FROM users u
-     JOIN certificates cert ON cert.user_id = u.id
-     LEFT JOIN reward_events re ON re.user_id = u.id
-     WHERE u.role = "learner" AND u.is_active = 1
-     GROUP BY u.id
-     ORDER BY certificate_count DESC, reward_points DESC
-     LIMIT 20'
-);
-$talent = $talentStmt->fetchAll();
-
-// Recent VR assessment high-scorers
-$vrStmt = $db->query(
-    'SELECT u.name, u.email, u.city, vr.score, vr.attempted_at, c.title AS course_title
-     FROM vr_attempts vr
-     JOIN users u ON u.id = vr.user_id
-     JOIN vr_practices vp ON vp.id = vr.vr_practice_id
-     JOIN courses c ON c.id = vp.course_id
-     WHERE vr.score >= 80
-     ORDER BY vr.attempted_at DESC LIMIT 10'
-);
-$vrHighScorers = $vrStmt->fetchAll();
+// Learner-level records require an explicit organisation assignment and
+// consent model. Until those tables are deployed, no platform-wide learner
+// identity, email, certificate, or score data is exposed to employers.
+$talent = [];
+$vrHighScorers = [];
 
 // Upcoming events
 $calStmt = $db->prepare(
@@ -73,8 +52,8 @@ jsonOk([
     'metrics'        => [
         ['label' => 'Opportunities posted', 'value' => (string)$totalOpps],
         ['label' => 'Active listings',      'value' => (string)$activeOpps],
-        ['label' => 'Talent pool size',     'value' => (string)count($talent)],
-        ['label' => 'VR high-scorers',      'value' => (string)count($vrHighScorers)],
+        ['label' => 'Assigned learners',    'value' => 'Restricted'],
+        ['label' => 'Skills evidence',      'value' => 'Restricted'],
     ],
     'opportunities'  => $opportunities,
     'talent'         => $talent,

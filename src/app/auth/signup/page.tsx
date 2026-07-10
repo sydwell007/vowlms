@@ -1,14 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { visualAssets } from "@/lib/visual-assets";
 
 const academyOptions = [
   "Upskilling Academy",
   "Skills Training Academy",
   "Chef Academy",
   "GoalVow Schools",
+  "Sports Academy",
   "Business School",
   "University Online",
 ];
@@ -23,7 +26,6 @@ export default function SignUpPage() {
     phone: "",
     password: "",
     confirm: "",
-    role: "learner" as "learner" | "facilitator" | "employer",
     academy: "",
     city: "",
     country: "South Africa",
@@ -60,7 +62,6 @@ export default function SignUpPage() {
           email: form.email,
           password: form.password,
           phone: form.phone || null,
-          role: form.role,
           city: form.city || null,
           country: form.country,
           preferredAcademy: form.academy || null,
@@ -74,12 +75,7 @@ export default function SignUpPage() {
         return;
       }
 
-      const dashboardByRole: Record<string, string> = {
-        learner: "/dashboard/learner",
-        facilitator: "/dashboard/facilitator",
-        employer: "/dashboard/employer",
-      };
-      router.push(dashboardByRole[form.role] ?? "/dashboard/learner");
+      router.push("/dashboard/learner");
     } catch {
       setError("Unable to connect. Please check your connection.");
     } finally {
@@ -91,8 +87,8 @@ export default function SignUpPage() {
     <main className="flex min-h-screen items-center justify-center px-4 py-20">
       <div className="w-full max-w-lg">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gold text-xl font-black text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)]">
-            VL
+          <div className="brand-mark-frame mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg p-2 shadow-[0_10px_24px_rgba(6,17,31,0.14)]">
+            <Image src={visualAssets.logo} alt="GoalVow" width={48} height={48} className="h-full w-full object-contain" priority />
           </div>
           <h1 className="text-3xl font-semibold text-ink">Create your account</h1>
           <p className="mt-2 text-sm text-muted">Join the GoalVow Academy ecosystem</p>
@@ -139,15 +135,6 @@ export default function SignUpPage() {
                 <input id="signup-email" type="email" required value={form.email} onChange={(e) => update("email", e.target.value)}
                   placeholder="you@example.com"
                   className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
-              </div>
-              <div>
-                <label htmlFor="role-select" className="block text-sm font-semibold text-ink mb-1.5">I am a</label>
-                <select id="role-select" value={form.role} onChange={(e) => update("role", e.target.value)}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition">
-                  <option value="learner">Learner</option>
-                  <option value="facilitator">Facilitator / Educator</option>
-                  <option value="employer">Employer / Partner</option>
-                </select>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>

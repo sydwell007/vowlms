@@ -2,7 +2,7 @@
 require_once __DIR__ . '/env.php';
 
 function setCors(): void {
-    $allowed = env('VOWLMS_APP_URL', 'https://vowlms.vercel.app');
+    $allowed = env('FRONTEND_ORIGIN', 'https://vowlms.vercel.app');
 
     header('Access-Control-Allow-Origin: ' . $allowed);
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');

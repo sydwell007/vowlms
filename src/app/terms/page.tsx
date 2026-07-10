@@ -35,8 +35,8 @@ export default function TermsPage() {
           <h2>4. Certificates and VowRewards</h2>
           <ul>
             <li>Certificates are issued only upon genuine completion of all course requirements.</li>
-            <li>Certificates may be verified by employers through the GoalVow certificate verification system.</li>
-            <li>VowRewards points have no cash value and are subject to the VowRewards programme terms.</li>
+            <li>Certificate records may include a unique identifier. No public employer-verification service should be assumed unless GoalVow publishes one.</li>
+            <li>VowRewards records do not currently represent cash, stored value, or a payment instrument. Redemption requires separately approved programme terms.</li>
           </ul>
 
           <h2>5. Acceptable use</h2>
