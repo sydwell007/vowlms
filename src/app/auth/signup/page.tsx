@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { setSessionCache, useSession } from "@/lib/auth/useSession";
 import { visualAssets } from "@/lib/visual-assets";
 
 const academyOptions = [
@@ -18,6 +19,7 @@ const academyOptions = [
 
 export default function SignUpPage() {
   const router = useRouter();
+  const session = useSession();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -32,6 +34,13 @@ export default function SignUpPage() {
     agreeTerms: false,
   });
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (session.status !== "authenticated") return;
+
+    router.replace("/dashboard/learner");
+    router.refresh();
+  }, [router, session]);
 
   function update(field: keyof typeof form, value: string | boolean) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -75,7 +84,12 @@ export default function SignUpPage() {
         return;
       }
 
-      router.push("/dashboard/learner");
+      if (json.data) {
+        setSessionCache(json.data);
+      }
+
+      router.replace("/dashboard/learner");
+      router.refresh();
     } catch {
       setError("Unable to connect. Please check your connection.");
     } finally {

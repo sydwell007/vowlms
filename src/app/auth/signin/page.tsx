@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { setSessionCache, useSession } from "@/lib/auth/useSession";
 import { visualAssets } from "@/lib/visual-assets";
 
 const DASHBOARD: Record<string, string> = {
@@ -15,10 +16,20 @@ const DASHBOARD: Record<string, string> = {
 
 export default function SignInPage() {
   const router = useRouter();
+  const session = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (session.status !== "authenticated") return;
+
+    const requested = new URLSearchParams(window.location.search).get("returnTo");
+    const safeReturnTo = requested?.startsWith("/") && !requested.startsWith("//") ? requested : null;
+    router.replace(safeReturnTo ?? DASHBOARD[session.user.role] ?? "/dashboard/learner");
+    router.refresh();
+  }, [router, session]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -39,10 +50,16 @@ export default function SignInPage() {
         return;
       }
 
-      const role: string = json.data?.role ?? "learner";
+      const user = json.data;
+      if (user) {
+        setSessionCache(user);
+      }
+
+      const role: string = user?.role ?? "learner";
       const requested = new URLSearchParams(window.location.search).get("returnTo");
       const safeReturnTo = requested?.startsWith("/") && !requested.startsWith("//") ? requested : null;
-      router.push(safeReturnTo ?? DASHBOARD[role] ?? "/dashboard/learner");
+      router.replace(safeReturnTo ?? DASHBOARD[role] ?? "/dashboard/learner");
+      router.refresh();
     } catch {
       setError("Unable to connect. Please check your connection and try again.");
     } finally {

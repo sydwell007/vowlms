@@ -15,16 +15,31 @@ type SessionState =
   | { status: "unauthenticated" };
 
 let cachedUser: SessionUser | null = null;
+let cachedState: SessionState = { status: "loading" };
+const listeners = new Set<(state: SessionState) => void>();
+
+function emit(state: SessionState) {
+  cachedState = state;
+  for (const listener of listeners) {
+    listener(state);
+  }
+}
 
 export function useSession(): SessionState {
-  const [state, setState] = useState<SessionState>({ status: "loading" });
+  const [state, setState] = useState<SessionState>(cachedState);
 
   useEffect(() => {
+    listeners.add(setState);
+
     if (cachedUser) {
       Promise.resolve().then(() => {
-        if (cachedUser) setState({ status: "authenticated", user: cachedUser });
+        if (cachedUser) {
+          emit({ status: "authenticated", user: cachedUser });
+        }
       });
-      return;
+      return () => {
+        listeners.delete(setState);
+      };
     }
 
     fetch("/api/auth/session")
@@ -32,17 +47,27 @@ export function useSession(): SessionState {
       .then((json) => {
         if (json.ok && json.data) {
           cachedUser = json.data as SessionUser;
-          setState({ status: "authenticated", user: cachedUser });
+          emit({ status: "authenticated", user: cachedUser });
         } else {
-          setState({ status: "unauthenticated" });
+          emit({ status: "unauthenticated" });
         }
       })
-      .catch(() => setState({ status: "unauthenticated" }));
+      .catch(() => emit({ status: "unauthenticated" }));
+
+    return () => {
+      listeners.delete(setState);
+    };
   }, []);
 
   return state;
 }
 
+export function setSessionCache(user: SessionUser) {
+  cachedUser = user;
+  emit({ status: "authenticated", user });
+}
+
 export function clearSessionCache() {
   cachedUser = null;
+  emit({ status: "unauthenticated" });
 }
