@@ -19,7 +19,25 @@ try {
     if ($usersTableExists) {
         $columnStmt = $db->query("SHOW COLUMNS FROM users LIKE 'password_hash'");
         $passwordColumnExists = (bool)$columnStmt->fetchColumn();
-        $schemaStatus = $passwordColumnExists ? 'healthy' : 'error';
+        $requiredUserColumns = [
+            'password_hash',
+            'language',
+            'timezone',
+            'province',
+            'company',
+            'avatar_url',
+            'email_notifications',
+            'sms_notifications',
+        ];
+        $missingColumns = [];
+        foreach ($requiredUserColumns as $column) {
+            $requiredStmt = $db->query("SHOW COLUMNS FROM users LIKE '{$column}'");
+            if (!$requiredStmt->fetchColumn()) {
+                $missingColumns[] = $column;
+            }
+        }
+
+        $schemaStatus = ($passwordColumnExists && count($missingColumns) === 0) ? 'healthy' : 'error';
     } else {
         $schemaStatus = 'error';
     }
