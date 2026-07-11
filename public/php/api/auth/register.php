@@ -65,10 +65,19 @@ try {
     jsonError('Registration failed', 500);
 }
 
-// Welcome email
-sendMail($email, 'Welcome to VowLMS — GoalVow Holdings', welcomeEmail($name));
+// Welcome email should never break account creation.
+try {
+    sendMail($email, 'Welcome to VowLMS — GoalVow Holdings', welcomeEmail($name));
+} catch (Throwable $error) {
+    error_log('Welcome email failed: ' . $error->getMessage());
+}
 
-$token = JWT::encode(['sub' => $id, 'email' => $email, 'role' => $role, 'name' => $name]);
+try {
+    $token = JWT::encode(['sub' => $id, 'email' => $email, 'role' => $role, 'name' => $name]);
+} catch (Throwable $error) {
+    error_log('Registration JWT failed: ' . $error->getMessage());
+    jsonError('Registration completed but session setup failed. Check JWT_SECRET on the bridge.', 500);
+}
 
 jsonCreated([
     'token' => $token,

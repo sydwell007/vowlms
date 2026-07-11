@@ -30,12 +30,17 @@ if (!$user || !password_verify($password, $user['password_hash'])) {
     jsonError('Invalid email or password', 401);
 }
 
-$token = JWT::encode([
-    'sub'   => $user['id'],
-    'email' => $user['email'],
-    'role'  => $user['role'],
-    'name'  => $user['name'],
-]);
+try {
+    $token = JWT::encode([
+        'sub'   => $user['id'],
+        'email' => $user['email'],
+        'role'  => $user['role'],
+        'name'  => $user['name'],
+    ]);
+} catch (Throwable $error) {
+    error_log('Login JWT failed: ' . $error->getMessage());
+    jsonError('Session setup failed. Check JWT_SECRET on the bridge.', 500);
+}
 
 jsonOk([
     'token' => $token,
