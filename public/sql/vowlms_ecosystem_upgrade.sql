@@ -2,6 +2,15 @@
 -- VowLMS Ecosystem Upgrade SQL
 -- Import in phpMyAdmin: goalvxiw_vowlms database
 -- =============================================================================
+-- LEGACY / DO NOT IMPORT FOR THE CURRENT 000-011 INSTALLATION.
+--
+-- This older optional bundle creates and seeds editable ecosystem-content and
+-- lead tables. It is intentionally excluded from README_IMPORT_ORDER.md because
+-- its seed wording predates the current evidence-safe VowLMS content and can
+-- reintroduce unapproved claims. The current Next.js public pages do not require
+-- this file. If these tables already exist, leave them in place; do not rerun
+-- this seed bundle. Any future use requires a separately reviewed migration.
+-- =============================================================================
 
 SET NAMES utf8mb4;
 SET time_zone = '+00:00';

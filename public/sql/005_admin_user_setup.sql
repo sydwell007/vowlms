@@ -1,72 +1,45 @@
 -- =============================================================================
--- VowLMS — First Admin User Setup
--- File: 005_admin_user_setup.sql
--- Run AFTER 001_schema.sql
+-- VowLMS - Promote an existing account to administrator
+-- OPTIONAL: do not run as part of the numbered schema import.
 -- =============================================================================
 --
--- INSTRUCTIONS:
--- 1. Generate a bcrypt hash for your password at: https://bcrypt-generator.com
---    (Use 10 rounds, enter your chosen password)
--- 2. Replace $2y$10$REPLACE_THIS_WITH_YOUR_BCRYPT_HASH below
--- 3. Replace sydwell@goalvow.com with your admin email if different
--- 4. Run this SQL in phpMyAdmin
+-- SAFEST PROCEDURE
+-- 1. Deploy the PHP API and VowLMS registration flow.
+-- 2. Create your own account through the normal VowLMS sign-up page. This
+--    ensures PHP creates a secure password hash; never put a password in SQL.
+-- 3. Confirm the account appears in the users table.
+-- 4. Replace REPLACE_WITH_YOUR_ADMIN_EMAIL below with that exact email.
+-- 5. Run this file once in phpMyAdmin.
+-- 6. Confirm promoted_rows = 1 and the final row shows role = admin.
+--
+-- If promoted_rows = 0, no account matched. Do not insert a placeholder user;
+-- register the account normally, confirm its email, and retry this script.
 -- =============================================================================
 
+USE `goalvxiw_vowlms`;
 SET NAMES utf8mb4;
 
-INSERT IGNORE INTO `users` (
-  `id`,
-  `name`,
-  `email`,
-  `password_hash`,
-  `role`,
-  `phone`,
-  `city`,
-  `country`,
-  `is_active`,
-  `email_verified`
-) VALUES (
-  UUID(),
-  'Sydwell',
-  'sydwell@goalvow.com',
-  '$2y$10$REPLACE_THIS_WITH_YOUR_BCRYPT_HASH',
-  'admin',
-  '+27632706787',
-  'Cape Town',
-  'ZA',
-  1,
-  1
-);
+SET @admin_email = 'REPLACE_WITH_YOUR_ADMIN_EMAIL';
 
--- Verify admin was created
-SELECT id, name, email, role, created_at FROM users WHERE role = 'admin';
+-- Preview the exact account that will be promoted.
+SELECT `id`, `name`, `email`, `role`, `is_active`, `email_verified`
+FROM `goalvxiw_vowlms`.`users`
+WHERE `email` = @admin_email;
 
--- ── Optional: Create test learner account ─────────────────────────────────────
--- Password: TestLearner2026! (replace hash below)
-INSERT IGNORE INTO `users` (
-  `id`,
-  `name`,
-  `email`,
-  `password_hash`,
-  `role`,
-  `city`,
-  `country`,
-  `is_active`,
-  `email_verified`
-) VALUES (
-  UUID(),
-  'Test Learner',
-  'learner@goalvow.com',
-  '$2y$10$REPLACE_THIS_WITH_LEARNER_BCRYPT_HASH',
-  'learner',
-  'Cape Town',
-  'ZA',
-  1,
-  1
-);
+START TRANSACTION;
 
--- ── Reward bootstrap: 100 pts for registration ───────────────────────────────
-INSERT IGNORE INTO `reward_events` (`id`, `user_id`, `event`, `points`)
-SELECT UUID(), id, 'register', 100 FROM users WHERE email IN ('sydwell@goalvow.com','learner@goalvow.com');
+UPDATE `goalvxiw_vowlms`.`users`
+SET `role` = 'admin',
+    `is_active` = 1
+WHERE `email` = @admin_email
+  AND @admin_email <> 'REPLACE_WITH_YOUR_ADMIN_EMAIL';
 
-SELECT COUNT(*) AS user_count FROM users;
+SELECT ROW_COUNT() AS promoted_rows;
+
+COMMIT;
+
+-- Final verification. This must return exactly your intended account.
+SELECT `id`, `name`, `email`, `role`, `is_active`, `email_verified`, `created_at`
+FROM `goalvxiw_vowlms`.`users`
+WHERE `email` = @admin_email
+  AND `role` = 'admin';

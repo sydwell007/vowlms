@@ -7,6 +7,8 @@ This is a phpMyAdmin/Afrihost migration package. It must never be served by Verc
 1. Export a full database backup with routines and triggers.
 2. Run `000_schema_audit.sql` and save the result.
 3. Confirm the selected database name before every import.
+   `verify_schema.sql` explicitly selects `goalvxiw_vowlms`; update its `USE`
+   statement first if your target database has a different name.
 4. Confirm `payments.payfast_payment_id` has no duplicate non-null values before migration 011.
 5. Use a staging database first.
 
@@ -22,7 +24,31 @@ This is a phpMyAdmin/Afrihost migration package. It must never be served by Verc
 8. `011_integrity_hardening.sql`
 9. `verify_schema.sql`
 
-`005_admin_user_setup.sql` is not part of the automatic production order. Review and replace it with an approved admin provisioning procedure before use. Never deploy a known default password.
+### Optional admin promotion (`005_admin_user_setup.sql`)
+
+Do not import this with the numbered schema files. First create your own account
+through the normal VowLMS sign-up flow so PHP securely hashes the password. Then:
+
+1. Confirm that exact email exists in `users`.
+2. Open `005_admin_user_setup.sql` and replace
+   `REPLACE_WITH_YOUR_ADMIN_EMAIL` with your account email.
+3. Import the edited file once.
+4. Confirm `promoted_rows` is `1` and the final result shows only your intended
+   account with `role = admin`.
+
+The file never creates a password, test learner, or reward record. Keep admin
+credentials out of SQL and never use an online password-hash generator.
+
+### Legacy ecosystem bundle
+
+Do **not** import `vowlms_ecosystem_upgrade.sql` in the current installation.
+It is a legacy optional content/lead-table bundle, not migration 012. Its seed
+copy predates the current evidence-safe content and can reintroduce unapproved
+claims. The current Next.js public pages do not depend on it. Your phpMyAdmin
+screenshot already shows its tables (`ecosystem_services`, `homepage_sections`,
+`investor_sections`, `academy_pages`, `support_services`, `sidebar_services`,
+`partner_leads`, `investor_leads`, and `service_interest_logs`), so leave those
+tables in place and do not reseed them with this file.
 
 ## Existing Database
 

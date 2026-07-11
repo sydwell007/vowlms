@@ -1,5 +1,13 @@
 # Schema Changelog
 
+## Legacy ecosystem bundle
+
+- `vowlms_ecosystem_upgrade.sql` is excluded from the current import order.
+- Existing legacy ecosystem tables may remain, but the old seed bundle must not
+  be rerun without a separately reviewed migration and approved content.
+- `005_admin_user_setup.sql` now promotes an existing normally registered user;
+  it no longer creates placeholder users, passwords, test learners, or rewards.
+
 ## 011 - Integrity hardening
 
 - Adds `updated_at` to enrolments and lesson progress.
