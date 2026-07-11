@@ -127,7 +127,11 @@ export async function bridgePost<T>(
 
 /** Sets the JWT cookie in a Next.js response */
 export function setAuthCookie(response: Response, token: string): Response {
-  const res = new Response(response.body, response);
+  const res = new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: new Headers(response.headers),
+  });
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
   res.headers.append(
     "Set-Cookie",
@@ -138,7 +142,11 @@ export function setAuthCookie(response: Response, token: string): Response {
 
 /** Clears the JWT cookie */
 export function clearAuthCookie(response: Response): Response {
-  const res = new Response(response.body, response);
+  const res = new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: new Headers(response.headers),
+  });
   const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
   res.headers.append(
     "Set-Cookie",

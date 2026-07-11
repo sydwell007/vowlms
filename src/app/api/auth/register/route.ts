@@ -1,5 +1,5 @@
 import { badRequest, created, serverError } from "@/lib/api/responses";
-import { bridgePost, isBridgeConfigured, setAuthCookie } from "@/lib/bridge";
+import { BridgeError, bridgePost, isBridgeConfigured, setAuthCookie } from "@/lib/bridge";
 
 type RegisterResponse = {
   token: string;
@@ -58,6 +58,19 @@ export async function POST(request: Request) {
     const response = created(result.user);
     return setAuthCookie(response, result.token);
   } catch (e: unknown) {
+    if (e instanceof BridgeError) {
+      if (e.status === 403) {
+        return serverError("Bridge authorization failed. Check BRIDGE_API_KEY on Vercel and Afrihost.");
+      }
+      if (e.status === 409) {
+        return badRequest("An account with this email already exists");
+      }
+      if (e.status === 503) {
+        return serverError("Backend bridge is unavailable. Check BRIDGE_BASE_URL and bridge health.");
+      }
+      return serverError(e.message);
+    }
+
     const msg = e instanceof Error ? e.message : "";
     if (msg.toLowerCase().includes("exists") || msg.toLowerCase().includes("duplicate")) {
       return badRequest("An account with this email already exists");
