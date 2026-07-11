@@ -62,8 +62,8 @@ if (
 // ─────────────────────────────────────────────────────────────────────────────
 // MODE C — Direct URL proxy (for pluginfile.php URLs embedded in lesson HTML)
 // Restricted to known Moodle hosts only to prevent open-proxy abuse.
-// Plain pluginfile.php requires a browser session; we convert it to the
-// webservice variant and append the MOODLE_TOKEN so PHP can fetch server-side.
+// Plain pluginfile.php requires a browser session; convert it to the
+// webservice variant and inject the token belonging to that academy.
 // ─────────────────────────────────────────────────────────────────────────────
 if ($url !== '' && $hash === '' && $id === '') {
     if (!preg_match('#^https?://(goalvow\.com|www\.goalvow\.com)/#i', $url)) {
@@ -72,21 +72,12 @@ if ($url !== '' && $hash === '' && $id === '') {
         echo json_encode(['ok' => false, 'error' => 'URL domain not allowed']);
         exit;
     }
-    $cleanUrl = preg_replace('/([?&])forcedownload=\d+&?/', '$1', $url);
-    $cleanUrl = rtrim($cleanUrl, '?&');
-
-    // Convert plain pluginfile.php → webservice/pluginfile.php and add token.
-    // webservice/pluginfile.php accepts a token instead of a session cookie,
-    // allowing server-to-server file fetching without a logged-in browser.
-    $moodleToken = getenv('MOODLE_TOKEN');
-    if (!$moodleToken) $moodleToken = $_ENV['MOODLE_TOKEN'] ?? '';
-    if ($moodleToken !== ''
-        && preg_match('#/pluginfile\.php/#i', $cleanUrl)
-        && !preg_match('#/webservice/pluginfile\.php/#i', $cleanUrl)
-    ) {
-        $cleanUrl = preg_replace('#/pluginfile\.php/#i', '/webservice/pluginfile.php/', $cleanUrl);
-        $sep      = (strpos($cleanUrl, '?') !== false) ? '&' : '?';
-        $cleanUrl .= $sep . 'token=' . urlencode($moodleToken);
+    $cleanUrl = prepareMoodleUrl($url);
+    if ($cleanUrl === '') {
+        http_response_code(503);
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => false, 'error' => 'Moodle token not configured for this academy']);
+        exit;
     }
 
     $filename = $reqName ?: basename(parse_url($cleanUrl, PHP_URL_PATH) ?: 'file');
@@ -199,8 +190,13 @@ if ($id !== '') {
         exit;
     }
 
-    $fileUrl  = preg_replace('/([?&])forcedownload=\d+&?/', '$1', $fileUrl);
-    $fileUrl  = rtrim($fileUrl, '?&');
+    $fileUrl = prepareMoodleUrl($fileUrl);
+    if ($fileUrl === '') {
+        http_response_code(503);
+        header('Content-Type: application/json');
+        echo json_encode(['ok' => false, 'error' => 'Moodle token not configured for this academy']);
+        exit;
+    }
     $filename = $reqName ?: ($resource['filename'] ?? 'file');
     $mimeType = $resource['mime_type'] ?? guessMime($filename);
 
@@ -329,11 +325,25 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         if (!$headersSet) {
             $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-            if ($httpCode === 206 || ($range !== '' && $httpCode === 200)) {
+            $upstreamType = strtolower($moodleHeaders['content-type'] ?? '');
+            $isErrorPayload = $httpCode >= 400
+                || str_contains($upstreamType, 'application/json')
+                || str_contains($upstreamType, 'text/html');
+
+            if ($isErrorPayload) {
+                http_response_code($httpCode >= 400 ? $httpCode : 502);
+                header('Content-Type: ' . ($upstreamType ?: 'application/json'));
+                header('Cache-Control: no-store');
+                header('X-Content-Type-Options: nosniff');
+                $headersSet = true;
+                echo $data;
+                flush();
+                return strlen($data);
+            }
+
+            if ($httpCode === 206 && isset($moodleHeaders['content-range'])) {
                 http_response_code(206);
-                if (isset($moodleHeaders['content-range'])) {
-                    header("Content-Range: {$moodleHeaders['content-range']}");
-                }
+                header("Content-Range: {$moodleHeaders['content-range']}");
             } else {
                 http_response_code($httpCode >= 400 ? $httpCode : 200);
             }
@@ -367,6 +377,70 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         error_log('Moodle resource proxy failed: ' . $err);
         echo json_encode(['ok' => false, 'error' => 'Resource fetch failed']);
     }
+}
+
+function moodleTokenForUrl(string $url): string
+{
+    $path = strtolower((string)parse_url($url, PHP_URL_PATH));
+    $tokenByPath = [
+        '/upskilling/'     => 'UPSKILLING_MOODLE_TOKEN',
+        '/skills-training/' => 'SKILLS_TRAINING_MOODLE_TOKEN',
+        '/skillstraining/'  => 'SKILLS_TRAINING_MOODLE_TOKEN',
+        '/chef-academy/'    => 'CHEF_ACADEMY_MOODLE_TOKEN',
+        '/chefacademy/'     => 'CHEF_ACADEMY_MOODLE_TOKEN',
+        '/schools/'        => 'GOALVOW_SCHOOLS_MOODLE_TOKEN',
+        '/business-school/' => 'BUSINESS_SCHOOL_MOODLE_TOKEN',
+        '/businessschool/'  => 'BUSINESS_SCHOOL_MOODLE_TOKEN',
+        '/university/'     => 'GOALVOW_UNIVERSITY_MOODLE_TOKEN',
+    ];
+
+    foreach ($tokenByPath as $academyPath => $envName) {
+        if (str_contains($path, $academyPath)) {
+            return cleanEnvToken($envName);
+        }
+    }
+
+    return cleanEnvToken('MOODLE_TOKEN');
+}
+
+function cleanEnvToken(string $name): string
+{
+    $value = getenv($name);
+    if ($value === false || $value === '') {
+        $value = $_ENV[$name] ?? '';
+    }
+    return trim((string)$value, " \t\n\r\0\x0B;\"'");
+}
+
+function prepareMoodleUrl(string $url): string
+{
+    $cleanUrl = preg_replace('/([?&])forcedownload=\d+&?/', '$1', $url);
+    $cleanUrl = rtrim((string)$cleanUrl, '?&');
+    $cleanUrl = str_ireplace(
+        ['/skillstraining/', '/chefacademy/', '/businessschool/'],
+        ['/skills-training/', '/chef-academy/', '/business-school/'],
+        $cleanUrl
+    );
+
+    if (!preg_match('#/pluginfile\.php/#i', $cleanUrl)) {
+        return $cleanUrl;
+    }
+
+    $moodleToken = moodleTokenForUrl($cleanUrl);
+    if ($moodleToken === '') {
+        return '';
+    }
+
+    if (!preg_match('#/webservice/pluginfile\.php/#i', $cleanUrl)) {
+        $cleanUrl = preg_replace('#/pluginfile\.php/#i', '/webservice/pluginfile.php/', $cleanUrl);
+    }
+
+    // Replace any stale token stored in lesson HTML or lesson_resources.
+    $cleanUrl = preg_replace('/([?&])token=[^&]*&?/i', '$1', (string)$cleanUrl);
+    $cleanUrl = rtrim((string)$cleanUrl, '?&');
+    $separator = strpos($cleanUrl, '?') !== false ? '&' : '?';
+
+    return $cleanUrl . $separator . 'token=' . urlencode($moodleToken);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `lesson_resources` (
   `type`         ENUM('pdf','video','audio','image','other') NOT NULL DEFAULT 'other',
   `filename`     VARCHAR(500)  NOT NULL,
   `content_hash` CHAR(40)      NULL COMMENT 'SHA-1 hash — used to serve from courses/ symlink',
-  `file_url`     VARCHAR(1000) NULL COMMENT 'Moodle pluginfile URL with token — fallback serve',
+  `file_url`     VARCHAR(1000) NULL COMMENT 'Moodle pluginfile URL; token is injected server-side',
   `filesize`     INT UNSIGNED  NOT NULL DEFAULT 0,
   `mime_type`    VARCHAR(100)  NULL,
   `position`     TINYINT UNSIGNED NOT NULL DEFAULT 0,

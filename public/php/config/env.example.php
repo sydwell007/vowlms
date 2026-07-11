@@ -14,7 +14,13 @@ $_ENV['DB_PASS'] = 'replace_with_database_password';
 $_ENV['BRIDGE_API_KEY'] = 'replace_with_a_long_random_bridge_key';
 $_ENV['JWT_SECRET'] = 'replace_with_a_different_long_random_jwt_secret';
 $_ENV['RESOURCE_SIGNING_SECRET'] = 'replace_with_a_third_long_random_secret';
-$_ENV['MOODLE_TOKEN'] = 'replace_with_server_side_moodle_token';
+$_ENV['UPSKILLING_MOODLE_TOKEN'] = 'replace_with_upskilling_token';
+$_ENV['SKILLS_TRAINING_MOODLE_TOKEN'] = 'replace_with_skills_training_token';
+$_ENV['CHEF_ACADEMY_MOODLE_TOKEN'] = 'replace_with_chef_academy_token';
+$_ENV['GOALVOW_SCHOOLS_MOODLE_TOKEN'] = 'replace_with_schools_token';
+$_ENV['BUSINESS_SCHOOL_MOODLE_TOKEN'] = 'replace_with_business_school_token';
+$_ENV['GOALVOW_UNIVERSITY_MOODLE_TOKEN'] = 'replace_with_university_token';
+$_ENV['MOODLE_TOKEN'] = '';
 
 $_ENV['APP_URL'] = 'https://vowlms.vercel.app';
 $_ENV['FRONTEND_ORIGIN'] = 'https://vowlms.vercel.app';

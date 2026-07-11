@@ -127,7 +127,7 @@ Only after these pass should Vercel be configured with the matching
 
 ## Required Host Environment
 
-`DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`, `BRIDGE_API_KEY`, `JWT_SECRET`, `RESOURCE_SIGNING_SECRET`, `MOODLE_TOKEN`, `APP_URL`, `FRONTEND_ORIGIN`, `API_BASE_URL`, `APP_TIMEZONE`, PayFast variables, and SMTP variables where email is enabled.
+`DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`, `BRIDGE_API_KEY`, `JWT_SECRET`, `RESOURCE_SIGNING_SECRET`, all six academy-specific Moodle token variables, `APP_URL`, `FRONTEND_ORIGIN`, `API_BASE_URL`, `APP_TIMEZONE`, PayFast variables, and SMTP variables where email is enabled. `MOODLE_TOKEN` is only an optional fallback for an unrecognised Moodle path.
 
 Use different random values for bridge, JWT, and resource-signing secrets. Never reuse a database password as an application secret.
 

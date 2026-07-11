@@ -41,6 +41,12 @@ function extractYouTubeFromHtml(html: string): string | null {
   return null;
 }
 
+function extractVideoFromHtml(html: string): string | null {
+  const source = html.match(/<(?:source|video)\b[^>]*\bsrc=["']([^"']+)["']/i);
+  if (!source) return null;
+  return source[1].replace(/&amp;/g, "&");
+}
+
 type VideoInfo =
   | { type: "youtube"; ytId: string }
   | { type: "mp4"; url: string; mimeType?: string }
@@ -74,6 +80,9 @@ function getVideoInfo(lesson: Lesson, content: string, resources: LessonResource
   if (content) {
     const id = extractYouTubeFromHtml(content);
     if (id) return { type: "youtube", ytId: id };
+
+    const embeddedVideo = extractVideoFromHtml(content);
+    if (embeddedVideo) return { type: "mp4", url: embeddedVideo, mimeType: "video/mp4" };
   }
 
   return { type: "none" };
@@ -120,6 +129,8 @@ export function LessonPlayer({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [completedSlugs, setCompletedSlugs] = useState<string[]>([]);
   const [activePdf, setActivePdf] = useState<LessonResource | null>(null);
+  const [videoError, setVideoError] = useState(false);
+  const [videoReloadKey, setVideoReloadKey] = useState(0);
 
   const assessment = course.assessments.find((a) => a.lessonSlug === lesson.slug);
   const vrPractice = course.vrPractices.find((v) => v.lessonSlug === lesson.slug);
@@ -132,6 +143,8 @@ export function LessonPlayer({
     ? sanitizeHtml(content)
         .replace(/<iframe[^>]*src=["'][^"']*youtube[^"']*["'][^>]*>[\s\S]*?<\/iframe>/gi, "")
         .replace(/<iframe[^>]*src=["'][^"']*youtube[^"']*["'][^>]*>/gi, "")
+        .replace(/<video\b[^>]*>[\s\S]*?<\/video>/gi, "")
+        .replace(/<video\b[^>]*\/?\s*>/gi, "")
     : content;
 
   const hasContent = cleanContent.replace(/<[^>]+>/g, "").trim().length > 0;
@@ -282,16 +295,34 @@ export function LessonPlayer({
 
             {videoInfo.type === "mp4" && (
               <div className="mt-6 overflow-hidden rounded-2xl bg-black">
-                <video
-                  controls
-                  preload="metadata"
-                  className="w-full"
-                  style={{ maxHeight: "540px" }}
-                  title={lesson.title}
-                >
-                  <source src={videoInfo.url} type={videoInfo.mimeType ?? "video/mp4"} />
-                  Your browser does not support video playback.
-                </video>
+                {videoError ? (
+                  <div className="flex aspect-video flex-col items-center justify-center gap-3 bg-[#06111f] px-6 text-center text-white">
+                    <p className="text-base font-semibold">This lesson video could not be loaded.</p>
+                    <p className="max-w-md text-sm text-white/70">Please retry. If the problem continues, the academy media connection needs attention.</p>
+                    <button
+                      type="button"
+                      onClick={() => { setVideoError(false); setVideoReloadKey((key) => key + 1); }}
+                      className="rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-[#06111f]"
+                    >
+                      Retry video
+                    </button>
+                  </div>
+                ) : (
+                  <video
+                    key={videoReloadKey}
+                    controls
+                    playsInline
+                    preload="metadata"
+                    className="aspect-video w-full"
+                    style={{ maxHeight: "540px" }}
+                    title={lesson.title}
+                    onLoadedMetadata={() => setVideoError(false)}
+                    onError={() => setVideoError(true)}
+                  >
+                    <source src={videoInfo.url} type={videoInfo.mimeType ?? "video/mp4"} />
+                    Your browser does not support video playback.
+                  </video>
+                )}
               </div>
             )}
 
