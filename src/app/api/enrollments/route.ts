@@ -13,6 +13,9 @@ export async function GET() {
     return ok(await bridgeGet("/enrollments"));
   } catch (e) {
     if (e instanceof BridgeError && e.status === 401) return unauthorized();
+    if (e instanceof BridgeError && e.status === 403) {
+      return serverError("Bridge authorization failed. Check BRIDGE_API_KEY on Vercel and Afrihost.");
+    }
     if (e instanceof BridgeError) return serverError(e.message);
     return serverError("Failed to fetch enrollments");
   }
@@ -38,6 +41,9 @@ export async function POST(request: Request) {
     return created(await bridgePost("/enrollments", { courseSlug: payload.courseSlug }));
   } catch (e) {
     if (e instanceof BridgeError && e.status === 401) return unauthorized();
+    if (e instanceof BridgeError && e.status === 403) {
+      return serverError("Bridge authorization failed. Check BRIDGE_API_KEY on Vercel and Afrihost.");
+    }
     if (e instanceof BridgeError) return serverError(e.message);
     return serverError("Failed to enroll");
   }

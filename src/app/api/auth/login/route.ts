@@ -1,5 +1,5 @@
 import { badRequest, ok, serverError, unauthorized } from "@/lib/api/responses";
-import { bridgePost, isBridgeConfigured, setAuthCookie } from "@/lib/bridge";
+import { BridgeError, bridgePost, isBridgeConfigured, setAuthCookie } from "@/lib/bridge";
 
 type LoginResponse = {
   token: string;
@@ -34,6 +34,18 @@ export async function POST(request: Request) {
     const response = ok(result.user);
     return setAuthCookie(response, result.token);
   } catch (e: unknown) {
+    if (e instanceof BridgeError) {
+      if (e.status === 401) {
+        return unauthorized("Invalid email or password");
+      }
+      if (e.status === 403) {
+        return serverError("Bridge authorization failed. Check BRIDGE_API_KEY on Vercel and Afrihost.");
+      }
+      if (e.status === 503) {
+        return serverError("Backend bridge is unavailable. Check BRIDGE_BASE_URL and bridge health.");
+      }
+    }
+
     const msg = e instanceof Error ? e.message : "Login failed";
     if (msg.toLowerCase().includes("invalid") || msg.toLowerCase().includes("credentials")) {
       return unauthorized("Invalid email or password");
