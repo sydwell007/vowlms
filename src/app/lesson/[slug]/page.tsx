@@ -20,6 +20,7 @@ type BridgeResource = {
   filename: string;
   content_hash: string | null;
   file_url: string | null;
+  serve_url: string | null;
   filesize: number;
   mime_type: string | null;
 };
@@ -33,6 +34,7 @@ type BridgeLessonResponse = {
     content: string | null;
     video_url: string | null;
     video_hash: string | null;
+    media_url: string | null;
     duration_minutes: number;
     position: number;
     module_id: string;
@@ -157,7 +159,9 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
 
   // Determine video URL — prefer uploaded video (via serve.php) over YouTube embed
   let videoUrl: string | undefined;
-  if (d.lesson.video_hash) {
+  if (d.lesson.media_url) {
+    videoUrl = d.lesson.media_url;
+  } else if (d.lesson.video_hash) {
     videoUrl = signedServeUrl(bridgeBase, { hash: d.lesson.video_hash }, "video.mp4") || undefined;
   } else if (d.lesson.video_url) {
     const rawVideo = d.lesson.video_url;
@@ -231,7 +235,7 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
   // Build resource URLs server-side so BRIDGE_BASE_URL stays server-only
   const resources: LessonResource[] = (d.resources ?? [])
     .reduce<LessonResource[]>((acc, r) => {
-      const url = buildServeUrl(r);
+      const url = r.serve_url || buildServeUrl(r);
       if (!url) return acc;
       acc.push({
         type: r.type,

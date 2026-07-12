@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * GET /lessons/[slug]
  * Returns a single lesson with its content, module, course, prev/next,
@@ -17,6 +17,39 @@ ob_end_clean();
 setCors();
 requireBridgeKey();
 requireMethod('GET');
+
+function signedMediaUrl(string $kind, string $value, string $filename): ?string
+{
+    $secret = env('RESOURCE_SIGNING_SECRET', '');
+    $apiBase = rtrim(env('API_BASE_URL', 'https://api.goalvow.com'), '/');
+    if ($secret === '' || $apiBase === '' || $value === '') return null;
+
+    $expires = time() + 3600;
+    $signature = hash_hmac('sha256', $kind . ':' . $value . '|' . $expires, $secret);
+    $query = http_build_query([
+        $kind => $value,
+        'name' => $filename,
+        'expires' => $expires,
+        'sig' => $signature,
+    ], '', '&', PHP_QUERY_RFC3986);
+
+    return $apiBase . '/files/serve?' . $query;
+}
+
+function cleanMoodleSourceUrl(string $url): string
+{
+    $url = html_entity_decode($url, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $url = preg_replace('/([?&])forcedownload=\d+&?/i', '$1', $url);
+    $url = preg_replace('/([?&])token=[^&]*&?/i', '$1', (string)$url);
+    return rtrim((string)$url, '?&');
+}
+
+function filenameFromUrl(string $url, string $fallback = 'video.mp4'): string
+{
+    $path = (string)parse_url($url, PHP_URL_PATH);
+    $filename = rawurldecode(basename($path));
+    return $filename !== '' ? $filename : $fallback;
+}
 
 $slug = trim($_GET['slug'] ?? '');
 if ($slug === '') jsonError('Lesson slug is required', 400);
@@ -107,6 +140,31 @@ try {
 } catch (Throwable $e) {
     // lesson_resources table may not exist yet — return empty list rather than crashing
     $resources = [];
+}
+
+// Sign media on the bridge so Vercel never needs to share the signing secret.
+foreach ($resources as &$resource) {
+    $resource['serve_url'] = signedMediaUrl(
+        'id',
+        (string)$resource['id'],
+        (string)($resource['filename'] ?? 'file')
+    );
+}
+unset($resource);
+
+$lesson['media_url'] = null;
+if (!empty($lesson['video_hash'])) {
+    $lesson['media_url'] = signedMediaUrl('hash', (string)$lesson['video_hash'], 'video.mp4');
+} elseif (!empty($lesson['video_url']) && preg_match('#/pluginfile\.php/#i', (string)$lesson['video_url'])) {
+    $sourceUrl = cleanMoodleSourceUrl((string)$lesson['video_url']);
+    $lesson['media_url'] = signedMediaUrl('url', $sourceUrl, filenameFromUrl($sourceUrl));
+} elseif (!empty($lesson['content']) && preg_match(
+    '/<(?:source|video)\b[^>]*\bsrc=["\'](https?:\/\/[^"\']*\/pluginfile\.php\/[^"\']+)["\']/i',
+    (string)$lesson['content'],
+    $mediaMatch
+)) {
+    $sourceUrl = cleanMoodleSourceUrl($mediaMatch[1]);
+    $lesson['media_url'] = signedMediaUrl('url', $sourceUrl, filenameFromUrl($sourceUrl));
 }
 
 // ── 7. Return ─────────────────────────────────────────────────────────────────
