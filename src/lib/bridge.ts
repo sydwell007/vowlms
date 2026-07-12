@@ -125,6 +125,38 @@ export async function bridgePost<T>(
   return json.data as T;
 }
 
+export async function bridgePut<T>(
+  path: string,
+  body: unknown,
+  opts?: BridgeOpts,
+): Promise<T> {
+  const token = await resolveToken(opts);
+  let res: Response;
+
+  try {
+    res = await fetch(`${BASE}${path}`, {
+      method: "PUT",
+      headers: buildHeaders(token),
+      body: JSON.stringify(body),
+      cache: "no-store",
+    });
+  } catch {
+    throw new BridgeError("Backend service unavailable", 503);
+  }
+
+  const json: BridgeEnvelope<T> = await res.json().catch(() => ({
+    ok: false,
+    error: "Invalid JSON from bridge",
+    timestamp: new Date().toISOString(),
+  }));
+
+  if (!json.ok || res.status >= 400) {
+    throw new BridgeError(json.error ?? `Bridge HTTP ${res.status}`, res.status);
+  }
+
+  return json.data as T;
+}
+
 export async function bridgeUpload<T>(
   path: string,
   body: FormData,

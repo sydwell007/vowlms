@@ -86,3 +86,12 @@ test("account and ecosystem pages do not fall back to fabricated production reco
   assert.match(dataLayer, /return \[\] as Opportunity\[\]/);
   assert.match(dataLayer, /return \[\] as LearningHub\[\]/);
 });
+
+test("profile updates preserve the PUT method through the bridge", async () => {
+  const profileRoute = await read("src/app/api/user/profile/route.ts");
+  const bridge = await read("src/lib/bridge.ts");
+
+  assert.match(profileRoute, /bridgePut\("\/user\/profile", payload\)/);
+  assert.match(bridge, /export async function bridgePut/);
+  assert.match(bridge, /method:\s*"PUT"/);
+});
