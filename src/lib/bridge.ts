@@ -125,6 +125,68 @@ export async function bridgePost<T>(
   return json.data as T;
 }
 
+export async function bridgeUpload<T>(
+  path: string,
+  body: FormData,
+  opts?: BridgeOpts,
+): Promise<T> {
+  const token = await resolveToken(opts);
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+    "X-Bridge-Key": API_KEY,
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  let res: Response;
+  try {
+    res = await fetch(`${BASE}${path}`, {
+      method: "POST",
+      headers,
+      body,
+      cache: "no-store",
+    });
+  } catch {
+    throw new BridgeError("Backend service unavailable", 503);
+  }
+
+  const json: BridgeEnvelope<T> = await res.json().catch(() => ({
+    ok: false,
+    error: "Invalid JSON from bridge",
+    timestamp: new Date().toISOString(),
+  }));
+  if (!json.ok || res.status >= 400) {
+    throw new BridgeError(json.error ?? `Bridge HTTP ${res.status}`, res.status);
+  }
+
+  return json.data as T;
+}
+
+export async function bridgeDelete<T>(path: string, opts?: BridgeOpts): Promise<T> {
+  const token = await resolveToken(opts);
+  let res: Response;
+
+  try {
+    res = await fetch(`${BASE}${path}`, {
+      method: "DELETE",
+      headers: buildHeaders(token),
+      cache: "no-store",
+    });
+  } catch {
+    throw new BridgeError("Backend service unavailable", 503);
+  }
+
+  const json: BridgeEnvelope<T> = await res.json().catch(() => ({
+    ok: false,
+    error: "Invalid JSON from bridge",
+    timestamp: new Date().toISOString(),
+  }));
+  if (!json.ok || res.status >= 400) {
+    throw new BridgeError(json.error ?? `Bridge HTTP ${res.status}`, res.status);
+  }
+
+  return json.data as T;
+}
+
 /** Sets the JWT cookie in a Next.js response */
 export function setAuthCookie(response: Response, token: string): Response {
   const res = new Response(response.body, {

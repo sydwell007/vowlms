@@ -7,6 +7,8 @@ export type SessionUser = {
   name: string;
   email: string;
   role: "learner" | "facilitator" | "employer" | "admin";
+  avatar_url?: string | null;
+  avatarUrl?: string | null;
 };
 
 type SessionState =

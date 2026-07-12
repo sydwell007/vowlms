@@ -15,7 +15,7 @@ $userId  = $payload['sub'];
 
 $db   = getDb();
 $stmt = $db->prepare(
-    'SELECT id, name, email, role, phone, city, country, bio, preferred_academy,
+    'SELECT id, name, email, role, phone, city, country, bio, avatar_url, preferred_academy,
             email_notifications, language, timezone
      FROM users WHERE id = ? AND is_active = 1 LIMIT 1'
 );

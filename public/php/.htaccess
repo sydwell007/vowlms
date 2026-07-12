@@ -58,6 +58,7 @@ RewriteRule ^dashboard/employer/?$    api/dashboard/employer.php [L,QSA]
 
 # ── User profile ──────────────────────────────────────────────────────────────
 RewriteRule ^user/profile/?$          api/user/profile.php [L,QSA]
+RewriteRule ^user/avatar/?$           api/user/avatar.php [L,QSA]
 
 # ── Payments ──────────────────────────────────────────────────────────────────
 RewriteRule ^payments/payfast-create/?$ api/payments/payfast-create.php [L,QSA]

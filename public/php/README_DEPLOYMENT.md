@@ -38,6 +38,7 @@ Important:
 - Include the hidden `.htaccess` file.
 - Do not upload `public/sql` to the API website.
 - Do not upload a local `config/env.local.php`.
+- Keep `uploads/avatars/.htaccess` in place and make `uploads/avatars` writable by PHP.
 - If uploading `php.zip`, extract it inside the API document root and then
   remove the uploaded ZIP from the web-accessible folder.
 
@@ -135,6 +136,7 @@ Use different random values for bridge, JWT, and resource-signing secrets. Never
 
 - PHP source: `0644`.
 - Directories: `0755`.
+- Avatar upload directory (`uploads/avatars`): start with `0755`; use the least-permissive Afrihost setting that allows PHP to create files.
 - Host-only environment file: `0600` where supported.
 - Do not grant write permission to the web user except the system temporary directory used by rate limiting and approved upload directories.
 

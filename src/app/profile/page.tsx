@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { useSession } from "@/lib/auth/useSession";
+import { setSessionCache, useSession } from "@/lib/auth/useSession";
 
 const tabs = ["Profile", "Security", "Notifications", "Preferences"] as const;
 type Tab = typeof tabs[number];
@@ -12,6 +13,10 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<Tab>("Profile");
   const [saved, setSaved] = useState(false);
   const [saveError, setSaveError] = useState("");
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarMessage, setAvatarMessage] = useState("");
+  const avatarInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -30,20 +35,102 @@ export default function ProfilePage() {
 
   useEffect(() => {
     let cancelled = false;
-    if (sessionUser) {
-      Promise.resolve().then(() => {
-        if (cancelled) return;
-        setForm((f) => ({
-          ...f,
-          name: sessionUser.name || f.name,
-          email: sessionUser.email || f.email,
+    if (!sessionUser) return () => { cancelled = true; };
+
+    Promise.resolve().then(() => {
+      if (cancelled) return;
+      setForm((current) => ({
+        ...current,
+        name: sessionUser.name || current.name,
+        email: sessionUser.email || current.email,
+      }));
+      setAvatarUrl(sessionUser.avatar_url ?? sessionUser.avatarUrl ?? null);
+    });
+
+    fetch("/api/user/profile")
+      .then((response) => response.json())
+      .then((json) => {
+        if (cancelled || !json.ok || !json.data) return;
+        const profile = json.data;
+        setForm((current) => ({
+          ...current,
+          name: profile.name ?? current.name,
+          email: profile.email ?? current.email,
+          phone: profile.phone ?? "",
+          city: profile.city ?? "",
+          country: profile.country ?? current.country,
+          bio: profile.bio ?? "",
+          academy: profile.preferred_academy ?? current.academy,
+          emailNotifications: Boolean(profile.email_notifications),
+          smsNotifications: Boolean(profile.sms_notifications),
+          language: profile.language ?? current.language,
+          timezone: profile.timezone ?? current.timezone,
         }));
-      });
-    }
+        setAvatarUrl(profile.avatar_url ?? null);
+      })
+      .catch(() => {});
     return () => {
       cancelled = true;
     };
   }, [sessionUser]);
+
+  async function uploadAvatar(file: File) {
+    setAvatarMessage("");
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setAvatarMessage("Use a JPG, PNG, or WebP image.");
+      return;
+    }
+    if (file.size > 4 * 1024 * 1024) {
+      setAvatarMessage("The image must be smaller than 4 MB.");
+      return;
+    }
+
+    const previousUrl = avatarUrl;
+    const previewUrl = URL.createObjectURL(file);
+    setAvatarUrl(previewUrl);
+    setAvatarUploading(true);
+
+    try {
+      const body = new FormData();
+      body.set("avatar", file);
+      const response = await fetch("/api/user/avatar", { method: "POST", body });
+      const json = await response.json();
+      if (!response.ok || !json.ok || !json.data?.avatar_url) {
+        throw new Error(json.error ?? "Avatar upload failed.");
+      }
+
+      const uploadedUrl = json.data.avatar_url as string;
+      setAvatarUrl(uploadedUrl);
+      if (sessionUser) {
+        setSessionCache({ ...sessionUser, avatar_url: uploadedUrl, avatarUrl: uploadedUrl });
+      }
+      setAvatarMessage("Profile photo updated.");
+    } catch (error) {
+      setAvatarUrl(previousUrl);
+      setAvatarMessage(error instanceof Error ? error.message : "Avatar upload failed.");
+    } finally {
+      URL.revokeObjectURL(previewUrl);
+      setAvatarUploading(false);
+      if (avatarInputRef.current) avatarInputRef.current.value = "";
+    }
+  }
+
+  async function removeAvatar() {
+    setAvatarMessage("");
+    setAvatarUploading(true);
+    try {
+      const response = await fetch("/api/user/avatar", { method: "DELETE" });
+      const json = await response.json();
+      if (!response.ok || !json.ok) throw new Error(json.error ?? "Could not remove photo.");
+      setAvatarUrl(null);
+      if (sessionUser) setSessionCache({ ...sessionUser, avatar_url: null, avatarUrl: null });
+      setAvatarMessage("Profile photo removed.");
+    } catch (error) {
+      setAvatarMessage(error instanceof Error ? error.message : "Could not remove photo.");
+    } finally {
+      setAvatarUploading(false);
+    }
+  }
 
   function update(field: keyof typeof form, value: string | boolean) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -96,8 +183,10 @@ export default function ProfilePage() {
         {/* Header */}
         <div className="premium-section-dark rounded-2xl p-8 text-white mb-6">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
-            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gold text-3xl font-black text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)]">
-              {initials}
+            <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gold text-3xl font-black text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)]">
+              {avatarUrl ? (
+                <Image src={avatarUrl} alt={`${form.name || "User"} profile photo`} fill sizes="80px" className="object-cover" unoptimized />
+              ) : initials}
             </div>
             <div className="flex-1">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">Learner profile</p>
@@ -132,6 +221,52 @@ export default function ProfilePage() {
           {activeTab === "Profile" && (
             <div className="premium-card rounded-2xl p-6 space-y-5">
               <h2 className="text-xl font-semibold text-ink">Personal information</h2>
+              <div className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-slate-50/70 p-4 sm:flex-row sm:items-center">
+                <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gold text-xl font-black text-[#06111f]">
+                  {avatarUrl ? (
+                    <Image src={avatarUrl} alt="Profile photo preview" fill sizes="64px" className="object-cover" unoptimized />
+                  ) : initials}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-ink">Profile photo</p>
+                  <p className="mt-1 text-xs text-muted">JPG, PNG or WebP. Maximum 4 MB.</p>
+                  {avatarMessage && (
+                    <p className={`mt-1 text-xs ${avatarMessage.includes("updated") || avatarMessage.includes("removed") ? "text-emerald-700" : "text-red-700"}`}>
+                      {avatarMessage}
+                    </p>
+                  )}
+                </div>
+                <input
+                  ref={avatarInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="sr-only"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (file) uploadAvatar(file);
+                  }}
+                />
+                <div className="flex shrink-0 gap-2">
+                  {avatarUrl && !avatarUrl.startsWith("blob:") && (
+                    <button
+                      type="button"
+                      disabled={avatarUploading}
+                      onClick={removeAvatar}
+                      className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-ink transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      Remove
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    disabled={avatarUploading}
+                    onClick={() => avatarInputRef.current?.click()}
+                    className="rounded-lg bg-[#06111f] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#10243a] disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {avatarUploading ? "Uploading..." : "Upload photo"}
+                  </button>
+                </div>
+              </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="block text-sm font-semibold text-ink mb-1.5">Full name</label>

@@ -45,6 +45,7 @@ export function Header() {
   const initials = user?.name
     ? user.name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase()
     : "?";
+  const avatarUrl = user?.avatar_url ?? user?.avatarUrl ?? null;
 
   async function handleLogout() {
     clearSessionCache();
@@ -128,10 +129,12 @@ export function Header() {
             <>
               <Link
                 href="/profile"
-                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/14 bg-white/6 text-xs font-bold text-[#f5c542] transition hover:bg-white/10"
+                className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-white/14 bg-white/6 text-xs font-bold text-[#f5c542] transition hover:bg-white/10"
                 title={user?.name ?? "Profile"}
               >
-                {initials}
+                {avatarUrl ? (
+                  <Image src={avatarUrl} alt="" fill sizes="36px" className="object-cover" unoptimized />
+                ) : initials}
               </Link>
               <button
                 onClick={handleLogout}

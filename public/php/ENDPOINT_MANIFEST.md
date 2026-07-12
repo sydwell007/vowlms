@@ -7,6 +7,7 @@
 | `/courses`, `/courses/{slug}` | GET | Bridge key |
 | `/lessons/{slug}` | GET | Bridge key |
 | `/files/serve` | GET/HEAD | Expiring HMAC signature |
+| `/user/avatar` | POST/DELETE | Bridge key + bearer token |
 | `/auth/register` | POST | Bridge key, rate limited; creates learner only |
 | `/auth/login` | POST | Bridge key, rate limited |
 | `/auth/logout` | POST | Bridge key |
