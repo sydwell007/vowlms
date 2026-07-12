@@ -5,6 +5,7 @@ import { ImagePanel } from "@/components/ui/ImagePanel";
 import { getAcademyBySlug, getCoursesByAcademy, getCourses } from "@/lib/data";
 import { AcademyCourseGrid } from "@/components/academies/AcademyCourseGrid";
 import { visualAssets } from "@/lib/visual-assets";
+import { getAcademyAccentColor } from "@/lib/academy-colors";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -23,17 +24,7 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
   const courses = getCoursesByAcademy(academy.slug);
   const allCourses = getCourses();
 
-  const CATEGORY_COLOR: Record<string, string> = {
-    "upskilling": "#1166c8",
-    "skills-training": "#19c37d",
-    "chef-academy": "#ff7a59",
-    "private-school": "#9b59b6",
-    "sports-academy": "#f97316",
-    "business-school": "#f5c542",
-    "university-online": "#20c7ff",
-  };
-
-  const accentColor = CATEGORY_COLOR[academy.category] ?? "#1166c8";
+  const accentColor = getAcademyAccentColor(academy.category);
 
   return (
     <main>

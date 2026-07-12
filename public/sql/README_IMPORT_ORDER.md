@@ -22,7 +22,8 @@ This is a phpMyAdmin/Afrihost migration package. It must never be served by Verc
 6. `009_lesson_resources.sql`
 7. Course content imports only after their source and licence are confirmed: `008_lesson_content.sql`, `010_resources_data.sql`
 8. `011_integrity_hardening.sql`
-9. `verify_schema.sql`
+9. `012_module_metadata.sql`
+10. `verify_schema.sql`
 
 ### Optional admin promotion (`005_admin_user_setup.sql`)
 
@@ -52,7 +53,7 @@ tables in place and do not reseed them with this file.
 
 ## Existing Database
 
-Do not re-import `001_schema.sql` blindly. Run the audit, compare the live schema, apply only required incremental patches in order (`007`, `009`, `011`), then run `verify_schema.sql`.
+Do not re-import `001_schema.sql` blindly. Run the audit, compare the live schema, apply only required incremental patches in order (`007`, `009`, `011`, `012`), then run `verify_schema.sql`.
 
 ## Rollback
 

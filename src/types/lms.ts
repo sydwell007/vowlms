@@ -40,6 +40,10 @@ export type CourseModule = {
   title: string;
   order: number;
   lessons: Lesson[];
+  /** Optional real copy from `modules.description` — falls back to an auto-generated summary when absent. */
+  description?: string;
+  /** Optional real copy from `modules.outcome` — falls back to an auto-generated "you'll be able to" line when absent. */
+  outcome?: string;
 };
 
 export type AssessmentQuestion = {

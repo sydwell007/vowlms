@@ -1,5 +1,13 @@
 # Schema Changelog
 
+## 012 - Module preview metadata
+
+- Adds nullable `description` and `outcome` columns to `modules`, populated
+  optionally to override the auto-generated course-preview copy shown on the
+  redesigned course landing page curriculum accordion.
+- No PHP change required — `public/php/api/courses/index.php` already selects
+  `SELECT * FROM modules`, so these columns are returned automatically.
+
 ## Legacy ecosystem bundle
 
 - `vowlms_ecosystem_upgrade.sql` is excluded from the current import order.

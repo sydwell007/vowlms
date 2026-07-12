@@ -135,6 +135,14 @@ export function LessonPlayer({
   const assessment = course.assessments.find((a) => a.lessonSlug === lesson.slug);
   const vrPractice = course.vrPractices.find((v) => v.lessonSlug === lesson.slug);
 
+  const totalLessonsInCourse = useMemo(
+    () => allModules.reduce((sum, m) => sum + m.lessons.length, 0),
+    [allModules],
+  );
+  const courseProgressPct = totalLessonsInCourse > 0
+    ? Math.round((completedSlugs.length / totalLessonsInCourse) * 100)
+    : 0;
+
   const content = lesson.content ?? "";
   const videoInfo = getVideoInfo(lesson, content, resources);
 
@@ -212,6 +220,12 @@ export function LessonPlayer({
             ☰ Course
           </button>
         </div>
+        <div className="h-[3px] w-full bg-slate-100">
+          <div
+            className="h-full bg-[linear-gradient(90deg,#1166c8,#20c7ff)] transition-[width] duration-500 ease-out"
+            style={{ width: `${courseProgressPct}%` }}
+          />
+        </div>
       </div>
 
       <div className="flex flex-1">
@@ -228,12 +242,27 @@ export function LessonPlayer({
                   <h2 className="mt-1 truncate text-sm font-semibold text-ink">{module.title}</h2>
                 </div>
               </div>
+              <div className="mt-4">
+                <div className="flex items-center justify-between text-xs font-medium text-muted">
+                  <span>Course progress</span>
+                  <span>{completedSlugs.length}/{totalLessonsInCourse} · {courseProgressPct}%</span>
+                </div>
+                <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className="h-full rounded-full bg-[linear-gradient(90deg,#1166c8,#20c7ff)] transition-[width] duration-500 ease-out"
+                    style={{ width: `${courseProgressPct}%` }}
+                  />
+                </div>
+              </div>
             </div>
             <nav className="flex-1 p-3 space-y-4">
-              {allModules.map((m) => (
+              {allModules.map((m) => {
+                const doneInModule = m.lessons.filter((l) => completedSlugs.includes(l.slug)).length;
+                return (
                 <div key={m.title}>
-                  <p className="px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                    Module {m.order}: {m.title}
+                  <p className="flex items-center justify-between px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                    <span>Module {m.order}: {m.title}</span>
+                    <span className="shrink-0 normal-case tracking-normal text-muted/80">{doneInModule}/{m.lessons.length}</span>
                   </p>
                   <div className="mt-1 space-y-0.5">
                     {m.lessons.map((l) => {
@@ -256,7 +285,8 @@ export function LessonPlayer({
                     })}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </nav>
           </div>
         </aside>
@@ -274,9 +304,19 @@ export function LessonPlayer({
               Module {module.order} · {module.title}
             </p>
             <h1 className="mt-3 text-balance text-3xl font-semibold text-ink sm:text-4xl">{lesson.title}</h1>
-            <p className="mt-2 text-sm text-muted">
-              {lesson.durationMinutes} min · {lesson.type === "vr-practice" ? "VR Practice" : lesson.type === "assessment" ? "Assessment" : "Lesson"}
-            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1166c8]/10 px-3 py-1 text-xs font-semibold text-[#1166c8]">
+                {lesson.type === "vr-practice" ? "🥽 VR Practice" : lesson.type === "assessment" ? "📝 Assessment" : "▸ Lesson"}
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-muted">
+                ⏱ {lesson.durationMinutes} min
+              </span>
+              {completed && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-600">
+                  ✓ Completed
+                </span>
+              )}
+            </div>
 
             {/* ── VIDEO PLAYER ────────────────────────────────────────── */}
             {videoInfo.type === "youtube" && (
@@ -374,7 +414,7 @@ export function LessonPlayer({
             {hasContent && (
               <div className="mt-8">
                 <div className="premium-card rounded-xl p-6">
-                  <h2 className="text-lg font-semibold text-ink mb-4">Lesson content</h2>
+                  <h2 className="text-lg font-semibold text-ink mb-4">📖 Lesson content</h2>
                   {htmlContent ? (
                     <div
                       className="lesson-html-content text-base leading-8 text-slate-700"
@@ -479,7 +519,10 @@ export function LessonPlayer({
             </div>
 
             {/* ── PREV / NEXT ──────────────────────────────────────────── */}
-            <div className="mt-8 grid grid-cols-2 gap-4 border-t border-slate-200 pt-8">
+            <div className="mt-8 border-t border-slate-200 pt-8">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-muted">Continue learning</p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               {prevLesson ? (
                 <Link href={`/lesson/${prevLesson.slug}`}
                   className="premium-card rounded-xl p-4 text-left transition hover:border-[#1166c8]/20">
