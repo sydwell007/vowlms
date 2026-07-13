@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { visualAssets } from "@/lib/visual-assets";
 import type { Lesson, Course, CourseModule } from "@/types/lms";
+import { PdfReader } from "@/components/learning/PdfReader";
 
 export type LessonResource = {
   type: "pdf" | "video" | "audio" | "image" | "other";
@@ -297,7 +298,7 @@ export function LessonPlayer({
 
         {/* Main content */}
         <main className="flex-1 min-w-0">
-          <div className="mx-auto max-w-4xl px-5 py-8 sm:px-6 lg:px-10">
+          <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
 
             {/* Breadcrumb */}
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">
@@ -384,28 +385,13 @@ export function LessonPlayer({
                   </div>
                 )}
 
-                {/* Active PDF embed */}
+                {/* Focused single-page PDF reader */}
                 {selectedPdf && (
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-                    <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5">
-                      <span className="text-xs font-semibold text-ink truncate">
-                        📄 {selectedPdf.filename}
-                      </span>
-                      <a
-                        href={selectedPdf.url}
-                        download
-                        className="ml-3 shrink-0 rounded-md bg-slate-100 px-3 py-1 text-xs font-semibold text-ink hover:bg-slate-200 transition"
-                      >
-                        Download
-                      </a>
-                    </div>
-                    <iframe
-                      src={selectedPdf.url + "#toolbar=1&navpanes=1&scrollbar=1"}
-                      className="w-full border-0"
-                      style={{ height: "640px" }}
-                      title={selectedPdf.filename}
-                    />
-                  </div>
+                  <PdfReader
+                    key={selectedPdf.url}
+                    filename={selectedPdf.filename}
+                    url={selectedPdf.url}
+                  />
                 )}
               </div>
             )}
