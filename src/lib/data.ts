@@ -182,6 +182,23 @@ export function getAssessmentBySlug(slug: string) {
   return undefined;
 }
 
+/**
+ * Grouped "parent" courses (e.g. "business-ethics") only exist as a Next.js-side
+ * construct — the real `courses` table only has the individual Moodle-migrated
+ * child course rows (`grouping.moduleSlugOrder`). Enrolling must target those
+ * real slugs, not the virtual parent slug, or the bridge returns "Course not found".
+ */
+export function getEnrollableCourseSlugs(courseSlug: string): string[] {
+  const grouping = allGroupings.find((g) => g.slug === courseSlug);
+  return grouping ? grouping.moduleSlugOrder : [courseSlug];
+}
+
+/** Reverse lookup: which grouped parent slug (if any) a real child course slug belongs to. */
+export function getParentGroupSlug(childCourseSlug: string): string | null {
+  const grouping = allGroupings.find((g) => g.moduleSlugOrder.includes(childCourseSlug));
+  return grouping ? grouping.slug : null;
+}
+
 export function getVRPracticeBySlug(slug: string) {
   for (const courseItem of courses) {
     const found = courseItem.vrPractices.find((p) => p.slug === slug);

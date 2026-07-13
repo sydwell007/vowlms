@@ -10,6 +10,7 @@ type Props = { course: Course };
 type Enrollment = {
   courseSlug?: string;
   course_slug?: string;
+  groupSlug?: string | null;
   status?: string;
 };
 
@@ -43,7 +44,7 @@ export function EnrollButton({ course }: Props) {
         setEnrolled(
           enrollments.some(
             (item) =>
-              (item.courseSlug ?? item.course_slug) === course.slug &&
+              ((item.courseSlug ?? item.course_slug) === course.slug || item.groupSlug === course.slug) &&
               item.status !== "cancelled",
           ),
         );
