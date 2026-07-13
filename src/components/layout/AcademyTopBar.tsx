@@ -46,7 +46,7 @@ export function AcademyTopBar() {
             const content = (
               <>
                 {link.home ? <HomeIcon /> : null}
-                <span className={comingSoon ? "opacity-40" : undefined}>{link.label}</span>
+                <span className={comingSoon ? "opacity-60" : undefined}>{link.label}</span>
                 {!comingSoon && (
                   <span
                     className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-transform ${active ? "scale-x-100" : "scale-x-0"}`}
@@ -64,10 +64,10 @@ export function AcademyTopBar() {
                     className="relative flex cursor-not-allowed items-center gap-1.5 whitespace-nowrap px-2 py-1.5 text-white/88"
                   >
                     {content}
-                    {/* Diagonal "stamp" ribbon overlaid across the academy label */}
+                    {/* Diagonal frosted-glass "stamp" ribbon — translucent so the academy name reads through it */}
                     <span
                       aria-hidden="true"
-                      className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-6 whitespace-nowrap rounded-[3px] bg-[linear-gradient(180deg,#ffe08a_0%,#f5c542_100%)] px-2 py-[1px] text-[8px] font-extrabold uppercase tracking-[0.1em] text-[#06111f] shadow-[0_2px_8px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.3)_inset]"
+                      className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-6 whitespace-nowrap rounded-[3px] border border-gold/70 bg-gold/40 px-2 py-[1px] text-[8px] font-extrabold uppercase tracking-[0.1em] text-[#06111f]/85 shadow-[0_2px_8px_rgba(0,0,0,0.25)] backdrop-blur-[1px]"
                     >
                       Coming soon
                     </span>
