@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
 import { EnrollButton } from "@/components/courses/EnrollButton";
 import { CourseCurriculum } from "@/components/courses/CourseCurriculum";
 import { formatCurrency, getAcademyBySlug, getCourseBySlug } from "@/lib/data";
-import { visualAssets } from "@/lib/visual-assets";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { formatDuration, getCourseStats } from "@/lib/course-content";
 
@@ -125,18 +123,6 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
               </div>
             </div>
           </aside>
-        </div>
-      </section>
-
-      {/* ── Course preview banner ─────────────────────────────────────────── */}
-      <section className="bg-white pt-8">
-        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
-          <ImagePanel
-            src={practice ? visualAssets.vrPracticeLab : visualAssets.dashboardExperience}
-            alt={`${course.title} learning experience`}
-            aspect="wide"
-            tone="light"
-          />
         </div>
       </section>
 
