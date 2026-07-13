@@ -45,10 +45,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
             </div>
 
             {academy ? (
-              <span
-                className="inline-block rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em]"
-                style={{ backgroundColor: `${accentColor}28`, color: accentColor }}
-              >
+              <span className="inline-block rounded-full border border-gold/40 bg-gold/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-gold">
                 Course preview
               </span>
             ) : null}
@@ -97,13 +94,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
           </div>
 
           {/* Enrolment card — sticky on desktop so it stays in view while scrolling the preview */}
-          <aside className="space-y-4 self-start lg:sticky lg:top-24">
-            <ImagePanel
-              src={practice ? visualAssets.vrPracticeLab : visualAssets.dashboardExperience}
-              alt={`${course.title} learning experience`}
-              aspect="video"
-              className="hidden lg:block"
-            />
+          <aside className="self-start lg:sticky lg:top-24">
             <div className="premium-card rounded-2xl p-6 text-ink">
               <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>Enrol now</p>
               <p className="mt-3 text-4xl font-bold text-ink">{formatCurrency(course.price)}</p>
@@ -137,8 +128,20 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
         </div>
       </section>
 
+      {/* ── Course preview banner ─────────────────────────────────────────── */}
+      <section className="bg-white pt-8">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+          <ImagePanel
+            src={practice ? visualAssets.vrPracticeLab : visualAssets.dashboardExperience}
+            alt={`${course.title} learning experience`}
+            aspect="wide"
+            tone="light"
+          />
+        </div>
+      </section>
+
       {/* ── Course-at-a-glance stat strip ─────────────────────────────────── */}
-      <section className="border-b border-slate-100 bg-white py-8">
+      <section className="border-b border-slate-100 bg-white py-6">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-6 px-5 sm:px-6 sm:grid-cols-4 lg:px-8">
           {[
             { label: "Modules", value: String(stats.moduleCount) },
@@ -157,6 +160,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
       {/* ── What you'll learn ─────────────────────────────────────────────── */}
       <Section
         tone="light"
+        size="tight"
         eyebrow="Course preview"
         title="What you'll learn"
         description="A quick look at the outcomes this course is built to deliver — before you commit."
@@ -179,6 +183,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
       {/* ── Curriculum accordion ──────────────────────────────────────────── */}
       <Section
         tone="light"
+        size="tight"
         eyebrow="Curriculum"
         title="Course curriculum"
         description="Every module is summarised below. Open a module to preview its lessons — enrol to unlock the full learning experience."

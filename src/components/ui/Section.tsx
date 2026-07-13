@@ -6,17 +6,22 @@ type SectionProps = {
   description?: string;
   children: ReactNode;
   tone?: "dark" | "light";
+  /** "tight" reduces vertical padding — use for sections stacked back-to-back with no visual break between them. */
+  size?: "default" | "tight";
 };
 
-export function Section({ eyebrow, title, description, children, tone = "dark" }: SectionProps) {
+export function Section({ eyebrow, title, description, children, tone = "dark", size = "default" }: SectionProps) {
   const isLight = tone === "light";
+  const isTight = size === "tight";
   const hasHeader = eyebrow || title || description;
 
+  const paddingClass = isTight ? "py-8 md:py-12" : "py-16 md:py-24";
+
   return (
-    <section className={isLight ? "premium-section-light py-16 text-ink md:py-24" : "premium-section-dark py-16 text-white md:py-24"}>
+    <section className={`${isLight ? "premium-section-light text-ink" : "premium-section-dark text-white"} ${paddingClass}`}>
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
         {hasHeader ? (
-          <div className="mb-10 max-w-3xl">
+          <div className={isTight ? "mb-6 max-w-3xl" : "mb-10 max-w-3xl"}>
             {eyebrow ? (
               <p className={isLight ? "mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#1166c8]" : "mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-gold"}>
                 {eyebrow}
