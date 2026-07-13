@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
+import { ComingSoonOverlay } from "@/components/ui/ComingSoonOverlay";
 import { getAcademies, getCourses } from "@/lib/data";
+import { getComingSoonInfo } from "@/lib/academy-launch";
 import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
@@ -79,15 +81,16 @@ export default function LearnPage() {
           <h2 className="text-2xl font-semibold text-ink">Choose your academy pathway</h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {academies.map((a) => (
-              <Link
-                key={a.slug}
-                href={`/academies/${a.slug}`}
-                className="gv-card rounded-xl p-6 transition hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(30,58,138,0.1)]"
-              >
-                <h3 className="text-base font-semibold text-[#1e3a8a]">{a.name}</h3>
-                <p className="mt-2 text-sm leading-5 text-muted">{a.description}</p>
-                <p className="mt-4 text-xs font-semibold text-[#06b6d4]">View academy →</p>
-              </Link>
+              <ComingSoonOverlay key={a.slug} info={getComingSoonInfo(a.category)}>
+                <Link
+                  href={`/academies/${a.slug}`}
+                  className="gv-card block rounded-xl p-6 transition hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(30,58,138,0.1)]"
+                >
+                  <h3 className="text-base font-semibold text-[#1e3a8a]">{a.name}</h3>
+                  <p className="mt-2 text-sm leading-5 text-muted">{a.description}</p>
+                  <p className="mt-4 text-xs font-semibold text-[#06b6d4]">View academy →</p>
+                </Link>
+              </ComingSoonOverlay>
             ))}
           </div>
         </div>
