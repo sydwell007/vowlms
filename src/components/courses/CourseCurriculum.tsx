@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import type { CourseModule } from "@/types/lms";
 import {
   formatDuration,
@@ -113,19 +112,21 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8" }: Props) {
                     </p>
                     <div className="space-y-2">
                       {moduleItem.lessons.map((lesson) => (
-                        <Link
+                        <div
                           key={lesson.slug}
-                          href={`/lesson/${lesson.slug}`}
-                          className="premium-card-soft flex items-center justify-between rounded-lg p-4 text-sm font-medium text-ink transition hover:border-[#1166c8]/18 hover:bg-[#f5f9ff]"
+                          className="premium-card-soft flex items-center justify-between rounded-lg p-4 text-sm font-medium text-ink"
                         >
                           <div className="flex items-center gap-3">
                             <span className="text-base">{LESSON_ICON[lesson.type] ?? "▸"}</span>
                             <span>{lesson.title}</span>
                           </div>
                           <span className="text-xs text-muted shrink-0">{lesson.durationMinutes} min</span>
-                        </Link>
+                        </div>
                       ))}
                     </div>
+                    <p className="mt-4 text-xs text-muted">
+                      Enrol to unlock these lessons and start learning.
+                    </p>
                   </div>
                 </div>
               </div>
