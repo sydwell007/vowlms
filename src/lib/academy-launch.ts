@@ -25,8 +25,6 @@ export type ComingSoonInfo = {
   label: string;
   /** Compact form for small ribbons, e.g. "30 Aug 2026" or "Soon". */
   shortLabel: string;
-  /** Shortest form for the nav bar's tight horizontal space, e.g. "30 Aug" or "Soon". */
-  navLabel: string;
 };
 
 function formatLaunchDate(iso: string): string {
@@ -41,12 +39,6 @@ function formatLaunchDateShort(iso: string): string {
   );
 }
 
-function formatLaunchDateNav(iso: string): string {
-  return new Intl.DateTimeFormat("en-ZA", { day: "numeric", month: "short" }).format(
-    new Date(`${iso}T00:00:00`),
-  );
-}
-
 export function getComingSoonInfo(
   category?: string | null,
   now: Date = new Date(),
@@ -56,7 +48,7 @@ export function getComingSoonInfo(
   if (!value) return null;
 
   if (value === "tbd") {
-    return { label: "Coming soon", shortLabel: "Soon", navLabel: "Soon" };
+    return { label: "Coming soon", shortLabel: "Soon" };
   }
 
   const launchDate = new Date(`${value}T00:00:00`);
@@ -65,6 +57,5 @@ export function getComingSoonInfo(
   return {
     label: `Coming ${formatLaunchDate(value)}`,
     shortLabel: formatLaunchDateShort(value),
-    navLabel: formatLaunchDateNav(value),
   };
 }

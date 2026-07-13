@@ -46,15 +46,8 @@ export function AcademyTopBar() {
             const content = (
               <>
                 {link.home ? <HomeIcon /> : null}
-                <span>{link.label}</span>
-                {comingSoon ? (
-                  <span
-                    title={comingSoon.label}
-                    className="rounded-full bg-gold px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-[#06111f]"
-                  >
-                    {comingSoon.navLabel}
-                  </span>
-                ) : (
+                <span className={comingSoon ? "opacity-40" : undefined}>{link.label}</span>
+                {!comingSoon && (
                   <span
                     className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-transform ${active ? "scale-x-100" : "scale-x-0"}`}
                   />
@@ -68,9 +61,16 @@ export function AcademyTopBar() {
                   <span
                     aria-disabled="true"
                     title={`${link.label} — ${comingSoon.label}`}
-                    className="relative flex cursor-not-allowed items-center gap-1.5 whitespace-nowrap px-2 py-1.5 text-white/45"
+                    className="relative flex cursor-not-allowed items-center gap-1.5 whitespace-nowrap px-2 py-1.5 text-white/88"
                   >
                     {content}
+                    {/* Diagonal "stamp" ribbon overlaid across the academy label */}
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-6 whitespace-nowrap rounded-[3px] bg-[linear-gradient(180deg,#ffe08a_0%,#f5c542_100%)] px-2 py-[1px] text-[8px] font-extrabold uppercase tracking-[0.1em] text-[#06111f] shadow-[0_2px_8px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.3)_inset]"
+                    >
+                      Coming soon
+                    </span>
                   </span>
                 ) : (
                   <Link
