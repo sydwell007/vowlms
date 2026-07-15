@@ -53,10 +53,10 @@ export function AcademyTopBar() {
                     title={`${link.label} — ${comingSoon.label}`}
                     className="flex cursor-not-allowed flex-col items-center gap-1 whitespace-nowrap px-2 py-1.5"
                   >
-                    <span className="rounded-[3px] border border-gold/50 bg-gold/40 px-1.5 py-0.5 text-white/90 backdrop-blur-[1px]">
+                    <span className="rounded-[3px] border border-gold/20 bg-gold/15 px-1.5 py-0.5 text-white/50 backdrop-blur-[1px]">
                       {link.label}
                     </span>
-                    <span className="text-[8px] font-extrabold uppercase leading-none tracking-[0.12em] text-gold">
+                    <span className="text-[8px] font-bold uppercase leading-none tracking-[0.12em] text-gold/60">
                       Coming soon
                     </span>
                   </span>
