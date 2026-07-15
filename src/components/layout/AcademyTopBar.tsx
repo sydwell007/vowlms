@@ -43,32 +43,20 @@ export function AcademyTopBar() {
             const active = isActive(pathname, link.href);
             const comingSoon = getComingSoonInfo(link.category);
 
-            const content = (
-              <>
-                {link.home ? <HomeIcon /> : null}
-                <span className={comingSoon ? "opacity-60" : undefined}>{link.label}</span>
-                {!comingSoon && (
-                  <span
-                    className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-transform ${active ? "scale-x-100" : "scale-x-0"}`}
-                  />
-                )}
-              </>
-            );
-
             return (
               <div key={link.href} className="flex items-center">
                 {comingSoon ? (
+                  // Locked: academy name gets a horizontal gold highlight band, with a
+                  // "Coming soon" caption stacked directly beneath it — no overlap on the name.
                   <span
                     aria-disabled="true"
                     title={`${link.label} — ${comingSoon.label}`}
-                    className="relative flex cursor-not-allowed items-center gap-1.5 whitespace-nowrap px-2 py-1.5 text-white/88"
+                    className="flex cursor-not-allowed flex-col items-center gap-1 whitespace-nowrap px-2 py-1.5"
                   >
-                    {content}
-                    {/* Diagonal frosted-glass "stamp" ribbon — translucent so the academy name reads through it */}
-                    <span
-                      aria-hidden="true"
-                      className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-6 whitespace-nowrap rounded-[3px] border border-gold/70 bg-gold/40 px-2 py-[1px] text-[8px] font-extrabold uppercase tracking-[0.1em] text-[#06111f]/85 shadow-[0_2px_8px_rgba(0,0,0,0.25)] backdrop-blur-[1px]"
-                    >
+                    <span className="rounded-[3px] border border-gold/50 bg-gold/40 px-1.5 py-0.5 text-white/90 backdrop-blur-[1px]">
+                      {link.label}
+                    </span>
+                    <span className="text-[8px] font-extrabold uppercase leading-none tracking-[0.12em] text-gold">
                       Coming soon
                     </span>
                   </span>
@@ -77,7 +65,11 @@ export function AcademyTopBar() {
                     href={link.href}
                     className={`relative flex items-center gap-1.5 whitespace-nowrap px-2 py-1.5 transition ${active ? "text-gold" : "text-white/88 hover:text-gold"}`}
                   >
-                    {content}
+                    {link.home ? <HomeIcon /> : null}
+                    <span>{link.label}</span>
+                    <span
+                      className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-transform ${active ? "scale-x-100" : "scale-x-0"}`}
+                    />
                   </Link>
                 )}
                 {index < academyLinks.length - 1 ? (
