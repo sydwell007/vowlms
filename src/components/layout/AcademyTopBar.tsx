@@ -37,7 +37,7 @@ export function AcademyTopBar() {
 
   return (
     <div className="border-b border-[#f5c542]/65 bg-[#0d2239] text-white shadow-[inset_0_1px_0_rgba(245,197,66,0.18)]">
-      <div className="mx-auto flex w-full max-w-7xl items-center overflow-x-auto px-4 py-2 sm:px-6 lg:px-8">
+      <div className="scrollbar-none mx-auto flex w-full max-w-7xl items-center overflow-x-auto px-4 py-2 sm:px-6 lg:px-8">
         <nav aria-label="GoalVow academy navigation" className="flex min-w-max items-center gap-0.5 text-[0.72rem] font-semibold tracking-[0.02em] sm:text-xs">
           {academyLinks.map((link, index) => {
             const active = isActive(pathname, link.href);

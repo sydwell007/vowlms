@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { DashboardShell } from "@/components/dashboards/DashboardShell";
 import { useDashboardEndpoint } from "@/lib/auth/useDashboardEndpoint";
-import { formatCurrency } from "@/lib/data";
+import { formatCurrency } from "@/lib/format";
 import type { DashboardMetric } from "@/types/lms";
 
 type AdminData = {

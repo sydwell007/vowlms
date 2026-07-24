@@ -66,6 +66,29 @@ type BridgeOpts = {
   noAuth?: boolean;
 };
 
+export function normalizeBridgeStatus(status: number, message: string) {
+  const normalizedMessage = message.trim().toLowerCase();
+
+  if (
+    normalizedMessage.startsWith("unauthorized") ||
+    normalizedMessage === "invalid token" ||
+    normalizedMessage.includes("no token provided")
+  ) {
+    return 401;
+  }
+
+  if (normalizedMessage.startsWith("forbidden")) {
+    return 403;
+  }
+
+  return status;
+}
+
+function toBridgeError<T>(json: BridgeEnvelope<T>, status: number) {
+  const message = json.error ?? json.message ?? `Bridge HTTP ${status}`;
+  return new BridgeError(message, normalizeBridgeStatus(status, message));
+}
+
 export async function bridgeGet<T>(path: string, opts?: BridgeOpts): Promise<T> {
   const token = await resolveToken(opts);
   let res: Response;
@@ -87,7 +110,7 @@ export async function bridgeGet<T>(path: string, opts?: BridgeOpts): Promise<T> 
   }));
 
   if (!json.ok || res.status >= 400) {
-    throw new BridgeError(json.error ?? `Bridge HTTP ${res.status}`, res.status);
+    throw toBridgeError(json, res.status);
   }
 
   return json.data as T;
@@ -119,7 +142,7 @@ export async function bridgePost<T>(
   }));
 
   if (!json.ok || res.status >= 400) {
-    throw new BridgeError(json.error ?? `Bridge HTTP ${res.status}`, res.status);
+    throw toBridgeError(json, res.status);
   }
 
   return json.data as T;
@@ -151,7 +174,7 @@ export async function bridgePut<T>(
   }));
 
   if (!json.ok || res.status >= 400) {
-    throw new BridgeError(json.error ?? `Bridge HTTP ${res.status}`, res.status);
+    throw toBridgeError(json, res.status);
   }
 
   return json.data as T;
@@ -187,7 +210,7 @@ export async function bridgeUpload<T>(
     timestamp: new Date().toISOString(),
   }));
   if (!json.ok || res.status >= 400) {
-    throw new BridgeError(json.error ?? `Bridge HTTP ${res.status}`, res.status);
+    throw toBridgeError(json, res.status);
   }
 
   return json.data as T;
@@ -213,7 +236,7 @@ export async function bridgeDelete<T>(path: string, opts?: BridgeOpts): Promise<
     timestamp: new Date().toISOString(),
   }));
   if (!json.ok || res.status >= 400) {
-    throw new BridgeError(json.error ?? `Bridge HTTP ${res.status}`, res.status);
+    throw toBridgeError(json, res.status);
   }
 
   return json.data as T;

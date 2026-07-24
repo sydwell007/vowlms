@@ -121,10 +121,12 @@ export function AssessmentPlayer({ assessment, course }: Props) {
                     className="rounded-lg bg-gold px-6 py-3 text-sm font-semibold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.25)] transition hover:bg-[#e8b830]">
                     View results & certificate
                   </Link>
-                  <Link href={`/vr-practice/${course.vrPractices[0]?.slug ?? ""}`}
-                    className="rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:bg-slate-50">
-                    Open VR practice
-                  </Link>
+                  {course.vrPractices[0] ? (
+                    <Link href={`/vr-practice/${course.vrPractices[0].slug}`}
+                      className="rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:bg-slate-50">
+                      Open VR practice
+                    </Link>
+                  ) : null}
                 </>
               ) : (
                 <>

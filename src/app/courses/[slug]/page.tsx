@@ -4,7 +4,8 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Section } from "@/components/ui/Section";
 import { EnrollButton } from "@/components/courses/EnrollButton";
 import { CourseCurriculum } from "@/components/courses/CourseCurriculum";
-import { formatCurrency, getAcademyBySlug, getCourseBySlug } from "@/lib/data";
+import { getAcademyBySlug, getCourseBySlug } from "@/lib/data";
+import { formatCurrency } from "@/lib/format";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { formatDuration, getCourseStats } from "@/lib/course-content";
 

@@ -90,7 +90,16 @@ body {
 
 ::selection {
   background: rgba(245, 197, 66, 0.35);
-  color: #ffffff;
+  color: #06111f;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
 .surface-grid {

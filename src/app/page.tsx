@@ -5,7 +5,7 @@ import { CourseCard } from "@/components/courses/CourseCard";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
-import { getAcademies, getCourses } from "@/lib/data";
+import { getAcademies, getCourseSummaries } from "@/lib/data";
 import { visualAssets } from "@/lib/visual-assets";
 
 const journey = [
@@ -38,7 +38,7 @@ const trustSignals = [
 
 export default function Home() {
   const academies = getAcademies();
-  const courses = getCourses();
+  const courses = getCourseSummaries();
   const connectedAcademies = academies.filter((academy) => academy.slug !== "sports-academy").length;
   const featuredCourses = courses.slice(0, 4);
   const stats = [
@@ -50,7 +50,7 @@ export default function Home() {
 
   return (
     <main>
-      <section className="relative isolate min-h-[calc(100vh-116px)] overflow-hidden bg-[#06111f] py-20 text-white sm:py-24 lg:py-28">
+      <section className="relative isolate min-h-[calc(100svh-260px)] overflow-hidden bg-[#06111f] py-16 text-white sm:py-20">
         <Image
           src={visualAssets.ecosystemHero}
           alt="VowLMS learners using laptops, tablets, and VR practice in a modern GoalVow learning ecosystem"

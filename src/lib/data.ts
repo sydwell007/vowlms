@@ -7,7 +7,14 @@ import {
   consumedSlugs,
   parentPlaceholderSlugs,
 } from "@/data/course-groupings";
-import type { Academy, Course, CourseModule, LearningHub, Opportunity } from "@/types/lms";
+import type {
+  Academy,
+  Course,
+  CourseModule,
+  CourseSummary,
+  LearningHub,
+  Opportunity,
+} from "@/types/lms";
 
 const sportsAcademy: Academy = {
   slug: "sports-academy",
@@ -139,6 +146,32 @@ export function getCourses() {
   return courses;
 }
 
+export function getCourseSummaries(): CourseSummary[] {
+  return courses.map((course) => {
+    const academy = getAcademyBySlug(course.academySlug);
+
+    return {
+      slug: course.slug,
+      title: course.title,
+      academySlug: course.academySlug,
+      academyName: academy?.name ?? "GoalVow Academy",
+      academyCategory: academy?.category ?? "upskilling",
+      description: course.description,
+      level: course.level,
+      duration: course.duration,
+      price: course.price,
+      rewards: course.rewards,
+    };
+  });
+}
+
+export function getCourseSummariesByAcademy(academySlug: string): CourseSummary[] {
+  const academy = getAcademyBySlug(academySlug);
+  if (!academy) return [];
+
+  return getCourseSummaries().filter((course) => course.academySlug === academy.slug);
+}
+
 export function getCoursesByAcademy(academySlug: string) {
   const academy = getAcademyBySlug(academySlug);
   if (!academy) return [];
@@ -254,13 +287,4 @@ export function getOpportunities() {
 
 export function getLearningHubs() {
   return [] as LearningHub[];
-}
-
-export function formatCurrency(amount: number) {
-  if (amount === 0) return "Free";
-  return new Intl.NumberFormat("en-ZA", {
-    style: "currency",
-    currency: "ZAR",
-    maximumFractionDigits: 0,
-  }).format(amount);
 }

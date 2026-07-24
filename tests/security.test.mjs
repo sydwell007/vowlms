@@ -95,3 +95,39 @@ test("profile updates preserve the PUT method through the bridge", async () => {
   assert.match(bridge, /export async function bridgePut/);
   assert.match(bridge, /method:\s*"PUT"/);
 });
+
+test("client components do not import the multi-megabyte seed data layer", async () => {
+  const clientFiles = [
+    "src/components/courses/CourseCatalogueClient.tsx",
+    "src/components/courses/CourseCard.tsx",
+    "src/components/search/SearchClient.tsx",
+    "src/components/academies/AcademyCourseGrid.tsx",
+    "src/app/dashboard/admin/page.tsx",
+  ];
+
+  for (const file of clientFiles) {
+    const source = await read(file);
+    assert.doesNotMatch(source, /@\/lib\/data/);
+    assert.doesNotMatch(source, /@\/data\/seed-data/);
+  }
+});
+
+test("course filters use URL parameters and VR scenarios are paginated", async () => {
+  const coursesPage = await read("src/app/courses/page.tsx");
+  const vrPage = await read("src/app/vr-practice/page.tsx");
+
+  assert.match(coursesPage, /searchParams:\s*Promise/);
+  assert.match(coursesPage, /params\.academy/);
+  assert.match(coursesPage, /params\.q/);
+  assert.match(vrPage, /const PAGE_SIZE\s*=\s*18/);
+  assert.match(vrPage, /\.slice\(pageStart,\s*pageStart \+ PAGE_SIZE\)/);
+});
+
+test("bridge corrects upstream authentication status wrappers", async () => {
+  const bridge = await read("src/lib/bridge.ts");
+
+  assert.match(bridge, /export function normalizeBridgeStatus/);
+  assert.match(bridge, /return 401/);
+  assert.match(bridge, /return 403/);
+  assert.match(bridge, /throw toBridgeError\(json,\s*res\.status\)/);
+});

@@ -88,6 +88,14 @@ export type Course = {
   opportunityPathways: string[];
 };
 
+export type CourseSummary = Pick<
+  Course,
+  "slug" | "title" | "academySlug" | "description" | "level" | "duration" | "price" | "rewards"
+> & {
+  academyName: string;
+  academyCategory: AcademyCategory;
+};
+
 export type Opportunity = {
   id: string;
   title: string;

@@ -2,13 +2,13 @@
 
 import { useState, useMemo } from "react";
 import { CourseCard } from "@/components/courses/CourseCard";
-import type { Course } from "@/types/lms";
+import type { CourseSummary } from "@/types/lms";
 
 const PAGE_SIZE = 12;
 const LEVEL_OPTS = ["All levels", "Foundation", "Intermediate", "Advanced"] as const;
 const PRICE_OPTS = ["All", "Free", "Paid"] as const;
 
-export function AcademyCourseGrid({ courses }: { courses: Course[] }) {
+export function AcademyCourseGrid({ courses }: { courses: CourseSummary[] }) {
   const [level, setLevel] = useState<string>("All levels");
   const [price, setPrice] = useState<string>("All");
   const [query, setQuery] = useState("");

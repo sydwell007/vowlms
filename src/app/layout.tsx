@@ -33,7 +33,6 @@ export const metadata: Metadata = {
     "learn to earn", "learning ecosystem"
   ],
   metadataBase: new URL(siteConfig.url),
-  alternates: { canonical: "/" },
   manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
@@ -52,7 +51,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1e3a8a",
+  themeColor: "#06111f",
 };
 
 export default function RootLayout({

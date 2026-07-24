@@ -2,7 +2,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Section } from "@/components/ui/Section";
 import { ImagePanel } from "@/components/ui/ImagePanel";
-import { getAcademyBySlug, getCoursesByAcademy, getCourses } from "@/lib/data";
+import {
+  getAcademyBySlug,
+  getCourseSummariesByAcademy,
+  getCourses,
+  getCoursesByAcademy,
+} from "@/lib/data";
 import { AcademyCourseGrid } from "@/components/academies/AcademyCourseGrid";
 import { visualAssets } from "@/lib/visual-assets";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
@@ -22,6 +27,7 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
   }
 
   const courses = getCoursesByAcademy(academy.slug);
+  const courseSummaries = getCourseSummariesByAcademy(academy.slug);
   const allCourses = getCourses();
 
   const accentColor = getAcademyAccentColor(academy.category);
@@ -76,7 +82,7 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
 
       {/* Paginated course grid — client component */}
       <Section tone="light" title={`${academy.name} courses`} description={`Audience: ${academy.audience}`}>
-        <AcademyCourseGrid courses={courses} />
+        <AcademyCourseGrid courses={courseSummaries} />
       </Section>
 
       {/* Other academies */}

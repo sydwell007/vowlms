@@ -1,76 +1,149 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-import { ButtonLink } from "@/components/ui/ButtonLink";
+import { useEffect, useRef, useState } from "react";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
-import { useSession, clearSessionCache } from "@/lib/auth/useSession";
+import { ButtonLink } from "@/components/ui/ButtonLink";
+import { clearSessionCache, useSession } from "@/lib/auth/useSession";
 import { visualAssets } from "@/lib/visual-assets";
 
-const navItems = [
-  { href: "/academies", label: "Academies" },
-  { href: "/courses", label: "Courses" },
-  { href: "/vr-practice", label: "VR Practice" },
-  { href: "/rewards", label: "Rewards" },
-  { href: "/opportunities", label: "Opportunities" },
-  { href: "/learning-hubs", label: "Learning Hubs" },
-  { href: "/dashboard/learner", label: "Dashboard", activePrefix: "/dashboard" },
+type NavigationItem = {
+  href: string;
+  label: string;
+  activePrefix?: string;
+  dashboard?: true;
+};
+
+type NavigationGroup = {
+  label: string;
+  items: NavigationItem[];
+};
+
+const navigationGroups: NavigationGroup[] = [
+  {
+    label: "Academies",
+    items: [
+      { href: "/academies", label: "Academy overview" },
+      { href: "/academies/upskilling", label: "Upskilling Academy" },
+      { href: "/academies/skills-training", label: "Skills Training Academy" },
+      { href: "/academies/chef-academy", label: "Chef Academy" },
+      { href: "/academies/private-school", label: "Private School" },
+      { href: "/academies/sports-academy", label: "Sports Academy" },
+      { href: "/academies/business-school", label: "Business School" },
+      { href: "/academies/university-online", label: "University Online" },
+    ],
+  },
+  {
+    label: "Learning",
+    items: [
+      { href: "/courses", label: "Course catalogue" },
+      { href: "/catalogue", label: "Programme catalogue" },
+      { href: "/learn", label: "Learning pathway" },
+      { href: "/practice", label: "Skills practice" },
+      { href: "/vr-practice", label: "VR practice" },
+    ],
+  },
+  {
+    label: "Progress",
+    items: [
+      { href: "/dashboard/learner", label: "My dashboard", activePrefix: "/dashboard", dashboard: true },
+      { href: "/certificates", label: "Certificates" },
+      { href: "/rewards", label: "VowRewards" },
+      { href: "/opportunities", label: "Opportunities" },
+      { href: "/apply", label: "Application pathway" },
+    ],
+  },
+  {
+    label: "Support",
+    items: [
+      { href: "/support", label: "Learner support" },
+      { href: "/learning-hubs", label: "Learning hubs" },
+      { href: "/calendar", label: "Calendar" },
+      { href: "/ecosystem", label: "GoalVow ecosystem" },
+      { href: "/investors", label: "Investor information" },
+    ],
+  },
 ];
 
-const mobileExtraItems = [
-  { href: "/learn", label: "Learn pathway" },
-  { href: "/practice", label: "Practice pathway" },
-  { href: "/apply", label: "Apply pathway" },
-  { href: "/support", label: "Support" },
-  { href: "/ecosystem", label: "Ecosystem" },
-  { href: "/investors", label: "Investors" },
-];
+function isActive(pathname: string, item: NavigationItem) {
+  const prefix = item.activePrefix ?? item.href;
+  return pathname === item.href || pathname.startsWith(`${prefix}/`);
+}
 
-function isActive(pathname: string, href: string, activePrefix?: string) {
-  const prefix = activePrefix ?? href;
-  return pathname === href || pathname.startsWith(`${prefix}/`);
+function resolveItem(item: NavigationItem, role?: string): NavigationItem {
+  if (!item.dashboard || !role) return item;
+  return { ...item, href: `/dashboard/${role}` };
 }
 
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const session = useSession();
-  const [openForPath, setOpenForPath] = useState<string | null>(null);
-  const menuOpen = openForPath === pathname;
+  const desktopNavRef = useRef<HTMLElement>(null);
+  const [mobileOpenForPath, setMobileOpenForPath] = useState<string | null>(null);
+  const [desktopMenu, setDesktopMenu] = useState<string | null>(null);
+  const [mobileGroup, setMobileGroup] = useState<string | null>(null);
+  const mobileMenuOpen = mobileOpenForPath === pathname;
 
   const isAuthed = session.status === "authenticated";
-  const user = session.status === "authenticated" ? session.user : null;
+  const user = isAuthed ? session.user : null;
   const initials = user?.name
-    ? user.name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase()
+    ? user.name
+        .split(" ")
+        .slice(0, 2)
+        .map((word) => word[0])
+        .join("")
+        .toUpperCase()
     : "?";
   const avatarUrl = user?.avatar_url ?? user?.avatarUrl ?? null;
+
+  useEffect(() => {
+    function closeOnOutsideClick(event: PointerEvent) {
+      if (desktopNavRef.current && !desktopNavRef.current.contains(event.target as Node)) {
+        setDesktopMenu(null);
+      }
+    }
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setDesktopMenu(null);
+    }
+
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideClick);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, []);
 
   async function handleLogout() {
     clearSessionCache();
     await fetch("/api/auth/logout", { method: "POST" });
     router.push("/auth/signin");
+    router.refresh();
   }
 
-  function toggleMenu() {
-    setOpenForPath((value) => (value === pathname ? null : pathname));
+  function closeAllMenus() {
+    setDesktopMenu(null);
+    setMobileOpenForPath(null);
+    setMobileGroup(null);
   }
 
-  function closeMenu() {
-    setOpenForPath(null);
+  function toggleMobileMenu() {
+    setMobileOpenForPath((value) => (value === pathname ? null : pathname));
+    setMobileGroup(null);
   }
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#06111f]/94 text-white shadow-[0_20px_48px_rgba(2,10,24,0.32)] backdrop-blur-xl">
       <div className="mx-auto flex min-h-[76px] w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
-
-        {/* Logo */}
-        <Link href="/" onClick={closeMenu} className="flex shrink-0 items-center gap-3">
+        <Link href="/" onClick={closeAllMenus} className="flex shrink-0 items-center gap-3" aria-label="VowLMS home">
           <span className="brand-mark-frame flex h-11 w-11 items-center justify-center rounded-xl p-1.5 shadow-[0_12px_28px_rgba(6,182,212,0.16)]">
             <Image
               src={visualAssets.logo}
-              alt="GoalVow logo"
+              alt=""
               width={40}
               height={40}
               className="h-full w-full object-contain"
@@ -78,51 +151,84 @@ export function Header() {
             />
           </span>
           <span className="flex flex-col">
-            <span className="text-base font-bold tracking-tight sm:text-lg">VowLMS</span>
+            <span className="text-base font-bold sm:text-lg">VowLMS</span>
             <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-white/52">
               GoalVow LMS
             </span>
           </span>
         </Link>
 
-        {/* Search */}
         <Link
           href="/search"
-          className="mx-3 hidden flex-1 max-w-[200px] items-center gap-2 rounded-lg border border-white/12 bg-white/6 px-3 py-2 text-sm text-white/52 transition hover:border-white/20 hover:bg-white/10 xl:flex"
+          className="mx-2 hidden max-w-[160px] flex-1 items-center gap-2 rounded-lg border border-white/12 bg-white/6 px-3 py-2 text-sm text-white/52 transition hover:border-white/20 hover:bg-white/10 xl:flex"
         >
-          <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          Search…
-          <kbd className="ml-auto rounded border border-white/20 px-1.5 py-0.5 text-[10px] text-white/36">⌘K</kbd>
+          <span aria-hidden="true">Search</span>
+          <span className="sr-only">Search VowLMS</span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="ml-auto hidden items-center gap-1 xl:flex">
-          {navItems.map((item) => {
-            const active = isActive(pathname, item.href, item.activePrefix);
+        <nav ref={desktopNavRef} className="ml-auto hidden items-center gap-1 xl:flex" aria-label="Primary navigation">
+          {navigationGroups.map((group) => {
+            const items = group.items.map((item) => resolveItem(item, user?.role));
+            const active = items.some((item) => isActive(pathname, item));
+            const open = desktopMenu === group.label;
+            const menuId = `desktop-menu-${group.label.toLowerCase()}`;
+
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`relative whitespace-nowrap rounded-md px-2.5 py-2 text-[13px] font-semibold transition ${
-                  active ? "bg-white/8 text-white" : "text-white/68 hover:bg-white/6 hover:text-white"
-                }`}
-              >
-                {item.label}
-                <span
-                  className={`absolute inset-x-2.5 bottom-0 h-0.5 rounded-full bg-[#06b6d4] transition-transform ${
-                    active ? "scale-x-100" : "scale-x-0"
+              <div key={group.label} className="relative">
+                <button
+                  type="button"
+                  aria-expanded={open}
+                  aria-controls={menuId}
+                  aria-haspopup="menu"
+                  onClick={() => setDesktopMenu(open ? null : group.label)}
+                  className={`relative flex min-h-10 items-center gap-1 rounded-md px-3 text-[13px] font-semibold transition ${
+                    active || open ? "bg-white/8 text-white" : "text-white/68 hover:bg-white/6 hover:text-white"
                   }`}
-                />
-              </Link>
+                >
+                  {group.label}
+                  <span
+                    aria-hidden="true"
+                    className={`h-1.5 w-1.5 border-b border-r border-current transition-transform ${
+                      open ? "rotate-[225deg]" : "rotate-45"
+                    }`}
+                  />
+                  <span
+                    className={`absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-[#06b6d4] transition-transform ${
+                      active ? "scale-x-100" : "scale-x-0"
+                    }`}
+                  />
+                </button>
+
+                {open ? (
+                  <div
+                    id={menuId}
+                    role="menu"
+                    className="absolute left-0 top-[calc(100%+0.5rem)] z-50 w-64 rounded-lg border border-white/10 bg-[#0b1b2d] p-2 shadow-[0_22px_50px_rgba(0,0,0,0.34)]"
+                  >
+                    {items.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        role="menuitem"
+                        onClick={closeAllMenus}
+                        className={`block rounded-md px-3 py-2.5 text-sm font-medium transition ${
+                          isActive(pathname, item)
+                            ? "bg-white text-[#06111f]"
+                            : "text-white/76 hover:bg-white/8 hover:text-white"
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
             );
           })}
         </nav>
 
-        {/* Desktop right actions */}
         <div className="hidden items-center gap-2 xl:flex">
-          {isAuthed && <NotificationBell />}
+          {isAuthed ? <NotificationBell /> : null}
           {session.status === "loading" ? (
             <div className="h-9 w-20 animate-pulse rounded-lg bg-white/10" />
           ) : isAuthed ? (
@@ -137,6 +243,7 @@ export function Header() {
                 ) : initials}
               </Link>
               <button
+                type="button"
                 onClick={handleLogout}
                 className="min-h-9 rounded-lg border border-white/14 bg-white/6 px-4 py-2 text-sm font-semibold text-white/80 transition hover:bg-white/10"
               >
@@ -158,83 +265,115 @@ export function Header() {
           )}
         </div>
 
-        {/* Mobile hamburger */}
         <button
           type="button"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-          onClick={toggleMenu}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
+          onClick={toggleMobileMenu}
           className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/14 bg-white/6 text-white transition hover:bg-white/10 xl:hidden"
         >
-          <span className="flex w-5 flex-col gap-1.5">
-            <span className={`h-0.5 rounded-full bg-current transition ${menuOpen ? "translate-y-2 rotate-45" : ""}`} />
-            <span className={`h-0.5 rounded-full bg-current transition ${menuOpen ? "opacity-0" : "opacity-100"}`} />
-            <span className={`h-0.5 rounded-full bg-current transition ${menuOpen ? "-translate-y-2 -rotate-45" : ""}`} />
+          <span className="flex w-5 flex-col gap-1.5" aria-hidden="true">
+            <span className={`h-0.5 rounded-full bg-current transition ${mobileMenuOpen ? "translate-y-2 rotate-45" : ""}`} />
+            <span className={`h-0.5 rounded-full bg-current transition ${mobileMenuOpen ? "opacity-0" : "opacity-100"}`} />
+            <span className={`h-0.5 rounded-full bg-current transition ${mobileMenuOpen ? "-translate-y-2 -rotate-45" : ""}`} />
           </span>
         </button>
       </div>
 
-      {/* Mobile menu */}
-      {menuOpen && (
+      {mobileMenuOpen ? (
         <nav
-          className="border-t border-white/10 bg-[#081626]/96 px-4 py-4 xl:hidden"
+          className="max-h-[calc(100dvh-76px)] overflow-y-auto border-t border-white/10 bg-[#081626]/98 px-4 py-4 xl:hidden"
           aria-label="Mobile navigation"
         >
-          <div className="mx-auto grid w-full max-w-7xl gap-1.5">
-            <Link href="/search" onClick={closeMenu}
-              className="flex items-center gap-2 rounded-md bg-white/8 px-4 py-3 text-sm text-white/70 hover:bg-white/12">
-              <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              Search…
+          <div className="mx-auto grid w-full max-w-7xl gap-2">
+            <Link
+              href="/search"
+              onClick={closeAllMenus}
+              className="rounded-md bg-white/8 px-4 py-3 text-sm font-semibold text-white/76 hover:bg-white/12"
+            >
+              Search VowLMS
             </Link>
-            {navItems.map((item) => {
-              const active = isActive(pathname, item.href, item.activePrefix);
+
+            {navigationGroups.map((group) => {
+              const open = mobileGroup === group.label;
+              const items = group.items.map((item) => resolveItem(item, user?.role));
+              const active = items.some((item) => isActive(pathname, item));
+              const menuId = `mobile-menu-${group.label.toLowerCase()}`;
+
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={closeMenu}
-                  className={`rounded-md px-4 py-3 text-sm font-semibold transition ${
-                    active ? "bg-white text-[#06111f]" : "bg-white/8 text-white/88 hover:bg-white/12"
-                  }`}
-                >
-                  {item.label}
-                </Link>
+                <div key={group.label} className="rounded-md border border-white/8 bg-white/[0.04]">
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-controls={menuId}
+                    onClick={() => setMobileGroup(open ? null : group.label)}
+                    className={`flex min-h-12 w-full items-center justify-between px-4 text-left text-sm font-semibold ${
+                      active ? "text-gold" : "text-white/88"
+                    }`}
+                  >
+                    {group.label}
+                    <span
+                      aria-hidden="true"
+                      className={`h-2 w-2 border-b border-r border-current transition-transform ${
+                        open ? "rotate-[225deg]" : "rotate-45"
+                      }`}
+                    />
+                  </button>
+                  {open ? (
+                    <div id={menuId} className="grid gap-1 border-t border-white/8 p-2">
+                      {items.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={closeAllMenus}
+                          className={`rounded-md px-3 py-2.5 text-sm font-medium ${
+                            isActive(pathname, item)
+                              ? "bg-white text-[#06111f]"
+                              : "text-white/68 hover:bg-white/8 hover:text-white"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
               );
             })}
-            <div className="my-2 border-t border-white/10" />
-            {mobileExtraItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={closeMenu}
-                className="rounded-md px-4 py-2.5 text-sm font-medium text-white/68 transition hover:bg-white/8 hover:text-white"
-              >
-                {item.label}
-              </Link>
-            ))}
-            <div className="mt-1 flex gap-2">
+
+            <div className="mt-1 flex gap-2 border-t border-white/10 pt-3">
               {session.status === "loading" ? (
                 <div className="h-12 flex-1 animate-pulse rounded-md bg-white/10" />
               ) : isAuthed ? (
                 <>
-                  <Link href="/profile" onClick={closeMenu}
-                    className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12">
+                  <Link
+                    href="/profile"
+                    onClick={closeAllMenus}
+                    className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12"
+                  >
                     Profile ({initials})
                   </Link>
-                  <button onClick={() => { closeMenu(); handleLogout(); }}
-                    className="flex-1 rounded-md bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/80 hover:bg-white/12">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      closeAllMenus();
+                      handleLogout();
+                    }}
+                    className="flex-1 rounded-md bg-white/8 px-4 py-3 text-sm font-semibold text-white/80 hover:bg-white/12"
+                  >
                     Sign out
                   </button>
                 </>
               ) : (
                 <>
-                  <Link href="/auth/signin" onClick={closeMenu}
-                    className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12">
+                  <Link
+                    href="/auth/signin"
+                    onClick={closeAllMenus}
+                    className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12"
+                  >
                     Sign in
                   </Link>
-                  <ButtonLink href="/auth/signup" className="flex-1 justify-center" onClick={closeMenu}>
+                  <ButtonLink href="/auth/signup" className="flex-1 justify-center" onClick={closeAllMenus}>
                     Start Learning
                   </ButtonLink>
                 </>
@@ -242,7 +381,7 @@ export function Header() {
             </div>
           </div>
         </nav>
-      )}
+      ) : null}
     </header>
   );
 }
