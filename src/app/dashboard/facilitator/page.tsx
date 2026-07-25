@@ -44,7 +44,10 @@ export default function FacilitatorDashboardPage() {
       {error ? <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800">{error}</div> : null}
       <div className="mt-6 flex items-center justify-between gap-4">
         <h2 className="text-xl font-semibold text-ink">Assigned courses</h2>
-        <Link href="/support" className="text-sm font-semibold text-[#1166c8] hover:underline">Escalate support</Link>
+        <div className="flex items-center gap-4">
+          <Link href="/dashboard/facilitator/courses" className="text-sm font-semibold text-[#1166c8] hover:underline">Course rosters</Link>
+          <Link href="/support" className="text-sm font-semibold text-[#1166c8] hover:underline">Escalate support</Link>
+        </div>
       </div>
       {loading ? (
         <div className="mt-4 h-48 animate-pulse rounded-lg border border-slate-200 bg-white" />

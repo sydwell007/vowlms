@@ -50,9 +50,9 @@ export default function AboutPage() {
               Make useful learning easier to discover, complete, and carry forward through reliable progress records, support, rewards, and opportunity pathways.
             </p>
           </div>
-          <div className="premium-card-dark rounded-lg p-8">
-            <h2 className="text-2xl font-semibold text-white">Current platform foundation</h2>
-            <p className="mt-4 text-base leading-7 text-white/70">
+          <div className="premium-card rounded-lg p-8">
+            <h2 className="text-2xl font-semibold text-ink">Current platform foundation</h2>
+            <p className="mt-4 text-base leading-7 text-muted">
               Six academy connections are verified. Sports Academy remains a planned pathway until its catalogue and delivery model are approved.
             </p>
           </div>

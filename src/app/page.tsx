@@ -114,7 +114,7 @@ export default function Home() {
           <ButtonLink href="/academies" variant="outline">
             View all academies
           </ButtonLink>
-          <ButtonLink href="/catalogue" variant="ink">
+          <ButtonLink href="/courses" variant="ink">
             Open catalogue
           </ButtonLink>
         </div>

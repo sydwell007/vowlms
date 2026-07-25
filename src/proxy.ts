@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Legacy/duplicate URLs that should 308-redirect at the network level (not just
+// render different content under the old URL) so browsers and search engines
+// treat the destination as canonical.
+const aliasRedirects: Record<string, string> = {
+  "/vowsupport": "/support",
+  "/contact": "/support",
+  "/catalogue": "/courses",
+};
+
 const protectedPrefixes = [
   "/dashboard",
   "/lesson",
@@ -32,8 +41,9 @@ function isProtectedPage(pathname: string) {
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
-  if (pathname === "/vowsupport") {
-    return NextResponse.redirect(new URL("/support", request.url), 308);
+  const aliasTarget = aliasRedirects[pathname];
+  if (aliasTarget) {
+    return NextResponse.redirect(new URL(aliasTarget, request.url), 308);
   }
 
   if (isDeploymentArtifact(pathname)) {

@@ -44,6 +44,7 @@ const loadingMetrics: DashboardMetric[] = [
 
 const quickLinks = [
   { label: "Browse courses", href: "/courses" },
+  { label: "Grades & results", href: "/dashboard/learner/grades" },
   { label: "Certificates", href: "/certificates" },
   { label: "VowRewards", href: "/rewards" },
   { label: "VowSupport", href: "/support" },

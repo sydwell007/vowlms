@@ -8,12 +8,16 @@ import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { clearSessionCache, useSession } from "@/lib/auth/useSession";
 import { visualAssets } from "@/lib/visual-assets";
+import { getComingSoonInfo } from "@/lib/academy-launch";
+import type { AcademyCategory } from "@/types/lms";
 
 type NavigationItem = {
   href: string;
   label: string;
   activePrefix?: string;
   dashboard?: true;
+  /** Set on academy items so locked (not-yet-launched) academies render as disabled instead of a live link. */
+  category?: AcademyCategory;
 };
 
 type NavigationGroup = {
@@ -26,20 +30,20 @@ const navigationGroups: NavigationGroup[] = [
     label: "Academies",
     items: [
       { href: "/academies", label: "Academy overview" },
-      { href: "/academies/upskilling", label: "Upskilling Academy" },
-      { href: "/academies/skills-training", label: "Skills Training Academy" },
-      { href: "/academies/chef-academy", label: "Chef Academy" },
-      { href: "/academies/private-school", label: "Private School" },
-      { href: "/academies/sports-academy", label: "Sports Academy" },
-      { href: "/academies/business-school", label: "Business School" },
-      { href: "/academies/university-online", label: "University Online" },
+      { href: "/academies/upskilling", label: "Upskilling Academy", category: "upskilling" },
+      { href: "/academies/skills-training", label: "Skills Training Academy", category: "skills-training" },
+      { href: "/academies/chef-academy", label: "Chef Academy", category: "chef-academy" },
+      { href: "/academies/private-school", label: "Private School", category: "private-school" },
+      { href: "/academies/sports-academy", label: "Sports Academy", category: "sports-academy" },
+      { href: "/academies/business-school", label: "Business School", category: "business-school" },
+      { href: "/academies/university-online", label: "University Online", category: "university-online" },
     ],
   },
   {
     label: "Learning",
     items: [
       { href: "/courses", label: "Course catalogue" },
-      { href: "/catalogue", label: "Programme catalogue" },
+      { href: "/pricing", label: "Course pricing" },
       { href: "/learn", label: "Learning pathway" },
       { href: "/practice", label: "Skills practice" },
       { href: "/vr-practice", label: "VR practice" },
@@ -56,13 +60,23 @@ const navigationGroups: NavigationGroup[] = [
     ],
   },
   {
+    label: "Company",
+    items: [
+      { href: "/about", label: "About Us" },
+      { href: "/team", label: "Team" },
+      { href: "/careers", label: "Careers" },
+      { href: "/impact", label: "Impact" },
+      { href: "/ecosystem", label: "Ecosystem" },
+      { href: "/investors", label: "Investors Hub" },
+      { href: "/innovation-labs", label: "Innovation Labs" },
+    ],
+  },
+  {
     label: "Support",
     items: [
       { href: "/support", label: "Learner support" },
       { href: "/learning-hubs", label: "Learning hubs" },
       { href: "/calendar", label: "Calendar" },
-      { href: "/ecosystem", label: "GoalVow ecosystem" },
-      { href: "/investors", label: "Investor information" },
     ],
   },
 ];
@@ -205,21 +219,40 @@ export function Header() {
                     role="menu"
                     className="absolute left-0 top-[calc(100%+0.5rem)] z-50 w-64 rounded-lg border border-white/10 bg-[#0b1b2d] p-2 shadow-[0_22px_50px_rgba(0,0,0,0.34)]"
                   >
-                    {items.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        role="menuitem"
-                        onClick={closeAllMenus}
-                        className={`block rounded-md px-3 py-2.5 text-sm font-medium transition ${
-                          isActive(pathname, item)
-                            ? "bg-white text-[#06111f]"
-                            : "text-white/76 hover:bg-white/8 hover:text-white"
-                        }`}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
+                    {items.map((item) => {
+                      const comingSoon = item.category ? getComingSoonInfo(item.category) : null;
+                      if (comingSoon) {
+                        return (
+                          <span
+                            key={item.href}
+                            role="menuitem"
+                            aria-disabled="true"
+                            title={`${item.label} — ${comingSoon.label}`}
+                            className="flex cursor-not-allowed items-center justify-between gap-2 rounded-md px-3 py-2.5 text-sm font-medium text-white/35"
+                          >
+                            <span>{item.label}</span>
+                            <span className="shrink-0 rounded-full border border-gold/20 bg-gold/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-gold/60">
+                              Soon
+                            </span>
+                          </span>
+                        );
+                      }
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          role="menuitem"
+                          onClick={closeAllMenus}
+                          className={`block rounded-md px-3 py-2.5 text-sm font-medium transition ${
+                            isActive(pathname, item)
+                              ? "bg-white text-[#06111f]"
+                              : "text-white/76 hover:bg-white/8 hover:text-white"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      );
+                    })}
                   </div>
                 ) : null}
               </div>
@@ -321,20 +354,38 @@ export function Header() {
                   </button>
                   {open ? (
                     <div id={menuId} className="grid gap-1 border-t border-white/8 p-2">
-                      {items.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          onClick={closeAllMenus}
-                          className={`rounded-md px-3 py-2.5 text-sm font-medium ${
-                            isActive(pathname, item)
-                              ? "bg-white text-[#06111f]"
-                              : "text-white/68 hover:bg-white/8 hover:text-white"
-                          }`}
-                        >
-                          {item.label}
-                        </Link>
-                      ))}
+                      {items.map((item) => {
+                        const comingSoon = item.category ? getComingSoonInfo(item.category) : null;
+                        if (comingSoon) {
+                          return (
+                            <span
+                              key={item.href}
+                              aria-disabled="true"
+                              title={`${item.label} — ${comingSoon.label}`}
+                              className="flex cursor-not-allowed items-center justify-between gap-2 rounded-md px-3 py-2.5 text-sm font-medium text-white/35"
+                            >
+                              <span>{item.label}</span>
+                              <span className="shrink-0 rounded-full border border-gold/20 bg-gold/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-gold/60">
+                                Soon
+                              </span>
+                            </span>
+                          );
+                        }
+                        return (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={closeAllMenus}
+                            className={`rounded-md px-3 py-2.5 text-sm font-medium ${
+                              isActive(pathname, item)
+                                ? "bg-white text-[#06111f]"
+                                : "text-white/68 hover:bg-white/8 hover:text-white"
+                            }`}
+                          >
+                            {item.label}
+                          </Link>
+                        );
+                      })}
                     </div>
                   ) : null}
                 </div>

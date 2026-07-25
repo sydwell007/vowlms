@@ -2,8 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { visualAssets } from "@/lib/visual-assets";
 import { siteConfig } from "@/lib/site";
+import { getComingSoonInfo } from "@/lib/academy-launch";
+import type { AcademyCategory } from "@/types/lms";
 
-const columns = [
+const columns: { title: string; links: { href: string; label: string; category?: AcademyCategory }[] }[] = [
   {
     title: "About GoalVow",
     links: [
@@ -18,13 +20,13 @@ const columns = [
   {
     title: "Academy Network",
     links: [
-      { href: "/academies/upskilling", label: "Upskilling" },
-      { href: "/academies/skills-training", label: "Skills Training" },
-      { href: "/academies/chef-academy", label: "Chef Academy" },
-      { href: "/academies/private-school", label: "Private School" },
-      { href: "/academies/sports-academy", label: "Sports Academy" },
-      { href: "/academies/business-school", label: "Business School" },
-      { href: "/academies/university-online", label: "University Online" },
+      { href: "/academies/upskilling", label: "Upskilling", category: "upskilling" },
+      { href: "/academies/skills-training", label: "Skills Training", category: "skills-training" },
+      { href: "/academies/chef-academy", label: "Chef Academy", category: "chef-academy" },
+      { href: "/academies/private-school", label: "Private School", category: "private-school" },
+      { href: "/academies/sports-academy", label: "Sports Academy", category: "sports-academy" },
+      { href: "/academies/business-school", label: "Business School", category: "business-school" },
+      { href: "/academies/university-online", label: "University Online", category: "university-online" },
     ],
   },
   {
@@ -69,11 +71,29 @@ export function Footer() {
           <div key={column.title}>
             <h2 className="border-b border-white/12 pb-3 text-lg font-semibold">{column.title}</h2>
             <div className="mt-4 flex flex-col gap-2.5">
-              {column.links.map((link) => (
-                <Link key={link.href} href={link.href} className="text-sm text-white/78 transition hover:text-gold">
-                  {link.label}
-                </Link>
-              ))}
+              {column.links.map((link) => {
+                const comingSoon = link.category ? getComingSoonInfo(link.category) : null;
+                if (comingSoon) {
+                  return (
+                    <span
+                      key={link.href}
+                      aria-disabled="true"
+                      title={`${link.label} — ${comingSoon.label}`}
+                      className="flex cursor-not-allowed items-center justify-between gap-2 text-sm text-white/35"
+                    >
+                      <span>{link.label}</span>
+                      <span className="shrink-0 rounded-full border border-gold/20 bg-gold/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-gold/60">
+                        Soon
+                      </span>
+                    </span>
+                  );
+                }
+                return (
+                  <Link key={link.href} href={link.href} className="text-sm text-white/78 transition hover:text-gold">
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         ))}

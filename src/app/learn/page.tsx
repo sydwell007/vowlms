@@ -47,7 +47,7 @@ export default function LearnPage() {
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/courses" variant="primary">Browse all courses</ButtonLink>
-            <ButtonLink href="/catalogue" variant="secondary">Course catalogue</ButtonLink>
+            <ButtonLink href="/courses" variant="secondary">Course catalogue</ButtonLink>
           </div>
           </div>
           <ImagePanel

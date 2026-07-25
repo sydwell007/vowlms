@@ -11,6 +11,21 @@ const PAGE_SIZE = 24;
 const levelOptions = ["All levels", "Foundation", "Intermediate", "Advanced"] as const;
 const priceOptions = ["All", "Free", "Paid"] as const;
 
+// Real Upskilling Academy course titles — a quick-browse shortcut into the search filter below,
+// not a separate catalogue. Keeps topic discovery available without a second full page.
+const POPULAR_TOPICS = [
+  "Business Ethics",
+  "Marketing",
+  "Sales",
+  "Leadership",
+  "Communication",
+  "Human Resources",
+  "Project Management",
+  "Customer Service",
+  "Cybersecurity",
+  "Time Management",
+];
+
 type CourseCatalogueClientProps = {
   academies: Academy[];
   courses: CourseSummary[];
@@ -112,6 +127,28 @@ export function CourseCatalogueClient({
                 </button>
               ) : null}
             </label>
+
+            <div className="mt-4 flex max-w-xl flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold text-white/50">Popular topics:</span>
+              {POPULAR_TOPICS.map((topic) => (
+                <button
+                  key={topic}
+                  type="button"
+                  onClick={() => {
+                    setQuery((current) => (current.trim().toLowerCase() === topic.toLowerCase() ? "" : topic));
+                    setPage(1);
+                  }}
+                  aria-pressed={query.trim().toLowerCase() === topic.toLowerCase()}
+                  className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
+                    query.trim().toLowerCase() === topic.toLowerCase()
+                      ? "border-gold bg-gold text-[#06111f]"
+                      : "border-white/16 bg-white/6 text-white/68 hover:border-white/30 hover:text-white"
+                  }`}
+                >
+                  {topic}
+                </button>
+              ))}
+            </div>
           </div>
           <ImagePanel
             src={visualAssets.academyNetwork}

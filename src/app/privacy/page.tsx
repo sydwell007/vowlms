@@ -39,7 +39,7 @@ export default function PrivacyPage() {
           <h2>5. Data retention</h2>
           <p>We retain your account and learning data for as long as your account is active. Certificates and rewards records are retained for 7 years to support verification requests. You may request deletion of your account at any time.</p>
 
-          <h2>6. Your rights (POPIA)</h2>
+          <h2 id="data-rights">6. Your rights (POPIA)</h2>
           <p>Under South Africa's Protection of Personal Information Act (POPIA) you have the right to access, correct, or delete your personal information. Contact <a href="mailto:privacy@goalvow.com" className="text-[#1166c8]">privacy@goalvow.com</a> to exercise these rights.</p>
 
           <h2>7. Cookies</h2>
