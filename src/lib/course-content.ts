@@ -45,6 +45,29 @@ export function getCourseStats(course: Course) {
   return { moduleCount, lessonCount, totalMinutes, hasAssessment, hasVRPractice };
 }
 
+export type PathwayStats = {
+  courseCount: number;
+  moduleCount: number;
+  lessonCount: number;
+  totalMinutes: number;
+};
+
+/** Aggregate stats across every course in a Skill Pathway. */
+export function getPathwayStats(courses: Course[]): PathwayStats {
+  let moduleCount = 0;
+  let lessonCount = 0;
+  let totalMinutes = 0;
+
+  for (const course of courses) {
+    const stats = getCourseStats(course);
+    moduleCount += stats.moduleCount;
+    lessonCount += stats.lessonCount;
+    totalMinutes += stats.totalMinutes;
+  }
+
+  return { courseCount: courses.length, moduleCount, lessonCount, totalMinutes };
+}
+
 export function formatDuration(totalMinutes: number): string {
   if (totalMinutes <= 0) return "Self-paced";
   if (totalMinutes < 60) return `${totalMinutes} min`;

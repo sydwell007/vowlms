@@ -5,7 +5,10 @@ import { useMemo, useState } from "react";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
+import { getAcademyAccentColor } from "@/lib/academy-colors";
 import type { Academy, CourseSummary } from "@/types/lms";
+
+const GROUPED_PREVIEW_SIZE = 4;
 
 const PAGE_SIZE = 24;
 const levelOptions = ["All levels", "Foundation", "Intermediate", "Advanced"] as const;
@@ -51,6 +54,16 @@ export function CourseCatalogueClient({
       counts.set(course.academySlug, (counts.get(course.academySlug) ?? 0) + 1);
     }
     return counts;
+  }, [courses]);
+
+  const groupedByAcademy = useMemo(() => {
+    const groups = new Map<string, CourseSummary[]>();
+    for (const course of courses) {
+      const list = groups.get(course.academySlug);
+      if (list) list.push(course);
+      else groups.set(course.academySlug, [course]);
+    }
+    return groups;
   }, [courses]);
 
   const filtered = useMemo(() => {
@@ -241,61 +254,120 @@ export function CourseCatalogueClient({
           )}
         </div>
 
-        <div className="mb-5 mt-8 flex items-center justify-between gap-4">
-          <p className="text-sm text-muted" aria-live="polite">
-            Showing <span className="font-semibold text-ink">{visibleCourses.length}</span> of{" "}
-            <span className="font-semibold text-ink">{filtered.length}</span> courses
-          </p>
-        </div>
+        {!hasFilters ? (
+          <div>
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-ink">Browse by academy</h2>
+              <p className="mt-1 text-sm text-muted">
+                Courses are grouped by academy so you can find the right skill area first. Search or filter above to see every matching course in one flat list instead.
+              </p>
+            </div>
+            <div className="space-y-10">
+              {academies.map((item) => {
+                const academyCourses = groupedByAcademy.get(item.slug) ?? [];
+                if (academyCourses.length === 0) return null;
+                const accent = getAcademyAccentColor(item.category);
+                const preview = academyCourses.slice(0, GROUPED_PREVIEW_SIZE);
 
-        {filtered.length === 0 ? (
-          <div className="premium-card rounded-xl px-6 py-16 text-center">
-            <h2 className="text-xl font-semibold text-ink">No courses match these filters</h2>
-            <p className="mt-2 text-sm text-muted">Adjust your search or return to the full catalogue.</p>
-            <button
-              type="button"
-              onClick={resetFilters}
-              className="mt-5 rounded-lg bg-[#06111f] px-6 py-3 text-sm font-semibold text-white"
-            >
-              Browse all courses
-            </button>
-          </div>
-        ) : (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {visibleCourses.map((course) => (
-              <CourseCard key={course.slug} course={course} />
-            ))}
-          </div>
-        )}
+                return (
+                  <div key={item.slug}>
+                    <div className="flex flex-wrap items-end justify-between gap-3 border-b border-slate-200 pb-3">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accent }}>
+                          {item.category.replaceAll("-", " ")}
+                        </p>
+                        <h3 className="mt-1 text-2xl font-semibold text-ink">{item.name}</h3>
+                        <p className="mt-1 max-w-xl text-sm text-muted">{item.description}</p>
+                      </div>
+                      <span className="shrink-0 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-muted">
+                        {academyCourses.length} course{academyCourses.length === 1 ? "" : "s"}
+                      </span>
+                    </div>
 
-        {hasMore ? (
-          <div className="mt-10 text-center">
-            <button
-              type="button"
-              onClick={() => setPage((current) => current + 1)}
-              className="rounded-xl border border-slate-200 bg-white px-10 py-3.5 text-sm font-semibold text-ink shadow-sm transition hover:border-[#1166c8]/30 hover:bg-slate-50"
-            >
-              Load {Math.min(PAGE_SIZE, filtered.length - visibleCourses.length)} more
-            </button>
-          </div>
-        ) : null}
+                    <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                      {preview.map((course) => (
+                        <CourseCard key={course.slug} course={course} />
+                      ))}
+                    </div>
 
-        {filtered.length > 0 && !hasMore ? (
-          <div className="mt-12 border-t border-slate-200 pt-8 text-center">
-            <h2 className="text-xl font-semibold text-ink">Continue by academy</h2>
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              {academies.map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/academies/${item.category}`}
-                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-[#1166c8]/40 hover:text-[#1166c8]"
-                >
-                  {item.name}
-                </Link>
-              ))}
+                    {academyCourses.length > preview.length ? (
+                      <div className="mt-4">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setAcademy(item.slug);
+                            setPage(1);
+                          }}
+                          className="text-sm font-semibold text-[#1166c8] hover:underline"
+                        >
+                          View all {academyCourses.length} courses in {item.name} →
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
           </div>
-        ) : null}
+        ) : (
+          <>
+            <div className="mb-5 flex items-center justify-between gap-4">
+              <p className="text-sm text-muted" aria-live="polite">
+                Showing <span className="font-semibold text-ink">{visibleCourses.length}</span> of{" "}
+                <span className="font-semibold text-ink">{filtered.length}</span> courses
+              </p>
+            </div>
+
+            {filtered.length === 0 ? (
+              <div className="premium-card rounded-xl px-6 py-16 text-center">
+                <h2 className="text-xl font-semibold text-ink">No courses match these filters</h2>
+                <p className="mt-2 text-sm text-muted">Adjust your search or return to the full catalogue.</p>
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="mt-5 rounded-lg bg-[#06111f] px-6 py-3 text-sm font-semibold text-white"
+                >
+                  Browse all courses
+                </button>
+              </div>
+            ) : (
+              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                {visibleCourses.map((course) => (
+                  <CourseCard key={course.slug} course={course} />
+                ))}
+              </div>
+            )}
+
+            {hasMore ? (
+              <div className="mt-10 text-center">
+                <button
+                  type="button"
+                  onClick={() => setPage((current) => current + 1)}
+                  className="rounded-xl border border-slate-200 bg-white px-10 py-3.5 text-sm font-semibold text-ink shadow-sm transition hover:border-[#1166c8]/30 hover:bg-slate-50"
+                >
+                  Load {Math.min(PAGE_SIZE, filtered.length - visibleCourses.length)} more
+                </button>
+              </div>
+            ) : null}
+
+            {filtered.length > 0 && !hasMore ? (
+              <div className="mt-12 border-t border-slate-200 pt-8 text-center">
+                <h2 className="text-xl font-semibold text-ink">Continue by academy</h2>
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  {academies.map((item) => (
+                    <Link
+                      key={item.slug}
+                      href={`/academies/${item.category}`}
+                      className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-ink transition hover:border-[#1166c8]/40 hover:text-[#1166c8]"
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </>
+        )}
       </section>
     </main>
   );

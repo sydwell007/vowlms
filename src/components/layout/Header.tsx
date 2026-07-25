@@ -25,63 +25,86 @@ type NavigationGroup = {
   items: NavigationItem[];
 };
 
-const navigationGroups: NavigationGroup[] = [
+/** A top-level nav entry is either a standalone link (Home, Dashboard) or a dropdown group. */
+type NavEntry =
+  | { kind: "link"; item: NavigationItem }
+  | { kind: "group"; group: NavigationGroup };
+
+const navEntries: NavEntry[] = [
+  { kind: "link", item: { href: "/", label: "Home" } },
   {
-    label: "Academies",
-    items: [
-      { href: "/academies", label: "Academy overview" },
-      { href: "/academies/upskilling", label: "Upskilling Academy", category: "upskilling" },
-      { href: "/academies/skills-training", label: "Skills Training Academy", category: "skills-training" },
-      { href: "/academies/chef-academy", label: "Chef Academy", category: "chef-academy" },
-      { href: "/academies/private-school", label: "Private School", category: "private-school" },
-      { href: "/academies/sports-academy", label: "Sports Academy", category: "sports-academy" },
-      { href: "/academies/business-school", label: "Business School", category: "business-school" },
-      { href: "/academies/university-online", label: "University Online", category: "university-online" },
-    ],
+    kind: "group",
+    group: {
+      label: "Academies",
+      items: [
+        { href: "/academies", label: "Academy overview" },
+        { href: "/academies/upskilling", label: "Upskilling Academy", category: "upskilling" },
+        { href: "/academies/skills-training", label: "Skills Training Academy", category: "skills-training" },
+        { href: "/academies/chef-academy", label: "Chef Academy", category: "chef-academy" },
+        { href: "/academies/private-school", label: "Private School", category: "private-school" },
+        { href: "/academies/sports-academy", label: "Sports Academy", category: "sports-academy" },
+        { href: "/academies/business-school", label: "Business School", category: "business-school" },
+        { href: "/academies/university-online", label: "University Online", category: "university-online" },
+      ],
+    },
   },
   {
-    label: "Learning",
-    items: [
-      { href: "/courses", label: "Course catalogue" },
-      { href: "/pricing", label: "Course pricing" },
-      { href: "/learn", label: "Learning pathway" },
-      { href: "/practice", label: "Skills practice" },
-      { href: "/vr-practice", label: "VR practice" },
-    ],
+    kind: "group",
+    group: {
+      label: "Learning",
+      items: [
+        { href: "/courses", label: "Course catalogue" },
+        { href: "/learn/pathways", label: "Skill pathways" },
+        { href: "/pricing", label: "Course pricing" },
+        { href: "/learn", label: "Learning pathway" },
+        { href: "/practice", label: "Skills practice" },
+        { href: "/vr-practice", label: "VR practice" },
+      ],
+    },
+  },
+  { kind: "link", item: { href: "/dashboard/learner", label: "Dashboard", activePrefix: "/dashboard", dashboard: true } },
+  {
+    kind: "group",
+    group: {
+      label: "Progress",
+      items: [
+        { href: "/certificates", label: "Certificates" },
+        { href: "/rewards", label: "VowRewards" },
+        { href: "/opportunities", label: "Opportunities" },
+        { href: "/apply", label: "Application pathway" },
+      ],
+    },
   },
   {
-    label: "Progress",
-    items: [
-      { href: "/dashboard/learner", label: "My dashboard", activePrefix: "/dashboard", dashboard: true },
-      { href: "/certificates", label: "Certificates" },
-      { href: "/rewards", label: "VowRewards" },
-      { href: "/opportunities", label: "Opportunities" },
-      { href: "/apply", label: "Application pathway" },
-    ],
+    kind: "group",
+    group: {
+      label: "Company",
+      items: [
+        { href: "/about", label: "About Us" },
+        { href: "/team", label: "Team" },
+        { href: "/careers", label: "Careers" },
+        { href: "/impact", label: "Impact" },
+        { href: "/ecosystem", label: "Ecosystem" },
+        { href: "/investors", label: "Investors Hub" },
+        { href: "/innovation-labs", label: "Innovation Labs" },
+      ],
+    },
   },
   {
-    label: "Company",
-    items: [
-      { href: "/about", label: "About Us" },
-      { href: "/team", label: "Team" },
-      { href: "/careers", label: "Careers" },
-      { href: "/impact", label: "Impact" },
-      { href: "/ecosystem", label: "Ecosystem" },
-      { href: "/investors", label: "Investors Hub" },
-      { href: "/innovation-labs", label: "Innovation Labs" },
-    ],
-  },
-  {
-    label: "Support",
-    items: [
-      { href: "/support", label: "Learner support" },
-      { href: "/learning-hubs", label: "Learning hubs" },
-      { href: "/calendar", label: "Calendar" },
-    ],
+    kind: "group",
+    group: {
+      label: "Support",
+      items: [
+        { href: "/support", label: "Learner support" },
+        { href: "/learning-hubs", label: "Learning hubs" },
+        { href: "/calendar", label: "Calendar" },
+      ],
+    },
   },
 ];
 
 function isActive(pathname: string, item: NavigationItem) {
+  if (item.href === "/") return pathname === "/";
   const prefix = item.activePrefix ?? item.href;
   return pathname === item.href || pathname.startsWith(`${prefix}/`);
 }
@@ -181,7 +204,30 @@ export function Header() {
         </Link>
 
         <nav ref={desktopNavRef} className="ml-auto hidden items-center gap-1 xl:flex" aria-label="Primary navigation">
-          {navigationGroups.map((group) => {
+          {navEntries.map((entry) => {
+            if (entry.kind === "link") {
+              const resolved = resolveItem(entry.item, user?.role);
+              const active = isActive(pathname, resolved);
+              return (
+                <Link
+                  key={entry.item.label}
+                  href={resolved.href}
+                  onClick={closeAllMenus}
+                  className={`relative flex min-h-10 items-center rounded-md px-3 text-[13px] font-semibold transition ${
+                    active ? "bg-white/8 text-white" : "text-white/68 hover:bg-white/6 hover:text-white"
+                  }`}
+                >
+                  {resolved.label}
+                  <span
+                    className={`absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-[#06b6d4] transition-transform ${
+                      active ? "scale-x-100" : "scale-x-0"
+                    }`}
+                  />
+                </Link>
+              );
+            }
+
+            const group = entry.group;
             const items = group.items.map((item) => resolveItem(item, user?.role));
             const active = items.some((item) => isActive(pathname, item));
             const open = desktopMenu === group.label;
@@ -327,7 +373,25 @@ export function Header() {
               Search VowLMS
             </Link>
 
-            {navigationGroups.map((group) => {
+            {navEntries.map((entry) => {
+              if (entry.kind === "link") {
+                const resolved = resolveItem(entry.item, user?.role);
+                const active = isActive(pathname, resolved);
+                return (
+                  <Link
+                    key={entry.item.label}
+                    href={resolved.href}
+                    onClick={closeAllMenus}
+                    className={`rounded-md px-4 py-3 text-sm font-semibold ${
+                      active ? "bg-white/8 text-gold" : "text-white/88 hover:bg-white/6"
+                    }`}
+                  >
+                    {resolved.label}
+                  </Link>
+                );
+              }
+
+              const group = entry.group;
               const open = mobileGroup === group.label;
               const items = group.items.map((item) => resolveItem(item, user?.role));
               const active = items.some((item) => isActive(pathname, item));

@@ -7,6 +7,7 @@ import {
   consumedSlugs,
   parentPlaceholderSlugs,
 } from "@/data/course-groupings";
+import { skillPathways } from "@/data/skill-pathways";
 import type {
   Academy,
   Course,
@@ -230,6 +231,21 @@ export function getEnrollableCourseSlugs(courseSlug: string): string[] {
 export function getParentGroupSlug(childCourseSlug: string): string | null {
   const grouping = allGroupings.find((g) => g.moduleSlugOrder.includes(childCourseSlug));
   return grouping ? grouping.slug : null;
+}
+
+export function getSkillPathways() {
+  return skillPathways;
+}
+
+export function getSkillPathwayBySlug(slug: string) {
+  const pathway = skillPathways.find((p) => p.slug === slug);
+  if (!pathway) return undefined;
+
+  const courses = pathway.courseSlugs
+    .map((courseSlug) => getCourseBySlug(courseSlug))
+    .filter((course): course is Course => Boolean(course));
+
+  return { pathway, courses };
 }
 
 export function getVRPracticeBySlug(slug: string) {
