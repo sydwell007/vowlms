@@ -39,12 +39,12 @@ const trustSignals = [
 export default function Home() {
   const academies = getAcademies();
   const courses = getCourseSummaries();
-  const connectedAcademies = academies.filter((academy) => academy.slug !== "sports-academy").length;
+  const connectedAcademies = academies.length;
   const featuredCourses = courses.slice(0, 4);
   const stats = [
     { value: connectedAcademies.toLocaleString(), label: "Connected academies" },
     { value: courses.length.toLocaleString(), label: "Courses" },
-    { value: "1", label: "Planned academy" },
+    { value: "3", label: "Planned academies" },
     { value: "PWA", label: "Mobile ready" },
   ];
 

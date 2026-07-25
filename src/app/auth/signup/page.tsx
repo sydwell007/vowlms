@@ -11,10 +11,7 @@ const academyOptions = [
   "Upskilling Academy",
   "Skills Training Academy",
   "Chef Academy",
-  "GoalVow Schools",
-  "Sports Academy",
   "Business School",
-  "University Online",
 ];
 
 export default function SignUpPage() {

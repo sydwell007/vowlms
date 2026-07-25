@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { getComingSoonInfo } from "@/lib/academy-launch";
+import { getComingSoonInfo, isHiddenAcademyCategory } from "@/lib/academy-launch";
 import type { AcademyCategory } from "@/types/lms";
 
-const academyLinks: { href: string; label: string; home?: true; category?: AcademyCategory }[] = [
-  { href: "/", label: "Home", home: true },
+const allAcademyLinks: { href: string; label: string; category: AcademyCategory }[] = [
   { href: "/academies/upskilling", label: "For Upskilling", category: "upskilling" },
   { href: "/academies/skills-training", label: "For Skills Training", category: "skills-training" },
   { href: "/academies/chef-academy", label: "For Chef Academy", category: "chef-academy" },
@@ -16,20 +15,14 @@ const academyLinks: { href: string; label: string; home?: true; category?: Acade
   { href: "/academies/university-online", label: "For University Online", category: "university-online" },
 ];
 
+const academyLinks = allAcademyLinks.filter((link) => !isHiddenAcademyCategory(link.category));
+
 function isActive(pathname: string, href: string) {
   if (href === "/") {
     return pathname === "/";
   }
 
   return pathname === href || pathname.startsWith(`${href}/`);
-}
-
-function HomeIcon() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current">
-      <path d="M12 3.2 3.75 10v10.25h5.5V14.5h5.5v5.75h5.5V10L12 3.2Z" />
-    </svg>
-  );
 }
 
 export function AcademyTopBar() {
@@ -65,7 +58,6 @@ export function AcademyTopBar() {
                     href={link.href}
                     className={`relative flex items-center gap-1.5 whitespace-nowrap px-2 py-1.5 transition ${active ? "text-gold" : "text-white/88 hover:text-gold"}`}
                   >
-                    {link.home ? <HomeIcon /> : null}
                     <span>{link.label}</span>
                     <span
                       className={`absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-gold transition-transform ${active ? "scale-x-100" : "scale-x-0"}`}

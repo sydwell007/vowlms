@@ -21,7 +21,7 @@ export default function AcademiesPage() {
           <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">GoalVow Holdings</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">
-            6 connected academies. {courses.length.toLocaleString()} courses. One platform.
+            {academies.length} connected academies. {courses.length.toLocaleString()} courses. One platform.
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-white/74">
             From workplace upskilling and culinary learning to school, business, and university-level online study, VowLMS brings the current GoalVow catalogues into one place.

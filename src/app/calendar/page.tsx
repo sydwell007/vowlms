@@ -60,17 +60,6 @@ const events: Event[] = [
     description: "Orientation session for all new Business School enrollments. Covers the learning platform, facilitator introductions, and pathway to SkillsShop.",
   },
   {
-    id: "e5",
-    title: "University Online — New learner intake and skills assessment",
-    type: "cohort",
-    date: "2026-07-05",
-    time: "11:00 – 12:30 SAST",
-    host: "University Online Faculty",
-    academy: "University Online",
-    description: "Welcome session and digital skills baseline assessment for July 2026 University Online cohort.",
-    link: "/academies/university-online",
-  },
-  {
     id: "e6",
     title: "GoalVow Platform update — PWA offline access announcement",
     type: "orientation",

@@ -23,10 +23,7 @@ const columns: { title: string; links: { href: string; label: string; category?:
       { href: "/academies/upskilling", label: "Upskilling", category: "upskilling" },
       { href: "/academies/skills-training", label: "Skills Training", category: "skills-training" },
       { href: "/academies/chef-academy", label: "Chef Academy", category: "chef-academy" },
-      { href: "/academies/private-school", label: "Private School", category: "private-school" },
-      { href: "/academies/sports-academy", label: "Sports Academy", category: "sports-academy" },
       { href: "/academies/business-school", label: "Business School", category: "business-school" },
-      { href: "/academies/university-online", label: "University Online", category: "university-online" },
     ],
   },
   {

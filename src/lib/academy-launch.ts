@@ -1,24 +1,42 @@
 import type { AcademyCategory } from "@/types/lms";
 
 /**
- * Launch schedule: Upskilling is already live. Each remaining academy launches
- * on the 30th of a subsequent month through December 2026. Sports Academy has
- * no fixed date yet, so it always shows a generic "coming soon" ribbon.
- *
+ * Launch schedule for academies that are visible but not yet fully live.
  * Once `now` passes an academy's launch date, `getComingSoonInfo` returns
  * `null` automatically and every "Coming Soon" ribbon/overlay across the site
  * disappears on its own — no other code changes are needed to bring an
  * academy (or its courses) live.
+ *
+ * Academies in `HIDDEN_ACADEMY_CATEGORIES` below are pulled from visibility
+ * entirely (nav, listings, direct URLs) regardless of what's set here.
  */
 export const ACADEMY_LAUNCH_DATES: Record<AcademyCategory, string | "tbd" | null> = {
   "upskilling": null,
-  "skills-training": "2026-08-30",
-  "chef-academy": "2026-09-30",
-  "business-school": "2026-10-30",
+  "skills-training": null,
+  "chef-academy": null,
+  "business-school": null,
   "private-school": "2026-11-30",
   "university-online": "2026-12-30",
   "sports-academy": "tbd",
 };
+
+/**
+ * Academies held back for a future intake (planned for next year). They stay
+ * fully intact in the data layer — just excluded from every visible surface
+ * (header, top bar, footer, academy/course listings, search, sitemap, and
+ * direct navigation to their academy/course pages). Remove a category here
+ * to bring it — and its courses — back into visibility.
+ */
+export const HIDDEN_ACADEMY_CATEGORIES: readonly AcademyCategory[] = [
+  "private-school",
+  "sports-academy",
+  "university-online",
+];
+
+export function isHiddenAcademyCategory(category?: string | null): boolean {
+  if (!category) return false;
+  return (HIDDEN_ACADEMY_CATEGORIES as readonly string[]).includes(category);
+}
 
 export type ComingSoonInfo = {
   /** Long form for cards/ribbons, e.g. "Coming 30 August 2026" or "Coming soon". */

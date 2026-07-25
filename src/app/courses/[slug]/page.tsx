@@ -8,6 +8,7 @@ import { getAcademyBySlug, getCourseBySlug } from "@/lib/data";
 import { formatCurrency } from "@/lib/format";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { formatDuration, getCourseStats } from "@/lib/course-content";
+import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -24,6 +25,10 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
   }
 
   const academy = getAcademyBySlug(course.academySlug);
+
+  if (isHiddenAcademyCategory(academy?.category)) {
+    notFound();
+  }
   const accentColor = getAcademyAccentColor(academy?.category);
   const firstLesson = course.modules[0]?.lessons[0];
   const assessment = course.assessments[0];

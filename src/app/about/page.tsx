@@ -22,7 +22,7 @@ const ecosystem = [
 
 export default function AboutPage() {
   const courses = getCourses();
-  const connectedAcademies = getAcademies().filter((academy) => academy.slug !== "sports-academy").length;
+  const connectedAcademies = getAcademies().length;
 
   return (
     <main>
@@ -53,7 +53,7 @@ export default function AboutPage() {
           <div className="premium-card rounded-lg p-8">
             <h2 className="text-2xl font-semibold text-ink">Current platform foundation</h2>
             <p className="mt-4 text-base leading-7 text-muted">
-              Six academy connections are verified. Sports Academy remains a planned pathway until its catalogue and delivery model are approved.
+              Four academy connections are live today. Further academy pathways are planned for a future intake once their catalogues and delivery models are approved.
             </p>
           </div>
         </div>

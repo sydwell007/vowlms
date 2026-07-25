@@ -8,6 +8,7 @@ import {
   parentPlaceholderSlugs,
 } from "@/data/course-groupings";
 import { skillPathways } from "@/data/skill-pathways";
+import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import type {
   Academy,
   Course,
@@ -131,11 +132,16 @@ export const courses: Course[] = buildGroupedCourses();
 // ─── Public data access functions ─────────────────────────────────────────────
 
 export function getAcademies() {
-  return academies;
+  return academies.filter((academy) => !isHiddenAcademyCategory(academy.category));
 }
 
 export function getAcademyBySlug(slug: string) {
   return academies.find((academy) => academy.slug === slug || academy.category === slug);
+}
+
+function isCourseVisible(course: Course): boolean {
+  const academy = getAcademyBySlug(course.academySlug);
+  return !isHiddenAcademyCategory(academy?.category);
 }
 
 export function getAcademyHref(categoryOrAcademy: { category: string } | string) {
@@ -144,11 +150,11 @@ export function getAcademyHref(categoryOrAcademy: { category: string } | string)
 }
 
 export function getCourses() {
-  return courses;
+  return courses.filter(isCourseVisible);
 }
 
 export function getCourseSummaries(): CourseSummary[] {
-  return courses.map((course) => {
+  return courses.filter(isCourseVisible).map((course) => {
     const academy = getAcademyBySlug(course.academySlug);
 
     return {

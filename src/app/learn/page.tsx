@@ -21,7 +21,7 @@ const studyModes = [
 export default function LearnPage() {
   const academies = getAcademies();
   const courses = getCourses();
-  const connectedAcademies = academies.filter((academy) => academy.slug !== "sports-academy").length;
+  const connectedAcademies = academies.length;
 
   return (
     <main>
@@ -36,7 +36,7 @@ export default function LearnPage() {
             <span className="bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">Learn</span>
           </h1>
           <p className="mt-5 max-w-xl text-base leading-7 text-white/72">
-            Structured online learning across {connectedAcademies} connected GoalVow academies, with a planned Sports Academy pathway clearly separated from the live catalogue.
+            Structured online learning across {connectedAcademies} connected GoalVow academies, with further academy pathways planned for a future intake.
           </p>
           <div className="mt-4 flex items-center gap-3 text-sm text-white/50">
             <span>{courses.length.toLocaleString()} courses</span>

@@ -11,6 +11,7 @@ import {
 import { AcademyCourseGrid } from "@/components/academies/AcademyCourseGrid";
 import { visualAssets } from "@/lib/visual-assets";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
+import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -22,7 +23,7 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
   const { slug } = await params;
   const academy = getAcademyBySlug(slug);
 
-  if (!academy) {
+  if (!academy || isHiddenAcademyCategory(academy.category)) {
     notFound();
   }
 
@@ -90,7 +91,7 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted mb-4">Other GoalVow academies</p>
           <div className="flex flex-wrap gap-3">
-            {["upskilling-academy", "skills-training-academy", "chef-academy", "private-school", "sports-academy", "business-school", "university-online"]
+            {["upskilling-academy", "skills-training-academy", "chef-academy", "business-school"]
               .filter((s) => s !== academy.slug)
               .map((s) => {
                 const a = getAcademyBySlug(s);
