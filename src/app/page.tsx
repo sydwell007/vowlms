@@ -95,25 +95,14 @@ export default function Home() {
         tone="light"
         eyebrow="Academy network"
         title="One LMS for the GoalVow learning ecosystem"
-        description="Skills, culinary, school, sport, business, and online learning pathways share a connected learner journey."
+        description="Upskilling, skills training, culinary, and business pathways share a connected learner journey."
       >
-        <div className="grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <ImagePanel
-            src={visualAssets.academyNetwork}
-            alt="GoalVow academy network across school, skills, culinary, business, and online learning pathways"
-            tone="light"
-            aspect="video"
-          />
-          <div className="grid gap-5 sm:grid-cols-2">
-            {academies.slice(0, 4).map((academy) => (
-              <AcademyCard key={academy.slug} academy={academy} />
-            ))}
-          </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {academies.slice(0, 4).map((academy) => (
+            <AcademyCard key={academy.slug} academy={academy} />
+          ))}
         </div>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <ButtonLink href="/academies" variant="outline">
-            View all academies
-          </ButtonLink>
           <ButtonLink href="/courses" variant="ink">
             Open catalogue
           </ButtonLink>
