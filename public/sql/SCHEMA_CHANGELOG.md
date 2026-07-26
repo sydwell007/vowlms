@@ -1,5 +1,17 @@
 # Schema Changelog
 
+## 013 - Learner goals
+
+- Adds `learner_goals` (one row per user, `UNIQUE KEY uq_user`) recording which
+  goal tile / role / academy a learner chose via the new "Find My Path" flow,
+  plus their most recent Path Finder Quiz answers and recommendation.
+- Course matching itself runs client-side in the Next.js app against the
+  existing static course data — this table only persists the learner's own
+  choice so it follows them across devices when logged in. No `courses`
+  schema change and no new course-tagging tables were needed.
+- New PHP endpoints: `POST public/php/api/learner-goals/save.php` (upsert),
+  `GET public/php/api/learner-goals/index.php` (read own profile).
+
 ## 012 - Module preview metadata
 
 - Adds nullable `description` and `outcome` columns to `modules`, populated

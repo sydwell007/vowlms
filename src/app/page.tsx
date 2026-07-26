@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { AcademyCard } from "@/components/academies/AcademyCard";
 import { CourseCard } from "@/components/courses/CourseCard";
+import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
@@ -67,17 +67,17 @@ export default function Home() {
             GoalVow academy ecosystem
           </p>
           <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl">
-            VowLMS
+            What do you want to achieve?
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-white/76">
-            A connected learning platform for GoalVow academies, Skills Practice, support, reward records, and carefully staged progression pathways.
+            Tell VowLMS your goal and we'll match you to the right courses — no need to know which academy you need.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/auth/signup" variant="primary">
               Start Learning
             </ButtonLink>
-            <ButtonLink href="/academies" variant="secondary">
-              Explore Academies
+            <ButtonLink href="/courses" variant="secondary">
+              Browse all courses
             </ButtonLink>
           </div>
           <div className="mt-12 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
@@ -91,22 +91,8 @@ export default function Home() {
         </div>
       </section>
 
-      <Section
-        tone="light"
-        eyebrow="Academy network"
-        title="One LMS for the GoalVow learning ecosystem"
-        description="Upskilling, skills training, culinary, and business pathways share a connected learner journey."
-      >
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {academies.slice(0, 4).map((academy) => (
-            <AcademyCard key={academy.slug} academy={academy} />
-          ))}
-        </div>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <ButtonLink href="/courses" variant="ink">
-            Open catalogue
-          </ButtonLink>
-        </div>
+      <Section tone="light" eyebrow="Find your path" description="Pick what you're working toward and we'll show you exactly which courses to start with.">
+        <OnboardingFlow />
       </Section>
 
       <section className="gv-section-dark py-16 text-white md:py-24">

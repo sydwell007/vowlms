@@ -6,13 +6,19 @@ import { CourseCard } from "@/components/courses/CourseCard";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
-import type { Academy, CourseSummary } from "@/types/lms";
+import { goalTiles } from "@/data/goal-tiles";
+import type { Academy, AcademyCategory, CourseSummary } from "@/types/lms";
 
 const GROUPED_PREVIEW_SIZE = 4;
 
 const PAGE_SIZE = 24;
 const levelOptions = ["All levels", "Foundation", "Intermediate", "Advanced"] as const;
 const priceOptions = ["All", "Free", "Paid"] as const;
+const certificateOptions = ["All", "Yes", "No"] as const;
+const durationOptions = ["2 weeks", "4 weeks", "6 weeks", "8 weeks"] as const;
+
+// The 4 goal tiles that map to a real academy — used as an extra "shop by goal" facet in the sidebar.
+const goalFilterOptions = goalTiles.filter((tile) => tile.academyCategory);
 
 // Real Upskilling Academy course titles — a quick-browse shortcut into the search filter below,
 // not a separate catalogue. Keeps topic discovery available without a second full page.
@@ -45,8 +51,34 @@ export function CourseCatalogueClient({
   const [academy, setAcademy] = useState(initialAcademy);
   const [level, setLevel] = useState<(typeof levelOptions)[number]>("All levels");
   const [price, setPrice] = useState<(typeof priceOptions)[number]>("All");
+  const [certificate, setCertificate] = useState<(typeof certificateOptions)[number]>("All");
+  const [goals, setGoals] = useState<Set<AcademyCategory>>(new Set());
+  const [durations, setDurations] = useState<Set<string>>(new Set());
+  const [minRewards, setMinRewards] = useState(0);
   const [query, setQuery] = useState(initialQuery);
   const [page, setPage] = useState(1);
+
+  const maxRewards = useMemo(() => courses.reduce((max, course) => Math.max(max, course.rewards), 0), [courses]);
+
+  function toggleGoal(category: AcademyCategory) {
+    setGoals((current) => {
+      const next = new Set(current);
+      if (next.has(category)) next.delete(category);
+      else next.add(category);
+      return next;
+    });
+    setPage(1);
+  }
+
+  function toggleDuration(value: string) {
+    setDurations((current) => {
+      const next = new Set(current);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
+      return next;
+    });
+    setPage(1);
+  }
 
   const academyCounts = useMemo(() => {
     const counts = new Map<string, number>();
@@ -71,9 +103,14 @@ export function CourseCatalogueClient({
 
     return courses.filter((course) => {
       if (academy !== "all" && course.academySlug !== academy) return false;
+      if (goals.size > 0 && !goals.has(course.academyCategory)) return false;
       if (level !== "All levels" && course.level !== level) return false;
       if (price === "Free" && course.price !== 0) return false;
       if (price === "Paid" && course.price === 0) return false;
+      if (certificate === "Yes" && !course.hasCertificate) return false;
+      if (certificate === "No" && course.hasCertificate) return false;
+      if (durations.size > 0 && !durations.has(course.duration)) return false;
+      if (course.rewards < minRewards) return false;
       if (
         normalizedQuery &&
         !`${course.title} ${course.description} ${course.academyName}`
@@ -84,17 +121,28 @@ export function CourseCatalogueClient({
       }
       return true;
     });
-  }, [academy, courses, level, price, query]);
+  }, [academy, certificate, courses, durations, goals, level, minRewards, price, query]);
 
   const visibleCourses = filtered.slice(0, page * PAGE_SIZE);
   const hasMore = visibleCourses.length < filtered.length;
   const hasFilters =
-    academy !== "all" || level !== "All levels" || price !== "All" || query.length > 0;
+    academy !== "all" ||
+    goals.size > 0 ||
+    level !== "All levels" ||
+    price !== "All" ||
+    certificate !== "All" ||
+    durations.size > 0 ||
+    minRewards > 0 ||
+    query.length > 0;
 
   function resetFilters() {
     setAcademy("all");
     setLevel("All levels");
     setPrice("All");
+    setCertificate("All");
+    setGoals(new Set());
+    setDurations(new Set());
+    setMinRewards(0);
     setQuery("");
     setPage(1);
   }
@@ -173,87 +221,162 @@ export function CourseCatalogueClient({
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
-        <div className="premium-card-soft grid gap-4 rounded-xl p-4 md:grid-cols-[minmax(220px,1fr)_auto_auto_auto] md:items-end">
-          <label className="grid gap-1.5 text-xs font-semibold text-muted">
-            Academy
-            <select
-              value={academy}
-              onChange={(event) => {
-                setAcademy(event.target.value);
-                setPage(1);
-              }}
-              className="min-h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-ink outline-none focus:border-[#1166c8]"
-            >
-              <option value="all">All academies ({courses.length})</option>
-              {academies.map((item) => (
-                <option key={item.slug} value={item.slug}>
-                  {item.name} ({academyCounts.get(item.slug) ?? 0})
-                </option>
-              ))}
-            </select>
-          </label>
+        <div className="grid gap-8 lg:grid-cols-[260px_1fr] lg:items-start">
+          <aside className="premium-card-soft grid gap-6 rounded-xl p-5 lg:sticky lg:top-24">
+            <label className="grid gap-1.5 text-xs font-semibold text-muted">
+              Academy
+              <select
+                value={academy}
+                onChange={(event) => {
+                  setAcademy(event.target.value);
+                  setPage(1);
+                }}
+                className="min-h-10 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-ink outline-none focus:border-[#1166c8]"
+              >
+                <option value="all">All academies ({courses.length})</option>
+                {academies.map((item) => (
+                  <option key={item.slug} value={item.slug}>
+                    {item.name} ({academyCounts.get(item.slug) ?? 0})
+                  </option>
+                ))}
+              </select>
+            </label>
 
-          <fieldset className="grid gap-1.5">
-            <legend className="text-xs font-semibold text-muted">Level</legend>
-            <div className="flex flex-wrap gap-1">
-              {levelOptions.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  aria-pressed={level === item}
-                  onClick={() => {
-                    setLevel(item);
-                    setPage(1);
-                  }}
-                  className={`min-h-10 rounded-md px-3 text-xs font-semibold transition ${
-                    level === item
-                      ? "bg-[#1166c8] text-white"
-                      : "border border-slate-200 bg-white text-muted hover:text-ink"
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-          </fieldset>
+            <fieldset className="grid gap-1.5">
+              <legend className="text-xs font-semibold text-muted">Goal</legend>
+              <div className="grid gap-1.5">
+                {goalFilterOptions.map((tile) => (
+                  <label key={tile.id} className="flex items-center gap-2 text-sm text-ink">
+                    <input
+                      type="checkbox"
+                      checked={tile.academyCategory ? goals.has(tile.academyCategory) : false}
+                      onChange={() => tile.academyCategory && toggleGoal(tile.academyCategory)}
+                      className="h-4 w-4 rounded border-slate-300"
+                    />
+                    <span aria-hidden="true">{tile.icon}</span>
+                    {tile.question}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
 
-          <fieldset className="grid gap-1.5">
-            <legend className="text-xs font-semibold text-muted">Price</legend>
-            <div className="flex gap-1">
-              {priceOptions.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  aria-pressed={price === item}
-                  onClick={() => {
-                    setPrice(item);
-                    setPage(1);
-                  }}
-                  className={`min-h-10 rounded-md px-3 text-xs font-semibold transition ${
-                    price === item
-                      ? "bg-gold text-[#06111f]"
-                      : "border border-slate-200 bg-white text-muted hover:text-ink"
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-          </fieldset>
+            <fieldset className="grid gap-1.5">
+              <legend className="text-xs font-semibold text-muted">Level</legend>
+              <div className="flex flex-wrap gap-1">
+                {levelOptions.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    aria-pressed={level === item}
+                    onClick={() => {
+                      setLevel(item);
+                      setPage(1);
+                    }}
+                    className={`min-h-9 rounded-md px-3 text-xs font-semibold transition ${
+                      level === item
+                        ? "bg-[#1166c8] text-white"
+                        : "border border-slate-200 bg-white text-muted hover:text-ink"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
 
-          {hasFilters ? (
-            <button
-              type="button"
-              onClick={resetFilters}
-              className="min-h-10 rounded-md px-3 text-sm font-semibold text-[#1166c8] hover:bg-white"
-            >
-              Reset
-            </button>
-          ) : (
-            <span />
-          )}
-        </div>
+            <fieldset className="grid gap-1.5">
+              <legend className="text-xs font-semibold text-muted">Duration</legend>
+              <div className="grid gap-1.5">
+                {durationOptions.map((item) => (
+                  <label key={item} className="flex items-center gap-2 text-sm text-ink">
+                    <input
+                      type="checkbox"
+                      checked={durations.has(item)}
+                      onChange={() => toggleDuration(item)}
+                      className="h-4 w-4 rounded border-slate-300"
+                    />
+                    {item}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
 
+            <fieldset className="grid gap-1.5">
+              <legend className="text-xs font-semibold text-muted">Price</legend>
+              <div className="flex gap-1">
+                {priceOptions.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    aria-pressed={price === item}
+                    onClick={() => {
+                      setPrice(item);
+                      setPage(1);
+                    }}
+                    className={`min-h-9 rounded-md px-3 text-xs font-semibold transition ${
+                      price === item
+                        ? "bg-gold text-[#06111f]"
+                        : "border border-slate-200 bg-white text-muted hover:text-ink"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset className="grid gap-1.5">
+              <legend className="text-xs font-semibold text-muted">Certificate</legend>
+              <div className="flex gap-1">
+                {certificateOptions.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    aria-pressed={certificate === item}
+                    onClick={() => {
+                      setCertificate(item);
+                      setPage(1);
+                    }}
+                    className={`min-h-9 rounded-md px-3 text-xs font-semibold transition ${
+                      certificate === item
+                        ? "bg-emerald-600 text-white"
+                        : "border border-slate-200 bg-white text-muted hover:text-ink"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <label className="grid gap-1.5 text-xs font-semibold text-muted">
+              VowRewards — earn at least {minRewards} Ʋ
+              <input
+                type="range"
+                min={0}
+                max={maxRewards}
+                step={10}
+                value={minRewards}
+                onChange={(event) => {
+                  setMinRewards(Number(event.target.value));
+                  setPage(1);
+                }}
+                className="accent-[#1166c8]"
+              />
+            </label>
+
+            {hasFilters ? (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="min-h-10 rounded-md border border-slate-200 bg-white px-3 text-sm font-semibold text-[#1166c8] hover:bg-slate-50"
+              >
+                Reset all filters
+              </button>
+            ) : null}
+          </aside>
+
+          <div className="min-w-0">
         {!hasFilters ? (
           <div>
             <div className="mb-6">
@@ -368,6 +491,8 @@ export function CourseCatalogueClient({
             ) : null}
           </>
         )}
+          </div>
+        </div>
       </section>
     </main>
   );

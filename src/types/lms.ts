@@ -94,6 +94,7 @@ export type CourseSummary = Pick<
 > & {
   academyName: string;
   academyCategory: AcademyCategory;
+  hasCertificate: boolean;
 };
 
 export type Opportunity = {

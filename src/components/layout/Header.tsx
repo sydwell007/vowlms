@@ -32,19 +32,7 @@ type NavEntry =
 
 const navEntries: NavEntry[] = [
   { kind: "link", item: { href: "/", label: "Home" } },
-  {
-    kind: "group",
-    group: {
-      label: "Academies",
-      items: [
-        { href: "/academies", label: "Academy overview" },
-        { href: "/academies/upskilling", label: "Upskilling Academy", category: "upskilling" },
-        { href: "/academies/skills-training", label: "Skills Training Academy", category: "skills-training" },
-        { href: "/academies/chef-academy", label: "Chef Academy", category: "chef-academy" },
-        { href: "/academies/business-school", label: "Business School", category: "business-school" },
-      ],
-    },
-  },
+  { kind: "link", item: { href: "/find-my-path", label: "Find My Path" } },
   {
     kind: "group",
     group: {

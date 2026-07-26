@@ -168,6 +168,7 @@ export function getCourseSummaries(): CourseSummary[] {
       duration: course.duration,
       price: course.price,
       rewards: course.rewards,
+      hasCertificate: course.assessments.length > 0,
     };
   });
 }
