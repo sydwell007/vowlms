@@ -407,7 +407,7 @@ export function CourseCatalogueClient({
                       </span>
                     </div>
 
-                    <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+                    <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                       {preview.map((course) => (
                         <CourseCard key={course.slug} course={course} />
                       ))}
@@ -454,7 +454,7 @@ export function CourseCatalogueClient({
                 </button>
               </div>
             ) : (
-              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                 {visibleCourses.map((course) => (
                   <CourseCard key={course.slug} course={course} />
                 ))}
