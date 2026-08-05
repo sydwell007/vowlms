@@ -16,12 +16,12 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 2,
-  // A single local `next start` process serving many concurrent full page loads from this
-  // many workers reliably causes page.goto timeouts unrelated to the app itself (confirmed:
-  // header/footer render immediately from static content, only the dynamic route content hangs,
-  // and which route hangs is inconsistent run to run). Capping concurrency trades wall-clock
-  // time for reliability against a single local server.
-  workers: process.env.CI ? undefined : 3,
+  // A single local `next start` process serving many concurrent full page loads reliably
+  // degrades over a long run — a 3-project x 2-worker pass measured 63/87 failing after ~30min,
+  // while three separate --workers=1 passes (one per project) were 87/87 clean at 1-5s per test.
+  // This is resource contention in this sandbox, not app behavior — a real CI runner or Vercel's
+  // serverless functions don't share this constraint. Default to 1 locally; raise it in CI.
+  workers: process.env.CI ? undefined : 1,
   reporter: [
     ["list"],
     ["json", { outputFile: "qa-reports/playwright-results.json" }],

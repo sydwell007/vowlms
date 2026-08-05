@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/response.php';
+require_once __DIR__ . '/../../lib/mail.php';
 ob_end_clean();
 
 setCors();
@@ -68,9 +69,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             jsonOk($cert);
         }
 
-        $uStmt = $db->prepare('SELECT name FROM users WHERE id = ? LIMIT 1');
+        $uStmt = $db->prepare('SELECT name, email FROM users WHERE id = ? LIMIT 1');
         $uStmt->execute([$userId]);
-        $learnerName = $uStmt->fetchColumn() ?: 'GoalVow Learner';
+        $learner = $uStmt->fetch();
+        $learnerName = $learner['name'] ?? 'GoalVow Learner';
+        $learnerEmail = $learner['email'] ?? null;
 
         $courseCode = strtoupper(substr(preg_replace('/[^a-z0-9]/', '', strtolower($courseSlug)), 0, 10));
         $certId  = 'VOWLMS-' . $courseCode . '-' . date('Y') . '-' . strtoupper(bin2hex(random_bytes(4)));
@@ -86,6 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
            ->execute([generateId(), $userId, 'certificate_issued', 200]);
 
         $db->commit();
+
+        if ($learnerEmail) {
+            sendMail($learnerEmail, 'Your VowLMS certificate is ready', certificateEmail($learnerName, $course['title'], $certId));
+        }
+
         jsonCreated([
             'id'             => $newId,
             'certificateId'  => $certId,

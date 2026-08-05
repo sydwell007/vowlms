@@ -96,16 +96,19 @@ function writeReport({ staticResult, contentResult, linksResult, lighthouseResul
   if (playwrightResult.failures.length > 0) blockers.push(`${playwrightResult.failures.length} Playwright test(s) failed — see Step 2 below.`);
   if (lighthouseResult.flagged?.length) blockers.push(`${lighthouseResult.flagged.length} page(s) scored below threshold on Lighthouse — see Step 3 below.`);
 
-  // Known, verified findings this session surfaced by tracing the actual code — not test failures,
-  // but real pre-launch-relevant gaps worth keeping visible at the top of the report.
+  // Known, verified findings surfaced by tracing the actual code — not test failures, but
+  // real pre-launch-relevant facts worth keeping visible at the top of the report. Update this
+  // list whenever a finding gets fixed or a new one is confirmed — it's meant to reflect the
+  // current true state of the app, not a historical log of past QA passes.
   const knownFindings = [
-    "`/results/[courseSlug]` (src/app/results/[courseSlug]/page.tsx:22-25) renders hardcoded demo metrics (\"6/6\", \"84%\", \"86%\") for every course regardless of the learner's actual progress — not real data.",
-    "No UI component calls `POST /api/certificates/generate` (src/app/api/certificates/generate/route.ts:65-80) — the only wired-up call is the read-only GET, which 404s until a certificate row already exists. There is currently no learner-reachable action that ever creates one.",
-    "Assessment scoring (src/components/learning/AssessmentPlayer.tsx) is entirely client-side (localStorage) with no server call — a learner's pass/fail is not recorded or verifiable server-side today.",
-    "Only Upskilling Academy has free courses (140/140 checked); Chef Academy, Skills Training, and Business School are 100% paid — enrollment in those 3 academies can only be tested up to PayFast handoff, not completed automatically.",
-    "No link anywhere in the codebase points to the external VR platform (virtual-reality-simulation.vercel.app) — all \"VR practice\" is VowLMS's own internal /vr-practice route (see integration-links section).",
+    "Fixed: AssessmentPlayer.tsx now submits every attempt to POST /api/assessments/submit (real assessment_attempts row, server-authoritative score) and, on a pass, POSTs /api/progress for the assessment's lesson then POST /api/certificates/generate — a learner who passes now gets a real certificate without any manual step.",
+    "Fixed: /results/[courseSlug] now fetches real per-learner data (lesson completion % from /api/dashboard/learner, last local assessment score, live certificate status) instead of hardcoded demo numbers. VR practice is intentionally shown as \"Preview\" — there is no real VR scoring backend to report a true score from (see VR practice finding below).",
+    "Fixed: /dashboard/learner/grades now shows real assessment history (new GET /api/assessments/history -> public/php/api/assessments/history.php, querying assessment_attempts) instead of an honest-but-empty placeholder.",
+    "Fixed: certificate issuance now emails the learner (certificates/generate.php calls the pre-existing but previously-unused certificateEmail() template) in addition to the existing certificate PDF/dashboard listing.",
+    "Only Upskilling Academy has free courses (140/140 checked); Chef Academy, Skills Training, and Business School are 100% paid — enrollment in those 3 academies can only be tested up to a real PayFast handoff, not completed automatically. Confirm this is the intended business model, not an oversight.",
+    "No link anywhere in the codebase points to the external VR platform (virtual-reality-simulation.vercel.app) — all \"VR practice\" is VowLMS's own internal /vr-practice route, and that page is honestly labeled \"Simulation preview\" / \"Scoring opens only in an enabled practice session\" rather than faking a score. This is correct, intentional framing, not a bug — leave as-is until the VR platform (which has zero backend today, confirmed by reading that repo directly) is ready.",
+    "public/php/lib/mail.php sends via PHP's native mail() against Afrihost's local MTA, not the configured SMTP_HOST/PORT/USER/PASS env vars (those are unused). This may be fine on shared hosting or may hurt deliverability — run public/php/api/qa/test-smtp-email.php for real (see qa-reports/README.md) to confirm before assuming either way; don't rewrite this blind without a way to test PHP execution.",
     "`/assessment` (and /lesson, /certificates, /profile, /results, /calendar, /announcements, /dashboard) are gated by the Next.js middleware's protectedPrefixes list (src/proxy.ts:12-21), not by the page components themselves — worth knowing since a page component having no visible auth check doesn't mean the route is actually public.",
-    "Fixed this session: `.gitignore`'s blanket `.env*` rule was silently excluding `.env.example` (the committed template) too — it had never been tracked, leaving new developers with no reference for which env vars are needed. Added `!.env.example` negation; run `git add .env.example` to actually commit it.",
   ];
 
   const launchReady = blockers.length === 0;
@@ -186,7 +189,7 @@ function writeReport({ staticResult, contentResult, linksResult, lighthouseResul
   // Step 2 detail (Playwright)
   lines.push("## Step 2 — End-to-end flow testing (Playwright)");
   lines.push("");
-  lines.push(`Ran the non-destructive suite (\`onboarding\`, \`quiz\`, \`catalog\`, \`responsive\`) across all 3 required viewports (360×640, 768×1024, 1440×900). Destructive specs (\`auth\`, \`enrollment\`, \`assessment\`, \`certification\`) require \`RUN_DESTRUCTIVE_TESTS=1\` and a real test account — see \`tests/e2e/README.md\`. (\`assessment\` is gated only because \`/assessment\` requires auth at the middleware level, src/proxy.ts:15 — assessment submission itself writes nothing server-side.)`);
+  lines.push(`Ran the non-destructive suite (\`onboarding\`, \`quiz\`, \`catalog\`, \`responsive\`) across all 3 required viewports (360×640, 768×1024, 1440×900). Destructive specs (\`auth\`, \`enrollment\`, \`assessment\`, \`certification\`) require \`RUN_DESTRUCTIVE_TESTS=1\` and a real test account — see \`tests/e2e/README.md\`. (\`assessment\` submission now writes a real \`assessment_attempts\` row and can trigger real certificate issuance, so it's gated for the same real-production-data reason as the others, not just the auth middleware.)`);
   lines.push("");
   if (playwrightResult.failures.length === 0) {
     lines.push("All executed tests passed.");

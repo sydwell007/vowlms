@@ -30,7 +30,10 @@ test.describe("Goal-first onboarding flow", () => {
       expect(href).toContain("/courses?academy=");
 
       await seeAllLink.click();
-      await expect(page.getByText(/Showing \d+ of \d+ courses/)).toBeVisible();
+      // A fresh /courses?academy=... load under concurrent test-worker load on a single local
+      // `next start` process can legitimately take longer than the 5s default — this is a
+      // server-response-time margin, not app behavior under test, hence the generous timeout.
+      await expect(page.getByText(/Showing \d+ of \d+ courses/)).toBeVisible({ timeout: 20_000 });
       const shownMatch = (await page.getByText(/Showing \d+ of \d+ courses/).innerText()).match(/of (\d+) courses/i);
       expect(Number(shownMatch?.[1] ?? 0)).toBeGreaterThan(0);
     });

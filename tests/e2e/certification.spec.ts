@@ -1,55 +1,61 @@
 import { test, expect } from "@playwright/test";
 import { signUpTestUser } from "./helpers/auth";
+import { getCourseBySlug } from "../../src/lib/data";
 
 /**
- * @destructive — writes a real certificate row via the live bridge. Skipped unless
- * RUN_DESTRUCTIVE_TESTS=1. See tests/e2e/README.md.
+ * @destructive — writes real progress, assessment, and certificate rows via the live bridge.
+ * Skipped unless RUN_DESTRUCTIVE_TESTS=1. See tests/e2e/README.md.
  *
- * IMPORTANT FINDING (verified by tracing the code, not assumption): no UI component in this
- * codebase ever calls `POST /api/certificates/generate` (src/app/api/certificates/generate/route.ts:65-80)
- * — the only wired-up call is the `GET` in CertificateRouteClient.tsx:20, which *reads* an
- * existing certificate (bridgeGet("/certificates?courseSlug=...")) and 404s if one doesn't
- * exist yet. There is currently no learner-reachable button/flow that ever creates the row in
- * the first place, so a real learner visiting /certificates/{slug} after completing a course
- * will always see "Certificate unavailable" today. This test calls the POST endpoint directly
- * (the way a "Generate certificate" action presumably should) to verify the backend half of the
- * flow works, then confirms the read-back/PDF/dashboard steps — but the missing UI trigger
- * itself is the actual pre-launch blocker and is called out in the generated report.
+ * Drives the real learner-facing UI end to end: enroll -> complete lesson 1 -> pass the
+ * assessment -> certificate is generated automatically (AssessmentPlayer.tsx now calls
+ * POST /api/progress + POST /api/certificates/generate on a passing score) -> read back
+ * through /results and /certificates.
  */
 const COURSE_SLUG = "improving-your-mental-health";
 
 test.describe("Certification @destructive", () => {
-  test("certificate generates via the backend, reads back, downloads as PDF, and lists on dashboard", async ({ page }) => {
+  test("passing the assessment auto-generates a certificate, visible on results, certificate page, and dashboard", async ({ page }) => {
+    const course = getCourseBySlug(COURSE_SLUG)!;
+    const assessment = course.assessments[0];
+
     await signUpTestUser(page, "cert");
 
-    // "Force-complete" the course: enroll, then mark both lessons complete.
     await page.goto(`/courses/${COURSE_SLUG}`);
     await page.getByRole("button", { name: "Enrol free" }).click();
     await expect(page.getByRole("button", { name: "Continue learning" })).toBeVisible({ timeout: 10_000 });
     await page.getByRole("button", { name: "Continue learning" }).click();
     await page.waitForURL(/\/lesson\//, { timeout: 10_000 });
 
+    // Lesson 1 -> auto-advances to lesson 2 (the assessment's lesson) on completion.
     await page.getByRole("button", { name: /Mark complete/i }).click();
-    await page.waitForTimeout(800); // auto-advance to lesson 2
-    await page.getByRole("button", { name: /Mark complete|Completed/i }).click().catch(() => {});
+    await page.waitForURL(/knowledge-check/, { timeout: 5_000 });
 
-    // The UI never calls this — invoking it directly to test the backend generation path itself.
-    const genResponse = await page.request.post("/api/certificates/generate", {
-      data: { courseSlug: COURSE_SLUG },
-    });
+    await page.getByRole("link", { name: /Take Assessment/i }).click();
+    await page.waitForURL(/\/assessment\//, { timeout: 10_000 });
 
-    if (genResponse.status() === 503) {
-      test.skip(true, "Bridge not configured in this environment — cannot verify real certificate generation.");
+    await page.getByRole("button", { name: "Start assessment" }).click();
+
+    for (const question of assessment.questions) {
+      // Clicking the option's label text toggles the radio it wraps (native label association).
+      await page.getByText(question.answer, { exact: true }).click();
+      const isLast = question === assessment.questions[assessment.questions.length - 1];
+      await page.getByRole("button", { name: isLast ? "Submit assessment" : "Next question →" }).click();
     }
 
-    expect(genResponse.ok()).toBe(true);
-    const genBody = await genResponse.json();
-    expect(genBody.ok).toBe(true);
-    expect(genBody.data?.certificateId).toBeTruthy();
+    await expect(page.getByText("Congratulations — you passed!")).toBeVisible();
+    await expect(page.getByText("100%").first()).toBeVisible();
 
-    // Read-back through the actual learner-facing page.
-    await page.goto(`/certificates/${COURSE_SLUG}`);
-    await expect(page.getByText(genBody.data.certificateId)).toBeVisible({ timeout: 10_000 });
+    // The certificate call happens in the background after submit — give it a moment, then
+    // confirm the UI reflects real success rather than staying stuck on "Checking...".
+    await expect(page.getByText(/Certificate ready|Complete the remaining lessons/)).toBeVisible({ timeout: 15_000 });
+
+    await page.getByRole("link", { name: "View results" }).click();
+    await page.waitForURL(/\/results\//, { timeout: 10_000 });
+    await expect(page.getByRole("link", { name: "View certificate" })).toBeVisible({ timeout: 15_000 });
+
+    await page.getByRole("link", { name: "View certificate" }).click();
+    await page.waitForURL(/\/certificates\//, { timeout: 10_000 });
+    const certificateIdText = await page.getByText(/VOWLMS-[A-Z0-9-]+/).first().innerText();
     await expect(page.getByRole("button", { name: /Download/i })).toBeVisible();
 
     // PDF download endpoint returns a real PDF.
@@ -64,6 +70,7 @@ test.describe("Certification @destructive", () => {
 
     // Appears on the learner's certificates list.
     await page.goto("/certificates");
-    await expect(page.getByText("Improving your Mental Health")).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(course.title)).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByText(certificateIdText)).toBeVisible();
   });
 });

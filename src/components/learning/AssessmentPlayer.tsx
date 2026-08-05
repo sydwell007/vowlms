@@ -7,42 +7,22 @@ import type { Assessment, Course } from "@/types/lms";
 type Props = { assessment: Assessment; course: Course };
 type Phase = "intro" | "quiz" | "results";
 
+type ServerResult = { score: number; passed: boolean; passMark: number };
+type CertificateState = "idle" | "pending" | "ready" | "incomplete" | "error";
+
 export function AssessmentPlayer({ assessment, course }: Props) {
   const [phase, setPhase] = useState<Phase>("intro");
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [serverResult, setServerResult] = useState<ServerResult | null>(null);
+  const [certificateState, setCertificateState] = useState<CertificateState>("idle");
 
   const questions = assessment.questions;
   const total = questions.length;
 
   function selectAnswer(questionId: string, option: string) {
     setAnswers((a) => ({ ...a, [questionId]: option }));
-  }
-
-  function submit() {
-    setSubmitted(true);
-    setPhase("results");
-
-    // Persist attempt to localStorage
-    const attempts = JSON.parse(localStorage.getItem("vowlms_assessments") ?? "{}");
-    const score = calculateScore();
-    attempts[assessment.slug] = {
-      slug: assessment.slug,
-      courseSlug: course.slug,
-      score,
-      passed: score >= assessment.passMark,
-      completedAt: new Date().toISOString(),
-    };
-    localStorage.setItem("vowlms_assessments", JSON.stringify(attempts));
-
-    // Update course progress
-    const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
-    if (!progress[course.slug]) progress[course.slug] = { completedLessons: [], assessmentPassed: false };
-    if (score >= assessment.passMark) {
-      progress[course.slug].assessmentPassed = true;
-    }
-    localStorage.setItem("vowlms_progress", JSON.stringify(progress));
   }
 
   const calculateScore = useCallback(() => {
@@ -53,8 +33,87 @@ export function AssessmentPlayer({ assessment, course }: Props) {
     return Math.round((correct / total) * 100);
   }, [answers, questions, total]);
 
-  const score = submitted ? calculateScore() : 0;
-  const passed = score >= assessment.passMark;
+  async function submit() {
+    setSubmitted(true);
+    setPhase("results");
+    setServerResult(null);
+    setCertificateState("idle");
+
+    const clientScore = calculateScore();
+    const clientPassed = clientScore >= assessment.passMark;
+
+    // Persist attempt to localStorage — instant, offline-safe local record.
+    const attempts = JSON.parse(localStorage.getItem("vowlms_assessments") ?? "{}");
+    attempts[assessment.slug] = {
+      slug: assessment.slug,
+      courseSlug: course.slug,
+      score: clientScore,
+      passed: clientPassed,
+      completedAt: new Date().toISOString(),
+    };
+    localStorage.setItem("vowlms_assessments", JSON.stringify(attempts));
+
+    const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
+    if (!progress[course.slug]) progress[course.slug] = { completedLessons: [], assessmentPassed: false };
+    if (clientPassed) progress[course.slug].assessmentPassed = true;
+    localStorage.setItem("vowlms_progress", JSON.stringify(progress));
+
+    // Sync the real attempt to the server — the score above is the instant local echo;
+    // this is the authoritative, storable record (assessment_attempts).
+    let effectivePassed = clientPassed;
+    try {
+      const res = await fetch("/api/assessments/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ assessmentSlug: assessment.slug, answers }),
+      });
+      const json = await res.json();
+      if (res.ok && json.ok) {
+        setServerResult({ score: json.data.score, passed: json.data.passed, passMark: json.data.passMark });
+        effectivePassed = json.data.passed;
+      }
+    } catch {
+      // Offline / bridge not configured — the client-computed score above still stands.
+    }
+
+    if (!effectivePassed) return;
+
+    // Passing the assessment is what completes the course: mark its lesson done (advances
+    // enrolment progress toward 100%), then attempt certificate issuance. The backend re-checks
+    // eligibility itself (enrollments.progress >= 100) — a 400 here just means other lessons in
+    // the course are still incomplete, which is an expected, non-error state.
+    setCertificateState("pending");
+    try {
+      await fetch("/api/progress", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ lessonSlug: assessment.lessonSlug, completed: true }),
+      });
+
+      const certRes = await fetch("/api/certificates/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ courseSlug: course.slug }),
+      });
+      const certJson = await certRes.json().catch(() => null);
+
+      if (certRes.ok && certJson?.ok) {
+        setCertificateState("ready");
+      } else if (certRes.status === 400) {
+        setCertificateState("incomplete");
+      } else {
+        setCertificateState("error");
+      }
+    } catch {
+      setCertificateState("error");
+    }
+  }
+
+  const score = serverResult?.score ?? (submitted ? calculateScore() : 0);
+  const passed = serverResult?.passed ?? score >= assessment.passMark;
   const answeredCount = Object.keys(answers).length;
 
   if (phase === "intro") {
@@ -119,7 +178,7 @@ export function AssessmentPlayer({ assessment, course }: Props) {
                 <>
                   <Link href={`/results/${course.slug}`}
                     className="rounded-lg bg-gold px-6 py-3 text-sm font-semibold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.25)] transition hover:bg-[#e8b830]">
-                    View results & certificate
+                    View results
                   </Link>
                   {course.vrPractices[0] ? (
                     <Link href={`/vr-practice/${course.vrPractices[0].slug}`}
@@ -141,6 +200,15 @@ export function AssessmentPlayer({ assessment, course }: Props) {
                 </>
               )}
             </div>
+
+            {passed ? (
+              <p className="mt-4 text-xs text-slate-500">
+                {certificateState === "pending" && "Checking your certificate…"}
+                {certificateState === "ready" && "🎓 Certificate ready — find it on your results page."}
+                {certificateState === "incomplete" && "Complete the remaining lessons in this course to unlock your certificate."}
+                {certificateState === "error" && "We couldn't confirm your certificate right now — check back on your dashboard shortly."}
+              </p>
+            ) : null}
           </div>
 
           {/* Answer review */}
