@@ -55,3 +55,25 @@ function welcomeEmail(string $name): string {
     </div>
     </body></html>";
 }
+
+function certificateEmail(string $name, string $courseName, string $certificateId): string {
+    $url = env('VOWLMS_APP_URL', 'https://vowlms.vercel.app');
+
+    return "
+    <html><body style='font-family:sans-serif;color:#1a1a1a;background:#f8f9fa;padding:40px 0;'>
+    <div style='max-width:540px;margin:0 auto;background:#fff;border-radius:16px;padding:40px;'>
+      <div style='text-align:center;margin-bottom:32px;'>
+        <div style='display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;background:#f5c542;border-radius:10px;font-size:18px;font-weight:900;color:#06111f;'>VL</div>
+        <h2 style='margin:16px 0 4px;color:#06111f;'>Certificate issued</h2>
+        <p style='color:#6b7280;margin:0;font-size:14px;'>VowLMS · GoalVow Holdings</p>
+      </div>
+      <p style='color:#374151;'>Hi {$name},</p>
+      <p style='color:#374151;'>Congratulations — your certificate for <strong>{$courseName}</strong> is ready.</p>
+      <div style='text-align:center;margin:32px 0;'>
+        <a href='{$url}/certificates' style='display:inline-block;background:#f5c542;color:#06111f;font-weight:700;font-size:14px;padding:14px 28px;border-radius:10px;text-decoration:none;'>View certificate</a>
+      </div>
+      <p style='color:#6b7280;font-size:13px;'>Certificate ID: {$certificateId}</p>
+      <p style='color:#6b7280;font-size:12px;margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;'>GoalVow Holdings (Pty) Ltd · 17 Vultee, Cape Town · support@goalvow.com</p>
+    </div>
+    </body></html>";
+}

@@ -2,8 +2,13 @@
 require_once __DIR__ . '/../config/cors.php';
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../lib/response.php';
+require_once __DIR__ . '/../lib/rate-limit.php';
 
 setCors();
+
+// Public, unauthenticated endpoint for uptime monitors (UptimeRobot etc.) — rate-limited
+// per IP so it can't be used to hammer the database.
+requireRateLimit('health-check', $_SERVER['REMOTE_ADDR'] ?? 'unknown', 1, 5);
 
 $dbStatus = 'unknown';
 $schemaStatus = 'unknown';
@@ -49,13 +54,17 @@ try {
     $jwtStatus = 'error';
 }
 
+$healthy = $dbStatus === 'healthy' && $schemaStatus === 'healthy' && $jwtStatus === 'healthy';
+
 jsonOk([
     'service' => 'VowLMS Bridge',
-    'status'  => ($dbStatus === 'healthy' && $schemaStatus === 'healthy' && $jwtStatus === 'healthy') ? 'healthy' : 'degraded',
+    'status'  => $healthy ? 'healthy' : 'degraded',
     'version' => '1.0.1',
     'checks'  => [
         'db'     => $dbStatus,
         'schema' => $schemaStatus,
         'jwt'    => $jwtStatus,
     ],
-]);
+    // DB unreachable specifically (not a schema/jwt config issue) is the one condition an
+    // uptime monitor should page on — surfaced separately so 503 means "database is down".
+], $dbStatus === 'error' ? 503 : 200);

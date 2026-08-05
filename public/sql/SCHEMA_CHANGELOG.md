@@ -1,5 +1,36 @@
 # Schema Changelog
 
+## 014-017 - Pre-launch QA diagnostic suite
+
+- `014_vr_sessions.sql` — tracks VR-platform completion callbacks received by
+  the new `POST public/php/api/qa/test-vr-callback.php` (distinct from the
+  existing `vr_attempts`/`vr_practices` tables — this logs the raw external
+  callback and whether it synced onward to `progress`/`reward_events`).
+- `015_course_evaluations.sql` — learner course/instructor ratings and
+  feedback, one row per user per course.
+- `016_opportunity_matches.sql` — records a PlugConnect opportunity match
+  against a learner's certificate.
+- `017_integration_health_log.sql` — every diagnostic run (`public/php/api/qa/*`)
+  logs here: endpoint, latency, success, error, and which authenticated
+  identity triggered it.
+- All four corrected from the original spec's `INT AUTO_INCREMENT` ids to
+  `VARCHAR(36)` UUIDs, matching every existing table in `001_schema.sql`
+  (`users.id`, `courses.id`, `modules.id`, `certificates.id` are all
+  `VARCHAR(36)` — an `INT` FK would never match them).
+- New PHP endpoints under `public/php/api/qa/`: `test-db-connection.php`,
+  `test-vowrewards-integration.php`, `test-plugconnect-integration.php`,
+  `test-vr-callback.php` + `test-vr-callback-simulator.php`,
+  `test-payfast-itn-simulator.php` (opt-in only via `ALLOW_QA_SIMULATORS=true`
+  — disabled by default), `test-smtp-email.php`, `verify-seed-integrity.php`,
+  `run-all-diagnostics.php`. `public/php/api/health.php` gained a rate limit
+  (1 req / 5s / IP) via the existing `requireRateLimit()` helper.
+- **Known gap, not fixed by this migration:** `test-vowrewards-integration.php`
+  and `test-plugconnect-integration.php` will report `NOT_CONFIGURED` /
+  connection failures today — neither `vowrewards-school` nor `plugconnect`
+  has a real endpoint on their side to receive these calls yet (verified by
+  reading both repos directly). These two diagnostics are intentionally honest
+  rather than faked — see `qa-reports/launch-readiness-recommendations.md`.
+
 ## 013 - Learner goals
 
 - Adds `learner_goals` (one row per user, `UNIQUE KEY uq_user`) recording which

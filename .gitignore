@@ -12,6 +12,11 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/qa-reports/*.json
 
 # next.js
 /.next/
@@ -34,6 +39,7 @@ dev-server.err.log
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 /public/php/config/env.local.php
 
 # vercel

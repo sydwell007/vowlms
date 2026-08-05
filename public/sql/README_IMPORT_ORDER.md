@@ -24,7 +24,15 @@ This is a phpMyAdmin/Afrihost migration package. It must never be served by Verc
 8. `011_integrity_hardening.sql`
 9. `012_module_metadata.sql`
 10. `013_learner_goals.sql`
-11. `verify_schema.sql`
+11. `014_vr_sessions.sql`
+12. `015_course_evaluations.sql`
+13. `016_opportunity_matches.sql`
+14. `017_integration_health_log.sql`
+15. `verify_schema.sql`
+
+`verify-seed-integrity.sql` is a separate, read-only diagnostic file (not part of
+the schema import order) — run it any time via phpMyAdmin or
+`GET public/php/api/qa/verify-seed-integrity.php`.
 
 ### Optional admin promotion (`005_admin_user_setup.sql`)
 
@@ -54,7 +62,23 @@ tables in place and do not reseed them with this file.
 
 ## Existing Database
 
-Do not re-import `001_schema.sql` blindly. Run the audit, compare the live schema, apply only required incremental patches in order (`007`, `009`, `011`, `012`, `013`), then run `verify_schema.sql`.
+Do not re-import `001_schema.sql` blindly, and do not re-run a numbered patch that's
+already been applied — most of them (`007`, `009`, `011`) are plain `ALTER TABLE`
+statements without an `IF NOT EXISTS` guard and will error on a column/table that
+already exists. Only `012` is written to be safely re-run.
+
+1. Run `000_schema_audit.sql` and compare its output against the live schema to see
+   exactly which numbered patches are already applied (check for the tables/columns
+   each one adds — see `SCHEMA_CHANGELOG.md` for what each number introduced).
+2. Import only the patches missing from that comparison, in ascending numeric order.
+   The full historical chain is `007`, `009`, `011`, `012`, `013`, `014`, `015`,
+   `016`, `017` — this is a reference list of everything that has ever shipped, not
+   an instruction to run all of them regardless of what's already live.
+3. Run `verify_schema.sql` once you've applied whatever was missing.
+
+As of `SCHEMA_CHANGELOG.md`'s "014-017" entry, `014` through `017` are the newest
+patches — if your database already has `013_learner_goals` applied (check for a
+`learner_goals` table) and nothing newer, those four are the only ones left to run.
 
 ## Rollback
 
