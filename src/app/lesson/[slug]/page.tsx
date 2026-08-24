@@ -3,6 +3,7 @@ import { createHmac } from "node:crypto";
 import { getLessonBySlug } from "@/lib/data";
 import { LessonPlayer } from "@/components/learning/LessonPlayer";
 import { bridgeGet, isBridgeConfigured } from "@/lib/bridge";
+import { normalizeVowHumanPresenter } from "@/lib/vowhumans";
 import type { Course, CourseModule, Lesson } from "@/types/lms";
 import type { LessonResource } from "@/components/learning/LessonPlayer";
 
@@ -38,6 +39,15 @@ type BridgeLessonResponse = {
     duration_minutes: number;
     position: number;
     module_id: string;
+    vowhuman_enabled?: boolean | number | string;
+    vowhuman_embed_url?: string | null;
+    vowhuman_presenter_name?: string | null;
+    vowhuman_intro?: string | null;
+    vowhuman_placement?: string | null;
+    vowhuman_role?: string | null;
+    vowhuman_expertise?: string | null;
+    vowhuman_camera_enabled?: boolean | number | string;
+    vowhuman_microphone_enabled?: boolean | number | string;
   };
   module: { id: string; title: string; position: number };
   course: {
@@ -184,6 +194,7 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
     hasAssessment: isAssessment,
     hasVRPractice: isVR,
     durationMinutes: d.lesson.duration_minutes ?? 10,
+    vowHuman: normalizeVowHumanPresenter(d.lesson),
   };
 
   const courseModule: CourseModule = { title: d.module.title, order: d.module.position, lessons: [] };

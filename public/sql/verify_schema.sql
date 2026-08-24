@@ -23,7 +23,13 @@ WHERE table_schema = 'goalvxiw_vowlms'
   AND (
     (table_name = 'payments' AND column_name IN ('amount','status','payfast_payment_id','itn_data')) OR
     (table_name = 'enrollments' AND column_name IN ('progress','updated_at')) OR
-    (table_name = 'progress' AND column_name IN ('completed','updated_at'))
+    (table_name = 'progress' AND column_name IN ('completed','updated_at')) OR
+    (table_name = 'lessons' AND column_name IN (
+      'vowhuman_enabled','vowhuman_embed_url','vowhuman_presenter_name',
+      'vowhuman_intro','vowhuman_placement','vowhuman_role',
+      'vowhuman_expertise','vowhuman_camera_enabled',
+      'vowhuman_microphone_enabled'
+    ))
   )
 ORDER BY table_name, column_name;
 
@@ -42,3 +48,13 @@ FROM `goalvxiw_vowlms`.`progress` p
 LEFT JOIN `goalvxiw_vowlms`.`users` u ON u.id = p.user_id
 LEFT JOIN `goalvxiw_vowlms`.`lessons` l ON l.id = p.lesson_id
 WHERE u.id IS NULL OR l.id IS NULL;
+
+SELECT
+  slug,
+  vowhuman_enabled,
+  vowhuman_embed_url,
+  vowhuman_presenter_name,
+  vowhuman_placement,
+  vowhuman_role
+FROM `goalvxiw_vowlms`.`lessons`
+WHERE slug = 'module-1-business-ethics-fundamentals-module-reading-material';

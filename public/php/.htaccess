@@ -32,6 +32,10 @@ RewriteRule ^courses/([^/]+)/?$       api/courses/index.php?slug=$1 [L,QSA]
 # ── Lessons ───────────────────────────────────────────────────────────────────
 RewriteRule ^lessons/([^/]+)/?$       api/lessons/index.php?slug=$1 [L,QSA]
 
+# ── Admin lesson presenter settings ───────────────────────────────────────────
+RewriteRule ^admin/lessons/?$         api/admin/lessons.php [L,QSA]
+RewriteRule ^admin/lessons/([^/]+)/?$ api/admin/lessons.php?slug=$1 [L,QSA]
+
 # ── File serving (no Bridge-Key — browser accesses directly) ──────────────────
 RewriteRule ^files/serve/?$           api/files/serve.php [L,QSA]
 

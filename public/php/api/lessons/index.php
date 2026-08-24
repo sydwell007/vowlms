@@ -59,7 +59,11 @@ $db = getDb();
 // ── 1. Fetch the lesson ───────────────────────────────────────────────────────
 $stmt = $db->prepare(
     'SELECT l.id, l.slug, l.title, l.type, l.content, l.video_url, l.video_hash,
-            l.duration_minutes, l.position, l.module_id
+            l.duration_minutes, l.position, l.module_id,
+            l.vowhuman_enabled, l.vowhuman_embed_url,
+            l.vowhuman_presenter_name, l.vowhuman_intro,
+            l.vowhuman_placement, l.vowhuman_role, l.vowhuman_expertise,
+            l.vowhuman_camera_enabled, l.vowhuman_microphone_enabled
      FROM lessons l
      WHERE l.slug = ? LIMIT 1'
 );

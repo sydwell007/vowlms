@@ -164,6 +164,10 @@ Expected: health returns JSON without PHP version or credentials; unauthorised c
 - Tampered or expired lesson-resource signatures return 403.
 - Employer responses contain no unassigned learner personal data.
 - `config`, `lib`, directory listings, and backup files are inaccessible.
+- An admin JWT can read `/admin/lessons`; learner and anonymous requests are
+  rejected. Saving a non-VowHumans URL returns HTTP 400.
+- The Business Ethics reading-material lesson returns structured `vowhuman_*`
+  fields after migration 018.
 
 ## Rollback
 

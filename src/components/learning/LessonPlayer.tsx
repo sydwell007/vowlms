@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { visualAssets } from "@/lib/visual-assets";
 import type { Lesson, Course, CourseModule } from "@/types/lms";
 import { PdfReader } from "@/components/learning/PdfReader";
+import { VowHumanPresenter } from "@/components/learning/VowHumanPresenter";
+import type { VowHumanPlacement } from "@/types/lms";
 
 export type LessonResource = {
   type: "pdf" | "video" | "audio" | "image" | "other";
@@ -165,6 +167,18 @@ export function LessonPlayer({
   const otherResources = useMemo(() => resources.filter((r) => r.type === "other" || r.type === "image"), [resources]);
   const selectedPdf = activePdf ?? pdfResources[0] ?? null;
 
+  function presenterAt(placement: VowHumanPlacement) {
+    if (!lesson.vowHuman?.enabled || lesson.vowHuman.placement !== placement) return null;
+
+    return (
+      <VowHumanPresenter
+        config={lesson.vowHuman}
+        lessonSlug={lesson.slug}
+        lessonTitle={lesson.title}
+      />
+    );
+  }
+
   useEffect(() => {
     let cancelled = false;
     Promise.resolve().then(() => {
@@ -319,6 +333,8 @@ export function LessonPlayer({
               )}
             </div>
 
+            {presenterAt("after-introduction")}
+
             {/* ── VIDEO PLAYER ────────────────────────────────────────── */}
             {videoInfo.type === "youtube" && (
               <div className="mt-6 overflow-hidden rounded-2xl bg-black">
@@ -366,6 +382,10 @@ export function LessonPlayer({
                 )}
               </div>
             )}
+
+            {presenterAt("before-content")}
+
+            <div id="lesson-reading-material" tabIndex={-1} className="scroll-mt-24 outline-none" />
 
             {/* ── PDF VIEWER (inline embed) ────────────────────────────── */}
             {pdfResources.length > 0 && (
@@ -452,6 +472,8 @@ export function LessonPlayer({
                 </div>
               </div>
             )}
+
+            {presenterAt("after-content")}
 
             {/* ── PLACEHOLDER when nothing to show ────────────────────── */}
             {!hasContent && videoInfo.type === "none" && pdfResources.length === 0 && (

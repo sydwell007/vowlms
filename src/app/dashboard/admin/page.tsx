@@ -31,7 +31,7 @@ const pendingMetrics: DashboardMetric[] = [
 const modules = [
   { title: "Users and roles", href: "/dashboard/admin/users", description: "Review account and role administration" },
   { title: "Analytics readiness", href: "/dashboard/admin/analytics", description: "Review authorised reporting sources" },
-  { title: "Courses", href: "/courses", description: "Review the published course catalogue" },
+  { title: "AI lesson presenters", href: "/dashboard/admin/lessons", description: "Assign VowHumans guides to course lessons" },
   { title: "Settings", href: "/dashboard/admin/settings", description: "Review platform integration settings" },
 ];
 

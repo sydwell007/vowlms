@@ -1,5 +1,18 @@
 # Schema Changelog
 
+## 018 - VowHumans lesson presenters
+
+- Adds structured, optional VowHumans fields to `lessons`; no lesson, course, or
+  learner data is recreated.
+- Supports presenter, mentor, tutor, and field-expert roles, three lesson
+  placements, expertise copy, and per-presenter camera/microphone delegation.
+- Seeds the approved Business Ethics presenter only when that lesson has no
+  existing presenter URL, so a re-import does not overwrite admin changes.
+- Adds the admin-only `/admin/lessons` PHP endpoint. All URLs are validated as
+  exact HTTPS `vowhumans.com/embed/{id}/{slug}` URLs and raw iframe HTML is rejected.
+- Future ordered content blocks remain the preferred architecture when VowLMS
+  gains a full authoring system; this patch is the smallest safe current change.
+
 ## 014-017 - Pre-launch QA diagnostic suite
 
 - `014_vr_sessions.sql` — tracks VR-platform completion callbacks received by

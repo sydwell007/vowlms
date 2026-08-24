@@ -374,6 +374,17 @@ export const courses: Course[] = [
           hasAssessment: false,
           hasVRPractice: false,
           durationMinutes: 8,
+          vowHuman: {
+            enabled: true,
+            embedUrl: "https://vowhumans.com/embed/c81cca0d-866f-466c-a60d-c343dcdab9c4/goalvow-academies",
+            presenterName: "GoalVow Academies Presenter",
+            introduction: "Meet your AI course presenter before working through the Business Ethics reading material.",
+            placement: "before-content" as const,
+            role: "presenter" as const,
+            expertise: "Business Ethics learning guide",
+            cameraEnabled: true,
+            microphoneEnabled: true,
+          },
         },
         {
           slug: "module-1-business-ethics-fundamentals-lesson-1-defining-business-ethics",

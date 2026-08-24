@@ -6,6 +6,7 @@
 | `/academies` | GET | Bridge key |
 | `/courses`, `/courses/{slug}` | GET | Bridge key |
 | `/lessons/{slug}` | GET | Bridge key |
+| `/admin/lessons`, `/admin/lessons/{slug}` | GET/PUT | Bridge key + admin JWT |
 | `/files/serve` | GET/HEAD | Expiring HMAC signature |
 | `/user/avatar` | POST/DELETE | Bridge key + bearer token |
 | `/auth/register` | POST | Bridge key, rate limited; creates learner only |

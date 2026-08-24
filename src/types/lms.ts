@@ -11,6 +11,25 @@ export type AcademyCategory =
 
 export type LessonType = "text" | "video" | "assessment" | "vr-practice";
 
+export type VowHumanRole = "presenter" | "mentor" | "tutor" | "field-expert";
+
+export type VowHumanPlacement =
+  | "after-introduction"
+  | "before-content"
+  | "after-content";
+
+export type VowHumanPresenterConfig = {
+  enabled: boolean;
+  embedUrl: string;
+  presenterName: string;
+  introduction: string;
+  placement: VowHumanPlacement;
+  role: VowHumanRole;
+  expertise: string;
+  cameraEnabled: boolean;
+  microphoneEnabled: boolean;
+};
+
 export type CourseLevel = "Foundation" | "Intermediate" | "Advanced";
 
 export type CourseStatus = "draft" | "published" | "archived";
@@ -34,6 +53,7 @@ export type Lesson = {
   hasAssessment: boolean;
   hasVRPractice: boolean;
   durationMinutes: number;
+  vowHuman?: VowHumanPresenterConfig;
 };
 
 export type CourseModule = {
