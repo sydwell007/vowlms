@@ -41,6 +41,7 @@ export function VowHumanPresenter({
   const [mounted, setMounted] = useState(false);
   const [frameKey, setFrameKey] = useState(0);
   const [permissionMessage, setPermissionMessage] = useState("");
+  const [lessonContextToken, setLessonContextToken] = useState("");
 
   const roleLabel = getVowHumanRoleLabel(config.role);
   const validUrl = isAllowedVowHumansUrl(config.embedUrl);
@@ -106,12 +107,32 @@ export function VowHumanPresenter({
 
   if (!config.enabled || !validUrl) return null;
 
-  function startPresenter() {
+  async function startPresenter() {
     setPermissionMessage("");
     setFrameKey((current) => current + 1);
-    setMounted(true);
     setState("loading");
     emitPresenterEvent("presenter_started", lessonSlug);
+
+    try {
+      const response = await fetch(
+        `/api/vowhumans/context-token/${encodeURIComponent(lessonSlug)}`,
+        { cache: "no-store" },
+      );
+      const body = (await response.json().catch(() => null)) as
+        | { token?: string; error?: string }
+        | null;
+      if (!response.ok || !body?.token) {
+        throw new Error(body?.error || "Lesson context is unavailable");
+      }
+      setLessonContextToken(body.token);
+      setMounted(true);
+    } catch (error) {
+      failPresenter(
+        error instanceof Error
+          ? error.message
+          : "Lesson context is unavailable",
+      );
+    }
   }
 
   function closePresenter() {
@@ -121,6 +142,7 @@ export function VowHumanPresenter({
     setMounted(false);
     setState("idle");
     setPermissionMessage("");
+    setLessonContextToken("");
   }
 
   function continueWithLesson() {
@@ -186,12 +208,21 @@ export function VowHumanPresenter({
           </div>
         ) : null}
 
-        {mounted ? (
+        {state === "loading" && !mounted ? (
+          <div className="flex min-h-72 items-center justify-center rounded-lg bg-[#06111f] px-6 text-center text-white">
+            <div>
+              <span className="mx-auto block h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-gold" />
+              <p className="mt-4 text-sm font-semibold">Preparing this lesson for {config.presenterName}</p>
+            </div>
+          </div>
+        ) : null}
+
+        {mounted && lessonContextToken ? (
           <div className="relative mx-auto w-full max-w-[480px]">
             <div className="relative aspect-[2/3] overflow-hidden rounded-lg bg-[#06111f]">
               <iframe
                 key={frameKey}
-                src={config.embedUrl}
+                src={`${config.embedUrl}#${new URLSearchParams({ lesson_context_token: lessonContextToken })}`}
                 title={`${config.presenterName} interactive ${roleLabel.toLowerCase()} for ${lessonTitle}`}
                 allow={iframePermissions}
                 allowFullScreen
