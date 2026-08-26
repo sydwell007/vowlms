@@ -50,19 +50,19 @@ export default function Home() {
 
   return (
     <main>
-      <section className="relative isolate min-h-[calc(100svh-260px)] overflow-hidden bg-[#06111f] py-16 text-white sm:py-20">
+      <section className="relative isolate overflow-hidden bg-[#06111f] py-12 text-white sm:py-14 md:py-16">
         <Image
           src={visualAssets.ecosystemHero}
           alt="VowLMS learners using laptops, tablets, and VR practice in a modern GoalVow learning ecosystem"
           fill
           priority
           sizes="100vw"
-          className="absolute inset-0 -z-20 object-cover"
+          className="absolute inset-0 -z-20 object-cover object-[78%_28%]"
         />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(6,17,31,0.94)_0%,rgba(6,17,31,0.78)_38%,rgba(6,17,31,0.28)_78%)]" />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(6,17,31,0.94)_0%,rgba(6,17,31,0.8)_42%,rgba(6,17,31,0.32)_80%)]" />
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,17,31,0.2)_0%,rgba(6,17,31,0.88)_100%)]" />
 
-        <div className="mx-auto flex min-h-[58vh] w-full max-w-7xl flex-col justify-center px-5 sm:px-6 lg:px-8">
+        <div className="mx-auto flex min-h-[380px] w-full max-w-7xl flex-col justify-center px-5 sm:min-h-[420px] sm:px-6 md:min-h-[460px] lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold">
             GoalVow academy ecosystem
           </p>

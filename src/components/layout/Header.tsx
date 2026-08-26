@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { clearSessionCache, useSession } from "@/lib/auth/useSession";
 import { visualAssets } from "@/lib/visual-assets";
@@ -40,7 +39,6 @@ const navEntries: NavEntry[] = [
       items: [
         { href: "/courses", label: "Course catalogue" },
         { href: "/learn/pathways", label: "Skill pathways" },
-        { href: "/pricing", label: "Course pricing" },
         { href: "/learn", label: "Learning pathway" },
         { href: "/practice", label: "Skills practice" },
         { href: "/vr-practice", label: "VR practice" },
@@ -56,22 +54,6 @@ const navEntries: NavEntry[] = [
         { href: "/certificates", label: "Certificates" },
         { href: "/rewards", label: "VowRewards" },
         { href: "/opportunities", label: "Opportunities" },
-        { href: "/apply", label: "Application pathway" },
-      ],
-    },
-  },
-  {
-    kind: "group",
-    group: {
-      label: "Company",
-      items: [
-        { href: "/about", label: "About Us" },
-        { href: "/team", label: "Team" },
-        { href: "/careers", label: "Careers" },
-        { href: "/impact", label: "Impact" },
-        { href: "/ecosystem", label: "Ecosystem" },
-        { href: "/investors", label: "Investors Hub" },
-        { href: "/innovation-labs", label: "Innovation Labs" },
       ],
     },
   },
@@ -104,9 +86,11 @@ export function Header() {
   const router = useRouter();
   const session = useSession();
   const desktopNavRef = useRef<HTMLElement>(null);
+  const accountMenuRef = useRef<HTMLDivElement>(null);
   const [mobileOpenForPath, setMobileOpenForPath] = useState<string | null>(null);
   const [desktopMenu, setDesktopMenu] = useState<string | null>(null);
   const [mobileGroup, setMobileGroup] = useState<string | null>(null);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const mobileMenuOpen = mobileOpenForPath === pathname;
 
   const isAuthed = session.status === "authenticated";
@@ -126,10 +110,16 @@ export function Header() {
       if (desktopNavRef.current && !desktopNavRef.current.contains(event.target as Node)) {
         setDesktopMenu(null);
       }
+      if (accountMenuRef.current && !accountMenuRef.current.contains(event.target as Node)) {
+        setAccountMenuOpen(false);
+      }
     }
 
     function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setDesktopMenu(null);
+      if (event.key === "Escape") {
+        setDesktopMenu(null);
+        setAccountMenuOpen(false);
+      }
     }
 
     document.addEventListener("pointerdown", closeOnOutsideClick);
@@ -151,6 +141,7 @@ export function Header() {
     setDesktopMenu(null);
     setMobileOpenForPath(null);
     setMobileGroup(null);
+    setAccountMenuOpen(false);
   }
 
   function toggleMobileMenu() {
@@ -292,28 +283,76 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 xl:flex">
-          {isAuthed ? <NotificationBell /> : null}
           {session.status === "loading" ? (
-            <div className="h-9 w-20 animate-pulse rounded-lg bg-white/10" />
+            <div className="h-9 w-24 animate-pulse rounded-lg bg-white/10" />
           ) : isAuthed ? (
-            <>
-              <Link
-                href="/profile"
-                className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg border border-white/14 bg-white/6 text-xs font-bold text-[#f5c542] transition hover:bg-white/10"
-                title={user?.name ?? "Profile"}
-              >
-                {avatarUrl ? (
-                  <Image src={avatarUrl} alt="" fill sizes="36px" className="object-cover" unoptimized />
-                ) : initials}
-              </Link>
+            <div ref={accountMenuRef} className="relative">
               <button
                 type="button"
-                onClick={handleLogout}
-                className="min-h-9 rounded-lg border border-white/14 bg-white/6 px-4 py-2 text-sm font-semibold text-white/80 transition hover:bg-white/10"
+                aria-expanded={accountMenuOpen}
+                aria-haspopup="menu"
+                aria-controls="desktop-account-menu"
+                onClick={() => setAccountMenuOpen((open) => !open)}
+                title={user?.name ?? "Account"}
+                className={`flex h-10 items-center gap-2 rounded-lg border border-white/14 py-1.5 pl-1.5 pr-2.5 transition ${
+                  accountMenuOpen ? "bg-white/10" : "bg-white/6 hover:bg-white/10"
+                }`}
               >
-                Sign out
+                <span className="relative flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-md bg-white/10 text-[11px] font-bold text-[#f5c542]">
+                  {avatarUrl ? (
+                    <Image src={avatarUrl} alt="" fill sizes="28px" className="object-cover" unoptimized />
+                  ) : (
+                    initials
+                  )}
+                </span>
+                <span className="max-w-[92px] truncate text-sm font-semibold text-white/86">
+                  {user?.name?.split(" ")[0] ?? "Account"}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className={`h-1.5 w-1.5 border-b border-r border-current text-white/60 transition-transform ${
+                    accountMenuOpen ? "rotate-[225deg]" : "rotate-45"
+                  }`}
+                />
               </button>
-            </>
+
+              {accountMenuOpen ? (
+                <div
+                  id="desktop-account-menu"
+                  role="menu"
+                  className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-56 rounded-lg border border-white/10 bg-[#0b1b2d] p-2 shadow-[0_22px_50px_rgba(0,0,0,0.34)]"
+                >
+                  <Link
+                    href="/profile"
+                    role="menuitem"
+                    onClick={closeAllMenus}
+                    className="block rounded-md px-3 py-2.5 text-sm font-medium text-white/76 transition hover:bg-white/8 hover:text-white"
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    href="/announcements"
+                    role="menuitem"
+                    onClick={closeAllMenus}
+                    className="block rounded-md px-3 py-2.5 text-sm font-medium text-white/76 transition hover:bg-white/8 hover:text-white"
+                  >
+                    Announcements
+                  </Link>
+                  <div className="my-1 h-px bg-white/10" aria-hidden="true" />
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      closeAllMenus();
+                      handleLogout();
+                    }}
+                    className="block w-full rounded-md px-3 py-2.5 text-left text-sm font-medium text-white/76 transition hover:bg-white/8 hover:text-white"
+                  >
+                    Sign out
+                  </button>
+                </div>
+              ) : null}
+            </div>
           ) : (
             <>
               <Link
@@ -441,31 +480,40 @@ export function Header() {
               );
             })}
 
-            <div className="mt-1 flex gap-2 border-t border-white/10 pt-3">
+            <div className="mt-1 flex flex-col gap-2 border-t border-white/10 pt-3">
               {session.status === "loading" ? (
                 <div className="h-12 flex-1 animate-pulse rounded-md bg-white/10" />
               ) : isAuthed ? (
                 <>
-                  <Link
-                    href="/profile"
-                    onClick={closeAllMenus}
-                    className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12"
-                  >
-                    Profile ({initials})
-                  </Link>
+                  <div className="flex gap-2">
+                    <Link
+                      href="/profile"
+                      onClick={closeAllMenus}
+                      className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12"
+                    >
+                      Profile ({initials})
+                    </Link>
+                    <Link
+                      href="/announcements"
+                      onClick={closeAllMenus}
+                      className="flex-1 rounded-md border border-white/14 bg-white/8 px-4 py-3 text-center text-sm font-semibold text-white/88 hover:bg-white/12"
+                    >
+                      Announcements
+                    </Link>
+                  </div>
                   <button
                     type="button"
                     onClick={() => {
                       closeAllMenus();
                       handleLogout();
                     }}
-                    className="flex-1 rounded-md bg-white/8 px-4 py-3 text-sm font-semibold text-white/80 hover:bg-white/12"
+                    className="rounded-md bg-white/8 px-4 py-3 text-sm font-semibold text-white/80 hover:bg-white/12"
                   >
                     Sign out
                   </button>
                 </>
               ) : (
-                <>
+                <div className="flex gap-2">
                   <Link
                     href="/auth/signin"
                     onClick={closeAllMenus}
@@ -476,7 +524,7 @@ export function Header() {
                   <ButtonLink href="/auth/signup" className="flex-1 justify-center" onClick={closeAllMenus}>
                     Start Learning
                   </ButtonLink>
-                </>
+                </div>
               )}
             </div>
           </div>

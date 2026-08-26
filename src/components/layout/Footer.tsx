@@ -13,6 +13,7 @@ const columns: { title: string; links: { href: string; label: string; category?:
       { href: "/team", label: "Team" },
       { href: "/careers", label: "Careers" },
       { href: "/impact", label: "Impact" },
+      { href: "/ecosystem", label: "Ecosystem" },
       { href: "/investors", label: "Investors Hub" },
       { href: "/innovation-labs", label: "Innovation Labs" },
     ],
@@ -29,6 +30,8 @@ const columns: { title: string; links: { href: string; label: string; category?:
   {
     title: "Other Services",
     links: [
+      { href: "/pricing", label: "Course pricing" },
+      { href: "/apply", label: "Application pathway" },
       { href: "/rewards", label: "VowRewards" },
       { href: "/support", label: "VowSupport" },
       { href: "/opportunities", label: "PlugConnect" },
