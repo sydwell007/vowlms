@@ -1,7 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import { toast } from "sonner";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
+import { ProgressBar } from "@/components/ui/ProgressBar";
+import { CelebrationOverlay } from "@/components/learning/CelebrationOverlay";
+import { getAcademyBySlug, getAcademyHref } from "@/lib/data";
 import type { Assessment, Course } from "@/types/lms";
 
 type Props = { assessment: Assessment; course: Course };
@@ -17,6 +22,7 @@ export function AssessmentPlayer({ assessment, course }: Props) {
   const [submitted, setSubmitted] = useState(false);
   const [serverResult, setServerResult] = useState<ServerResult | null>(null);
   const [certificateState, setCertificateState] = useState<CertificateState>("idle");
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const questions = assessment.questions;
   const total = questions.length;
@@ -116,11 +122,35 @@ export function AssessmentPlayer({ assessment, course }: Props) {
   const passed = serverResult?.passed ?? score >= assessment.passMark;
   const answeredCount = Object.keys(answers).length;
 
+  const academy = getAcademyBySlug(course.academySlug);
+  const breadcrumbItems = [
+    { label: "Academies", href: "/academies" },
+    ...(academy ? [{ label: academy.name, href: getAcademyHref(academy) }] : []),
+    { label: course.title, href: `/courses/${course.slug}` },
+    { label: "Assessment" },
+  ];
+
+  useEffect(() => {
+    if (certificateState !== "ready") return;
+    toast.success("🎓 Certificate ready! Find it on your results page.");
+    // Passing this assessment was what completed the course (enrollments.progress hit 100%
+    // for the certificate to issue) — the same big moment as finishing a course's last plain
+    // lesson in LessonPlayer.tsx, just reached via the assessment gate instead.
+    let cancelled = false;
+    Promise.resolve().then(() => {
+      if (!cancelled) setShowCelebration(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [certificateState]);
+
   if (phase === "intro") {
     return (
       <main className="premium-page">
         <section className="mx-auto w-full max-w-3xl px-5 py-12 sm:px-6 lg:px-8">
-          <div className="premium-card rounded-2xl p-8 text-center">
+          <Breadcrumb items={breadcrumbItems} />
+          <div className="mt-6 premium-card rounded-2xl p-8 text-center">
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#1166c8]/10 text-2xl">
               📝
             </div>
@@ -162,8 +192,11 @@ export function AssessmentPlayer({ assessment, course }: Props) {
     return (
       <main className="premium-page">
         <section className="mx-auto w-full max-w-3xl px-5 py-12 sm:px-6 lg:px-8 space-y-5">
+          <Breadcrumb items={breadcrumbItems} />
           <div className={`rounded-2xl p-8 text-center ${passed ? "bg-gradient-to-br from-emerald-50 to-[#f0fdf4] border border-emerald-200" : "bg-gradient-to-br from-red-50 to-[#fff5f5] border border-red-200"}`}>
-            <div className={`mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full text-3xl font-black ${passed ? "bg-emerald-500 text-white" : "bg-red-500 text-white"}`}>
+            <div
+              className={`vowlms-result-badge mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full text-3xl font-black ${passed ? "bg-emerald-500 text-white" : "bg-red-500 text-white"}`}
+            >
               {passed ? "✓" : "✗"}
             </div>
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">{assessment.title}</p>
@@ -238,6 +271,26 @@ export function AssessmentPlayer({ assessment, course }: Props) {
             </div>
           </div>
         </section>
+
+        <style>{`
+          @keyframes vowlms-badge-in {
+            from { opacity: 0; transform: scale(0.6) rotate(-8deg); }
+            60% { transform: scale(1.08) rotate(2deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
+          }
+          .vowlms-result-badge { animation: vowlms-badge-in 0.5s cubic-bezier(0.34,1.56,0.64,1); }
+          @media (prefers-reduced-motion: reduce) {
+            .vowlms-result-badge { animation: none; }
+          }
+        `}</style>
+
+        {showCelebration ? (
+          <CelebrationOverlay
+            courseTitle={course.title}
+            courseSlug={course.slug}
+            onClose={() => setShowCelebration(false)}
+          />
+        ) : null}
       </main>
     );
   }
@@ -249,15 +302,12 @@ export function AssessmentPlayer({ assessment, course }: Props) {
   return (
     <main className="premium-page">
       <section className="mx-auto w-full max-w-3xl px-5 py-8 sm:px-6 lg:px-8">
+        <Breadcrumb items={breadcrumbItems} />
+
         {/* Progress header */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-semibold text-[#1166c8]">Question {current + 1} of {total}</p>
-            <p className="text-sm text-muted">{answeredCount}/{total} answered</p>
-          </div>
-          <div className="h-2 rounded-full bg-slate-200">
-            <div className="h-2 rounded-full bg-gradient-to-r from-[#1166c8] to-[#20c7ff] transition-all" style={{ width: `${progress}%` }} />
-          </div>
+        <div className="mt-6 mb-6">
+          <ProgressBar value={progress} label={`Question ${current + 1} of ${total}`} />
+          <p className="mt-2 text-right text-xs text-muted">{answeredCount}/{total} answered</p>
         </div>
 
         <div className="premium-card rounded-2xl p-8">

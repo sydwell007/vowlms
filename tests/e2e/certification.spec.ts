@@ -33,6 +33,9 @@ test.describe("Certification @destructive", () => {
     await page.getByRole("link", { name: /Take Assessment/i }).click();
     await page.waitForURL(/\/assessment\//, { timeout: 10_000 });
 
+    // Real, clickable breadcrumb trail (Academies -> Academy -> Course -> Assessment).
+    await expect(page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", { name: "Academies" })).toBeVisible();
+
     await page.getByRole("button", { name: "Start assessment" }).click();
 
     for (const question of assessment.questions) {
@@ -49,7 +52,11 @@ test.describe("Certification @destructive", () => {
     // confirm the UI reflects real success rather than staying stuck on "Checking...".
     await expect(page.getByText(/Certificate ready|Complete the remaining lessons/)).toBeVisible({ timeout: 15_000 });
 
-    await page.getByRole("link", { name: "View results" }).click();
+    // This 2-lesson course's assessment IS the last lesson, so passing it completes the whole
+    // course — the celebration overlay (not just the small in-card caption) should appear,
+    // since certificateState reaching "ready" means enrollments.progress hit 100%.
+    await expect(page.getByText("Course complete!")).toBeVisible({ timeout: 15_000 });
+    await page.getByRole("link", { name: "View results & certificate" }).click();
     await page.waitForURL(/\/results\//, { timeout: 10_000 });
     await expect(page.getByRole("link", { name: "View certificate" })).toBeVisible({ timeout: 15_000 });
 

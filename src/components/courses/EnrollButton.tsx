@@ -54,6 +54,12 @@ export function EnrollButton({ course }: Props) {
     return () => controller.abort();
   }, [course.slug]);
 
+  function redirectToSignIn() {
+    toast("Sign in to enrol in this course.");
+    const returnTo = encodeURIComponent(`/courses/${course.slug}`);
+    router.push(`/auth/signin?returnTo=${returnTo}`);
+  }
+
   async function requireSession() {
     const response = await fetch("/api/auth/me", {
       cache: "no-store",
@@ -62,8 +68,7 @@ export function EnrollButton({ course }: Props) {
 
     if (response.ok) return true;
 
-    const returnTo = encodeURIComponent(`/courses/${course.slug}`);
-    router.push(`/auth/signin?returnTo=${returnTo}`);
+    redirectToSignIn();
     return false;
   }
 
@@ -127,8 +132,7 @@ export function EnrollButton({ course }: Props) {
       const payload = await response.json();
 
       if (response.status === 401) {
-        const returnTo = encodeURIComponent(`/courses/${course.slug}`);
-        router.push(`/auth/signin?returnTo=${returnTo}`);
+        redirectToSignIn();
         return;
       }
 

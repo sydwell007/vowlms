@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { Section } from "@/components/ui/Section";
+import { CourseCard } from "@/components/courses/CourseCard";
 import { EnrollButton } from "@/components/courses/EnrollButton";
 import { CourseCurriculum } from "@/components/courses/CourseCurriculum";
-import { getAcademyBySlug, getCourseBySlug } from "@/lib/data";
+import { getAcademyBySlug, getAcademyHref, getCourseBySlug, getCourseSummariesByAcademy } from "@/lib/data";
 import { formatCurrency } from "@/lib/format";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { formatDuration, getCourseStats } from "@/lib/course-content";
@@ -13,7 +15,13 @@ import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const course = getCourseBySlug(slug);
-  return { title: course?.title ?? "Course" };
+  if (!course) return { title: "Course" };
+
+  const description = course.description.length > 155
+    ? `${course.description.slice(0, 152)}...`
+    : course.description;
+
+  return { title: course.title, description };
 }
 
 export default async function CourseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -34,6 +42,9 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
   const assessment = course.assessments[0];
   const practice = course.vrPractices[0];
   const stats = getCourseStats(course);
+  const moreCourses = academy
+    ? getCourseSummariesByAcademy(academy.slug).filter((c) => c.slug !== course.slug).slice(0, 4)
+    : [];
 
   return (
     <main>
@@ -41,15 +52,17 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
       <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 sm:px-6 lg:grid-cols-[1fr_360px] lg:px-8">
           <div>
-            {/* Breadcrumb */}
-            <div className="mb-4 flex items-center gap-2 text-sm text-white/60">
-              <Link href="/courses" className="hover:text-white transition">Courses</Link>
-              <span>/</span>
-              <Link href={`/academies/${academy?.category}`} className="hover:text-white transition">{academy?.name}</Link>
-            </div>
+            <Breadcrumb
+              tone="dark"
+              items={[
+                { label: "Academies", href: "/academies" },
+                ...(academy ? [{ label: academy.name, href: getAcademyHref(academy) }] : []),
+                { label: course.title },
+              ]}
+            />
 
             {academy ? (
-              <span className="inline-block rounded-full border border-gold/40 bg-gold/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-gold">
+              <span className="mt-4 inline-block rounded-full border border-gold/40 bg-gold/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-gold">
                 Course preview
               </span>
             ) : null}
@@ -57,11 +70,8 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
             <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">{course.title}</h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-white/74">{course.description}</p>
 
-            {/* Meta */}
+            {/* Meta — kept to what the stat strip below doesn't already cover (duration/level/lessons repeat there). */}
             <div className="mt-5 flex flex-wrap gap-4 text-sm text-white/70">
-              <span className="flex items-center gap-1.5"><span>📊</span> {course.level}</span>
-              <span className="flex items-center gap-1.5"><span>⏱</span> {course.duration}</span>
-              <span className="flex items-center gap-1.5"><span>📚</span> {stats.lessonCount} lessons</span>
               <span className="flex items-center gap-1.5"><span>🏅</span> Certificate included</span>
               <span className="flex items-center gap-1.5"><span>⭐</span> {course.rewards} VowRewards</span>
             </div>
@@ -198,8 +208,29 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
         </div>
       </Section>
 
+      {/* ── More courses in this academy ────────────────────────────────────── */}
+      {moreCourses.length > 0 && academy ? (
+        <Section
+          tone="light"
+          size="tight"
+          eyebrow={academy.name}
+          title={`More courses in ${academy.name}`}
+        >
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {moreCourses.map((c) => (
+              <CourseCard key={c.slug} course={c} />
+            ))}
+          </div>
+          <div className="mt-6 text-center">
+            <ButtonLink href={getAcademyHref(academy)} variant="outline">
+              View all {academy.name} courses
+            </ButtonLink>
+          </div>
+        </Section>
+      ) : null}
+
       {/* ── Closing CTA ──────────────────────────────────────────────────── */}
-      <section className="premium-section-dark surface-grid py-14 text-white">
+      <section className="premium-section-dark surface-grid py-14 pb-36 text-white lg:pb-14">
         <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-5 px-5 text-center sm:px-6 lg:px-8">
           <h2 className="text-balance text-3xl font-semibold sm:text-4xl">Ready to start {course.title}?</h2>
           <p className="max-w-xl text-white/70">
@@ -210,6 +241,23 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
           ) : null}
         </div>
       </section>
+
+      {/* ── Mobile sticky enrol bar — the sidebar card is desktop-only (lg:sticky).
+          Sits at bottom-14 (not bottom-0) because EcosystemSidebar's own fixed mobile
+          bar (src/components/layout/EcosystemSidebar.tsx:190) already occupies bottom-0
+          site-wide at the same z-30, up to xl — stacking above it avoids both bars
+          fighting over the same 56px strip. ─ */}
+      <div className="fixed inset-x-0 bottom-14 z-40 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-12px_30px_rgba(6,17,31,0.12)] backdrop-blur-lg lg:hidden">
+        <div className="mx-auto flex max-w-7xl items-center gap-4">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs font-medium text-muted">{course.title}</p>
+            <p className="text-lg font-bold text-ink">{formatCurrency(course.price)}</p>
+          </div>
+          <div className="w-40 shrink-0">
+            <EnrollButton course={course} />
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

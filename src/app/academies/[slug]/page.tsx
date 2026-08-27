@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Section } from "@/components/ui/Section";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import {
+  getAcademies,
   getAcademyBySlug,
   getCourseSummariesByAcademy,
   getCourses,
@@ -39,7 +41,8 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
       <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
         <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
           <div>
-          <div className="flex items-center gap-3">
+          <Breadcrumb tone="dark" items={[{ label: "Academies", href: "/academies" }, { label: academy.name }]} />
+          <div className="mt-4 flex items-center gap-3">
             <span
               className="rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em]"
               style={{ backgroundColor: `${accentColor}28`, color: accentColor }}
@@ -91,15 +94,13 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted mb-4">Other GoalVow academies</p>
           <div className="flex flex-wrap gap-3">
-            {["upskilling-academy", "skills-training-academy", "chef-academy", "business-school"]
-              .filter((s) => s !== academy.slug)
-              .map((s) => {
-                const a = getAcademyBySlug(s);
-                if (!a) return null;
+            {getAcademies()
+              .filter((a) => a.slug !== academy.slug)
+              .map((a) => {
                 const count = allCourses.filter((c) => c.academySlug === a.slug).length;
                 return (
                   <Link
-                    key={s}
+                    key={a.slug}
                     href={`/academies/${a.category}`}
                     className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-[#1166c8]/40 hover:text-[#1166c8]"
                   >

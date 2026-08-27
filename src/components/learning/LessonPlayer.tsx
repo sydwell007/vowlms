@@ -4,8 +4,12 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { visualAssets } from "@/lib/visual-assets";
+import { getAcademyBySlug, getAcademyHref } from "@/lib/data";
 import type { Lesson, Course, CourseModule } from "@/types/lms";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
+import { CelebrationOverlay } from "@/components/learning/CelebrationOverlay";
 import { PdfReader } from "@/components/learning/PdfReader";
 import { VowHumanPresenter } from "@/components/learning/VowHumanPresenter";
 import type { VowHumanPlacement } from "@/types/lms";
@@ -134,9 +138,11 @@ export function LessonPlayer({
   const [activePdf, setActivePdf] = useState<LessonResource | null>(null);
   const [videoError, setVideoError] = useState(false);
   const [videoReloadKey, setVideoReloadKey] = useState(0);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const assessment = course.assessments.find((a) => a.lessonSlug === lesson.slug);
   const vrPractice = course.vrPractices.find((v) => v.lessonSlug === lesson.slug);
+  const academy = getAcademyBySlug(course.academySlug);
 
   const totalLessonsInCourse = useMemo(
     () => allModules.reduce((sum, m) => sum + m.lessons.length, 0),
@@ -145,6 +151,19 @@ export function LessonPlayer({
   const courseProgressPct = totalLessonsInCourse > 0
     ? Math.round((completedSlugs.length / totalLessonsInCourse) * 100)
     : 0;
+
+  // Where each module boundary falls along the overall course progress bar, so crossing into a
+  // new module is visible on the bar itself, not just the sidebar's per-module counter.
+  const moduleBoundaryPcts = useMemo(() => {
+    if (totalLessonsInCourse === 0) return [];
+    let cumulative = 0;
+    const boundaries: number[] = [];
+    for (const m of allModules.slice(0, -1)) {
+      cumulative += m.lessons.length;
+      boundaries.push((cumulative / totalLessonsInCourse) * 100);
+    }
+    return boundaries;
+  }, [allModules, totalLessonsInCourse]);
 
   const content = lesson.content ?? "";
   const videoInfo = getVideoInfo(lesson, content, resources);
@@ -212,10 +231,25 @@ export function LessonPlayer({
       body: JSON.stringify({ lessonSlug: lesson.slug, courseSlug: course.slug }),
     }).catch(() => {});
 
-    if (nextLesson) {
-      setTimeout(() => router.push(`/lesson/${nextLesson.slug}`), 600);
+    if (!nextLesson) {
+      // Last lesson of the whole course — the big moment, not a quiet button flip.
+      setShowCelebration(true);
+      return;
     }
-  }, [course.slug, lesson.slug, nextLesson, router]);
+
+    const isLastLessonInModule = module.lessons.every((l) => done.includes(l.slug));
+    if (isLastLessonInModule) {
+      const moduleIndex = allModules.findIndex((m) => m.order === module.order);
+      const nextModule = allModules[moduleIndex + 1];
+      toast.success(
+        nextModule
+          ? `Module ${module.order} complete — on to Module ${nextModule.order}: ${nextModule.title}`
+          : `Module ${module.order} complete!`,
+      );
+    }
+
+    setTimeout(() => router.push(`/lesson/${nextLesson.slug}`), 600);
+  }, [allModules, course.slug, lesson.slug, module, nextLesson, router]);
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f8fbfe]">
@@ -262,11 +296,19 @@ export function LessonPlayer({
                   <span>Course progress</span>
                   <span>{completedSlugs.length}/{totalLessonsInCourse} · {courseProgressPct}%</span>
                 </div>
-                <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                <div className="relative mt-1.5 h-1.5 w-full rounded-full bg-slate-100">
                   <div
                     className="h-full rounded-full bg-[linear-gradient(90deg,#1166c8,#20c7ff)] transition-[width] duration-500 ease-out"
                     style={{ width: `${courseProgressPct}%` }}
                   />
+                  {moduleBoundaryPcts.map((pct, i) => (
+                    <span
+                      key={i}
+                      aria-hidden="true"
+                      className="absolute top-0 h-1.5 w-px bg-white/70"
+                      style={{ left: `${pct}%` }}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
@@ -314,10 +356,14 @@ export function LessonPlayer({
         <main className="flex-1 min-w-0">
           <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
 
-            {/* Breadcrumb */}
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">
-              Module {module.order} · {module.title}
-            </p>
+            <Breadcrumb
+              items={[
+                { label: "Academies", href: "/academies" },
+                ...(academy ? [{ label: academy.name, href: getAcademyHref(academy) }] : []),
+                { label: course.title, href: `/courses/${course.slug}` },
+                { label: `Module ${module.order}: ${module.title}` },
+              ]}
+            />
             <h1 className="mt-3 text-balance text-3xl font-semibold text-ink sm:text-4xl">{lesson.title}</h1>
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1166c8]/10 px-3 py-1 text-xs font-semibold text-[#1166c8]">
@@ -557,6 +603,14 @@ export function LessonPlayer({
           </div>
         </main>
       </div>
+
+      {showCelebration ? (
+        <CelebrationOverlay
+          courseTitle={course.title}
+          courseSlug={course.slug}
+          onClose={() => setShowCelebration(false)}
+        />
+      ) : null}
     </div>
   );
 }
