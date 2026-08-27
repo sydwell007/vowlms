@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CourseCard } from "@/components/courses/CourseCard";
+import { FAQSection } from "@/components/home/FAQSection";
+import { PresentersSection } from "@/components/home/PresentersSection";
 import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
@@ -32,7 +34,9 @@ const journey = [
 const trustSignals = [
   "Role-based dashboards for learners, facilitators, employers, and admins",
   "Account-owned enrolment, progress, assessment, and certificate records",
+  "Secure PayFast checkout for paid courses — VowLMS never sees your card details",
   "Mobile-first PWA foundation with a safe public offline fallback",
+  "POPIA-aligned privacy practices, published in full on our Privacy Policy",
   "Planned ecosystem services labelled separately from live capabilities",
 ];
 
@@ -131,6 +135,14 @@ export default function Home() {
         </div>
       </Section>
 
+      <Section
+        eyebrow="AI-guided learning"
+        title="Meet your AI course presenters"
+        description="A GoalVow-built feature, not a stock video — an on-demand interactive presenter available right inside select lessons."
+      >
+        <PresentersSection />
+      </Section>
+
       <section className="border-y border-slate-100 bg-white py-16 md:py-24">
         <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
           <div>
@@ -162,6 +174,10 @@ export default function Home() {
           />
         </div>
       </section>
+
+      <Section tone="light" eyebrow="FAQ" title="Questions learners ask before they start" description="Straight answers about cost, certificates, rewards, and how VowLMS actually works.">
+        <FAQSection />
+      </Section>
 
       <section className="gv-hero py-16 text-white md:py-24">
         <div className="mx-auto w-full max-w-3xl px-5 text-center sm:px-6">
