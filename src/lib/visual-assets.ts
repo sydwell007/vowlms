@@ -4,6 +4,7 @@ export const visualAssets = {
   academyNetwork: "/images/vowlms/academy-network.png",
   dashboardExperience: "/images/vowlms/dashboard-experience.png",
   vrPracticeLab: "/images/vowlms/vr-practice-lab.png",
+  coursePresenter: "/images/vowlms/course-presenter.webp",
 } as const;
 
 export function getAcademyCourseImage(category: string) {

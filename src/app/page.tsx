@@ -43,7 +43,7 @@ export default function Home() {
   const academies = getAcademies();
   const courses = getCourseSummaries();
   const connectedAcademies = academies.length;
-  const featuredCourses = courses.slice(0, 4);
+  const featuredCourses = courses.slice(0, 6);
   const stats = [
     { value: connectedAcademies.toLocaleString(), label: "Connected academies" },
     { value: courses.length.toLocaleString(), label: "Courses" },
@@ -122,7 +122,7 @@ export default function Home() {
         title="Start with focused, outcome-led courses"
         description={`Browse ${courses.length.toLocaleString()} courses with assessments, certificates, and VowRewards built in.`}
       >
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {featuredCourses.map((course, index) => (
             <CourseCard key={course.slug} course={course} priority={index === 0} />
           ))}

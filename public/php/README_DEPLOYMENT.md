@@ -171,11 +171,18 @@ Expected: health returns JSON without PHP version or credentials; unauthorised c
 - A bridge-authorised `GET /courses/{course-slug}/reviews` request returns an
   aggregate review summary for the public course page. An enrolled learner can create or update their own review;
   anonymous and non-enrolled review submissions are rejected.
+- A bridge-authorised `GET /courses/enrollment-counts` request returns one
+  non-negative active/completed enrolment total for each published course slug.
 
 The reviews endpoint requires `course_evaluations`, which is created by
 `public/sql/015_course_evaluations.sql`. On an existing database, confirm that
 table exists before uploading the updated PHP package. Do not re-import migration
 015 when the table is already present.
+
+The course-card enrolment totals do not require a SQL migration. Upload
+`api/course-enrollment-counts/index.php` and the updated `.htaccess` together;
+the enrolment-count route must appear before the generic `/courses/{slug}`
+rewrite rule.
 
 ## Rollback
 

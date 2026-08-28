@@ -176,6 +176,10 @@ export function getCourseSummaries(): CourseSummary[] {
       totalMinutes: stats.totalMinutes,
       hasAssessment: stats.hasAssessment || course.assessments.length > 0,
       hasVRPractice: stats.hasVRPractice || course.vrPractices.length > 0,
+      presenterName:
+        course.modules
+          .flatMap((moduleItem) => moduleItem.lessons)
+          .find((lesson) => lesson.vowHuman?.enabled)?.vowHuman?.presenterName ?? "GoalVow Academy Presenter",
     };
   });
 }

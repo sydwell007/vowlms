@@ -120,6 +120,7 @@ export type CourseSummary = Pick<
   totalMinutes: number;
   hasAssessment: boolean;
   hasVRPractice: boolean;
+  presenterName: string;
 };
 
 export type CourseReview = {

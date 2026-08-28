@@ -5,6 +5,7 @@
 | `/health` | GET | Public, minimal status |
 | `/academies` | GET | Bridge key |
 | `/courses`, `/courses/{slug}` | GET | Bridge key |
+| `/courses/enrollment-counts` | GET | Bridge key; aggregate published-course totals only |
 | `/courses/{slug}/reviews` | GET/POST | Bridge key for read; enrolled learner JWT to create/update |
 | `/lessons/{slug}` | GET | Bridge key |
 | `/admin/lessons`, `/admin/lessons/{slug}` | GET/PUT | Bridge key + admin JWT |

@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Award, BookOpen, Box, Clock3, GraduationCap, MoveRight } from "lucide-react";
+import { Award, BookOpen, MoveRight } from "lucide-react";
+import { CourseEnrollmentCount } from "@/components/courses/CourseEnrollmentCount";
 import { ComingSoonOverlay } from "@/components/ui/ComingSoonOverlay";
 import { formatCurrency } from "@/lib/format";
-import { formatDuration } from "@/lib/course-content";
 import { getComingSoonInfo } from "@/lib/academy-launch";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
-import { getAcademyCourseImage } from "@/lib/visual-assets";
+import { getAcademyCourseImage, visualAssets } from "@/lib/visual-assets";
 import type { CourseSummary } from "@/types/lms";
 
 type Props = {
@@ -63,14 +63,20 @@ export function CourseCard({ course, layout = "grid", priority = false }: Props)
             {course.description}
           </p>
 
-          <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 border-y border-slate-100 py-3 text-xs text-muted sm:grid-cols-3">
+          <div className="mt-4 flex items-center gap-2.5">
+            <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-full border border-slate-200 bg-white">
+              <Image src={visualAssets.coursePresenter} alt="" fill sizes="32px" className="object-cover" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-medium text-muted">Course presenter</p>
+              <p className="truncate text-sm font-semibold text-ink">{course.presenterName}</p>
+            </div>
+          </div>
+
+          <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 border-y border-slate-100 py-3 text-xs text-muted">
             <div className="flex items-center gap-2">
               <BookOpen aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
               <span>{course.lessonCount} lessons</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock3 aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
-              <span>{formatDuration(course.totalMinutes)}</span>
             </div>
             <div className="flex items-center gap-2">
               <Award aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
@@ -79,11 +85,7 @@ export function CourseCard({ course, layout = "grid", priority = false }: Props)
           </dl>
 
           <div className="mt-auto flex items-end justify-between gap-4 pt-4">
-            <div className="flex items-center gap-2 text-muted" aria-label="Course features">
-              {course.hasCertificate ? <GraduationCap className="h-4 w-4" aria-label="Certificate included" /> : null}
-              {course.hasAssessment ? <BookOpen className="h-4 w-4" aria-label="Assessment included" /> : null}
-              {course.hasVRPractice ? <Box className="h-4 w-4" aria-label="VR practice included" /> : null}
-            </div>
+            <CourseEnrollmentCount courseSlug={course.slug} />
             <Link
               href={`/courses/${course.slug}`}
               className="inline-flex min-h-10 items-center gap-2 rounded-md bg-[#06111f] px-4 text-sm font-semibold text-white transition hover:bg-[#1166c8]"
