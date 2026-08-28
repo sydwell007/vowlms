@@ -8,8 +8,6 @@ const NON_TOPIC_LESSON_TITLES = new Set([
   "rate this module",
 ]);
 
-const MODULE_ICONS = ["🎯", "📘", "🧭", "🛠️", "💡", "🔑", "📈", "🧩", "⚙️", "🌱", "🧠", "🚀"];
-
 export type ModuleStats = {
   lessonCount: number;
   totalMinutes: number;
@@ -82,10 +80,6 @@ export function getModuleTopics(moduleItem: CourseModule, max = 3): Lesson[] {
     .filter((l) => !NON_TOPIC_LESSON_TITLES.has(l.title.trim().toLowerCase()))
     .filter((l) => !/^lesson\s*\d+\s*[:.-]?\s*$/i.test(l.title.trim()))
     .slice(0, max);
-}
-
-export function getModuleIcon(index: number): string {
-  return MODULE_ICONS[index % MODULE_ICONS.length];
 }
 
 /** Real `modules.description` when present, otherwise a readable auto-generated summary. */

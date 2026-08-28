@@ -168,6 +168,14 @@ Expected: health returns JSON without PHP version or credentials; unauthorised c
   rejected. Saving a non-VowHumans URL returns HTTP 400.
 - The Business Ethics reading-material lesson returns structured `vowhuman_*`
   fields after migration 018.
+- A bridge-authorised `GET /courses/{course-slug}/reviews` request returns an
+  aggregate review summary for the public course page. An enrolled learner can create or update their own review;
+  anonymous and non-enrolled review submissions are rejected.
+
+The reviews endpoint requires `course_evaluations`, which is created by
+`public/sql/015_course_evaluations.sql`. On an existing database, confirm that
+table exists before uploading the updated PHP package. Do not re-import migration
+015 when the table is already present.
 
 ## Rollback
 

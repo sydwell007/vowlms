@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ChartNoAxesCombined, Network, ShieldCheck, Smartphone } from "lucide-react";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { FAQSection } from "@/components/home/FAQSection";
 import { PresentersSection } from "@/components/home/PresentersSection";
@@ -32,12 +33,10 @@ const journey = [
 ];
 
 const trustSignals = [
-  "Role-based dashboards for learners, facilitators, employers, and admins",
-  "Account-owned enrolment, progress, assessment, and certificate records",
-  "Secure PayFast checkout for paid courses — VowLMS never sees your card details",
-  "Mobile-first PWA foundation with a safe public offline fallback",
-  "POPIA-aligned privacy practices, published in full on our Privacy Policy",
-  "Planned ecosystem services labelled separately from live capabilities",
+  { Icon: ChartNoAxesCombined, title: "Visible progress", description: "Role-based dashboards for learning, facilitation, employers, and administration." },
+  { Icon: ShieldCheck, title: "Account-owned records", description: "Enrolments, assessments, certificates, and secure PayFast checkout." },
+  { Icon: Smartphone, title: "Mobile ready", description: "A PWA foundation with an offline-safe public fallback." },
+  { Icon: Network, title: "Ecosystem clarity", description: "Live capabilities and planned GoalVow services are clearly separated." },
 ];
 
 export default function Home() {
@@ -70,11 +69,11 @@ export default function Home() {
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold">
             GoalVow academy ecosystem
           </p>
-          <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl">
+          <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[1.04] sm:text-6xl lg:text-7xl">
             What do you want to achieve?
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-white/76">
-            Tell VowLMS your goal and we'll match you to the right courses — no need to know which academy you need.
+            Tell VowLMS your goal and we will match you to the right courses. You do not need to know which academy to choose.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/auth/signup" variant="primary">
@@ -124,8 +123,8 @@ export default function Home() {
         description={`Browse ${courses.length.toLocaleString()} courses with assessments, certificates, and VowRewards built in.`}
       >
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {featuredCourses.map((course) => (
-            <CourseCard key={course.slug} course={course} />
+          {featuredCourses.map((course, index) => (
+            <CourseCard key={course.slug} course={course} priority={index === 0} />
           ))}
         </div>
         <div className="mt-8 text-center">
@@ -138,7 +137,7 @@ export default function Home() {
       <Section
         eyebrow="AI-guided learning"
         title="Meet your AI course presenters"
-        description="A GoalVow-built feature, not a stock video — an on-demand interactive presenter available right inside select lessons."
+        description="A GoalVow-built, on-demand interactive presenter available inside select lessons."
       >
         <PresentersSection />
       </Section>
@@ -150,10 +149,12 @@ export default function Home() {
             <h2 className="mt-3 text-balance text-3xl font-semibold text-ink sm:text-4xl">
               A focused LMS now, a scalable ecosystem platform next
             </h2>
-            <div className="mt-6 grid gap-3">
-              {trustSignals.map((signal) => (
-                <div key={signal} className="premium-card-soft rounded-xl px-4 py-3 text-sm leading-6 text-muted">
-                  {signal}
+            <div className="mt-7 grid gap-x-8 gap-y-6 sm:grid-cols-2">
+              {trustSignals.map(({ Icon, title, description }) => (
+                <div key={title} className="border-t border-slate-200 pt-4">
+                  <Icon aria-hidden="true" className="h-5 w-5 text-[#1166c8]" />
+                  <h3 className="mt-3 text-sm font-semibold text-ink">{title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-muted">{description}</p>
                 </div>
               ))}
             </div>

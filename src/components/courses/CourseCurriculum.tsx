@@ -1,11 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import {
+  BookOpen,
+  ChevronDown,
+  ClipboardCheck,
+  Clock3,
+  FileText,
+  Glasses,
+  GraduationCap,
+  Milestone,
+  Play,
+  type LucideIcon,
+} from "lucide-react";
 import type { CourseModule } from "@/types/lms";
 import {
   formatDuration,
   getModuleDescription,
-  getModuleIcon,
   getModuleOutcome,
   getModuleStats,
 } from "@/lib/course-content";
@@ -15,11 +26,11 @@ type Props = {
   accentColor?: string;
 };
 
-const LESSON_ICON: Record<string, string> = {
-  "vr-practice": "🥽",
-  assessment: "📝",
-  video: "▶",
-  text: "▸",
+const LESSON_ICON: Record<string, LucideIcon> = {
+  "vr-practice": Glasses,
+  assessment: ClipboardCheck,
+  video: Play,
+  text: FileText,
 };
 
 export function CourseCurriculum({ modules, accentColor = "#1166c8" }: Props) {
@@ -53,7 +64,7 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8" }: Props) {
       </div>
 
       <div className="space-y-4">
-        {modules.map((moduleItem, index) => {
+        {modules.map((moduleItem) => {
           const isOpen = expanded.has(moduleItem.order);
           const stats = getModuleStats(moduleItem);
           const description = getModuleDescription(moduleItem);
@@ -61,7 +72,7 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8" }: Props) {
           const panelId = `module-panel-${moduleItem.order}`;
 
           return (
-            <article key={moduleItem.title} className="premium-card overflow-hidden rounded-2xl">
+            <article key={moduleItem.title} className="premium-card overflow-hidden rounded-lg">
               <button
                 type="button"
                 onClick={() => toggle(moduleItem.order)}
@@ -70,10 +81,10 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8" }: Props) {
                 className="flex w-full items-start gap-4 p-5 text-left transition hover:bg-[#f5f9ff] sm:p-6"
               >
                 <span
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-xl"
+                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg"
                   style={{ background: `${accentColor}18`, color: accentColor }}
                 >
-                  {getModuleIcon(index)}
+                  <Milestone aria-hidden="true" className="h-5 w-5" />
                 </span>
 
                 <div className="min-w-0 flex-1">
@@ -84,19 +95,17 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8" }: Props) {
                   <p className="mt-2 text-sm leading-6 text-muted">{description}</p>
 
                   <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs font-medium text-muted">
-                    <span>📚 {stats.lessonCount} lesson{stats.lessonCount === 1 ? "" : "s"}</span>
-                    <span>⏱ {formatDuration(stats.totalMinutes)}</span>
-                    {stats.hasAssessment && <span>📝 Assessment</span>}
-                    {stats.hasVRPractice && <span>🥽 VR practice</span>}
+                    <span className="flex items-center gap-1.5"><BookOpen aria-hidden="true" className="h-3.5 w-3.5" /> {stats.lessonCount} lesson{stats.lessonCount === 1 ? "" : "s"}</span>
+                    <span className="flex items-center gap-1.5"><Clock3 aria-hidden="true" className="h-3.5 w-3.5" /> {formatDuration(stats.totalMinutes)}</span>
+                    {stats.hasAssessment ? <span className="flex items-center gap-1.5"><ClipboardCheck aria-hidden="true" className="h-3.5 w-3.5" /> Assessment</span> : null}
+                    {stats.hasVRPractice ? <span className="flex items-center gap-1.5"><Glasses aria-hidden="true" className="h-3.5 w-3.5" /> VR practice</span> : null}
                   </div>
                 </div>
 
-                <span
+                <ChevronDown
                   className={`mt-1 shrink-0 text-muted transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   aria-hidden="true"
-                >
-                  ▾
-                </span>
+                />
               </button>
 
               {/* Smooth CSS-only accordion (grid-template-rows trick) */}
@@ -107,22 +116,25 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8" }: Props) {
                 <div className="overflow-hidden">
                   <div className="border-t border-slate-100 px-5 pb-5 pt-4 sm:px-6">
                     <p className="mb-4 flex items-start gap-2 text-sm text-ink">
-                      <span className="mt-0.5 shrink-0" style={{ color: accentColor }}>🎓</span>
+                      <GraduationCap aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" style={{ color: accentColor }} />
                       <span><span className="font-semibold">You&apos;ll be able to:</span> {outcome}</span>
                     </p>
                     <div className="space-y-2">
-                      {moduleItem.lessons.map((lesson) => (
-                        <div
-                          key={lesson.slug}
-                          className="premium-card-soft flex items-center justify-between rounded-lg p-4 text-sm font-medium text-ink"
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className="text-base">{LESSON_ICON[lesson.type] ?? "▸"}</span>
-                            <span>{lesson.title}</span>
+                      {moduleItem.lessons.map((lesson) => {
+                        const LessonIcon = LESSON_ICON[lesson.type] ?? FileText;
+                        return (
+                          <div
+                            key={lesson.slug}
+                            className="flex items-center justify-between gap-4 border-b border-slate-100 py-3 text-sm font-medium text-ink last:border-b-0"
+                          >
+                            <div className="flex min-w-0 items-center gap-3">
+                              <LessonIcon aria-hidden="true" className="h-4 w-4 shrink-0 text-muted" />
+                              <span>{lesson.title}</span>
+                            </div>
+                            <span className="shrink-0 text-xs text-muted">{lesson.durationMinutes} min</span>
                           </div>
-                          <span className="text-xs text-muted shrink-0">{lesson.durationMinutes} min</span>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                     <p className="mt-4 text-xs text-muted">
                       Enrol to unlock these lessons and start learning.

@@ -131,3 +131,15 @@ test("bridge corrects upstream authentication status wrappers", async () => {
   assert.match(bridge, /return 403/);
   assert.match(bridge, /throw toBridgeError\(json,\s*res\.status\)/);
 });
+
+test("course reviews require a verified learner enrollment", async () => {
+  const endpoint = await read("public/php/api/course-reviews/index.php");
+  const route = await read("src/app/api/courses/[slug]/reviews/route.ts");
+
+  assert.match(endpoint, /requireBridgeKey\(\)/);
+  assert.match(endpoint, /requireAuth\(\)/);
+  assert.match(endpoint, /requireRole\(\$payload, 'learner'\)/);
+  assert.match(endpoint, /status IN \(\"active\", \"completed\"\)/);
+  assert.match(endpoint, /Only enrolled learners can review this course/);
+  assert.match(route, /bridgePost\(`\/courses\/\$\{encodeURIComponent\(slug\)\}\/reviews`/);
+});

@@ -9,6 +9,7 @@ import {
 } from "@/data/course-groupings";
 import { skillPathways } from "@/data/skill-pathways";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
+import { getCourseStats } from "@/lib/course-content";
 import type {
   Academy,
   Course,
@@ -156,6 +157,7 @@ export function getCourses() {
 export function getCourseSummaries(): CourseSummary[] {
   return courses.filter(isCourseVisible).map((course) => {
     const academy = getAcademyBySlug(course.academySlug);
+    const stats = getCourseStats(course);
 
     return {
       slug: course.slug,
@@ -169,6 +171,11 @@ export function getCourseSummaries(): CourseSummary[] {
       price: course.price,
       rewards: course.rewards,
       hasCertificate: course.assessments.length > 0,
+      moduleCount: stats.moduleCount,
+      lessonCount: stats.lessonCount,
+      totalMinutes: stats.totalMinutes,
+      hasAssessment: stats.hasAssessment || course.assessments.length > 0,
+      hasVRPractice: stats.hasVRPractice || course.vrPractices.length > 0,
     };
   });
 }

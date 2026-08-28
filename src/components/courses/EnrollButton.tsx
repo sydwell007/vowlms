@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import type { Course } from "@/types/lms";
+import { useSession } from "@/lib/auth/useSession";
 
 type Props = { course: Course };
 
@@ -27,10 +28,13 @@ function firstLessonHref(course: Course) {
 
 export function EnrollButton({ course }: Props) {
   const router = useRouter();
+  const session = useSession();
   const [enrolled, setEnrolled] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    if (session.status !== "authenticated") return;
+
     const controller = new AbortController();
 
     fetch("/api/enrollments", {
@@ -52,7 +56,7 @@ export function EnrollButton({ course }: Props) {
       .catch(() => undefined);
 
     return () => controller.abort();
-  }, [course.slug]);
+  }, [course.slug, session.status]);
 
   function redirectToSignIn() {
     toast("Sign in to enrol in this course.");

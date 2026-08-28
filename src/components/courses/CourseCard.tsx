@@ -1,45 +1,98 @@
-import { ButtonLink } from "@/components/ui/ButtonLink";
+import Image from "next/image";
+import Link from "next/link";
+import { Award, BookOpen, Box, Clock3, GraduationCap, MoveRight } from "lucide-react";
 import { ComingSoonOverlay } from "@/components/ui/ComingSoonOverlay";
 import { formatCurrency } from "@/lib/format";
+import { formatDuration } from "@/lib/course-content";
 import { getComingSoonInfo } from "@/lib/academy-launch";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
+import { getAcademyCourseImage } from "@/lib/visual-assets";
 import type { CourseSummary } from "@/types/lms";
 
-export function CourseCard({ course }: { course: CourseSummary }) {
+type Props = {
+  course: CourseSummary;
+  layout?: "grid" | "list";
+  priority?: boolean;
+};
+
+export function CourseCard({ course, layout = "grid", priority = false }: Props) {
   const comingSoon = getComingSoonInfo(course.academyCategory);
   const accent = getAcademyAccentColor(course.academyCategory);
+  const image = getAcademyCourseImage(course.academyCategory);
+  const isList = layout === "list";
 
   return (
     <ComingSoonOverlay info={comingSoon}>
       <article
-        className="premium-card flex h-full flex-col rounded-xl border-l-4 p-6 text-ink transition duration-200 hover:-translate-y-1 hover:shadow-[0_24px_54px_rgba(6,17,31,0.1)]"
-        style={{ borderLeftColor: accent }}
+        className={`group premium-card h-full overflow-hidden rounded-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_48px_rgba(6,17,31,0.12)] ${
+          isList ? "grid md:grid-cols-[220px_1fr]" : "flex flex-col"
+        }`}
       >
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-[#e8f6ff] px-3 py-1 text-xs font-semibold text-[#1166c8]">{course.level}</span>
-          <span className="rounded-full bg-[#fff5d1] px-3 py-1 text-xs font-semibold text-[#8a6100]">{formatCurrency(course.price)}</span>
-          {course.hasCertificate ? (
-            <span className="ml-auto flex items-center gap-1 text-xs font-semibold text-muted" title="Awards a certificate on completion">
-              🎓
-            </span>
-          ) : null}
-        </div>
-        <h3 className="mt-5 text-xl font-semibold leading-snug line-clamp-2">{course.title}</h3>
-        <p className="mt-2 text-sm font-medium" style={{ color: accent }}>{course.academyName}</p>
-        <p className="mt-3 flex-1 text-sm leading-6 text-muted">{course.description}</p>
-        <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-          <div className="premium-card-soft rounded-lg p-3">
-            <p className="font-semibold text-ink">{course.duration}</p>
-            <p className="mt-1 text-xs text-muted">Duration</p>
+        <Link
+          href={`/courses/${course.slug}`}
+          aria-label={`View ${course.title}`}
+          className={`relative block overflow-hidden bg-slate-100 ${isList ? "min-h-48 md:min-h-full" : "aspect-[16/9]"}`}
+        >
+          <Image
+            src={image}
+            alt=""
+            fill
+            priority={priority}
+            sizes={isList ? "(min-width: 768px) 220px, 100vw" : "(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"}
+            className="object-cover transition duration-500 group-hover:scale-[1.025]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06111f]/64 via-transparent to-transparent" />
+          <span className="absolute left-4 top-4 rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold text-ink shadow-sm">
+            {course.level}
+          </span>
+          <span className="absolute bottom-4 left-4 rounded-md bg-[#06111f]/88 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
+            {formatCurrency(course.price)}
+          </span>
+        </Link>
+
+        <div className="flex min-w-0 flex-1 flex-col p-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: accent }}>
+            {course.academyName}
+          </p>
+          <h3 className="mt-2 line-clamp-2 text-lg font-semibold leading-snug text-ink">
+            <Link href={`/courses/${course.slug}`} className="transition hover:text-[#1166c8]">
+              {course.title}
+            </Link>
+          </h3>
+          <p className={`mt-2 text-sm leading-6 text-muted ${isList ? "line-clamp-3" : "line-clamp-2"}`}>
+            {course.description}
+          </p>
+
+          <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 border-y border-slate-100 py-3 text-xs text-muted sm:grid-cols-3">
+            <div className="flex items-center gap-2">
+              <BookOpen aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
+              <span>{course.lessonCount} lessons</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock3 aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
+              <span>{formatDuration(course.totalMinutes)}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Award aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
+              <span>{course.rewards} points</span>
+            </div>
+          </dl>
+
+          <div className="mt-auto flex items-end justify-between gap-4 pt-4">
+            <div className="flex items-center gap-2 text-muted" aria-label="Course features">
+              {course.hasCertificate ? <GraduationCap className="h-4 w-4" aria-label="Certificate included" /> : null}
+              {course.hasAssessment ? <BookOpen className="h-4 w-4" aria-label="Assessment included" /> : null}
+              {course.hasVRPractice ? <Box className="h-4 w-4" aria-label="VR practice included" /> : null}
+            </div>
+            <Link
+              href={`/courses/${course.slug}`}
+              className="inline-flex min-h-10 items-center gap-2 rounded-md bg-[#06111f] px-4 text-sm font-semibold text-white transition hover:bg-[#1166c8]"
+            >
+              View course
+              <MoveRight aria-hidden="true" className="h-4 w-4" />
+            </Link>
           </div>
-          <div className="premium-card-soft rounded-lg p-3">
-            <p className="font-semibold text-ink">Earn {course.rewards} Ʋ</p>
-            <p className="mt-1 text-xs text-muted">VowRewards</p>
-          </div>
         </div>
-        <ButtonLink href={`/courses/${course.slug}`} variant="ink" className="mt-6 w-full">
-          Open course
-        </ButtonLink>
       </article>
     </ComingSoonOverlay>
   );

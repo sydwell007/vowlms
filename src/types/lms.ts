@@ -115,6 +115,29 @@ export type CourseSummary = Pick<
   academyName: string;
   academyCategory: AcademyCategory;
   hasCertificate: boolean;
+  moduleCount: number;
+  lessonCount: number;
+  totalMinutes: number;
+  hasAssessment: boolean;
+  hasVRPractice: boolean;
+};
+
+export type CourseReview = {
+  id: string;
+  learnerName: string;
+  rating: number;
+  instructorRating: number | null;
+  feedback: string;
+  wouldRecommend: boolean | null;
+  createdAt: string;
+};
+
+export type CourseReviewSummary = {
+  averageRating: number | null;
+  totalReviews: number;
+  recommendationPercent: number | null;
+  distribution: Record<"1" | "2" | "3" | "4" | "5", number>;
+  reviews: CourseReview[];
 };
 
 export type Opportunity = {

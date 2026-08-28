@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { LayoutGrid, List, Search, SlidersHorizontal, X } from "lucide-react";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
@@ -9,13 +10,14 @@ import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { goalTiles } from "@/data/goal-tiles";
 import type { Academy, AcademyCategory, CourseSummary } from "@/types/lms";
 
-const GROUPED_PREVIEW_SIZE = 4;
+const GROUPED_PREVIEW_SIZE = 3;
 
 const PAGE_SIZE = 24;
 const levelOptions = ["All levels", "Foundation", "Intermediate", "Advanced"] as const;
 const priceOptions = ["All", "Free", "Paid"] as const;
 const certificateOptions = ["All", "Yes", "No"] as const;
 const durationOptions = ["2 weeks", "4 weeks", "6 weeks", "8 weeks"] as const;
+const sortOptions = ["Recommended", "Title A-Z", "Shortest first", "Most lessons", "Highest rewards"] as const;
 
 // The 4 goal tiles that map to a real academy — used as an extra "shop by goal" facet in the sidebar.
 const goalFilterOptions = goalTiles.filter((tile) => tile.academyCategory);
@@ -57,6 +59,9 @@ export function CourseCatalogueClient({
   const [minRewards, setMinRewards] = useState(0);
   const [query, setQuery] = useState(initialQuery);
   const [page, setPage] = useState(1);
+  const [sortBy, setSortBy] = useState<(typeof sortOptions)[number]>("Recommended");
+  const [view, setView] = useState<"grid" | "list">("grid");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const maxRewards = useMemo(() => courses.reduce((max, course) => Math.max(max, course.rewards), 0), [courses]);
 
@@ -123,8 +128,17 @@ export function CourseCatalogueClient({
     });
   }, [academy, certificate, courses, durations, goals, level, minRewards, price, query]);
 
-  const visibleCourses = filtered.slice(0, page * PAGE_SIZE);
-  const hasMore = visibleCourses.length < filtered.length;
+  const sortedCourses = useMemo(() => {
+    const next = [...filtered];
+    if (sortBy === "Title A-Z") next.sort((a, b) => a.title.localeCompare(b.title));
+    if (sortBy === "Shortest first") next.sort((a, b) => a.totalMinutes - b.totalMinutes);
+    if (sortBy === "Most lessons") next.sort((a, b) => b.lessonCount - a.lessonCount);
+    if (sortBy === "Highest rewards") next.sort((a, b) => b.rewards - a.rewards);
+    return next;
+  }, [filtered, sortBy]);
+
+  const visibleCourses = sortedCourses.slice(0, page * PAGE_SIZE);
+  const hasMore = visibleCourses.length < sortedCourses.length;
   const hasFilters =
     academy !== "all" ||
     goals.size > 0 ||
@@ -133,7 +147,8 @@ export function CourseCatalogueClient({
     certificate !== "All" ||
     durations.size > 0 ||
     minRewards > 0 ||
-    query.length > 0;
+    query.length > 0 ||
+    sortBy !== "Recommended";
 
   function resetFilters() {
     setAcademy("all");
@@ -144,6 +159,7 @@ export function CourseCatalogueClient({
     setDurations(new Set());
     setMinRewards(0);
     setQuery("");
+    setSortBy("Recommended");
     setPage(1);
   }
 
@@ -162,8 +178,8 @@ export function CourseCatalogueClient({
               Find practical learning by topic, academy, level, or price.
             </p>
 
-            <label className="mt-6 flex max-w-xl items-center gap-3 rounded-xl border border-white/18 bg-white/8 px-4 py-3 backdrop-blur-md">
-              <span aria-hidden="true" className="text-white/50">Search</span>
+            <label className="mt-6 flex max-w-xl items-center gap-3 rounded-lg border border-white/18 bg-white/8 px-4 py-3 backdrop-blur-md">
+              <Search aria-hidden="true" className="h-5 w-5 text-white/50" />
               <span className="sr-only">Search courses</span>
               <input
                 type="search"
@@ -182,9 +198,11 @@ export function CourseCatalogueClient({
                     setQuery("");
                     setPage(1);
                   }}
-                  className="text-xs font-semibold text-white/64 hover:text-white"
+                  className="inline-flex h-8 w-8 items-center justify-center text-white/64 hover:text-white"
+                  title="Clear search"
                 >
-                  Clear
+                  <X aria-hidden="true" className="h-4 w-4" />
+                  <span className="sr-only">Clear search</span>
                 </button>
               ) : null}
             </label>
@@ -221,8 +239,59 @@ export function CourseCatalogueClient({
       </section>
 
       <section className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-5">
+          <div>
+            <p className="text-sm font-semibold text-ink">Course catalogue</p>
+            <p className="mt-1 text-sm text-muted">Compare courses, then open one for curriculum and enrolment details.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setFiltersOpen((current) => !current)}
+              aria-expanded={filtersOpen}
+              className="inline-flex min-h-10 items-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-semibold text-ink lg:hidden"
+            >
+              <SlidersHorizontal aria-hidden="true" className="h-4 w-4" />
+              Filters
+            </button>
+            <label className="sr-only" htmlFor="course-sort">Sort courses</label>
+            <select
+              id="course-sort"
+              value={sortBy}
+              onChange={(event) => {
+                setSortBy(event.target.value as (typeof sortOptions)[number]);
+                setPage(1);
+              }}
+              className="min-h-10 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-ink"
+            >
+              {sortOptions.map((option) => <option key={option}>{option}</option>)}
+            </select>
+            <div className="flex rounded-md border border-slate-200 bg-white p-1" aria-label="Course view">
+              <button
+                type="button"
+                onClick={() => setView("grid")}
+                aria-pressed={view === "grid"}
+                className={`inline-flex h-8 w-8 items-center justify-center rounded ${view === "grid" ? "bg-[#06111f] text-white" : "text-muted"}`}
+                title="Grid view"
+              >
+                <LayoutGrid aria-hidden="true" className="h-4 w-4" />
+                <span className="sr-only">Grid view</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setView("list")}
+                aria-pressed={view === "list"}
+                className={`inline-flex h-8 w-8 items-center justify-center rounded ${view === "list" ? "bg-[#06111f] text-white" : "text-muted"}`}
+                title="List view"
+              >
+                <List aria-hidden="true" className="h-4 w-4" />
+                <span className="sr-only">List view</span>
+              </button>
+            </div>
+          </div>
+        </div>
         <div className="grid gap-8 lg:grid-cols-[260px_1fr] lg:items-start">
-          <aside className="premium-card-soft grid gap-6 rounded-xl p-5 lg:sticky lg:top-24">
+          <aside className={`${filtersOpen ? "grid" : "hidden"} premium-card-soft gap-6 rounded-lg p-5 lg:sticky lg:top-24 lg:grid`}>
             <label className="grid gap-1.5 text-xs font-semibold text-muted">
               Academy
               <select
@@ -386,7 +455,7 @@ export function CourseCatalogueClient({
               </p>
             </div>
             <div className="space-y-10">
-              {academies.map((item) => {
+              {academies.map((item, academyIndex) => {
                 const academyCourses = groupedByAcademy.get(item.slug) ?? [];
                 if (academyCourses.length === 0) return null;
                 const accent = getAcademyAccentColor(item.category);
@@ -407,9 +476,9 @@ export function CourseCatalogueClient({
                       </span>
                     </div>
 
-                    <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                      {preview.map((course) => (
-                        <CourseCard key={course.slug} course={course} />
+                    <div className={`mt-5 grid gap-5 ${view === "grid" ? "md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"}`}>
+                      {preview.map((course, courseIndex) => (
+                        <CourseCard key={course.slug} course={course} layout={view} priority={academyIndex === 0 && courseIndex === 0} />
                       ))}
                     </div>
 
@@ -454,9 +523,9 @@ export function CourseCatalogueClient({
                 </button>
               </div>
             ) : (
-              <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {visibleCourses.map((course) => (
-                  <CourseCard key={course.slug} course={course} />
+              <div className={`grid gap-5 ${view === "grid" ? "md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"}`}>
+                {visibleCourses.map((course, index) => (
+                  <CourseCard key={course.slug} course={course} layout={view} priority={index === 0} />
                 ))}
               </div>
             )}
@@ -468,7 +537,7 @@ export function CourseCatalogueClient({
                   onClick={() => setPage((current) => current + 1)}
                   className="rounded-xl border border-slate-200 bg-white px-10 py-3.5 text-sm font-semibold text-ink shadow-sm transition hover:border-[#1166c8]/30 hover:bg-slate-50"
                 >
-                  Load {Math.min(PAGE_SIZE, filtered.length - visibleCourses.length)} more
+                  Load {Math.min(PAGE_SIZE, sortedCourses.length - visibleCourses.length)} more
                 </button>
               </div>
             ) : null}
