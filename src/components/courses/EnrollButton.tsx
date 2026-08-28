@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import type { Course } from "@/types/lms";
 import { useSession } from "@/lib/auth/useSession";
+import { invalidateCourseEnrollmentCounts } from "@/lib/course-enrollment-counts-client";
 
 type Props = { course: Course };
 
@@ -145,6 +146,7 @@ export function EnrollButton({ course }: Props) {
       }
 
       setEnrolled(true);
+      invalidateCourseEnrollmentCounts(course.slug);
       toast.success(`You are enrolled in ${course.title}.`, {
         description: "Your first lesson is ready.",
         action: {

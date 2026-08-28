@@ -173,6 +173,7 @@ Expected: health returns JSON without PHP version or credentials; unauthorised c
   anonymous and non-enrolled review submissions are rejected.
 - A bridge-authorised `GET /courses/enrollment-counts` request returns one
   non-negative active/completed enrolment total for each published course slug.
+  VowLMS combines the underlying module totals for its grouped course cards.
 
 The reviews endpoint requires `course_evaluations`, which is created by
 `public/sql/015_course_evaluations.sql`. On an existing database, confirm that

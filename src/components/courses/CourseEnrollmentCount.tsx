@@ -2,49 +2,49 @@
 
 import { useEffect, useState } from "react";
 import { Users } from "lucide-react";
-
-type EnrollmentCounts = Record<string, number>;
-
-let cachedCounts: EnrollmentCounts | null = null;
-let countsRequest: Promise<EnrollmentCounts> | null = null;
-
-async function getEnrollmentCounts() {
-  if (cachedCounts) return cachedCounts;
-  if (!countsRequest) {
-    countsRequest = fetch("/api/courses/enrollment-counts", { cache: "no-store" })
-      .then(async (response) => {
-        const payload = await response.json();
-        if (!response.ok || !payload.ok) throw new Error(payload.error ?? "Enrolment totals could not be loaded.");
-        cachedCounts = payload.data as EnrollmentCounts;
-        return cachedCounts;
-      })
-      .catch((error) => {
-        countsRequest = null;
-        throw error;
-      });
-  }
-  return countsRequest;
-}
+import {
+  COURSE_ENROLLMENT_COUNTS_CHANGED,
+  getCourseEnrollmentCounts,
+} from "@/lib/course-enrollment-counts-client";
 
 export function CourseEnrollmentCount({ courseSlug }: { courseSlug: string }) {
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
     let active = true;
-    getEnrollmentCounts()
-      .then((counts) => {
-        if (active) setCount(counts[courseSlug] ?? 0);
-      })
-      .catch(() => undefined);
+
+    const loadCount = () => {
+      getCourseEnrollmentCounts()
+        .then((counts) => {
+          if (active) setCount(counts[courseSlug] ?? 0);
+        })
+        .catch(() => undefined);
+    };
+
+    const handleEnrollmentChange = (event: Event) => {
+      const changedCourseSlug = (event as CustomEvent<{ courseSlug?: string }>).detail?.courseSlug;
+      if (changedCourseSlug !== courseSlug) return;
+      setCount(null);
+      loadCount();
+    };
+
+    loadCount();
+    window.addEventListener(COURSE_ENROLLMENT_COUNTS_CHANGED, handleEnrollmentChange);
+
     return () => {
       active = false;
+      window.removeEventListener(COURSE_ENROLLMENT_COUNTS_CHANGED, handleEnrollmentChange);
     };
   }, [courseSlug]);
 
   return (
     <span className="flex items-center gap-1.5 text-xs font-medium text-muted">
       <Users aria-hidden="true" className="h-4 w-4" />
-      {count === null ? "Enrolled learners" : `${count.toLocaleString()} Enrolled`}
+      {count === null ? (
+        <span aria-label="Loading enrolment total" className="h-3 w-14 animate-pulse rounded-sm bg-slate-200" />
+      ) : (
+        `${count.toLocaleString()} enrolled`
+      )}
     </span>
   );
 }

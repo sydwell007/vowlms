@@ -74,6 +74,13 @@ export function formatDuration(totalMinutes: number): string {
   return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
 }
 
+const RECOMMENDED_WEEKLY_STUDY_MINUTES = 180;
+
+export function formatCourseDurationWeeks(totalMinutes: number): string {
+  const weeks = Math.max(1, Math.ceil(totalMinutes / RECOMMENDED_WEEKLY_STUDY_MINUTES));
+  return `${weeks} week${weeks === 1 ? "" : "s"}`;
+}
+
 /** First few lessons with real topical content — used for auto-generated module copy and preview chips. */
 export function getModuleTopics(moduleItem: CourseModule, max = 3): Lesson[] {
   return moduleItem.lessons

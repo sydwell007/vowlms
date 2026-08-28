@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Award, BookOpen, MoveRight } from "lucide-react";
+import { Award, BookOpen, Clock3, MoveRight } from "lucide-react";
 import { CourseEnrollmentCount } from "@/components/courses/CourseEnrollmentCount";
 import { ComingSoonOverlay } from "@/components/ui/ComingSoonOverlay";
 import { formatCurrency } from "@/lib/format";
+import { formatCourseDurationWeeks } from "@/lib/course-content";
 import { getComingSoonInfo } from "@/lib/academy-launch";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { getAcademyCourseImage, visualAssets } from "@/lib/visual-assets";
@@ -73,10 +74,14 @@ export function CourseCard({ course, layout = "grid", priority = false }: Props)
             </div>
           </div>
 
-          <dl className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 border-y border-slate-100 py-3 text-xs text-muted">
+          <dl className="mt-4 grid grid-cols-3 gap-x-2 border-y border-slate-100 py-3 text-xs text-muted">
             <div className="flex items-center gap-2">
               <BookOpen aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
               <span>{course.lessonCount} lessons</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock3 aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
+              <span>{formatCourseDurationWeeks(course.totalMinutes)}</span>
             </div>
             <div className="flex items-center gap-2">
               <Award aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />

@@ -146,12 +146,17 @@ test("course reviews require a verified learner enrollment", async () => {
 
 test("course-card enrolment totals are aggregate and bridge protected", async () => {
   const endpoint = await read("public/php/api/course-enrollment-counts/index.php");
+  const route = await read("src/app/api/courses/enrollment-counts/route.ts");
+  const enrollButton = await read("src/components/courses/EnrollButton.tsx");
   const rewrites = await read("public/php/.htaccess");
 
   assert.match(endpoint, /requireBridgeKey\(\)/);
   assert.match(endpoint, /COUNT\(e\.id\) AS enrollment_count/);
   assert.match(endpoint, /e\.status IN \(\"active\", \"completed\"\)/);
   assert.doesNotMatch(endpoint, /u\.name|u\.email|user_id/);
+  assert.match(route, /allGroupings/);
+  assert.match(route, /Math\.min\(\.\.\.childCounts\)/);
+  assert.match(enrollButton, /invalidateCourseEnrollmentCounts\(course\.slug\)/);
   assert.ok(
     rewrites.indexOf("^courses/enrollment-counts") < rewrites.indexOf("^courses/([^/]+)/?$"),
     "aggregate route must precede the generic course-slug route",
