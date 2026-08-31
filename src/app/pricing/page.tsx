@@ -6,6 +6,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata = {
   title: "Course Pricing and Funding - VowLMS",
   description: "Understand how VowLMS displays free, paid, and organisation learning options.",
+  alternates: { canonical: "/pricing" },
 };
 
 export default function PricingPage() {

@@ -80,7 +80,7 @@ export default function SignInPage() {
 
         <form onSubmit={handleSubmit} className="premium-card rounded-2xl p-8 space-y-5">
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div id="signin-error" role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
             </div>
           )}
@@ -91,8 +91,12 @@ export default function SignInPage() {
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               autoComplete="email"
+              inputMode="email"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? "signin-error" : undefined}
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -112,8 +116,11 @@ export default function SignInPage() {
             </div>
             <input
               id="password"
+              name="password"
               type="password"
               autoComplete="current-password"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? "signin-error" : undefined}
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}

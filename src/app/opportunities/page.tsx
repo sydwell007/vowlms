@@ -8,6 +8,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "Opportunities — VowLMS",
   description: "Review opportunity pathways published by GoalVow and prepare learner-controlled evidence for future matching.",
+  alternates: { canonical: "/opportunities" },
 };
 
 const TYPE_COLOR: Record<string, string> = {

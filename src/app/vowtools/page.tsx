@@ -4,6 +4,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "VowTools - Planned Career Readiness Toolkit",
   description: "Review the proposed VowTools roadmap for future learner career-readiness features.",
+  alternates: { canonical: "/vowtools" },
 };
 
 const tools = [

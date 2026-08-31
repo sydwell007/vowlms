@@ -5,7 +5,10 @@ import { CertificateRouteClient } from "@/components/certificates/CertificateRou
 export async function generateMetadata({ params }: { params: Promise<{ courseSlug: string }> }) {
   const { courseSlug } = await params;
   const course = getCourseBySlug(courseSlug);
-  return { title: course ? `Certificate — ${course.title}` : "Certificate" };
+  return {
+    title: course ? `Certificate — ${course.title}` : "Certificate",
+    robots: { index: false, follow: false },
+  };
 }
 
 export default async function CertificatePageRoute({ params }: { params: Promise<{ courseSlug: string }> }) {

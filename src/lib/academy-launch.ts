@@ -38,6 +38,16 @@ export function isHiddenAcademyCategory(category?: string | null): boolean {
   return (HIDDEN_ACADEMY_CATEGORIES as readonly string[]).includes(category);
 }
 
+export function getConnectedAcademyCount(): number {
+  return Object.entries(ACADEMY_LAUNCH_DATES).filter(
+    ([category, launch]) => !isHiddenAcademyCategory(category) && launch === null,
+  ).length;
+}
+
+export function getPlannedAcademyCount(): number {
+  return Object.keys(ACADEMY_LAUNCH_DATES).filter((category) => isHiddenAcademyCategory(category)).length;
+}
+
 export type ComingSoonInfo = {
   /** Long form for cards/ribbons, e.g. "Coming 30 August 2026" or "Coming soon". */
   label: string;

@@ -18,7 +18,10 @@
 | GET | `/api/academies` | Public | Optional query filters | Academy list | `/academies`; `academies` |
 | GET | `/api/courses` | Public | Academy, level, free, page, limit | Published course list | `/courses`; `courses`, `academies` |
 | GET | `/api/courses/{slug}` | Public | Slug path | Course, modules, lessons | `/courses/{slug}`; course tables |
-| GET | `/api/lessons/{slug}` | Learner session for page access | Slug path | Lesson navigation and content | `/lessons/{slug}`; learning tables |
+| GET | `/api/courses/enrollment-counts` | Public aggregate | None | Active/completed counts by published course slug | `/courses/enrollment-counts`; `enrollments`, `courses` |
+| GET | `/api/courses/{slug}/reviews` | Public aggregate | Slug path | Verified review summary | `/courses/{slug}/reviews`; `course_evaluations` |
+| POST | `/api/courses/{slug}/reviews` | Enrolled learner | Rating, optional instructor rating/feedback/recommendation | Own created/updated review | `/courses/{slug}/reviews`; `course_evaluations`, `enrollments` |
+| GET | `/api/lessons/{slug}` | Active/completed enrolled learner at the Next.js boundary | Slug path | Lesson navigation and content | Internal bridge read `/lessons/{slug}`; learning tables |
 | GET | `/api/learning-hubs` | Public | Optional status | Hub list | `/learning-hubs`; `learning_hubs` |
 | GET | `/api/opportunities` | Public | Optional type | Opportunity list | `/opportunities`; `opportunities` |
 | POST | `/api/auth/register` | Public, rate limited | Name, email, password, optional profile fields | Learner account and session | `/auth/register`; `users`, `reward_events` |
@@ -38,11 +41,17 @@
 | POST | `/api/payments/payfast/create` | Learner | `courseSlug` | PayFast form action and signed fields | `/payments/payfast-create`; `payments` |
 | POST | `/api/payments/payfast/notify` | PayFast relay | Raw form payload | Processing status | `/payments/payfast-notify`; payments, enrolments, rewards |
 | POST | `/api/rewards/award` | Facilitator or admin | User, event, points, metadata | Reward event and balance | `/rewards/award`; `reward_events` |
+| GET, POST | `/api/learner-goals` | Learner for bridge sync; local draft otherwise | Goal tile, academy, role/quiz context | Own saved goal profile | `/learner-goals`, `/learner-goals/save`; `learner_goals` |
 | GET | `/api/dashboard/learner` | Learner owner | None | Own metrics, courses, certificates, events | `/dashboard/learner`; learner-owned tables |
 | GET | `/api/dashboard/facilitator` | Facilitator/admin | None | Assigned courses and learner aggregates | `/dashboard/facilitator`; facilitator-scoped tables |
 | GET | `/api/dashboard/employer` | Employer/admin | None | Own listings; learner data restricted | `/dashboard/employer`; employer-owned opportunities |
 | GET | `/api/dashboard/admin` | Admin | None | Platform totals and admin records | `/dashboard/admin`; admin-only aggregate queries |
 | GET, PUT | `/api/user/profile` | Authenticated owner | Profile fields on PUT | Current profile | `/user/profile`; `users` |
+| POST, DELETE | `/api/user/avatar` | Authenticated owner | JPG/PNG/WebP, maximum 4 MB | Own avatar URL/removal | `/user/avatar`; approved upload directory, `users` |
+| GET | `/api/admin/lessons` | Admin | Optional search query | Lesson presenter settings | `/admin/lessons`; `lessons` |
+| GET, PUT | `/api/admin/lessons/{slug}` | Admin | VowHumans presenter fields | Saved lesson presenter settings | `/admin/lessons`; `lessons` |
+| GET | `/api/vowhumans/context-token/{slug}` | Lesson presenter bootstrap | Valid lesson slug | Short-lived signed context token | Next.js signing helper; no table write |
+| GET | `/api/vowhumans/lesson-context/{slug}` | Valid signed VowHumans token | Bearer token | Bounded plain lesson text and approved PDF metadata | `/lessons/{slug}` plus reviewed fallback; no table write |
 | GET | `/api/integrations/{name}` | Server-configured integration | Integration name | Configuration availability only | External service adapter; no PHP table |
 
 ## Validation and Ownership Rules
@@ -50,10 +59,33 @@
 - Registration always assigns `learner`; elevated roles require an audited admin workflow.
 - Paid enrolment requires a `paid` payment row created only by verified PayFast ITN processing.
 - Progress, assessments, practice, and certificates require enrolment ownership.
+- Lesson pages and VowHumans context-token minting re-check active/completed enrolment before returning protected learning content. The PHP lesson read is bridge-internal and cannot be called without the server bridge key.
 - Employers cannot enumerate platform learners. Organisation assignment and consent tables must exist before learner-level employer reporting is added.
 - Admin and facilitator access is enforced in PHP with JWT role checks.
 - Lesson resource URLs expire after one hour and are HMAC-signed with `RESOURCE_SIGNING_SECRET`.
+- VowHumans lesson context tokens expire quickly, are bound to one lesson slug, and responses are `private, no-store` with lesson text capped before delivery.
+- Avatar uploads are validated in both Next.js and PHP for owner, MIME/type, size, and safe storage name.
 - Payment notifications validate ordered signature data, source, merchant, PayFast server response, stored amount, and state transition.
+
+## Status and Idempotency
+
+- `200`: successful read/update or an already-completed idempotent operation.
+- `201`: created learner, enrolment, goal profile, review, or other new record where the handler uses `created`.
+- `400`: malformed or invalid input without internal details.
+- `401`: missing/invalid/expired learner authentication or context token.
+- `403`: valid identity without role, ownership, enrolment, or bridge authority.
+- `404`: unknown public identifier or intentionally blocked deployment artifact.
+- `409`: conflicting state where an endpoint explicitly distinguishes conflict.
+- `429`: authentication/reset/sensitive mutation rate limit where implemented by PHP.
+- `503`: bridge or required integration unavailable.
+
+Free enrolment, payment-event processing, first completion rewards, assessment-pass rewards, certificate issue, and one-review-per-learner/course must be safe to retry.
+
+## Rate-Limit Strategy
+
+- Highest priority: login, registration, forgot/reset password, PayFast relay, support/lead forms, avatar upload, reviews, and admin mutations.
+- Current PHP limits use host-local storage. If the API scales to multiple hosts, replace this with a shared atomic store before calling the protection distributed.
+- Return generic errors and `Retry-After` where supported. Never log passwords, reset tokens, JWTs, bridge keys, signed resource URLs, or payment payload secrets.
 
 ## Example
 

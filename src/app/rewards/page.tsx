@@ -6,6 +6,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "VowRewards - VowLMS",
   description: "Understand which verified VowLMS learning milestones currently create VowRewards records.",
+  alternates: { canonical: "/rewards" },
 };
 
 const rewardEvents = [

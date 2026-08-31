@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/Section";
 
-export const metadata = { title: "Accessibility — VowLMS" };
+export const metadata = { title: "Accessibility — VowLMS", alternates: { canonical: "/accessibility" } };
 
 export default function AccessibilityPage() {
   return (

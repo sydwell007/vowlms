@@ -1,8 +1,9 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createHmac } from "node:crypto";
-import { getLessonBySlug } from "@/lib/data";
+import { getLessonBySlug, getParentGroupSlug } from "@/lib/data";
 import { LessonPlayer } from "@/components/learning/LessonPlayer";
-import { bridgeGet, isBridgeConfigured } from "@/lib/bridge";
+import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
+import { hasActiveCourseEnrollment } from "@/lib/course-access";
 import { normalizeVowHumanPresenter } from "@/lib/vowhumans";
 import type { Course, CourseModule, Lesson } from "@/types/lms";
 import type { LessonResource } from "@/components/learning/LessonPlayer";
@@ -10,7 +11,10 @@ import type { LessonResource } from "@/components/learning/LessonPlayer";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const result = getLessonBySlug(slug);
-  return { title: result?.lesson.title ?? "Lesson" };
+  return {
+    title: result?.lesson.title ?? "Lesson",
+    robots: { index: false, follow: false },
+  };
 }
 
 // ── Bridge response types ─────────────────────────────────────────────────────
@@ -274,11 +278,26 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       if (data?.lesson) {
         bridgeProps = bridgeToProps(data, slug);
       }
-    } catch {
-      // Fall through to static seed data
+    } catch (error) {
+      if (process.env.NODE_ENV === "production") throw error;
     }
 
     if (bridgeProps) {
+      let hasAccess = false;
+      try {
+        hasAccess = await hasActiveCourseEnrollment([bridgeProps.course.slug]);
+      } catch (error) {
+        if (error instanceof BridgeError && error.status === 401) {
+          redirect(`/auth/signin?returnTo=${encodeURIComponent(`/lesson/${slug}`)}`);
+        }
+        throw error;
+      }
+
+      if (!hasAccess) {
+        const courseSlug = getParentGroupSlug(bridgeProps.course.slug) ?? bridgeProps.course.slug;
+        redirect(`/courses/${courseSlug}?enrolment=required`);
+      }
+
       return (
         <LessonPlayer
           lesson={bridgeProps.lesson}

@@ -12,6 +12,12 @@ npm test
 npm run build
 ```
 
+Current static suite: 25 passing Node tests. It covers deployment-artifact blocking, auth role safety, payment integrity, Moodle resource signing, bridge status handling, reviews, aggregate enrolment counts, VowHumans restrictions, canonical redirects, sitemap canonicalisation, JSON-LD, auth field semantics, Find My Path recovery/accessibility, and protected learning enrolment checks.
+
+Current non-destructive browser suite: 99 passing Playwright cases across 360x640, 768x1024, and 1440x900. The verified 31 August 2026 run covered catalogue filtering/search, onboarding, pathfinder recommendations, responsive layout, canonical SEO, redirects, and the VowHumans consent/token/close lifecycle.
+
+Current local Lighthouse evidence meets the repository thresholds: homepage 82 performance/85 accessibility, catalogue 74/86, and course detail 85/90; all measured pages scored 96 for best practices and 100 for SEO.
+
 PHP syntax must also be checked on a host with PHP installed:
 
 ```bash
@@ -53,6 +59,27 @@ find public/php -name '*.php' -print0 | xargs -0 -n1 php -l
 13. Verify certificate eligibility and unique certificate IDs.
 14. Verify signed resource URL success, tamper failure, and expiry failure.
 15. Verify `/php`, `/sql`, and archive paths return 404 in production.
+16. Verify legacy academy URLs return 308, preserve query strings, and land on the short canonical URL.
+17. Verify every sitemap entry is 200, canonical, indexable, and absent from redirect/noindex route families.
+18. Verify course title/description/social metadata and valid factual Course/Breadcrumb JSON-LD.
+19. Verify Find My Path exposes semantic progress, Back/Restart, refresh recovery, and recommendation rationale.
+20. Verify auth fields have stable labels/names/autocomplete and errors announce through `role="alert"`.
+21. Verify public search submits/updates `?q=`, supports keyboard entry, announces result count, and handles no results.
+22. Verify course-card enrolment count changes after an approved enrolment and never exposes learner identity.
+23. Verify presenter start/load/single-audio/retry/close while lesson content stays available.
+
+## Playwright Suites
+
+- Non-destructive by default: responsive layout, catalogue, onboarding, quiz, auth page semantics, VowHumans shell, and canonical SEO.
+- Destructive specs are tagged and run only when `RUN_DESTRUCTIVE_TESTS=1` against an approved disposable/staging environment.
+- Set `PLAYWRIGHT_BASE_URL` to a Preview/staging origin to test a deployment without starting the local server.
+
+```bash
+npm run test:e2e -- --project=desktop-1440x900
+PLAYWRIGHT_BASE_URL=https://APPROVED-PREVIEW.example npm run test:e2e
+```
+
+Never enable destructive tests against Production.
 
 ## Browser Matrix
 
@@ -63,6 +90,19 @@ find public/php -name '*.php' -print0 | xargs -0 -n1 php -l
 - 200% zoom and reflow.
 - Reduced-motion preference.
 - Slow network/offline shell; confirm private/API content is not cached.
+
+## Route-Archetype Coverage
+
+Test one page from every archetype on each release: home, academy list/detail, catalogue, course detail, pathway detail, Find My Path, support/legal/corporate, auth, learner lesson/assessment/result/certificate, each dashboard role, API error, 404, offline, and VowHumans lesson. The sitemap crawl covers all canonical public URLs at a rate that does not flood Production.
+
+## Accessibility Pass
+
+- One H1 and logical heading order.
+- Skip link, landmarks, breadcrumb labels, keyboard focus, and mobile navigation.
+- Form labels, names, autocomplete, required state, error association, and status announcements.
+- Native progress semantics for Find My Path and assessments.
+- Accordion/tab/drawer expanded-selected relationships.
+- Touch targets, 200% zoom/reflow, contrast, reduced motion, image alternatives, and long lesson readability.
 
 ## Data Safety
 

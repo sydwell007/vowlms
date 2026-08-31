@@ -1,6 +1,6 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 
-export const metadata = { title: "Announcements" };
+export const metadata = { title: "Announcements", robots: { index: false, follow: false } };
 
 export default function AnnouncementsPage() {
   return (

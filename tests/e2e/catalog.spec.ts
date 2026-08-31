@@ -10,6 +10,13 @@ const KNOWN_TITLES = [
 ];
 
 test.describe("Course catalog", () => {
+  async function openFiltersWhenCollapsed(page: import("@playwright/test").Page) {
+    const filtersButton = page.getByRole("button", { name: "Filters", exact: true });
+    if (await filtersButton.isVisible()) {
+      await filtersButton.click();
+    }
+  }
+
   test("course count matches the real dataset", async ({ page }) => {
     const expectedCount = getCourses().length;
     await page.goto("/courses");
@@ -19,9 +26,10 @@ test.describe("Course catalog", () => {
   test("each filter individually never yields an unexpected empty state", async ({ page }) => {
     await page.goto("/courses");
     await page.waitForSelector("text=Browse by academy");
+    await openFiltersWhenCollapsed(page);
 
     // Academy select
-    const academySelect = page.locator("select");
+    const academySelect = page.locator("#academy-filter");
     const optionValues = await academySelect.locator("option").evaluateAll((opts) =>
       opts.map((o) => (o as HTMLOptionElement).value),
     );
@@ -49,8 +57,9 @@ test.describe("Course catalog", () => {
   test("combining filters narrows results without erroring", async ({ page }) => {
     await page.goto("/courses");
     await page.waitForSelector("text=Browse by academy");
+    await openFiltersWhenCollapsed(page);
 
-    await page.locator("select").selectOption("chef-academy");
+    await page.locator("#academy-filter").selectOption("chef-academy");
     await page.getByRole("button", { name: "Foundation", exact: true }).click();
     await page.getByRole("button", { name: "Free", exact: true }).click();
 

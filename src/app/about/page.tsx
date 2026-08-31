@@ -3,7 +3,11 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Section } from "@/components/ui/Section";
 import { getAcademies, getCourses } from "@/lib/data";
 
-export const metadata = { title: "About GoalVow - VowLMS" };
+export const metadata = {
+  title: "About GoalVow - VowLMS",
+  description: "Learn how GoalVow approaches practical, evidence-led and accessible learning through VowLMS.",
+  alternates: { canonical: "/about" },
+};
 
 const values = [
   { title: "Practical learning", description: "Course pathways are organised around knowledge learners can use in study, work, enterprise, and everyday life." },
@@ -53,7 +57,7 @@ export default function AboutPage() {
           <div className="premium-card rounded-lg p-8">
             <h2 className="text-2xl font-semibold text-ink">Current platform foundation</h2>
             <p className="mt-4 text-base leading-7 text-muted">
-              Four academy connections are live today. Further academy pathways are planned for a future intake once their catalogues and delivery models are approved.
+              {connectedAcademies} academy connections are live today. Further academy pathways are planned for a future intake once their catalogues and delivery models are approved.
             </p>
           </div>
         </div>

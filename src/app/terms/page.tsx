@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/Section";
 
-export const metadata = { title: "Terms of Use — VowLMS" };
+export const metadata = { title: "Terms of Use — VowLMS", alternates: { canonical: "/terms" } };
 
 export default function TermsPage() {
   return (

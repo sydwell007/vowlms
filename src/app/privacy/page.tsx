@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/Section";
 
-export const metadata = { title: "Privacy Policy — VowLMS" };
+export const metadata = { title: "Privacy Policy — VowLMS", alternates: { canonical: "/privacy" } };
 
 export default function PrivacyPage() {
   return (

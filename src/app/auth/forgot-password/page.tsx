@@ -59,11 +59,12 @@ export default function ForgotPasswordPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               {error && (
-                <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
+                <div id="reset-error" role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
               )}
               <div>
                 <label htmlFor="reset-email" className="block text-sm font-semibold text-ink mb-1.5">Email address</label>
-                <input id="reset-email" type="email" required value={email}
+                <input id="reset-email" name="email" type="email" autoComplete="email" inputMode="email" required value={email}
+                  aria-invalid={Boolean(error)} aria-describedby={error ? "reset-error" : undefined}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@goalvow.com"
                   className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />

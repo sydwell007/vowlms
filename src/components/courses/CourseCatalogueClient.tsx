@@ -292,9 +292,10 @@ export function CourseCatalogueClient({
         </div>
         <div className="grid gap-8 lg:grid-cols-[260px_1fr] lg:items-start">
           <aside className={`${filtersOpen ? "grid" : "hidden"} premium-card-soft gap-6 rounded-lg p-5 lg:sticky lg:top-24 lg:grid`}>
-            <label className="grid gap-1.5 text-xs font-semibold text-muted">
+            <label htmlFor="academy-filter" className="grid gap-1.5 text-xs font-semibold text-muted">
               Academy
               <select
+                id="academy-filter"
                 value={academy}
                 onChange={(event) => {
                   setAcademy(event.target.value);

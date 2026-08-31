@@ -20,7 +20,7 @@ test.describe("Goal-first onboarding flow", () => {
 
       await expect(page.getByText(`Your path to becoming a ${firstRole.label}`)).toBeVisible();
 
-      const courseCards = page.locator("article", { hasText: "Open course" });
+      const courseCards = page.locator("article", { hasText: "View course" });
       await expect(courseCards.first()).toBeVisible();
       expect(await courseCards.count()).toBeGreaterThan(0);
 

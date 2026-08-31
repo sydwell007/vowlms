@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Section } from "@/components/ui/Section";
@@ -14,11 +15,34 @@ import { AcademyCourseGrid } from "@/components/academies/AcademyCourseGrid";
 import { visualAssets } from "@/lib/visual-assets";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { siteConfig } from "@/lib/site";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const academy = getAcademyBySlug(slug);
-  return { title: academy?.name ?? "Academy" };
+  if (!academy || isHiddenAcademyCategory(academy.category)) {
+    return { title: "Academy", robots: { index: false, follow: false } };
+  }
+
+  const canonicalPath = `/academies/${academy.category}`;
+  return {
+    title: academy.name,
+    description: academy.description,
+    alternates: { canonical: canonicalPath },
+    openGraph: {
+      title: `${academy.name} | VowLMS`,
+      description: academy.description,
+      url: canonicalPath,
+      images: [{ url: visualAssets.academyNetwork, alt: `${academy.name} course network` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${academy.name} | VowLMS`,
+      description: academy.description,
+      images: [visualAssets.academyNetwork],
+    },
+  };
 }
 
 export default async function AcademyDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -34,9 +58,19 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
   const allCourses = getCourses();
 
   const accentColor = getAcademyAccentColor(academy.category);
+  const canonicalPath = `/academies/${academy.category}`;
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Academies", item: `${siteConfig.url}/academies` },
+      { "@type": "ListItem", position: 2, name: academy.name, item: `${siteConfig.url}${canonicalPath}` },
+    ],
+  };
 
   return (
     <main>
+      <JsonLd data={breadcrumbSchema} />
       {/* Hero */}
       <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
         <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">

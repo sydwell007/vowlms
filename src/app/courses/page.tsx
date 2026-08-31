@@ -8,6 +8,7 @@ import {
 export const metadata = {
   title: "Courses",
   description: "Browse practical courses across the GoalVow academy network.",
+  alternates: { canonical: "/courses" },
 };
 
 type CoursesPageProps = {

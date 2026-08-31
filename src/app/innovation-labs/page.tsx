@@ -6,6 +6,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "Innovation Labs - GoalVow R&D",
   description: "Review GoalVow's current platform experiments and clearly labelled research roadmap.",
+  alternates: { canonical: "/innovation-labs" },
 };
 
 const projects = [

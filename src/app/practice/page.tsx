@@ -6,6 +6,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "Skills Practice - VowLMS",
   description: "Explore current VowLMS practice previews and the planned GoalVow Skills Practice model.",
+  alternates: { canonical: "/practice" },
 };
 
 const practiceTypes = [

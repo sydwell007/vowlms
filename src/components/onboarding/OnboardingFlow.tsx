@@ -7,7 +7,7 @@ import { SmartCourseFeed } from "@/components/onboarding/SmartCourseFeed";
 import { PathFinderQuiz } from "@/components/onboarding/PathFinderQuiz";
 import { ReturningLearnerBanner } from "@/components/onboarding/ReturningLearnerBanner";
 import type { GoalTile, RoleOption } from "@/data/goal-tiles";
-import { getLearnerProfile, saveLearnerProfile, type LearnerProfile } from "@/lib/learner-profile";
+import { clearLearnerProfile, getLearnerProfile, saveLearnerProfile, type LearnerProfile } from "@/lib/learner-profile";
 import { getQuizRecommendation, type QuizAnswers } from "@/lib/goal-routing";
 
 type Step = "tiles" | "roles" | "feed" | "quiz";
@@ -57,6 +57,7 @@ export function OnboardingFlow({ initialStep = "tiles" }: { initialStep?: "tiles
   }
 
   function reset() {
+    clearLearnerProfile();
     setSelectedTile(null);
     setSelectedRole(null);
     setStep("tiles");
@@ -81,7 +82,7 @@ export function OnboardingFlow({ initialStep = "tiles" }: { initialStep?: "tiles
         <SmartCourseFeed academyCategory={selectedTile.academyCategory} role={selectedRole} onStartOver={reset} />
       ) : null}
 
-      {step === "quiz" ? <PathFinderQuiz onComplete={handleQuizComplete} /> : null}
+      {step === "quiz" ? <PathFinderQuiz onComplete={handleQuizComplete} onClearSavedProfile={clearLearnerProfile} /> : null}
     </div>
   );
 }

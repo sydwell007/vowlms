@@ -8,6 +8,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "VR Practice",
   description: "Build confidence through guided GoalVow workplace simulations.",
+  alternates: { canonical: "/vr-practice" },
 };
 
 const PAGE_SIZE = 18;

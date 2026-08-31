@@ -2,18 +2,20 @@ import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
+import { getAcademies } from "@/lib/data";
 
 export const metadata = {
   title: "GoalVow Ecosystem · Connected Learning Services",
   description: "Explore the full GoalVow Holdings ecosystem — academies, learning hubs, VowSupport, VowRewards, VowTools, PlugConnect, SkillsShop, ChefOrder, and Innovation Labs.",
+  alternates: { canonical: "/ecosystem" },
 };
 
 const pillars = [
   {
     icon: "🎓",
     name: "Academies",
-    tagline: "6 connected academy catalogues",
-    desc: "Upskilling, Skills Training, Chef Academy, Private School, Business School, and University Online — all sharing one learner identity and reward system.",
+    tagline: "Connected academy catalogues",
+    desc: "Live GoalVow academies share one learner identity and learning-platform foundation.",
     href: "/academies",
     status: "Live",
     statusColor: "bg-emerald-100 text-emerald-700",
@@ -111,6 +113,17 @@ const platformFlow = [
 ];
 
 export default function EcosystemPage() {
+  const liveAcademies = getAcademies();
+  const ecosystemPillars = pillars.map((pillar) =>
+    pillar.name === "Academies"
+      ? {
+          ...pillar,
+          tagline: `${liveAcademies.length} connected academy catalogues`,
+          desc: `${liveAcademies.map((academy) => academy.name).join(", ")} share one VowLMS learning-platform foundation.`,
+        }
+      : pillar,
+  );
+
   return (
     <main>
       {/* Hero */}
@@ -170,7 +183,7 @@ export default function EcosystemPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1e3a8a]">All verticals</p>
           <h2 className="mt-2 text-3xl font-semibold text-ink">Every part of the ecosystem</h2>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {pillars.map((p) => (
+            {ecosystemPillars.map((p) => (
               <Link key={p.name} href={p.href}>
                 <article className="gv-card h-full rounded-2xl p-6 transition hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(30,58,138,0.12)]">
                   <div className="flex items-start justify-between">

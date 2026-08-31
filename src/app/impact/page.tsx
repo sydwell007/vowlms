@@ -5,6 +5,7 @@ import { getCourses } from "@/lib/data";
 export const metadata = {
   title: "Impact",
   description: "How GoalVow intends to measure learning access, completion evidence, and progression outcomes.",
+  alternates: { canonical: "/impact" },
 };
 
 const outcomeAreas = [

@@ -5,6 +5,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "ChefOrder - Planned Chef Business Platform",
   description: "Review the proposed ChefOrder pathway for future Chef Academy enterprise services.",
+  alternates: { canonical: "/cheforder" },
 };
 
 const features = [

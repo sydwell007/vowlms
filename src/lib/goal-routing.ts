@@ -52,7 +52,12 @@ function addScore(scores: AcademyScores, category: AcademyCategory, points: numb
  * assigned them points, so they're stored for context/copy only rather than
  * silently folded into another question's weight.
  */
-export function getQuizRecommendation(answers: QuizAnswers): { academyCategory: AcademyCategory; courses: CourseSummary[] } {
+export function getQuizRecommendation(answers: QuizAnswers): {
+  academyCategory: AcademyCategory;
+  courses: CourseSummary[];
+  reason: string;
+  selectionReason: string;
+} {
   const scores: AcademyScores = {
     "upskilling": 0,
     "skills-training": 0,
@@ -114,5 +119,33 @@ export function getQuizRecommendation(answers: QuizAnswers): { academyCategory: 
     .sort((a, b) => b.rewards - a.rewards)
     .slice(0, 3);
 
-  return { academyCategory: winner, courses };
+  const academyNames: Record<string, string> = {
+    upskilling: "Upskilling Academy",
+    "skills-training": "Skills Training Academy",
+    "chef-academy": "Chef Academy",
+    "business-school": "Business School",
+  };
+  const situationLabels: Record<QuizAnswers["q1"], string> = {
+    unemployed: "finding work",
+    employed: "growing in your current role",
+    business: "building a business",
+    student: "adding practical skills while studying",
+  };
+  const workStyleLabels: Record<QuizAnswers["q3"], string> = {
+    "hands-on": "hands-on work",
+    office: "office-based work",
+    mixed: "a mix of practical and office work",
+    people: "people and customer-facing work",
+  };
+  const priorityLabels: Record<QuizAnswers["q4"], string> = {
+    "get-job": "getting job-ready quickly",
+    certificate: "earning course completion evidence",
+    career: "building long-term career skills",
+    income: "creating an income stream",
+  };
+  const academyName = academyNames[winner] ?? "this GoalVow academy";
+  const reason = `Your focus on ${situationLabels[answers.q1]}, preference for ${workStyleLabels[answers.q3]}, and priority of ${priorityLabels[answers.q4]} produced the strongest rules-based match with ${academyName}.`;
+  const selectionReason = `These are currently available ${academyName} courses. When several courses match the same academy, VowLMS orders them by their configured learner reward value; your study-time answer is saved for planning and does not change the academy score.`;
+
+  return { academyCategory: winner, courses, reason, selectionReason };
 }

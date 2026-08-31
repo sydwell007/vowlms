@@ -122,7 +122,7 @@ export default function SignUpPage() {
 
         <form onSubmit={handleSubmit} className="premium-card rounded-2xl p-8 space-y-5">
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
+            <div id="signup-error" role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
           )}
 
           {step === 1 && (
@@ -130,33 +130,33 @@ export default function SignUpPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="name" className="block text-sm font-semibold text-ink mb-1.5">Full name</label>
-                  <input id="name" type="text" required value={form.name} onChange={(e) => update("name", e.target.value)}
+                  <input id="name" name="name" type="text" autoComplete="name" required value={form.name} onChange={(e) => update("name", e.target.value)}
                     placeholder="Your full name"
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
                 </div>
                 <div>
                   <label htmlFor="phone" className="block text-sm font-semibold text-ink mb-1.5">Phone (optional)</label>
-                  <input id="phone" type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)}
+                  <input id="phone" name="phone" type="tel" autoComplete="tel" inputMode="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)}
                     placeholder="+27 82 000 0000"
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
                 </div>
               </div>
               <div>
                 <label htmlFor="signup-email" className="block text-sm font-semibold text-ink mb-1.5">Email address</label>
-                <input id="signup-email" type="email" required value={form.email} onChange={(e) => update("email", e.target.value)}
+                <input id="signup-email" name="email" type="email" autoComplete="email" inputMode="email" required value={form.email} onChange={(e) => update("email", e.target.value)}
                   placeholder="you@example.com"
                   className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="pwd" className="block text-sm font-semibold text-ink mb-1.5">Password</label>
-                  <input id="pwd" type="password" required value={form.password} onChange={(e) => update("password", e.target.value)}
+                  <input id="pwd" name="password" type="password" autoComplete="new-password" required value={form.password} onChange={(e) => update("password", e.target.value)}
                     placeholder="Min. 8 characters"
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
                 </div>
                 <div>
                   <label htmlFor="confirm" className="block text-sm font-semibold text-ink mb-1.5">Confirm password</label>
-                  <input id="confirm" type="password" required value={form.confirm} onChange={(e) => update("confirm", e.target.value)}
+                  <input id="confirm" name="confirmPassword" type="password" autoComplete="new-password" required value={form.confirm} onChange={(e) => update("confirm", e.target.value)}
                     placeholder="••••••••"
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
                 </div>
@@ -172,7 +172,7 @@ export default function SignUpPage() {
             <>
               <div>
                 <label htmlFor="academy" className="block text-sm font-semibold text-ink mb-1.5">Primary academy of interest</label>
-                <select id="academy" value={form.academy} onChange={(e) => update("academy", e.target.value)}
+                <select id="academy" name="preferredAcademy" value={form.academy} onChange={(e) => update("academy", e.target.value)}
                   className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition">
                   <option value="">Select an academy…</option>
                   {academyOptions.map((a) => <option key={a} value={a}>{a}</option>)}
@@ -181,18 +181,18 @@ export default function SignUpPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label htmlFor="city" className="block text-sm font-semibold text-ink mb-1.5">City</label>
-                  <input id="city" type="text" value={form.city} onChange={(e) => update("city", e.target.value)}
+                  <input id="city" name="city" type="text" autoComplete="address-level2" value={form.city} onChange={(e) => update("city", e.target.value)}
                     placeholder="Cape Town"
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
                 </div>
                 <div>
                   <label htmlFor="country" className="block text-sm font-semibold text-ink mb-1.5">Country</label>
-                  <input id="country" type="text" value={form.country} onChange={(e) => update("country", e.target.value)}
+                  <input id="country" name="country" type="text" autoComplete="country-name" value={form.country} onChange={(e) => update("country", e.target.value)}
                     className="w-full rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-ink focus:border-[#1166c8] focus:outline-none focus:ring-2 focus:ring-[#1166c8]/20 transition" />
                 </div>
               </div>
               <label className="flex items-start gap-3 cursor-pointer">
-                <input type="checkbox" checked={form.agreeTerms} onChange={(e) => update("agreeTerms", e.target.checked)}
+                <input name="acceptTerms" type="checkbox" required checked={form.agreeTerms} onChange={(e) => update("agreeTerms", e.target.checked)}
                   className="mt-0.5 h-4 w-4 rounded border-slate-300 accent-[#1166c8]" />
                 <span className="text-sm text-muted leading-6">
                   I agree to the{" "}

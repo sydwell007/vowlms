@@ -7,6 +7,8 @@ import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "GoalVow Academies",
+  description: "Explore the live GoalVow academies and their available VowLMS courses.",
+  alternates: { canonical: "/academies" },
 };
 
 export default function AcademiesPage() {

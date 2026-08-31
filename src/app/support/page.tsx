@@ -7,6 +7,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "VowSupport - GoalVow Learner Support",
   description: "Get help with VowLMS accounts, enrolment, courses, assessments, payments, and partnerships.",
+  alternates: { canonical: "/support" },
 };
 
 const supportAreas = [

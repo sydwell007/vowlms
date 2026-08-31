@@ -8,6 +8,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "Learning Hubs - VowLMS",
   description: "Review GoalVow's planned model for supported community learning access.",
+  alternates: { canonical: "/learning-hubs" },
 };
 
 const STATUS_STYLE: Record<string, { bg: string; text: string; label: string }> = {

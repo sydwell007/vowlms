@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import type { Academy, CourseSummary } from "@/types/lms";
 
 const RESULT_LIMIT = 20;
@@ -21,6 +22,8 @@ type SearchClientProps = {
 };
 
 export function SearchClient({ academies, courses, initialQuery }: SearchClientProps) {
+  const pathname = usePathname();
+  const router = useRouter();
   const [query, setQuery] = useState(initialQuery);
   const [tab, setTab] = useState<"all" | "courses" | "academies">("all");
 
@@ -45,32 +48,53 @@ export function SearchClient({ academies, courses, initialQuery }: SearchClientP
   const totalResults = results.courses.length + results.academies.length;
   const visibleCourses = results.courses.slice(0, RESULT_LIMIT);
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const params = new URLSearchParams(window.location.search);
+      const normalizedQuery = query.trim();
+      if (normalizedQuery) params.set("q", normalizedQuery);
+      else params.delete("q");
+
+      const nextUrl = params.size > 0 ? `${pathname}?${params.toString()}` : pathname;
+      if (`${window.location.pathname}${window.location.search}` !== nextUrl) {
+        router.replace(nextUrl, { scroll: false });
+      }
+    }, 300);
+
+    return () => window.clearTimeout(timer);
+  }, [pathname, query, router]);
+
   return (
     <main className="premium-page">
       <div className="mx-auto w-full max-w-4xl px-5 py-10 sm:px-6 lg:px-8">
         <h1 className="mb-6 text-2xl font-semibold text-ink">Search VowLMS</h1>
 
-        <label className="premium-card relative mb-6 flex items-center gap-3 rounded-xl px-4 py-3.5">
-          <span className="text-sm font-semibold text-muted" aria-hidden="true">Search</span>
-          <span className="sr-only">Search courses and academies</span>
-          <input
-            type="search"
-            autoFocus
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Course, academy, or skill"
-            className="min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-muted"
-          />
-          {query ? (
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              className="text-xs font-semibold text-muted hover:text-ink"
-            >
-              Clear
-            </button>
-          ) : null}
-        </label>
+        <form action="/search" method="get" role="search" className="mb-6">
+          <label className="premium-card relative flex items-center gap-3 rounded-xl px-4 py-3.5">
+            <span className="text-sm font-semibold text-muted" aria-hidden="true">Search</span>
+            <span className="sr-only">Search courses and academies</span>
+            <input
+              name="q"
+              type="search"
+              autoFocus
+              autoComplete="off"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Course, academy, or skill"
+              aria-controls="search-results"
+              className="min-w-0 flex-1 bg-transparent text-base text-ink outline-none placeholder:text-muted"
+            />
+            {query ? (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                className="min-h-10 px-2 text-xs font-semibold text-muted hover:text-ink"
+              >
+                Clear
+              </button>
+            ) : null}
+          </label>
+        </form>
 
         {!query.trim() ? (
           <>
@@ -100,8 +124,11 @@ export function SearchClient({ academies, courses, initialQuery }: SearchClientP
             </div>
           </>
         ) : (
-          <>
-            <div className="mb-5 flex flex-wrap items-center gap-4" aria-label="Search result types">
+          <div id="search-results">
+            <p role="status" aria-live="polite" className="sr-only">
+              {totalResults} {totalResults === 1 ? "result" : "results"} found
+            </p>
+            <div className="mb-5 flex flex-wrap items-center gap-4" role="tablist" aria-label="Search result types">
               {[
                 { key: "all" as const, label: `All (${totalResults})` },
                 { key: "courses" as const, label: `Courses (${results.courses.length})` },
@@ -110,7 +137,8 @@ export function SearchClient({ academies, courses, initialQuery }: SearchClientP
                 <button
                   key={item.key}
                   type="button"
-                  aria-pressed={tab === item.key}
+                  role="tab"
+                  aria-selected={tab === item.key}
                   onClick={() => setTab(item.key)}
                   className={`border-b-2 pb-2 text-sm font-semibold transition ${
                     tab === item.key
@@ -199,7 +227,7 @@ export function SearchClient({ academies, courses, initialQuery }: SearchClientP
                 </div>
               </section>
             ) : null}
-          </>
+          </div>
         )}
       </div>
     </main>

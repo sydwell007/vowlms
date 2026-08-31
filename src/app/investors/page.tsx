@@ -8,6 +8,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "Investors Hub",
   description: "A factual overview of the current GoalVow learning-platform foundation and decisions required for scale.",
+  alternates: { canonical: "/investors" },
 };
 
 const platformCase = [

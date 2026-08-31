@@ -1,8 +1,10 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { VRStudio } from "@/components/vr/VRStudio";
-import { getAcademyBySlug, getAcademyHref, getVRPracticeBySlug } from "@/lib/data";
+import { getAcademyBySlug, getAcademyHref, getEnrollableCourseSlugs, getVRPracticeBySlug } from "@/lib/data";
+import { BridgeError } from "@/lib/bridge";
+import { hasActiveCourseEnrollment } from "@/lib/course-access";
 
 export default async function VRPracticePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -13,6 +15,17 @@ export default async function VRPracticePage({ params }: { params: Promise<{ slu
   }
 
   const { practice, course } = result;
+  try {
+    if (!await hasActiveCourseEnrollment(getEnrollableCourseSlugs(course.slug))) {
+      redirect(`/courses/${course.slug}?enrolment=required`);
+    }
+  } catch (error) {
+    if (error instanceof BridgeError && error.status === 401) {
+      redirect(`/auth/signin?returnTo=${encodeURIComponent(`/vr-practice/${slug}`)}`);
+    }
+    throw error;
+  }
+
   const academy = getAcademyBySlug(course.academySlug);
 
   return (

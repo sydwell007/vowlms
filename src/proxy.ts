@@ -7,6 +7,8 @@ const aliasRedirects: Record<string, string> = {
   "/vowsupport": "/support",
   "/contact": "/support",
   "/catalogue": "/courses",
+  "/academies/upskilling-academy": "/academies/upskilling",
+  "/academies/skills-training-academy": "/academies/skills-training",
 };
 
 const protectedPrefixes = [
@@ -43,7 +45,9 @@ export function proxy(request: NextRequest) {
 
   const aliasTarget = aliasRedirects[pathname];
   if (aliasTarget) {
-    return NextResponse.redirect(new URL(aliasTarget, request.url), 308);
+    const destination = new URL(aliasTarget, request.url);
+    destination.search = search;
+    return NextResponse.redirect(destination, 308);
   }
 
   if (isDeploymentArtifact(pathname)) {

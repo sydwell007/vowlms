@@ -1,6 +1,6 @@
 import { Section } from "@/components/ui/Section";
 
-export const metadata = { title: "Cookie Policy — VowLMS" };
+export const metadata = { title: "Cookie Policy — VowLMS", alternates: { canonical: "/cookies" } };
 
 export default function CookiesPage() {
   return (

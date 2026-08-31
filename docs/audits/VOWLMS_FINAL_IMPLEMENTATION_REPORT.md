@@ -1,300 +1,159 @@
-# VowLMS Final Implementation Report
+# VowLMS Production Upgrade Implementation Report
 
-Report date: 10 July 2026  
+Report date: 31 August 2026
+
 Repository: `C:\Users\sydwe\Desktop\vowlms`
 
-## Executive Summary
+Baseline commit: `1f5c66d`
 
-VowLMS has been moved from a visually promising prototype with critical deployment, credential, payment, privacy, and demonstration-data risks to a production-oriented platform foundation. The application now has a consistent GoalVow design, responsive academy navigation, account-aware enrolment and certificate flows, hardened PHP endpoints, incremental SQL guidance, protected deployment packages, factual public content, and repeatable security checks.
+## Executive Outcome
 
-The Next.js production build, TypeScript, ESLint, and nine automated security tests pass. Public routes render at desktop, tablet, and mobile widths with no document overflow. PHP/SQL deployment URLs return 404 and authenticated pages redirect unauthenticated visitors to sign-in.
+The production-readiness prompt was applied as a requirements brief, then checked against the actual repository before implementation. This phase strengthens VowLMS in five areas: canonical SEO, protected-learning authorization, goal-first discovery, accessible form and search behavior, and operational documentation.
 
-Production launch remains conditional on manual credential rotation, Afrihost deployment, SQL backup/migration, TLS-chain repair, approved business policies, PayFast sandbox validation, and role-based testing with approved accounts.
+The repository is build-ready and suitable for a Vercel Preview deployment. It is not declared fully launched because production credentials, Afrihost PHP compatibility, approved role accounts, PayFast sandbox reconciliation, and the external VowHumans/RunPod media path still require controlled platform-side verification.
 
-## Initial Condition
+No production deployment, database mutation, payment, enrolment, certificate issue, Moodle write, or RunPod configuration change was performed during this phase.
 
-- Next.js 16.2.9 App Router, React 19.2.4, strict TypeScript, and Tailwind CSS 4.
-- Six Moodle academy sources plus a large generated local catalogue.
-- Vercel frontend connected through Next.js routes to an Afrihost PHP/MySQL bridge.
-- Strong early visual direction and four relevant VowLMS image assets.
-- A clean Git worktree at the start of the audit.
-- No automated test command at baseline.
-- A stale/truncated generated `.next` validator initially blocked TypeScript and the production build.
+## Baseline Findings
 
-## Root Causes Found
+1. Public academy pages had two URL families for the same content, which could divide search authority.
+2. Public metadata was uneven; many sitemap routes lacked explicit canonicals and course pages lacked factual structured data.
+3. Search, pathfinder, and auth forms needed stronger browser semantics, URL state, recovery, and assistive-technology feedback.
+4. Protected lesson, assessment, VR practice, and presenter-token flows trusted the presence of a session cookie without independently rechecking active course enrolment.
+5. Academy totals and launch status were repeated in page copy instead of derived from one status source.
+6. Architecture, route, content, deployment, and operations documentation did not fully describe the current system or the intended production boundary.
 
-1. Host-specific secrets and Moodle tokens had been treated as source configuration.
-2. Afrihost deployment files lived under `public` without Vercel exclusions or application blocking.
-3. Prototype fallbacks were presented as live learners, certificates, hubs, opportunities, metrics, jobs, and business claims.
-4. Browser state was used to simulate enrolment and success actions that required backend ownership.
-5. Payment notification handling did not implement the complete merchant, amount, source, server-validation, transaction, and idempotency boundary.
-6. Backend role and ownership controls were inconsistent across registration, employer reporting, learning progress, practice, resources, and certificates.
-7. Private and API routes were eligible for service-worker caching.
-8. Public pages mixed launched capabilities, development work, and future subsidiaries without reliable status labels.
+The detailed evidence is in `VOWLMS_BASELINE_AUDIT.md`, `VOWLMS_ROUTE_INVENTORY.md`, and `VOWLMS_CONTENT_AND_IMAGE_AUDIT.md`.
 
-## Files Added
+## Implemented Changes
 
-### Application and tests
+### Canonical SEO and discovery
 
-- `.vercelignore`
-- `src/proxy.ts`
-- `src/app/api/auth/session/route.ts`
-- `src/app/error.tsx`
-- `src/app/loading.tsx`
-- `src/app/robots.ts`
-- `src/app/sitemap.ts`
-- Auth, course, and dashboard metadata layouts
-- `src/components/certificates/CertificatesOverview.tsx`
-- `src/components/certificates/CertificateRouteClient.tsx`
-- `src/lib/auth/useDashboardEndpoint.ts`
-- `src/lib/site.ts`
-- `tests/security.test.mjs`
+- Added permanent redirects from legacy academy slugs to short canonical slugs while preserving query strings.
+- Updated the sitemap to emit canonical public URLs and exclude redirect-only routes.
+- Added explicit canonical metadata to the home, academy, course, pathway, discovery, support, corporate, product, and legal route families.
+- Added noindex rules to auth, dashboard, profile, calendar, results, assessment, certificate, lesson, offline, internal search, and private practice surfaces where indexing is inappropriate.
+- Added safe JSON-LD rendering, Organization schema on the homepage, BreadcrumbList schema on academy/course pages, and factual Course schema with provider, offer, level, delivery mode, and outcomes.
+- Added branded course titles and route-specific social metadata.
 
-### Migration and deployment
+### Protected learning and VowHumans
 
-- `scripts/moodle-migration/0-check-connectivity.mjs`
-- `scripts/moodle-migration/env.mjs`
-- `public/php/config/env.example.php`
-- `public/php/lib/rate-limit.php`
-- `public/php/README_DEPLOYMENT.md`
-- `public/php/ENDPOINT_MANIFEST.md`
-- `public/sql/000_schema_audit.sql`
-- `public/sql/011_integrity_hardening.sql`
-- `public/sql/verify_schema.sql`
-- `public/sql/README_IMPORT_ORDER.md`
-- `public/sql/SCHEMA_CHANGELOG.md`
-- `public/sql/rollback/011_integrity_hardening_rollback.sql`
+- Added a server-side course-access helper that verifies active or completed enrolment through the trusted bridge.
+- Rechecked enrolment before serving lessons, assessments, VR practice, and VowHumans lesson-context tokens.
+- Changed production bridge failures for protected learning to fail closed instead of falling back to seed content.
+- Added clear sign-in and enrolment-required redirects.
+- Kept the VowHumans iframe opt-in and removable, and passed the short-lived lesson-context token in the URL fragment so it is not sent in ordinary HTTP request logs.
+- Preserved the existing allowlist, sandbox, origin-scoped messaging, and minimal camera/microphone/fullscreen delegation.
 
-### Documentation
+### Goal-first learning and search
 
-- `docs/audits/VOWLMS_BASELINE_AUDIT.md`
-- `docs/audits/VOWLMS_IMAGE_AUDIT.md`
-- `docs/audits/VOWLMS_FINAL_IMPLEMENTATION_REPORT.md`
-- `docs/api/VOWLMS_API_CONTRACT.md`
-- `docs/architecture/VOWLMS_ROUTE_INVENTORY.md`
-- `docs/decisions/VOWLMS_OUTSTANDING_BUSINESS_DECISIONS.md`
-- `docs/deployment/VERCEL_DEPLOYMENT_CHECKLIST.md`
-- `docs/design/VOWLMS_IMAGE_PROMPTS.md`
-- `docs/testing/VOWLMS_TEST_PLAN.md`
+- Added semantic progress, Back and Restart controls, answer state, refresh recovery, and deterministic recommendation rationale to Find My Path.
+- Explained why a route and course were selected while treating weekly availability as context rather than a hidden score.
+- Corrected onboarding reset so saved goal state is actually cleared.
+- Made public search a real GET search form with `?q=` state, debounced URL updates, result announcements, accessible tabs, and stable clear behavior.
 
-## Files Changed
+### Forms, accessibility, and data consistency
 
-The implementation touched the root configuration and README; shared layout, public pages, auth, dashboards, certificates, learning and payment routes; PHP auth, progress, assessment, payment, certificate, file, dashboard, CORS, JWT, database, and health code; SQL schema files; migration scripts; PWA worker; and generated catalogue alignment. Use `git diff --stat` for the complete machine-readable inventory.
+- Added stable names, autocomplete tokens, input modes, error associations, and alert semantics to sign-in, sign-up, and password recovery.
+- Added an explicit academy-filter label/control association and maintained the responsive filter drawer.
+- Centralized connected and planned academy counts and reused them in the homepage, ecosystem page, about page, and Open Graph image.
+- Preserved honest zero states for integrations that are not yet connected.
 
-High-impact groups:
+### Documentation and operations
 
-- `src/components/layout/*`, `src/app/layout.tsx`, and `src/app/globals.css`
-- `src/app/page.tsx`, academy/course/ecosystem/support/reward/opportunity/company pages
-- `src/components/courses/EnrollButton.tsx`
-- `src/app/api/*`, `src/lib/bridge.ts`, and `src/lib/api/responses.ts`
-- `public/php/api/*`, `public/php/config/*`, and `public/php/lib/*`
-- `public/sql/001_schema.sql` and integrity migration files
-- `public/sw.js`, `next.config.ts`, `package.json`, and `package-lock.json`
+- Added current and target architecture, API/data flow, route inventory, content/image audit, design system, Afrihost deployment, operations runbook, and outstanding business decisions.
+- Updated the API contract, test plan, Vercel checklist, baseline audit, and repository README.
+- Documented environment-variable ownership across Vercel, Afrihost PHP, migration tooling, VowHumans, and RunPod.
 
 ## Files Intentionally Not Changed
 
-- Real `.env.local` values were not printed or copied.
-- Moodle course source content was not rewritten wholesale.
-- Production database records were not created, deleted, or migrated.
-- No live PayFast payment, refund, or webhook was triggered.
-- No production user, role, certificate, result, hub, opportunity, job, testimonial, partner, accreditation, or investor metric was fabricated.
-- Existing generated academy source data remains available for catalogue migration; demonstration opportunities and hubs are no longer exported through the public data layer.
-- The supplied `public/images/GoalVow - Logo.png` remains the canonical original.
+- No PHP endpoint or SQL schema was modified in this phase.
+- No production `.env` value was printed, copied, or committed.
+- No Moodle course content or live learner record was changed.
+- No live partner, testimonial, accreditation, investor metric, enrolment total, or outcome claim was invented.
+- No Vercel, Afrihost, Render, Moodle, VowHumans, RunPod, PayFast, SMTP, or database deployment was triggered.
 
-## Architecture Improvements
+## Verification Results
 
-- Added a same-origin nullable session endpoint while preserving 401 semantics on `/api/auth/me`.
-- Made production bridge failures fail closed instead of silently serving identity or operational mocks.
-- Added request IDs to Next.js JSON responses.
-- Centralised public URL and verified contact details.
-- Added a route proxy for private pages and deployment-artifact blocking.
-- Documented one frontend/PHP/database API contract and ownership rules.
-- Added a secure Moodle connectivity gate before migration commands.
-- Kept Sports Academy as a planned, zero-course pathway instead of inventing a catalogue.
-
-## UI and UX Improvements
-
-- Added the responsive GoalVow academy top bar, refined main header, mobile navigation, and structured footer.
-- Applied the supplied GoalVow logo to header, footer, auth, sidebar, manifest, and certificate UI.
-- Refined navy, cyan, gold, neutral surfaces, typography, focus states, spacing, borders, and restrained shadows.
-- Kept one primary homepage action and one secondary discovery action.
-- Converted the ecosystem sidebar to a fixed overlay so its collapsed state never reserves page width.
-- Preserved a compact mobile ecosystem launcher and local preference memory.
-- Added honest loading, error, empty, unavailable, and retry states.
-- Removed fake notifications, users, grades, certificates, opportunities, hubs, vacancies, announcements, investor figures, and simulated admin success.
-- Reframed future subsidiaries and R&D as planned concepts with explicit status.
-
-## Images Retained, Replaced, or Generated
-
-- Retained the user-supplied GoalVow logo and made a code-friendly copy at `public/images/goalvow-logo.png`.
-- Retained four existing VowLMS visuals for the ecosystem hero, academy network, dashboard experience, and Skills Practice concept.
-- No additional image was generated because the existing assets cover the four main visual contexts without adding clutter.
-- All major placements use `next/image`, stable dimensions/aspect ratios, responsive sizes, and contextual alt text.
-- Source PNG photography remains relatively large; runtime delivery is optimised by Next.js, while source WebP/AVIF conversion remains a later repository-weight improvement.
-
-## Backend Changes
-
-- Registration always creates a learner role.
-- Added rate limiting to sensitive auth endpoints.
-- Password reset tokens are stored hashed and reset operations are transactional.
-- JWT and resource-signing secrets enforce minimum strength.
-- Bridge authentication no longer accepts secret query-string parameters.
-- Enrolment uses real APIs; paid access is never activated from a browser return.
-- Progress and assessment updates require active enrolment, serialise critical updates, clamp progress, and prevent duplicate first-achievement rewards.
-- Certificate issue is learner-owned, completion-gated, cryptographically suffixed, transactional, and idempotent.
-- Lesson resources use expiring HMAC URLs, host restrictions, and verified TLS.
-- Skills Practice submission requires enrolled ownership and does not award an automatic reward.
-- Employer learner-level PII is withheld until organisation assignment and consent exist.
-- PHP health and public errors no longer disclose versions, SQL details, or secret diagnostics.
-
-## Database Changes
-
-- Added integrity-audit queries and rerunnable hardening migration guidance.
-- Added payment timestamps, cancelled status support, and unique provider-reference constraints.
-- Preserved InnoDB, utf8mb4, decimal money, ownership foreign keys, enrolment uniqueness, certificate uniqueness, and payment-event integrity.
-- Added import order, schema verification, change log, backup expectations, and rollback guidance.
-
-## Security Improvements
-
-- Removed tracked `public/php/config/env.local.php` and rebuilt `public/php.zip` without it.
-- Moved Moodle tokens to environment variables and restored TLS verification.
-- Added `.vercelignore` and application-level 404 responses for PHP, SQL, and the PHP archive.
-- Hardened PayFast ITN verification: ordered signature, source validation, merchant match, PayFast server validation, stored amount match, row locking, state transitions, and replay-safe enrolment.
-- Restricted cookies to Secure in production, HttpOnly, and deliberate SameSite behaviour.
-- Blocked browser-supplied role escalation and open redirect values.
-- Removed private/API service-worker caching.
-- Added signed resource delivery and generic error responses.
-
-## Accessibility Improvements
-
-- Added skip navigation and a focusable main target.
-- Added strong `:focus-visible` treatment and reduced-motion support.
-- Preserved semantic landmarks and native controls.
-- Added accessible labels to catalogue search and clear actions.
-- Improved mobile reflow, touch targets, contrast, form labels, and error roles.
-- Kept private dashboard and auth surfaces out of search indexing.
-
-## Performance Improvements
-
-- Continued using Next.js image optimisation with responsive delivery.
-- Avoided loading supporting dashboard imagery on narrow screens.
-- Removed unused Recharts and bcrypt dependencies.
-- Restricted service-worker caching to safe public resources.
-- Added route-level loading UI, stable image aspect ratios, and no artificial loading delays.
-- Responsive checks report no document-level horizontal overflow at 390px and 768px.
-
-## Moodle Connectivity Results
-
-Read-only checks used `core_webservice_get_site_info` and `core_course_get_courses`. All six tokens passed securely with the operating-system CA store:
-
-| Academy | Site | User | Visible courses |
-|---|---|---|---:|
-| Upskilling Academy | Free Online Courses for Upskilling | `vowlms_api` | 41 |
-| Skills Training Academy | Occupational Skills Training | `vowlms_api` | 9 |
-| Chef Academy | Top Chef Meals &amp; Recipe | `vowlms_api` | 166 |
-| GoalVow Schools | GoalVow Schools | `vowlms_api` | 10 |
-| Business School | GoalVow Business School | `vowlms_api` | 24 |
-| University Online | GoalVow University Online | `vowlms_api` | 10 |
-
-No Moodle migration was run. Standard bundled CA validation still reports an incomplete GoalVow host certificate chain, so host TLS repair remains required.
-
-## Tests Executed and Results
-
-| Check | Result |
+| Gate | Result |
 |---|---|
-| `npm run lint` | Pass, no warnings |
 | `npm run typecheck` | Pass |
-| `npm test` | Pass, 9/9 |
-| `npm run build` | Pass, 78 generated routes |
-| Production public-route matrix | Pass, HTTP 200 |
-| Protected-page matrix | Pass, HTTP 307 to sign-in with `returnTo` |
-| `/php`, `/php/*`, `/sql`, `/sql/*`, `/php.zip` | Pass, HTTP 404 |
-| Image URL checks | Pass, HTTP 200 with PNG content type |
-| Mobile 390px reflow | Pass, `scrollWidth === innerWidth` |
-| Tablet 768px reflow | Pass, `scrollWidth === innerWidth` |
-| Desktop rendering | Pass after ecosystem overlay correction |
-| Fresh anonymous browser console | Pass, no errors; session probe uses HTTP 200 nullable state |
-| PHP syntax | Not run; PHP CLI is not installed locally |
-| Authenticated role E2E | Not run; no approved test credentials were used |
-| Live PayFast transaction | Not run by design |
+| `npm run lint` | Pass |
+| `npm run test` | Pass, 25/25 |
+| `npm run build` | Pass, 87 generated page outputs |
+| `npm run qa:static` | Pass; build/lint/type, no hardcoded secrets, environment protection, 106 hrefs against 98 routes, no broken internal links |
+| `npm run qa:content` | Pass; 427 courses, no empty courses, duplicate titles, or orphans |
+| Playwright public E2E | Pass, 99/99 non-destructive cases across 360x640, 768x1024, and 1440x900 |
+| Canonical/JSON-LD browser checks | Pass on home, course, and legacy academy redirect across all three viewports |
+| VowHumans shell checks | Pass; consent, authorized context token, iframe permissions, fragment transport, and clean close |
+| Visual overflow checks | Pass on homepage, catalogue, pathways, and pathfinder across all three viewports |
 
-The final verification section must be updated if a later code change causes any command result to differ.
+The 99 browser cases cover catalogue counts, individual and combined filters, searches, six onboarding goals, reset, five pathfinder combinations, responsive navigation/overflow, canonical SEO, academy redirects, and presenter lifecycle.
 
-## Build Result
+## Performance Evidence
 
-The production build completes successfully under Next.js 16.2.9. The only framework notice is that the Edge-runtime Open Graph image route is dynamic, which is expected and non-blocking.
+Lighthouse was run against the local production build. Scores below combine two runs because Windows temporarily locked one Lighthouse cleanup directory in each run; every page was successfully measured in the complementary run.
 
-## Remaining Limitations
+| Page | Performance | Accessibility | Best practices | SEO |
+|---|---:|---:|---:|---:|
+| Homepage | 82 | 85 | 96 | 100 |
+| Course catalogue | 74 | 86 | 96 | 100 |
+| Course detail | 85 | 90 | 96 | 100 |
 
-- Credential rotation has not been performed by the repository task.
-- GoalVow host TLS needs a complete intermediate certificate chain.
-- PHP syntax and extension checks must run on staging/Afrihost.
-- Authenticated role journeys need approved learner, facilitator, employer, and admin test accounts.
-- Public certificate verification, assessment-history, facilitator roster/review, organisation assignment/consent, refunds, analytics consent, and redemption are not complete product capabilities.
-- Public hubs, opportunities, vacancies, leadership profiles, accreditations, outcomes, and financial claims remain unpublished pending evidence and approval.
-- Generated Moodle seed descriptions remain structural migration content and require academy editorial review before broad publication.
+All measured pages met the repository thresholds of 70 performance and 85 accessibility. The next optimization priority is the catalogue: reduce initial course/image work and measure real-user Core Web Vitals after Preview deployment.
 
-## Manual Afrihost Steps
+## Visual Evidence
 
-1. Rotate every previously exposed database, bridge, JWT, resource-signing, Moodle, SMTP, and PayFast credential.
-2. Repair the `goalvow.com` TLS chain and verify it without `--use-system-ca` workarounds on standard clients.
-3. Upload the sanitised `public/php` package outside any Vercel-served directory.
-4. Create `config/env.local.php` from the safe example directly on the host.
-5. Confirm PHP version/extensions, file permissions, `.htaccess`, CORS origin, API base URL, and HTTPS.
-6. Run PHP syntax checks and endpoint smoke tests from `public/php/README_DEPLOYMENT.md`.
-7. Verify health, auth rate limits, role denial, resource signatures, and generic error responses.
-8. Keep PayFast in sandbox until the full valid/invalid/replay matrix passes.
+- `qa-reports/vowlms-home-desktop.png`
+- `qa-reports/vowlms-courses-mobile.png`
+- Presenter preview screenshots are retained in Playwright test artifacts when the suite runs.
 
-## Manual phpMyAdmin Steps
+The screenshots confirm a stable desktop first viewport and a 390px catalogue without horizontal overflow. Course cards retain their existing premium hierarchy, presenter identity, lesson/reward facts, enrolment totals, and course-duration treatment.
 
-1. Take a full database backup and record the restore point.
-2. Run `000_schema_audit.sql` and resolve reported duplicates/conflicts.
-3. Follow `README_IMPORT_ORDER.md`; do not blindly recreate production tables.
-4. Apply the required incremental migration, including `011_integrity_hardening.sql`.
-5. Run `verify_schema.sql` and retain the output with the deployment record.
-6. Test rollback guidance in staging before relying on it in production.
+## Required Manual Vercel Actions
 
-## Manual Vercel Steps
+1. Add or verify Production and Preview values for `NEXT_PUBLIC_APP_URL`, `BRIDGE_BASE_URL`, `BRIDGE_API_KEY`, `JWT_SECRET`, `RESOURCE_SIGNING_SECRET`, and `VOWHUMANS_LESSON_CONTEXT_SECRET`.
+2. Add PayFast, SMTP, and ecosystem integration variables only where the deployed Next.js code actually consumes them.
+3. Keep Moodle migration tokens out of browser-visible variables.
+4. Deploy to Preview first, run the non-destructive Playwright suite against the Preview URL, and confirm canonicals use the intended Preview or production policy.
+5. Verify `/php`, `/sql`, and archive paths remain unavailable in the Vercel artifact.
+6. Promote only after Afrihost bridge compatibility and approved authenticated journeys pass.
 
-1. Add required environment values to Preview and Production scopes without copying them into Git.
-2. Confirm `NEXT_PUBLIC_APP_URL`, canonical domain, bridge URL/key, and resource-signing secret.
-3. Confirm `.vercelignore` excludes `public/php/**`, `public/sql/**`, and `public/php.zip` in the built deployment.
-4. Deploy after Afrihost/API/schema compatibility is verified.
-5. Run the public, protected, artifact-blocking, image, console, and network checks in the deployment checklist.
-6. Keep preview deployments away from production learner data and live PayFast credentials.
+## Required Manual Afrihost and phpMyAdmin Actions
 
-## Required Environment Variables
+1. Back up the production database and PHP directory before any separate backend release.
+2. Verify PHP version, extensions, HTTPS, CORS origin, file permissions, health response, and generic error behavior.
+3. Confirm the PHP environment contains the matching bridge, JWT, resource-signing, database, PayFast, SMTP, and frontend-origin values.
+4. Run PHP syntax checks on the host because PHP CLI is not installed in this workspace.
+5. Do not import or alter SQL for this frontend phase; no migration was created here.
+6. For any future schema release, use the documented audit, import order, backup, verification, and rollback process before production import.
 
-### Vercel / Next.js
+## Required Manual VowHumans and RunPod Actions
 
-- `NEXT_PUBLIC_APP_URL`
-- `BRIDGE_BASE_URL`
-- `BRIDGE_API_KEY`
-- `RESOURCE_SIGNING_SECRET`
-- Ecosystem API URL/key pairs only when an integration is approved
+1. Vercel owns `VOWHUMANS_LESSON_CONTEXT_SECRET`; the avatar worker does not receive that value directly.
+2. RunPod owns `ENABLE_MUSETALK=true`, `MUSETALK_BATCH_SIZE=16`, and `VOWHUMANS_INTERNAL_KEY=<matching existing internal key>` on the pod template or deployment overrides that start the avatar worker.
+3. Render services retain only the variables consumed by the participant, realtime-agent, and gateway services; do not duplicate GPU-worker variables there without code that reads them.
+4. Verify one audio owner per response, full-sentence buffering/interrupt behavior, LiveKit track cleanup, lip-sync latency, and pod GPU/CPU/network telemetry in staging.
+5. Run an enrolled Business Ethics lesson session end to end after deployment: material context, lecture response, follow-up question, lip sync, interruption, retry, and close.
 
-### Afrihost PHP
+## Remaining Launch Dependencies
 
-- `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`
-- `BRIDGE_API_KEY`, `JWT_SECRET`, `RESOURCE_SIGNING_SECRET`
-- `APP_URL`, `FRONTEND_ORIGIN`, `API_BASE_URL`, `APP_TIMEZONE`
-- `PAYFAST_MERCHANT_ID`, `PAYFAST_MERCHANT_KEY`, `PAYFAST_PASSPHRASE`, `PAYFAST_SANDBOX`
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`
-
-### Migration operator only
-
-- Six Moodle base URL/token pairs listed in `.env.example`
+- Approved learner, facilitator, employer, and admin accounts for authenticated role E2E.
+- PayFast sandbox return, cancel, valid/invalid ITN, amount mismatch, and replay testing.
+- Afrihost PHP syntax/runtime verification and credential rotation.
+- Staging validation of VowHumans audio ownership, lip sync, sentence completion, and RunPod capacity.
+- Business approval for pricing, refunds, accreditation, certificate wording, outcomes, privacy retention, partner claims, investor metrics, and publication status.
+- Production monitoring, alert recipients, incident ownership, backup restore rehearsal, and rollback sign-off.
 
 ## Recommended Next Phase
 
-1. Complete credential rotation, TLS repair, staging PHP deployment, and schema migration.
-2. Run approved role-based E2E tests and PayFast sandbox reconciliation.
-3. Add assessment-history and facilitator-assignment contracts.
-4. Implement organisation assignment and explicit learner consent before employer reporting.
-5. Approve course-level accreditation, certificate, pricing, refund, and publication rules.
-6. Load only confirmed opportunities, hubs, vacancies, leadership profiles, and outcome data.
-7. Convert large photographic source PNGs after visual QA and measure Core Web Vitals on the production domain.
+1. Create a Vercel Preview and attach a staging bridge/database with non-production PayFast credentials.
+2. Complete the approved authenticated role matrix and destructive tests against disposable staging data.
+3. Measure Preview Web Vitals and optimize the catalogue's initial image/data workload.
+4. Complete VowHumans/RunPod media telemetry and single-audio-owner validation.
+5. Resolve the decisions in `docs/VOWLMS_OUTSTANDING_BUSINESS_DECISIONS.md` before public claims or paid launch.
+6. Promote frontend, backend, and configuration as one versioned release with recorded rollback points.
 
 ## Release Decision
 
-The repository is build-ready and substantially safer, more truthful, and more coherent. It is not appropriate to declare the live business fully launched until the manual security, hosting, payment, policy, and role-verification steps above are completed.
+The codebase passes its local production, security, content, responsive, SEO, presenter-shell, and performance gates. It is ready for Preview deployment and controlled staging acceptance. Production launch remains conditional on the external hosting, payment, authenticated-role, media, policy, and operational checks listed above.

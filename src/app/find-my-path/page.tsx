@@ -4,6 +4,7 @@ import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 export const metadata = {
   title: "Find My Path",
   description: "Tell VowLMS what you want to achieve and get matched to the right courses.",
+  alternates: { canonical: "/find-my-path" },
 };
 
 export default function FindMyPathPage() {

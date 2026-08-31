@@ -3,6 +3,7 @@ import { CertificatesOverview } from "@/components/certificates/CertificatesOver
 export const metadata = {
   title: "My Certificates - GoalVow",
   description: "View certificate records issued to your VowLMS learner account.",
+  robots: { index: false, follow: false },
 };
 
 export default function CertificatesIndexPage() {

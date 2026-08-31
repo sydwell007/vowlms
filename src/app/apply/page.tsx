@@ -6,6 +6,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "Apply - Certificates and Progression Pathways",
   description: "Use learner-owned GoalVow records and review confirmed progression pathways as they are published.",
+  alternates: { canonical: "/apply" },
 };
 
 const applyPaths = [

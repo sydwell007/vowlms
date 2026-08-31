@@ -9,6 +9,7 @@ Configure values in Vercel, never in Git:
 - `BRIDGE_API_KEY`
 - `RESOURCE_SIGNING_SECRET`
 - `JWT_SECRET`
+- `VOWHUMANS_LESSON_CONTEXT_SECRET`
 - `PAYFAST_MERCHANT_ID`
 - `PAYFAST_MERCHANT_KEY`
 - `PAYFAST_PASSPHRASE`
@@ -39,6 +40,9 @@ Moodle tokens are migration/operator secrets and should not be added to browser-
 
 - `/`, `/academies`, `/courses`, course details, support, impact, ecosystem, and investors load.
 - `/robots.txt` and `/sitemap.xml` use the production domain.
+- Home, academy, course, pathway, support, and legal pages emit one absolute canonical URL.
+- `/academies/upskilling-academy` and `/academies/skills-training-academy` return 308 to short canonical slugs and preserve query strings.
+- Course pages emit route-specific title, description, social image, Course JSON-LD, and BreadcrumbList JSON-LD.
 - `/php`, `/php/...`, `/sql`, `/sql/...`, and `/php.zip` return 404.
 - Unauthenticated dashboard, lesson, assessment, certificate, profile, and results routes redirect to sign-in.
 - Sign-up creates a learner even if a request is tampered with to include another role.
@@ -47,6 +51,24 @@ Moodle tokens are migration/operator secrets and should not be added to browser-
 - Images render at desktop, tablet, and mobile sizes without layout shift.
 - Service worker does not cache `/api` or authenticated pages.
 - PayFast sandbox return, cancel, valid ITN, invalid signature, amount mismatch, and replay paths are checked.
+
+## Required Vercel Commands
+
+Run locally or in CI before promotion:
+
+```bash
+npm ci
+npm run typecheck
+npm run lint
+npm run test
+npm run build
+```
+
+Then run non-destructive Playwright smoke tests against the Preview URL. Do not set `RUN_DESTRUCTIVE_TESTS=1` against Production.
+
+## VowHumans and RunPod Boundary
+
+`ENABLE_MUSETALK`, `MUSETALK_BATCH_SIZE`, and `VOWHUMANS_INTERNAL_KEY` belong on the RunPod pod/template that executes the avatar worker. They are not Vercel variables unless Vercel code is changed to consume them. Vercel needs only its lesson-context signing secret and approved VowHumans CSP configuration.
 
 ## Rollback
 

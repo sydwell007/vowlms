@@ -9,10 +9,10 @@ const Q1 = {
   student: "I'm a student looking for skills",
 };
 const Q2 = {
-  light: "1–2 hours a week",
+  light: "1-2 hours a week",
   moderate: "A few hours a day",
-  fulltime: "I want to finish fast — full time",
-  flexible: "Flexible — whenever I can",
+  fulltime: "I want to finish fast, full time",
+  flexible: "Flexible, whenever I can",
 };
 const Q3 = {
   handsOn: "Hands-on / practical work",
@@ -49,7 +49,7 @@ test.describe("Path Finder Quiz", () => {
 
       await expect(page.getByText(/Based on your answers, we recommend/i)).toBeVisible();
 
-      const courseCards = page.locator("article", { hasText: "Open course" });
+      const courseCards = page.locator("article", { hasText: "View course" });
       expect(await courseCards.count()).toBeGreaterThan(0);
 
       await expect(page.getByRole("link", { name: /Start my recommended path/i })).toBeVisible();

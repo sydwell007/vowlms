@@ -1,7 +1,11 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Section } from "@/components/ui/Section";
 
-export const metadata = { title: "Team - GoalVow Holdings" };
+export const metadata = {
+  title: "Team - GoalVow Holdings",
+  description: "Meet the operating areas responsible for GoalVow academies, VowLMS, learner support, and partnerships.",
+  alternates: { canonical: "/team" },
+};
 
 const operatingAreas = [
   { title: "Academy and curriculum", detail: "Course ownership, academic review, learning design, and delivery standards across each academy." },

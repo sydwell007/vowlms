@@ -4,6 +4,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "SkillsShop - Planned Learning Marketplace",
   description: "Review the proposed SkillsShop model for academy-aligned learning resources.",
+  alternates: { canonical: "/skillsshop" },
 };
 
 const categories = [

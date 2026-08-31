@@ -37,6 +37,12 @@ test.describe("VowHumans presenter", () => {
         body: JSON.stringify({ ok: true, data: { lessons: [lesson] } }),
       });
     });
+    await page.route("**/api/vowhumans/context-token/**", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({ token: "presenter-ui-test-token" }),
+      });
+    });
   });
 
   test("requires learner consent and cleanly removes the iframe", async ({ page }, testInfo) => {
@@ -64,7 +70,10 @@ test.describe("VowHumans presenter", () => {
     const frame = presenter.locator("iframe");
     await expect(frame).toHaveCount(1);
     await expect(frame).toHaveAttribute("allow", "camera; microphone; fullscreen");
-    await expect(frame).toHaveAttribute("src", lesson.vowhuman_embed_url);
+    await expect(frame).toHaveAttribute(
+      "src",
+      `${lesson.vowhuman_embed_url}#lesson_context_token=presenter-ui-test-token`,
+    );
 
     await presenter.getByRole("button", { name: "Close presenter" }).click();
     await expect(presenter.locator("iframe")).toHaveCount(0);

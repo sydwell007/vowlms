@@ -1,88 +1,89 @@
 # VowLMS Baseline Audit
 
-Audit date: 10 July 2026  
-Repository: `C:\Users\sydwe\Desktop\vowlms`  
-Initial Git state: clean `main` branch tracking `origin/main`
+Audit date: 31 August 2026
+Repository: `C:\Users\sydwe\Desktop\vowlms`
+Baseline revision: `1f5c66d` on `main`
+Initial worktree: clean
 
-## Architecture Baseline
+## Scope and Safety
 
-- Next.js 16.2.9 App Router with React 19.2.4 and strict TypeScript.
-- Tailwind CSS 4 with local layout and UI components.
-- Next.js route handlers proxy an Afrihost PHP API and MySQL database.
-- Development-only seed data is available when the bridge is absent.
-- GoalVow Moodle migration tooling covers six academy installations.
-- PWA manifest and service worker are present.
-- No unit-test command existed at baseline.
+This audit was completed before application changes for the production-readiness upgrade. The public deployment was inspected read-only. No live account, enrolment, payment, Moodle, VowHumans, Afrihost, or database mutation was performed.
 
-## Baseline Checks
+## Verified Architecture
 
-| Check | Baseline result | Root cause | Status |
-|---|---|---|---|
-| Git status | Pass | Clean worktree | Verified |
-| ESLint | Pass with 13 warnings | Unused migration and UI variables | Corrected during implementation |
-| TypeScript | Initial fail | Truncated generated `.next/dev/types/validator.ts` | Passed after clearing generated cache |
-| Production build | Initial fail at type gate | Same corrupted generated validator | Passed after clean rebuild |
-| PHP syntax | Not available | PHP CLI is not installed locally | Must run on Afrihost/staging |
-| Moodle connectivity | Transport fail under bundled Node CAs | GoalVow TLS chain is not self-contained | Passed securely with OS CA; host chain still needs repair |
+- Next.js 16.2.9 App Router and React 19.2.4, deployed to Vercel.
+- Strict TypeScript, Tailwind CSS 4, Next.js metadata routes, PWA manifest, and service worker.
+- Next.js route handlers form a server-side facade over an Afrihost PHP API.
+- Afrihost PHP uses a shared bridge key, JWT authentication, PDO/MySQL, and environment-only credentials.
+- GoalVow Moodle is the approved course-content source used by migration tooling and lesson resources.
+- VowHumans is embedded only from approved `https://vowhumans.com/embed/...` URLs and receives signed lesson context through VowLMS.
+- PayFast initiation and server notification handlers are present; completion is not trusted from a browser redirect.
+- `public/php` and `public/sql` are deployment packages, excluded by `.vercelignore` and blocked by `src/proxy.ts`.
 
-## Findings
+## Baseline Commands
 
-### Critical
+| Check | Result | Evidence |
+|---|---|---|
+| `git status --short` | Pass | No output; clean worktree |
+| `npm run typecheck` | Pass | TypeScript completed with no diagnostics |
+| `npm run lint` | Pass | ESLint completed with no diagnostics |
+| `npm run test` | Pass | 19 tests passed, 0 failed |
+| `npm run build` | Pass | Next.js production build completed; 87 page outputs |
+| Live home page | Pass | HTTP 200 and expected VowLMS title/H1 |
+| Live `/contact`, `/vowsupport`, `/catalogue` | Pass | Permanent 308 redirects to `/support`, `/support`, `/courses` |
+| Live `/php`, `/sql` | Pass | HTTP 404 |
 
-1. **Committed server credentials**
-   - Location: `public/php/config/env.local.php` and the tracked PHP archive.
-   - Impact: database, bridge, and signing credentials must be treated as compromised.
-   - Root cause: a host-specific environment file was committed inside `public`.
-   - Correction: removed the file, added a safe template and ignore rules, and excluded deployment packages from Vercel.
-   - Verification: repository credential-literal scan passes. Credential rotation remains a manual release blocker.
+The build reports that the Edge runtime used by the generated Open Graph route disables static generation for that route. This is informational and not a release blocker.
 
-2. **Hard-coded Moodle tokens and disabled TLS**
-   - Location: Moodle migration scripts.
-   - Impact: token disclosure and man-in-the-middle risk.
-   - Correction: moved tokens to environment variables, restored TLS verification, and added a connectivity gate.
-   - Verification: six academies return valid site information and course visibility counts when using the trusted system CA store.
+## Working Product Strengths
 
-3. **PHP and SQL artifacts could be served by Vercel**
-   - Location: `public/php`, `public/sql`, and `public/php.zip`.
-   - Impact: source, schema, and deployment detail disclosure.
-   - Correction: `.vercelignore` plus application-level 404 blocking in `src/proxy.ts`.
-   - Verification: automated security tests and production browser checks cover these paths.
+- Premium GoalVow visual identity, responsive navigation, homepage, catalogue, academy, course, pathway, legal, support, and corporate pages are implemented.
+- The homepage currently presents six featured courses in a responsive three-column, two-row layout.
+- Course cards show real aggregate enrolment totals, week-based duration, lesson/reward facts, and a course presenter.
+- Course discovery includes academy, goal, level, duration, price, certificate, rewards, sorting, grid/list, and incremental-loading controls.
+- Authentication, protected-route return paths, learner progress, assessments, certificates, enrolment, reviews, rewards, and VowHumans routes have automated security coverage.
+- Public registration is learner-only; role and ownership checks are enforced by server endpoints.
+- Security headers include CSP, HSTS, frame protection, referrer policy, permissions policy, and content-type protection.
+- VowHumans iframe sources and lesson-context URLs are allowlisted and validated.
 
-4. **Payment completion lacked full integrity controls**
-   - Location: PayFast create and ITN handlers.
-   - Impact: incorrect enrolment activation, duplicate processing, and amount mismatch risk.
-   - Correction: signature order, merchant, source, PayFast server validation, stored-amount matching, row locking, transition checks, and idempotent enrolment creation.
-   - Verification: security tests assert all required checks. No live payment was made.
+## Findings at Baseline
 
-5. **Private learner data exposed to employer scope**
-   - Location: employer dashboard PHP endpoint.
-   - Impact: unauthorised disclosure of learner names, emails, certificates, and scores.
-   - Correction: learner-level employer data is withheld until organisation assignment and consent tables exist.
-   - Verification: endpoint now returns restricted indicators and empty learner collections.
+### Priority 1
 
-### High
+1. **Duplicate academy detail URLs**
+   `/academies/upskilling` and `/academies/upskilling-academy` both return 200. The equivalent Skills Training URLs also both return 200. The short category slug is already used by internal navigation and should be canonical; long legacy slugs need 308 redirects.
 
-- Public registration accepted facilitator/employer roles from the browser. It now creates learner accounts only.
-- Enrolment was simulated in `localStorage`. The course action now uses authenticated enrolment and PayFast APIs.
-- The service worker cached API and authenticated GET responses. It now excludes private routes and APIs.
-- Lesson resources were publicly proxyable with disabled cURL TLS checks. Links are now short-lived HMAC URLs and TLS is verified.
-- Lesson and assessment rewards could be repeated. Backend transactions now reward only first valid state transitions.
-- Certificate identifiers could collide across learners. Certificate IDs now include a cryptographic suffix.
-- Dashboards and impact/investor pages displayed invented operational figures. They now use authorised APIs, factual catalogue counts, or explicit empty states.
+2. **Canonical metadata is absent**
+   Representative live public pages do not emit `rel="canonical"`. Dynamic academy and course metadata is title/description-only.
 
-### Medium
+3. **Course structured data is absent**
+   Course detail pages do not emit accurate Course and BreadcrumbList JSON-LD or route-specific social metadata.
 
-- Root loading, error, robots, sitemap, skip navigation, and reduced-motion handling were missing.
-- Canonical metadata was hard-coded instead of environment-aware.
-- Assignment, discussion, admin settings, and export controls simulated success without a backend.
-- The Sports Academy was absent from the ecosystem navigation and data model.
+### Priority 2
 
-### Enhancements
+4. **Sitemap contains a redirected route and legacy academy slugs**
+   `/contact` is emitted despite redirecting to `/support`, and academy entries use the long data slug. Several useful public routes are omitted.
 
-- Generated imagery is consistently placed and served through `next/image`.
-- Source PNG files are large; responsive Next.js delivery limits the user transfer, while source WebP/AVIF conversion remains useful for repository/deployment weight.
-- A shared rate-limit store is required if the PHP API is scaled beyond one host.
+5. **Account form semantics are incomplete**
+   Visible labels are present, but auth inputs lack `name` attributes and signup/reset fields have incomplete autocomplete metadata. Auth pages also need an explicit noindex policy.
 
-## Baseline Conclusion
+6. **Find My Path is not fully explainable or semantically progressive**
+   The four questions work and the outcome is persisted after completion, but progress is text-only, there is no Back action, in-progress answers are lost on refresh, and the result does not explain the recommendation rule.
 
-The visual foundation was strong, but launch readiness was blocked by secret exposure, public deployment artifacts, payment and role integrity issues, private-data scope, and simulated operational data. Those items drove the implementation priority.
+7. **Search state is not written back to the URL while typing**
+   `/search?q=...` can initialise the client, but subsequent query changes are not shareable. Catalogue filters are richer but primarily client state; a later server/hybrid catalogue phase is advisable for a much larger data set.
+
+8. **Operational documents are stale or incomplete**
+   Existing July documentation does not reflect the 31 August route count, current test suite, VowHumans context flow, or complete deployment/operations responsibilities.
+
+## Risks and Constraints
+
+- No live credentials are available or required for this repository upgrade. Authenticated role journeys and external integration writes must be smoke-tested in an approved staging environment.
+- PHP CLI is not installed locally, so PHP syntax and host extension checks require Afrihost staging or an approved PHP environment.
+- The browser automation connector was unavailable during one metadata probe; production status and redirect evidence was collected through read-only HTTP checks, with full browser verification scheduled against the local production server.
+- The repository contains large source images. `next/image` provides responsive delivery, but source-asset conversion remains a deployment-weight optimisation.
+- Legal, accreditation, employment, partner, investor, and impact claims require named business owners and supporting evidence before publication.
+
+## Baseline Decision
+
+No Priority 0 regression was found: the clean codebase builds and its security controls remain intact. Implementation will therefore be incremental and focused on canonical routing/SEO, form and path-finder accessibility, test coverage, and current production/deployment documentation. Moodle, PayFast, VowHumans, Afrihost contracts, and the database schema will not be changed without a demonstrated defect.

@@ -7,7 +7,7 @@ VowLMS is the GoalVow learning platform for academy discovery, courses, authenti
 - Next.js 16 App Router, React 19, strict TypeScript, Tailwind CSS 4.
 - Vercel frontend and same-origin Next.js route handlers.
 - Afrihost PHP 8.1+ API bridge with PDO/MySQL.
-- Six verified Moodle academy connections used by read-only migration tooling.
+- Academy-specific Moodle connections used by read-only migration tooling.
 - Development data is available locally only; production fails closed when the bridge is missing.
 
 ## Local Setup
@@ -49,7 +49,7 @@ Copy `.env.example` to `.env.local` and configure values locally or in Vercel. N
 Key groups:
 
 - App and bridge: `NEXT_PUBLIC_APP_URL`, `BRIDGE_BASE_URL`, `BRIDGE_API_KEY`.
-- Security: `JWT_SECRET`, `RESOURCE_SIGNING_SECRET`.
+- Security: `JWT_SECRET`, `RESOURCE_SIGNING_SECRET`, `VOWHUMANS_LESSON_CONTEXT_SECRET`.
 - PayFast, SMTP, ecosystem integrations, and six Moodle URL/token pairs.
 
 ## Deployment Packages
@@ -62,10 +62,19 @@ Key groups:
 Read:
 
 - `docs/audits/VOWLMS_BASELINE_AUDIT.md`
+- `docs/audits/VOWLMS_ROUTE_INVENTORY.md`
+- `docs/audits/VOWLMS_CONTENT_AND_IMAGE_AUDIT.md`
 - `docs/audits/VOWLMS_FINAL_IMPLEMENTATION_REPORT.md`
+- `docs/architecture/VOWLMS_CURRENT_ARCHITECTURE.md`
+- `docs/architecture/VOWLMS_TARGET_ARCHITECTURE.md`
+- `docs/architecture/VOWLMS_API_AND_DATA_FLOW.md`
 - `docs/api/VOWLMS_API_CONTRACT.md`
 - `docs/testing/VOWLMS_TEST_PLAN.md`
 - `docs/deployment/VERCEL_DEPLOYMENT_CHECKLIST.md`
+- `docs/deployment/AFRIHOST_PHP_DEPLOYMENT.md`
+- `docs/operations/VOWLMS_OPERATIONS_RUNBOOK.md`
+- `docs/design/VOWLMS_DESIGN_SYSTEM.md`
+- `docs/VOWLMS_OUTSTANDING_BUSINESS_DECISIONS.md`
 - `public/php/README_DEPLOYMENT.md`
 - `public/sql/README_IMPORT_ORDER.md`
 

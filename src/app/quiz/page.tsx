@@ -4,6 +4,8 @@ import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 export const metadata = {
   title: "Path Finder Quiz",
   description: "Answer 4 quick questions and get matched to the right GoalVow academy and courses.",
+  alternates: { canonical: "/find-my-path" },
+  robots: { index: false, follow: true },
 };
 
 export default function QuizPage() {

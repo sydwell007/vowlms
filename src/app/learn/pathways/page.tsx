@@ -6,6 +6,7 @@ import { getPathwayStats, formatDuration } from "@/lib/course-content";
 export const metadata = {
   title: "Skill Pathways",
   description: "Curated GoalVow course curricula, grouped by the real workplace skill they build.",
+  alternates: { canonical: "/learn/pathways" },
 };
 
 export default function SkillPathwaysPage() {

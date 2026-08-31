@@ -1,12 +1,14 @@
 import type { MetadataRoute } from "next";
-import { getAcademies, getCourses } from "@/lib/data";
+import { getAcademies, getCourses, getSkillPathways } from "@/lib/data";
 import { siteConfig } from "@/lib/site";
 
 const publicRoutes = [
   "",
   "/academies",
   "/courses",
+  "/find-my-path",
   "/learn",
+  "/learn/pathways",
   "/practice",
   "/apply",
   "/rewards",
@@ -16,7 +18,14 @@ const publicRoutes = [
   "/support",
   "/ecosystem",
   "/about",
-  "/contact",
+  "/impact",
+  "/team",
+  "/careers",
+  "/investors",
+  "/innovation-labs",
+  "/vowtools",
+  "/skillsshop",
+  "/cheforder",
   "/pricing",
   "/privacy",
   "/terms",
@@ -33,7 +42,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === "" ? 1 : route === "/courses" || route === "/academies" ? 0.9 : 0.6,
   }));
   const academyEntries: MetadataRoute.Sitemap = getAcademies().map((academy) => ({
-    url: `${siteConfig.url}/academies/${academy.slug}`,
+    url: `${siteConfig.url}/academies/${academy.category}`,
     lastModified: now,
     changeFrequency: "monthly",
     priority: 0.8,
@@ -44,6 +53,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly",
     priority: 0.7,
   }));
+  const pathwayEntries: MetadataRoute.Sitemap = getSkillPathways().map((pathway) => ({
+    url: `${siteConfig.url}/learn/pathways/${pathway.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
 
-  return [...baseEntries, ...academyEntries, ...courseEntries];
+  return [...baseEntries, ...academyEntries, ...pathwayEntries, ...courseEntries];
 }

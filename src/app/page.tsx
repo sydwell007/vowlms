@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ChartNoAxesCombined, Network, ShieldCheck, Smartphone } from "lucide-react";
@@ -8,8 +9,29 @@ import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
-import { getAcademies, getCourseSummaries } from "@/lib/data";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { getCourseSummaries } from "@/lib/data";
+import { siteConfig } from "@/lib/site";
 import { visualAssets } from "@/lib/visual-assets";
+import { getConnectedAcademyCount, getPlannedAcademyCount } from "@/lib/academy-launch";
+
+export const metadata: Metadata = {
+  title: { absolute: "VowLMS | GoalVow Learning Platform" },
+  description: siteConfig.description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "VowLMS | GoalVow Learning Platform",
+    description: siteConfig.description,
+    url: "/",
+    images: [{ url: visualAssets.ecosystemHero, alt: "VowLMS learning platform" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VowLMS | GoalVow Learning Platform",
+    description: siteConfig.description,
+    images: [visualAssets.ecosystemHero],
+  },
+};
 
 const journey = [
   {
@@ -40,19 +62,34 @@ const trustSignals = [
 ];
 
 export default function Home() {
-  const academies = getAcademies();
   const courses = getCourseSummaries();
-  const connectedAcademies = academies.length;
+  const connectedAcademies = getConnectedAcademyCount();
   const featuredCourses = courses.slice(0, 6);
   const stats = [
     { value: connectedAcademies.toLocaleString(), label: "Connected academies" },
     { value: courses.length.toLocaleString(), label: "Courses" },
-    { value: "3", label: "Planned academies" },
+    { value: getPlannedAcademyCount().toLocaleString(), label: "Planned academies" },
     { value: "PWA", label: "Mobile ready" },
   ];
+  const organisationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteConfig.legalName,
+    url: siteConfig.url,
+    logo: `${siteConfig.url}${visualAssets.logo}`,
+    email: siteConfig.contact.email,
+    telephone: siteConfig.contact.phoneDisplay,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "17 Vultee",
+      addressLocality: "Cape Town",
+      addressCountry: "ZA",
+    },
+  };
 
   return (
     <main>
+      <JsonLd data={organisationSchema} />
       <section className="relative isolate overflow-hidden bg-[#06111f] py-12 text-white sm:py-14 md:py-16">
         <Image
           src={visualAssets.ecosystemHero}

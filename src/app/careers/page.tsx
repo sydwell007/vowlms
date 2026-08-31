@@ -1,7 +1,11 @@
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/lib/site";
 
-export const metadata = { title: "Careers - GoalVow Holdings" };
+export const metadata = {
+  title: "Careers - GoalVow Holdings",
+  description: "Explore current GoalVow career interest areas and the verified route for enquiries.",
+  alternates: { canonical: "/careers" },
+};
 
 const interestAreas = [
   { title: "Education and facilitation", detail: "Curriculum, assessment, learner guidance, and academy delivery." },

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -23,21 +24,56 @@ import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { formatDuration, getCourseStats } from "@/lib/course-content";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { getAcademyCourseImage } from "@/lib/visual-assets";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { siteConfig } from "@/lib/site";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const course = getCourseBySlug(slug);
-  if (!course) return { title: "Course" };
+  if (!course) return { title: "Course", robots: { index: false, follow: false } };
+
+  const academy = getAcademyBySlug(course.academySlug);
+  if (isHiddenAcademyCategory(academy?.category)) {
+    return { title: "Course", robots: { index: false, follow: false } };
+  }
 
   const description = course.description.length > 155
     ? `${course.description.slice(0, 152)}...`
     : course.description;
 
-  return { title: course.title, description };
+  const canonicalPath = `/courses/${course.slug}`;
+  const image = getAcademyCourseImage(academy?.category ?? "upskilling");
+  const socialTitle = `${course.title} Course | VowLMS`;
+
+  return {
+    title: { absolute: socialTitle },
+    description,
+    alternates: { canonical: canonicalPath },
+    openGraph: {
+      type: "website",
+      title: socialTitle,
+      description,
+      url: canonicalPath,
+      images: [{ url: image, alt: `${course.title} course` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: socialTitle,
+      description,
+      images: [image],
+    },
+  };
 }
 
-export default async function CourseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function CourseDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ enrolment?: string }>;
+}) {
   const { slug } = await params;
+  const query = await searchParams;
   const course = getCourseBySlug(slug);
   if (!course) notFound();
 
@@ -53,6 +89,43 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
   const moreCourses = academy
     ? getCourseSummariesByAcademy(academy.slug).filter((item) => item.slug !== course.slug).slice(0, 3)
     : [];
+  const canonicalUrl = `${siteConfig.url}/courses/${course.slug}`;
+  const academyUrl = academy ? `${siteConfig.url}${getAcademyHref(academy)}` : `${siteConfig.url}/academies`;
+  const courseSchema = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: course.title,
+    description: course.description,
+    url: canonicalUrl,
+    educationalLevel: course.level,
+    teaches: course.outcomes,
+    provider: {
+      "@type": "Organization",
+      name: siteConfig.legalName,
+      url: siteConfig.url,
+    },
+    offers: {
+      "@type": "Offer",
+      url: canonicalUrl,
+      price: course.price.toFixed(2),
+      priceCurrency: "ZAR",
+      availability: "https://schema.org/InStock",
+    },
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: "online",
+      name: course.title,
+    },
+  };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Academies", item: `${siteConfig.url}/academies` },
+      ...(academy ? [{ "@type": "ListItem", position: 2, name: academy.name, item: academyUrl }] : []),
+      { "@type": "ListItem", position: academy ? 3 : 2, name: course.title, item: canonicalUrl },
+    ],
+  };
   const courseFeatures = [
     { Icon: Smartphone, text: "Mobile and PWA access" },
     { Icon: Download, text: "Offline lesson content" },
@@ -64,6 +137,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
 
   return (
     <main>
+      <JsonLd data={[courseSchema, breadcrumbSchema]} />
       <section className="premium-section-dark surface-grid py-16 text-white md:py-20">
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 sm:px-6 lg:grid-cols-[1fr_360px] lg:px-8">
           <div>
@@ -84,6 +158,12 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
 
             <h1 className="mt-4 max-w-4xl text-balance text-4xl font-semibold sm:text-5xl lg:text-6xl">{course.title}</h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-white/74">{course.description}</p>
+
+            {query.enrolment === "required" ? (
+              <div role="alert" className="mt-5 max-w-2xl border-l-4 border-gold bg-white/10 px-4 py-3 text-sm text-white/86">
+                Enrol in this course before opening its lessons, assessments, or practice activities.
+              </div>
+            ) : null}
 
             <div className="mt-5 flex flex-wrap gap-4 text-sm text-white/70">
               <span className="flex items-center gap-1.5"><BadgeCheck aria-hidden="true" className="h-4 w-4" /> Certificate included</span>

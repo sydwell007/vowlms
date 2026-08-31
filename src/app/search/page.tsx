@@ -4,6 +4,8 @@ import { getAcademies, getCourseSummaries } from "@/lib/data";
 export const metadata = {
   title: "Search",
   description: "Search GoalVow academies and VowLMS courses.",
+  alternates: { canonical: "/search" },
+  robots: { index: false, follow: true },
 };
 
 type SearchPageProps = {

@@ -9,6 +9,7 @@ import { visualAssets } from "@/lib/visual-assets";
 export const metadata = {
   title: "Learn · GoalVow Academies",
   description: "Explore GoalVow courses in upskilling, trades, culinary, school, business, and university-level online pathways.",
+  alternates: { canonical: "/learn" },
 };
 
 const studyModes = [
