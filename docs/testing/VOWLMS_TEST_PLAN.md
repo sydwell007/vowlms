@@ -12,9 +12,9 @@ npm test
 npm run build
 ```
 
-Current static suite: 25 passing Node tests. It covers deployment-artifact blocking, auth role safety, payment integrity, Moodle resource signing, bridge status handling, reviews, aggregate enrolment counts, VowHumans restrictions, canonical redirects, sitemap canonicalisation, JSON-LD, auth field semantics, Find My Path recovery/accessibility, and protected learning enrolment checks.
+Current static suite: 26 passing Node tests. It covers deployment-artifact blocking, auth role safety, payment integrity, Moodle resource signing, bridge status handling, reviews, aggregate enrolment counts, VowHumans restrictions, canonical redirects, sitemap canonicalisation, JSON-LD, focused course-detail composition, auth field semantics, Find My Path recovery/accessibility, and protected learning enrolment checks.
 
-Current non-destructive browser suite: 99 passing Playwright cases across 360x640, 768x1024, and 1440x900. The verified 31 August 2026 run covered catalogue filtering/search, onboarding, pathfinder recommendations, responsive layout, canonical SEO, redirects, and the VowHumans consent/token/close lifecycle.
+Current non-destructive browser suite: 102 passing Playwright cases across 360x640, 768x1024, and 1440x900. The verified 31 August 2026 run covered catalogue filtering/search, onboarding, pathfinder recommendations, responsive layout, canonical SEO, redirects, selected-course focus across all connected academies, and the VowHumans consent/token/close lifecycle.
 
 Current local Lighthouse evidence meets the repository thresholds: homepage 82 performance/85 accessibility, catalogue 74/86, and course detail 85/90; all measured pages scored 96 for best practices and 100 for SEO.
 

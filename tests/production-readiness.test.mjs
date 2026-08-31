@@ -38,6 +38,13 @@ test("home, academy, and course pages expose canonical and structured metadata",
   assert.match(jsonLd, /replace\(\/<\/g, "\\\\u003c"\)/);
 });
 
+test("course detail pages contain only the selected course", async () => {
+  const course = await read("src/app/courses/[slug]/page.tsx");
+
+  assert.doesNotMatch(course, /More courses in/);
+  assert.doesNotMatch(course, /getCourseSummariesByAcademy/);
+});
+
 test("authentication forms provide names and complete autocomplete semantics", async () => {
   const signIn = await read("src/app/auth/signin/page.tsx");
   const signUp = await read("src/app/auth/signup/page.tsx");

@@ -79,16 +79,16 @@ The detailed evidence is in `VOWLMS_BASELINE_AUDIT.md`, `VOWLMS_ROUTE_INVENTORY.
 |---|---|
 | `npm run typecheck` | Pass |
 | `npm run lint` | Pass |
-| `npm run test` | Pass, 25/25 |
+| `npm run test` | Pass, 26/26 |
 | `npm run build` | Pass, 87 generated page outputs |
 | `npm run qa:static` | Pass; build/lint/type, no hardcoded secrets, environment protection, 106 hrefs against 98 routes, no broken internal links |
 | `npm run qa:content` | Pass; 427 courses, no empty courses, duplicate titles, or orphans |
-| Playwright public E2E | Pass, 99/99 non-destructive cases across 360x640, 768x1024, and 1440x900 |
+| Playwright public E2E | Pass, 102/102 non-destructive cases across 360x640, 768x1024, and 1440x900 |
 | Canonical/JSON-LD browser checks | Pass on home, course, and legacy academy redirect across all three viewports |
 | VowHumans shell checks | Pass; consent, authorized context token, iframe permissions, fragment transport, and clean close |
 | Visual overflow checks | Pass on homepage, catalogue, pathways, and pathfinder across all three viewports |
 
-The 99 browser cases cover catalogue counts, individual and combined filters, searches, six onboarding goals, reset, five pathfinder combinations, responsive navigation/overflow, canonical SEO, academy redirects, and presenter lifecycle.
+The 102 browser cases cover catalogue counts, individual and combined filters, searches, six onboarding goals, reset, five pathfinder combinations, responsive navigation/overflow, canonical SEO, academy redirects, selected-course focus across all connected academies, and presenter lifecycle.
 
 ## Performance Evidence
 
@@ -106,6 +106,7 @@ All measured pages met the repository thresholds of 70 performance and 85 access
 
 - `qa-reports/vowlms-home-desktop.png`
 - `qa-reports/vowlms-courses-mobile.png`
+- `qa-reports/vowlms-course-focused-desktop.png`
 - Presenter preview screenshots are retained in Playwright test artifacts when the suite runs.
 
 The screenshots confirm a stable desktop first viewport and a 390px catalogue without horizontal overflow. Course cards retain their existing premium hierarchy, presenter identity, lesson/reward facts, enrolment totals, and course-duration treatment.

@@ -27,4 +27,19 @@ test.describe("canonical SEO", () => {
       "https://vowlms.vercel.app/academies/upskilling",
     );
   });
+
+  test("course pages stay focused on the selected course", async ({ page }) => {
+    const courses = [
+      ["/courses/business-ethics", "Business Ethics"],
+      ["/courses/commercial-kitchenette-cleaner", "Commercial Kitchenette Cleaner"],
+      ["/courses/making-toad-in-the-hole", "Making Toad in the Hole"],
+      ["/courses/starting-a-business-in-africa", "Starting a Business in Africa"],
+    ];
+
+    for (const [url, title] of courses) {
+      await page.goto(url);
+      await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+      await expect(page.getByRole("heading", { name: /More courses in/i })).toHaveCount(0);
+    }
+  });
 });

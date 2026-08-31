@@ -14,11 +14,9 @@ import {
 } from "lucide-react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
-import { Section } from "@/components/ui/Section";
-import { CourseCard } from "@/components/courses/CourseCard";
 import { CourseExperience } from "@/components/courses/CourseExperience";
 import { EnrollButton } from "@/components/courses/EnrollButton";
-import { getAcademyBySlug, getAcademyHref, getCourseBySlug, getCourseSummariesByAcademy } from "@/lib/data";
+import { getAcademyBySlug, getAcademyHref, getCourseBySlug } from "@/lib/data";
 import { formatCurrency } from "@/lib/format";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { formatDuration, getCourseStats } from "@/lib/course-content";
@@ -86,9 +84,6 @@ export default async function CourseDetailPage({
   const practice = course.vrPractices[0];
   const stats = getCourseStats(course);
   const courseImage = getAcademyCourseImage(academy?.category ?? "upskilling");
-  const moreCourses = academy
-    ? getCourseSummariesByAcademy(academy.slug).filter((item) => item.slug !== course.slug).slice(0, 3)
-    : [];
   const canonicalUrl = `${siteConfig.url}/courses/${course.slug}`;
   const academyUrl = academy ? `${siteConfig.url}${getAcademyHref(academy)}` : `${siteConfig.url}/academies`;
   const courseSchema = {
@@ -241,17 +236,6 @@ export default async function CourseDetailPage({
       </section>
 
       <CourseExperience course={course} academy={academy} accentColor={accentColor} />
-
-      {moreCourses.length > 0 && academy ? (
-        <Section tone="light" size="tight" eyebrow={academy.name} title={`More courses in ${academy.name}`}>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {moreCourses.map((item) => <CourseCard key={item.slug} course={item} />)}
-          </div>
-          <div className="mt-6 text-center">
-            <ButtonLink href={getAcademyHref(academy)} variant="outline">View all {academy.name} courses</ButtonLink>
-          </div>
-        </Section>
-      ) : null}
 
       <section className="premium-section-dark surface-grid py-14 pb-36 text-white lg:pb-14">
         <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-5 px-5 text-center sm:px-6 lg:px-8">
