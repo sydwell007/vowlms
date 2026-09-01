@@ -88,7 +88,7 @@ export function CourseExperience({ course, academy, accentColor }: Props) {
                 <h2 className="mt-2 text-3xl font-semibold text-ink">A clear path from start to completion</h2>
                 <p className="mt-3 text-sm leading-6 text-muted">Open a module to preview its lessons. Enrolment unlocks the complete learning experience.</p>
               </div>
-              <CourseCurriculum modules={course.modules} accentColor={accentColor} />
+              <CourseCurriculum modules={course.modules} accentColor={accentColor} courseSlug={course.slug} />
             </div>
           ) : null}
 

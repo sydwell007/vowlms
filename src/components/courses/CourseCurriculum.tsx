@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import {
   BookOpen,
   ChevronDown,
@@ -20,10 +21,12 @@ import {
   getModuleOutcome,
   getModuleStats,
 } from "@/lib/course-content";
+import { getModuleImageSrc } from "@/lib/module-images";
 
 type Props = {
   modules: CourseModule[];
   accentColor?: string;
+  courseSlug?: string;
 };
 
 const LESSON_ICON: Record<string, LucideIcon> = {
@@ -33,7 +36,7 @@ const LESSON_ICON: Record<string, LucideIcon> = {
   text: FileText,
 };
 
-export function CourseCurriculum({ modules, accentColor = "#1166c8" }: Props) {
+export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug }: Props) {
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
   const allOpen = expanded.size === modules.length;
 
@@ -70,6 +73,7 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8" }: Props) {
           const description = getModuleDescription(moduleItem);
           const outcome = getModuleOutcome(moduleItem);
           const panelId = `module-panel-${moduleItem.order}`;
+          const moduleImageSrc = courseSlug ? getModuleImageSrc(courseSlug, moduleItem.order) : null;
 
           return (
             <article key={moduleItem.title} className="premium-card overflow-hidden rounded-lg">
@@ -80,12 +84,24 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8" }: Props) {
                 aria-controls={panelId}
                 className="flex w-full items-start gap-4 p-5 text-left transition hover:bg-[#f5f9ff] sm:p-6"
               >
-                <span
-                  className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg"
-                  style={{ background: `${accentColor}18`, color: accentColor }}
-                >
-                  <Milestone aria-hidden="true" className="h-5 w-5" />
-                </span>
+                {moduleImageSrc ? (
+                  <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                    <Image
+                      src={moduleImageSrc}
+                      alt=""
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
+                  </span>
+                ) : (
+                  <span
+                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg"
+                    style={{ background: `${accentColor}18`, color: accentColor }}
+                  >
+                    <Milestone aria-hidden="true" className="h-5 w-5" />
+                  </span>
+                )}
 
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>
