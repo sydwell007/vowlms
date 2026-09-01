@@ -82,26 +82,26 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug 
                 onClick={() => toggle(moduleItem.order)}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                className="flex w-full items-start gap-4 p-5 text-left transition hover:bg-[#f5f9ff] sm:p-6"
+                className="group flex w-full items-start gap-3 p-5 text-left transition hover:bg-[#f5f9ff] sm:gap-5 sm:p-6"
               >
-                {moduleImageSrc ? (
-                  <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-slate-100 shadow-sm ring-1 ring-slate-900/5 sm:h-24 sm:w-36 sm:rounded-xl">
+                  {moduleImageSrc ? (
                     <Image
                       src={moduleImageSrc}
                       alt=""
                       fill
-                      sizes="48px"
-                      className="object-cover"
+                      sizes="(min-width: 640px) 144px, 64px"
+                      className="object-cover transition duration-300 group-hover:scale-105"
                     />
-                  </span>
-                ) : (
-                  <span
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg"
-                    style={{ background: `${accentColor}18`, color: accentColor }}
-                  >
-                    <Milestone aria-hidden="true" className="h-5 w-5" />
-                  </span>
-                )}
+                  ) : (
+                    <span
+                      className="flex h-full w-full items-center justify-center"
+                      style={{ background: `${accentColor}18`, color: accentColor }}
+                    >
+                      <Milestone aria-hidden="true" className="h-6 w-6 sm:h-8 sm:w-8" />
+                    </span>
+                  )}
+                </span>
 
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>
