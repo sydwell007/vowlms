@@ -52,7 +52,12 @@ export function getModuleStats(moduleItem: CourseModule): ModuleStats {
   // avoids showing a nonsensical "0 lessons" for a module that clearly has content.
   const countedLessons = realLessons.length > 0 ? realLessons : nonAssessment;
   const lessonCount = countedLessons.length;
-  const totalMinutes = countedLessons.reduce((sum, l) => sum + (l.durationMinutes || 0), 0);
+  // Duration is deliberately NOT limited to the counted lessons above: finishing a module
+  // means working through its outcome/reading material, every numbered lesson, the module
+  // summary, the knowledge-check assessment, rating the module, and viewing the
+  // certificate — so total time is every item's estimated minutes added together, even
+  // though only the numbered lessons count toward "lessonCount".
+  const totalMinutes = moduleItem.lessons.reduce((sum, l) => sum + (l.durationMinutes || 0), 0);
   const hasAssessment = moduleItem.lessons.some((l) => l.type === "assessment");
   const hasVRPractice = moduleItem.lessons.some((l) => l.type === "vr-practice");
   const hasCertificate = moduleItem.lessons.some((l) => /certificate/i.test(l.title));
