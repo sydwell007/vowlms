@@ -12,6 +12,7 @@ import {
   getCoursesByAcademy,
 } from "@/lib/data";
 import { AcademyCourseGrid } from "@/components/academies/AcademyCourseGrid";
+import { getCourseStats } from "@/lib/course-content";
 import { visualAssets } from "@/lib/visual-assets";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
@@ -97,7 +98,7 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
             </div>
             <div>
               <span className="text-2xl font-semibold text-electric">
-                {courses.reduce((sum, c) => sum + c.modules.reduce((ms, m) => ms + m.lessons.length, 0), 0).toLocaleString()}
+                {courses.reduce((sum, c) => sum + getCourseStats(c).lessonCount, 0).toLocaleString()}
               </span>
               <span className="ml-2 text-white/60">lessons</span>
             </div>

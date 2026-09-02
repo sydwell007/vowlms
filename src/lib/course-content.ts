@@ -1,12 +1,39 @@
 import type { Course, CourseModule, Lesson } from "@/types/lms";
 
-/** Lesson titles that don't carry real topic content — excluded from auto-generated "topics covered" copy. */
-const NON_TOPIC_LESSON_TITLES = new Set([
-  "learning outcome",
-  "module reading material",
-  "module summary",
-  "rate this module",
-]);
+/**
+ * Title patterns for module scaffolding items — reading material, summaries,
+ * ratings, certificates, intros — that are real curriculum entries but not
+ * teaching lessons in their own right. Assessments are excluded separately by
+ * `type` rather than title, since their wording varies ("Knowledge check",
+ * "External Assessment", "Module Assessment: Test Your Knowledge", ...).
+ * Deliberately a negative filter (exclude known scaffolding) rather than a
+ * positive one (require "Lesson N:") — lesson-title conventions vary widely
+ * across academies (e.g. Skills Training's "Theory Knowledge Module N: ...",
+ * "Practical Skills Training Module N: ...").
+ */
+const NON_LESSON_TITLE_PATTERNS: RegExp[] = [
+  /certificate/i,
+  /reading material/i,
+  /^module material/i,
+  /^course material$/i,
+  /^module summary$/i,
+  /^course summary/i,
+  /^summary$/i,
+  /learning outcome/i,
+  /^course (introduction|preview)/i,
+  /entry requirements/i,
+  /rate this module/i,
+  /knowledge check/i,
+  /course final exam/i,
+  /^course project$/i,
+];
+
+/** True for a real teaching lesson — false for assessments and module scaffolding (see above). */
+function isRealLesson(lesson: Lesson): boolean {
+  if (lesson.type === "assessment") return false;
+  const title = lesson.title.trim();
+  return !NON_LESSON_TITLE_PATTERNS.some((pattern) => pattern.test(title));
+}
 
 export type ModuleStats = {
   lessonCount: number;
@@ -17,8 +44,15 @@ export type ModuleStats = {
 };
 
 export function getModuleStats(moduleItem: CourseModule): ModuleStats {
-  const lessonCount = moduleItem.lessons.length;
-  const totalMinutes = moduleItem.lessons.reduce((sum, l) => sum + (l.durationMinutes || 0), 0);
+  const nonAssessment = moduleItem.lessons.filter((l) => l.type !== "assessment");
+  const realLessons = moduleItem.lessons.filter(isRealLesson);
+  // A handful of short trailing sections (e.g. just "Course introduction" + "Knowledge
+  // check", or "Course Summary and Final Exam" + "Certificate of Completion") contain no
+  // "Lesson N:"-style content at all — falling back to every non-assessment item there
+  // avoids showing a nonsensical "0 lessons" for a module that clearly has content.
+  const countedLessons = realLessons.length > 0 ? realLessons : nonAssessment;
+  const lessonCount = countedLessons.length;
+  const totalMinutes = countedLessons.reduce((sum, l) => sum + (l.durationMinutes || 0), 0);
   const hasAssessment = moduleItem.lessons.some((l) => l.type === "assessment");
   const hasVRPractice = moduleItem.lessons.some((l) => l.type === "vr-practice");
   const hasCertificate = moduleItem.lessons.some((l) => /certificate/i.test(l.title));
@@ -84,7 +118,7 @@ export function formatCourseDurationWeeks(totalMinutes: number): string {
 /** First few lessons with real topical content — used for auto-generated module copy and preview chips. */
 export function getModuleTopics(moduleItem: CourseModule, max = 3): Lesson[] {
   return moduleItem.lessons
-    .filter((l) => !NON_TOPIC_LESSON_TITLES.has(l.title.trim().toLowerCase()))
+    .filter(isRealLesson)
     .filter((l) => !/^lesson\s*\d+\s*[:.-]?\s*$/i.test(l.title.trim()))
     .slice(0, max);
 }

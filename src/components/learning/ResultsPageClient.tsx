@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { ProgressBar } from "@/components/ui/ProgressBar";
+import { getCourseStats } from "@/lib/course-content";
 import type { Course } from "@/types/lms";
 
 type EnrolledCourse = {
@@ -16,7 +17,7 @@ type EnrolledCourse = {
 type CertificateState = "checking" | "ready" | "not-yet" | "unknown";
 
 function totalLessonCount(course: Course) {
-  return course.modules.reduce((sum, module) => sum + module.lessons.length, 0);
+  return getCourseStats(course).lessonCount;
 }
 
 function readLocalAssessmentScore(course: Course): number | null {
