@@ -82,15 +82,15 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug 
                 onClick={() => toggle(moduleItem.order)}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                className="group flex w-full items-start gap-3 p-5 text-left transition hover:bg-[#f5f9ff] sm:gap-5 sm:p-6"
+                className="group flex w-full items-stretch text-left transition hover:bg-[#f5f9ff]"
               >
-                <span className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-slate-100 shadow-sm ring-1 ring-slate-900/5 sm:h-24 sm:w-36 sm:rounded-xl">
+                <span className="relative w-24 shrink-0 overflow-hidden bg-slate-100 sm:w-52">
                   {moduleImageSrc ? (
                     <Image
                       src={moduleImageSrc}
                       alt=""
                       fill
-                      sizes="(min-width: 640px) 144px, 64px"
+                      sizes="(min-width: 640px) 208px, 96px"
                       className="object-cover transition duration-300 group-hover:scale-105"
                     />
                   ) : (
@@ -103,25 +103,27 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug 
                   )}
                 </span>
 
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>
-                    Module {moduleItem.order}
-                  </p>
-                  <h3 className="mt-1 text-lg font-semibold text-ink sm:text-xl">{moduleItem.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{description}</p>
+                <div className="flex min-w-0 flex-1 items-start gap-3 p-5 sm:gap-5 sm:p-6">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>
+                      Module {moduleItem.order}
+                    </p>
+                    <h3 className="mt-1 text-lg font-semibold text-ink sm:text-xl">{moduleItem.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-muted">{description}</p>
 
-                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs font-medium text-muted">
-                    <span className="flex items-center gap-1.5"><BookOpen aria-hidden="true" className="h-3.5 w-3.5" /> {stats.lessonCount} lesson{stats.lessonCount === 1 ? "" : "s"}</span>
-                    <span className="flex items-center gap-1.5"><Clock3 aria-hidden="true" className="h-3.5 w-3.5" /> {formatDuration(stats.totalMinutes)}</span>
-                    {stats.hasAssessment ? <span className="flex items-center gap-1.5"><ClipboardCheck aria-hidden="true" className="h-3.5 w-3.5" /> Assessment</span> : null}
-                    {stats.hasVRPractice ? <span className="flex items-center gap-1.5"><Glasses aria-hidden="true" className="h-3.5 w-3.5" /> VR practice</span> : null}
+                    <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs font-medium text-muted">
+                      <span className="flex items-center gap-1.5"><BookOpen aria-hidden="true" className="h-3.5 w-3.5" /> {stats.lessonCount} lesson{stats.lessonCount === 1 ? "" : "s"}</span>
+                      <span className="flex items-center gap-1.5"><Clock3 aria-hidden="true" className="h-3.5 w-3.5" /> {formatDuration(stats.totalMinutes)}</span>
+                      {stats.hasAssessment ? <span className="flex items-center gap-1.5"><ClipboardCheck aria-hidden="true" className="h-3.5 w-3.5" /> Assessment</span> : null}
+                      {stats.hasVRPractice ? <span className="flex items-center gap-1.5"><Glasses aria-hidden="true" className="h-3.5 w-3.5" /> VR practice</span> : null}
+                    </div>
                   </div>
-                </div>
 
-                <ChevronDown
-                  className={`mt-1 shrink-0 text-muted transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                  aria-hidden="true"
-                />
+                  <ChevronDown
+                    className={`mt-1 shrink-0 text-muted transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    aria-hidden="true"
+                  />
+                </div>
               </button>
 
               {/* Smooth CSS-only accordion (grid-template-rows trick) */}
