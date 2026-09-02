@@ -7,7 +7,7 @@ import { formatCurrency } from "@/lib/format";
 import { formatCourseDurationWeeks } from "@/lib/course-content";
 import { getComingSoonInfo } from "@/lib/academy-launch";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
-import { getAcademyCourseImage, visualAssets } from "@/lib/visual-assets";
+import { getCourseVisual, visualAssets } from "@/lib/visual-assets";
 import type { CourseSummary } from "@/types/lms";
 
 type Props = {
@@ -19,7 +19,7 @@ type Props = {
 export function CourseCard({ course, layout = "grid", priority = false }: Props) {
   const comingSoon = getComingSoonInfo(course.academyCategory);
   const accent = getAcademyAccentColor(course.academyCategory);
-  const image = getAcademyCourseImage(course.academyCategory);
+  const courseVisual = getCourseVisual(course, course.academyCategory);
   const isList = layout === "list";
 
   return (
@@ -35,7 +35,7 @@ export function CourseCard({ course, layout = "grid", priority = false }: Props)
           className={`relative block overflow-hidden bg-slate-100 ${isList ? "min-h-48 md:min-h-full" : "aspect-[16/9]"}`}
         >
           <Image
-            src={image}
+            src={courseVisual.src}
             alt=""
             fill
             priority={priority}

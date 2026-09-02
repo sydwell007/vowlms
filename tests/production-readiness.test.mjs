@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 
 const read = (path) => readFile(path, "utf8");
@@ -43,6 +43,47 @@ test("course detail pages contain only the selected course", async () => {
 
   assert.doesNotMatch(course, /More courses in/);
   assert.doesNotMatch(course, /getCourseSummariesByAcademy/);
+});
+
+test("all Upskilling parent courses have one shared curated-image mapping", async () => {
+  const expectedSlugs = [
+    "business-ethics",
+    "workplace-compliance",
+    "organizational-culture",
+    "stress-management",
+    "cybersecurity",
+    "health-and-wellness",
+    "human-resources",
+    "marketing",
+    "sales",
+    "project-management",
+    "customer-service",
+    "career-management",
+    "change-management",
+    "communication",
+    "leadership",
+    "resilience",
+    "problem-solving",
+    "time-management",
+    "team-management",
+    "critical-thinking",
+  ];
+  const visualResolver = await read("src/lib/visual-assets.ts");
+  const courseCard = await read("src/components/courses/CourseCard.tsx");
+  const coursePage = await read("src/app/courses/[slug]/page.tsx");
+  const productionFiles = (await readdir("public/images/courses/upskilling"))
+    .filter((file) => file.endsWith(".webp"))
+    .sort();
+
+  for (const slug of expectedSlugs) {
+    assert.match(visualResolver, new RegExp(`"?${slug}"?: \\{`));
+    assert.match(visualResolver, new RegExp(`/images/courses/upskilling/${slug}\\.webp`));
+  }
+  assert.deepEqual(productionFiles, expectedSlugs.map((slug) => `${slug}.webp`).sort());
+  assert.match(visualResolver, /getAcademyCourseImage\(academyCategory\)/);
+  assert.match(courseCard, /getCourseVisual\(course, course\.academyCategory\)/);
+  assert.match(coursePage, /getCourseVisual\(course, academy\?\.category \?\? "upskilling"\)/);
+  assert.match(coursePage, /alt=\{courseVisual\.alt\}/);
 });
 
 test("authentication forms provide names and complete autocomplete semantics", async () => {

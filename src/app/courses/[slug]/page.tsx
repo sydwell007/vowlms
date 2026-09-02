@@ -21,7 +21,7 @@ import { formatCurrency } from "@/lib/format";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { formatDuration, getCourseStats } from "@/lib/course-content";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
-import { getAcademyCourseImage } from "@/lib/visual-assets";
+import { getCourseVisual } from "@/lib/visual-assets";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/lib/site";
 
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     : course.description;
 
   const canonicalPath = `/courses/${course.slug}`;
-  const image = getAcademyCourseImage(academy?.category ?? "upskilling");
+  const courseVisual = getCourseVisual(course, academy?.category ?? "upskilling");
   const socialTitle = `${course.title} Course | VowLMS`;
 
   return {
@@ -52,13 +52,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: socialTitle,
       description,
       url: canonicalPath,
-      images: [{ url: image, alt: `${course.title} course` }],
+      images: [{ url: courseVisual.src, alt: courseVisual.alt }],
     },
     twitter: {
       card: "summary_large_image",
       title: socialTitle,
       description,
-      images: [image],
+      images: [courseVisual.src],
     },
   };
 }
@@ -83,7 +83,7 @@ export default async function CourseDetailPage({
   const assessment = course.assessments[0];
   const practice = course.vrPractices[0];
   const stats = getCourseStats(course);
-  const courseImage = getAcademyCourseImage(academy?.category ?? "upskilling");
+  const courseVisual = getCourseVisual(course, academy?.category ?? "upskilling");
   const canonicalUrl = `${siteConfig.url}/courses/${course.slug}`;
   const academyUrl = academy ? `${siteConfig.url}${getAcademyHref(academy)}` : `${siteConfig.url}/academies`;
   const courseSchema = {
@@ -190,7 +190,7 @@ export default async function CourseDetailPage({
           <aside className="hidden self-start lg:sticky lg:top-24 lg:block">
             <div className="premium-card overflow-hidden rounded-lg text-ink">
               <div className="relative aspect-[16/8] overflow-hidden bg-slate-100">
-                <Image src={courseImage} alt="" fill priority sizes="360px" className="object-cover" />
+                <Image src={courseVisual.src} alt={courseVisual.alt} fill priority sizes="360px" className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#06111f]/65 to-transparent" />
                 <span className="absolute bottom-3 left-4 text-xs font-semibold uppercase tracking-[0.14em] text-white">Course preview</span>
               </div>
