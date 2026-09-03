@@ -2,12 +2,21 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ComingSoonOverlay } from "@/components/ui/ComingSoonOverlay";
 import { getAcademyHref } from "@/lib/data";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
-import { getComingSoonInfo } from "@/lib/academy-launch";
-import type { Academy } from "@/types/lms";
+import { getComingSoonInfo, isHiddenAcademyCategory } from "@/lib/academy-launch";
+import type { Academy, Role } from "@/types/lms";
 
-export function AcademyCard({ academy, courseCount }: { academy: Academy; courseCount?: number }) {
+export function AcademyCard({
+  academy,
+  courseCount,
+  role = null,
+}: {
+  academy: Academy;
+  courseCount?: number;
+  role?: Role | null;
+}) {
   const accent = getAcademyAccentColor(academy.category);
-  const comingSoon = getComingSoonInfo(academy.category);
+  const comingSoon = getComingSoonInfo(academy.category, role);
+  const isAdminPreview = role === "admin" && isHiddenAcademyCategory(academy.category, null);
 
   return (
     <ComingSoonOverlay info={comingSoon}>
@@ -27,6 +36,11 @@ export function AcademyCard({ academy, courseCount }: { academy: Academy; course
               {courseCount} courses
             </span>
           )}
+          {isAdminPreview ? (
+            <span className="shrink-0 rounded-full bg-amber-100 px-2.5 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-amber-700">
+              Admin preview
+            </span>
+          ) : null}
         </div>
         <h3 className="mt-4 text-2xl font-semibold">{academy.name}</h3>
         <p className="mt-3 flex-1 text-sm leading-6 text-muted">{academy.description}</p>

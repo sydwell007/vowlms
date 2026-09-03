@@ -1,5 +1,6 @@
 import { ok, serverError, unauthorized } from "@/lib/api/responses";
 import { bridgeGet, isBridgeConfigured } from "@/lib/bridge";
+import { decodeDevToken } from "@/lib/auth/session-decode";
 import { cookies } from "next/headers";
 
 export async function GET() {
@@ -8,18 +9,8 @@ export async function GET() {
   if (!token) return unauthorized();
 
   if (!isBridgeConfigured()) {
-    // Tokens starting with "dev." contain base64-encoded user JSON
-    if (token.startsWith("dev.")) {
-      try {
-        const user = JSON.parse(Buffer.from(token.slice(4), "base64").toString("utf8"));
-        if (user?.id && user?.name && user?.email && user?.role) {
-          return ok(user);
-        }
-      } catch {
-        // fall through
-      }
-    }
-
+    const user = decodeDevToken(token);
+    if (user) return ok(user);
     return unauthorized();
   }
 

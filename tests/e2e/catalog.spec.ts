@@ -28,7 +28,10 @@ test.describe("Course catalog", () => {
     await page.waitForSelector("text=Browse by academy");
     await openFiltersWhenCollapsed(page);
 
-    // Academy select
+    // Academy select — the anonymous/learner catalogue is Upskilling-only today
+    // (Skills Training, Chef Academy, and Business School are admin-only until
+    // launched), so this only ever iterates whatever academies are actually
+    // offered rather than a fixed list.
     const academySelect = page.locator("#academy-filter");
     const optionValues = await academySelect.locator("option").evaluateAll((opts) =>
       opts.map((o) => (o as HTMLOptionElement).value),
@@ -43,13 +46,19 @@ test.describe("Course catalog", () => {
     }
     await academySelect.selectOption("all");
 
-    // Level buttons (All levels already implied 0-filter; check each real level)
-    for (const level of ["Foundation", "Intermediate", "Advanced"]) {
+    // Level buttons — the 20 complete Upskilling courses are all Foundation
+    // level today, so Foundation must always yield results, while
+    // Intermediate/Advanced are a genuinely-empty (not broken) state until
+    // higher-level courses launch.
+    await page.getByRole("button", { name: "Foundation", exact: true }).click();
+    const summary = page.getByText(/Showing \d+ of \d+ courses/);
+    await expect(summary).toBeVisible();
+    const match = (await summary.innerText()).match(/of (\d+) courses/i);
+    expect(Number(match?.[1] ?? 0)).toBeGreaterThan(0);
+
+    for (const level of ["Intermediate", "Advanced"]) {
       await page.getByRole("button", { name: level, exact: true }).click();
-      const summary = page.getByText(/Showing \d+ of \d+ courses/);
-      await expect(summary).toBeVisible();
-      const match = (await summary.innerText()).match(/of (\d+) courses/i);
-      expect(Number(match?.[1] ?? 0)).toBeGreaterThan(0);
+      await expect(page.getByRole("heading", { name: "No courses match these filters" })).toBeVisible();
     }
     await page.getByRole("button", { name: "All levels", exact: true }).click();
   });
@@ -59,13 +68,11 @@ test.describe("Course catalog", () => {
     await page.waitForSelector("text=Browse by academy");
     await openFiltersWhenCollapsed(page);
 
-    await page.locator("#academy-filter").selectOption("chef-academy");
-    await page.getByRole("button", { name: "Foundation", exact: true }).click();
-    await page.getByRole("button", { name: "Free", exact: true }).click();
+    await page.getByRole("button", { name: "Intermediate", exact: true }).click();
 
-    // Chef Academy courses are all paid in the real dataset, so Foundation+Free is a
-    // deliberately-empty combination — confirm the app shows the empty state gracefully
-    // rather than erroring (the "Showing 0 of 0 courses" count and this heading both render).
+    // The 20 complete Upskilling courses are all Foundation level today, so
+    // Intermediate alone is a deliberately-empty combination — confirm the
+    // app shows the empty state gracefully rather than erroring.
     await expect(page.getByRole("heading", { name: "No courses match these filters" })).toBeVisible();
   });
 

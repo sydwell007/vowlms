@@ -1,6 +1,14 @@
 import { test, expect } from "@playwright/test";
+import { goalTiles } from "../../src/data/goal-tiles";
+import { isHiddenAcademyCategory } from "../../src/lib/academy-launch";
 
 const PAGES = ["/", "/courses", "/learn/pathways", "/quiz"];
+
+// Anonymous/learner visitors only see goal tiles whose academy is live today
+// (currently just Upskilling — see src/components/onboarding/GoalTileGrid.tsx).
+const visibleGoalTileCount = goalTiles.filter(
+  (tile) => !tile.academyCategory || !isHiddenAcademyCategory(tile.academyCategory),
+).length;
 
 test.describe("Responsive layout", () => {
   for (const path of PAGES) {
@@ -38,7 +46,7 @@ test.describe("Responsive layout", () => {
     const tiles = page.locator('[aria-label="Learning goals"] button');
     await tiles.first().waitFor({ state: "visible" }); // OnboardingFlow renders nothing until mounted
     const count = await tiles.count();
-    expect(count).toBe(6);
+    expect(count).toBe(visibleGoalTileCount);
 
     const boxes = [];
     for (let i = 0; i < count; i++) {

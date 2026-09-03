@@ -9,6 +9,7 @@ import {
 } from "@/data/course-groupings";
 import { skillPathways } from "@/data/skill-pathways";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
+import { isLearnerVisibleUpskillingCourse } from "@/lib/upskilling-visibility";
 import { getCourseStats } from "@/lib/course-content";
 import type {
   Academy,
@@ -17,6 +18,7 @@ import type {
   CourseSummary,
   LearningHub,
   Opportunity,
+  Role,
 } from "@/types/lms";
 
 const sportsAcademy: Academy = {
@@ -132,17 +134,31 @@ export const courses: Course[] = buildGroupedCourses();
 
 // ─── Public data access functions ─────────────────────────────────────────────
 
-export function getAcademies() {
-  return academies.filter((academy) => !isHiddenAcademyCategory(academy.category));
+/** The Upskilling academy's own slug — the one academy every role can see. */
+const UPSKILLING_ACADEMY_SLUG = "upskilling-academy";
+
+export function getAcademies(role?: Role | null) {
+  return academies.filter((academy) => !isHiddenAcademyCategory(academy.category, role));
+}
+
+/** Every academy, unfiltered — for the admin visibility control center only. */
+export function getAllAcademies() {
+  return academies;
 }
 
 export function getAcademyBySlug(slug: string) {
   return academies.find((academy) => academy.slug === slug || academy.category === slug);
 }
 
-function isCourseVisible(course: Course): boolean {
+export function isCourseVisible(course: Course, role?: Role | null): boolean {
   const academy = getAcademyBySlug(course.academySlug);
-  return !isHiddenAcademyCategory(academy?.category);
+  if (isHiddenAcademyCategory(academy?.category, role)) return false;
+  if (role === "admin") return true;
+  // Within Upskilling, only the 20 complete parent courses are learner-ready —
+  // the rest (Microsoft Office groupings, ungrouped raw Moodle courses) stay
+  // admin-only until they're finished and launched.
+  if (course.academySlug === UPSKILLING_ACADEMY_SLUG && !isLearnerVisibleUpskillingCourse(course)) return false;
+  return true;
 }
 
 export function getAcademyHref(categoryOrAcademy: { category: string } | string) {
@@ -150,51 +166,54 @@ export function getAcademyHref(categoryOrAcademy: { category: string } | string)
   return `/academies/${category}`;
 }
 
-export function getCourses() {
-  return courses.filter(isCourseVisible);
+export function getCourses(role?: Role | null) {
+  return courses.filter((course) => isCourseVisible(course, role));
 }
 
-export function getCourseSummaries(): CourseSummary[] {
-  return courses.filter(isCourseVisible).map((course) => {
-    const academy = getAcademyBySlug(course.academySlug);
-    const stats = getCourseStats(course);
+export function getCourseSummaries(role?: Role | null): CourseSummary[] {
+  return courses
+    .filter((course) => isCourseVisible(course, role))
+    .map((course) => {
+      const academy = getAcademyBySlug(course.academySlug);
+      const stats = getCourseStats(course);
 
-    return {
-      slug: course.slug,
-      title: course.title,
-      academySlug: course.academySlug,
-      academyName: academy?.name ?? "GoalVow Academy",
-      academyCategory: academy?.category ?? "upskilling",
-      description: course.description,
-      level: course.level,
-      duration: course.duration,
-      price: course.price,
-      rewards: course.rewards,
-      hasCertificate: course.assessments.length > 0,
-      moduleCount: stats.moduleCount,
-      lessonCount: stats.lessonCount,
-      totalMinutes: stats.totalMinutes,
-      hasAssessment: stats.hasAssessment || course.assessments.length > 0,
-      hasVRPractice: stats.hasVRPractice || course.vrPractices.length > 0,
-      presenterName:
-        course.modules
-          .flatMap((moduleItem) => moduleItem.lessons)
-          .find((lesson) => lesson.vowHuman?.enabled)?.vowHuman?.presenterName ?? "GoalVow Academy Presenter",
-    };
-  });
+      return {
+        slug: course.slug,
+        title: course.title,
+        academySlug: course.academySlug,
+        academyName: academy?.name ?? "GoalVow Academy",
+        academyCategory: academy?.category ?? "upskilling",
+        description: course.description,
+        level: course.level,
+        duration: course.duration,
+        price: course.price,
+        rewards: course.rewards,
+        hasCertificate: course.assessments.length > 0,
+        moduleCount: stats.moduleCount,
+        lessonCount: stats.lessonCount,
+        totalMinutes: stats.totalMinutes,
+        hasAssessment: stats.hasAssessment || course.assessments.length > 0,
+        hasVRPractice: stats.hasVRPractice || course.vrPractices.length > 0,
+        presenterName:
+          course.modules
+            .flatMap((moduleItem) => moduleItem.lessons)
+            .find((lesson) => lesson.vowHuman?.enabled)?.vowHuman?.presenterName ?? "GoalVow Academy Presenter",
+        isAdminPreview: role === "admin" && !isCourseVisible(course, null),
+      };
+    });
 }
 
-export function getCourseSummariesByAcademy(academySlug: string): CourseSummary[] {
+export function getCourseSummariesByAcademy(academySlug: string, role?: Role | null): CourseSummary[] {
   const academy = getAcademyBySlug(academySlug);
   if (!academy) return [];
 
-  return getCourseSummaries().filter((course) => course.academySlug === academy.slug);
+  return getCourseSummaries(role).filter((course) => course.academySlug === academy.slug);
 }
 
-export function getCoursesByAcademy(academySlug: string) {
+export function getCoursesByAcademy(academySlug: string, role?: Role | null) {
   const academy = getAcademyBySlug(academySlug);
   if (!academy) return [];
-  return courses.filter((course) => course.academySlug === academy.slug);
+  return courses.filter((course) => course.academySlug === academy.slug && isCourseVisible(course, role));
 }
 
 export function getCourseBySlug(slug: string) {
@@ -255,13 +274,14 @@ export function getSkillPathways() {
   return skillPathways;
 }
 
-export function getSkillPathwayBySlug(slug: string) {
+export function getSkillPathwayBySlug(slug: string, role?: Role | null) {
   const pathway = skillPathways.find((p) => p.slug === slug);
   if (!pathway) return undefined;
 
   const courses = pathway.courseSlugs
     .map((courseSlug) => getCourseBySlug(courseSlug))
-    .filter((course): course is Course => Boolean(course));
+    .filter((course): course is Course => Boolean(course))
+    .filter((course) => isCourseVisible(course, role));
 
   return { pathway, courses };
 }

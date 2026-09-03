@@ -121,6 +121,8 @@ export type CourseSummary = Pick<
   hasAssessment: boolean;
   hasVRPractice: boolean;
   presenterName: string;
+  /** True when this course is only visible because the viewer is an admin previewing unlaunched content. */
+  isAdminPreview?: boolean;
 };
 
 export type CourseReview = {

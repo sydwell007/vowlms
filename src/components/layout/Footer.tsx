@@ -1,47 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { visualAssets } from "@/lib/visual-assets";
 import { siteConfig } from "@/lib/site";
-import { getComingSoonInfo } from "@/lib/academy-launch";
+import { getComingSoonInfo, isHiddenAcademyCategory } from "@/lib/academy-launch";
+import { academyNavLinks } from "@/data/academy-nav";
+import { getEcosystemServices } from "@/data/ecosystem-services";
+import { useSession } from "@/lib/auth/useSession";
 import type { AcademyCategory } from "@/types/lms";
-
-const columns: { title: string; links: { href: string; label: string; category?: AcademyCategory }[] }[] = [
-  {
-    title: "About GoalVow",
-    links: [
-      { href: "/about", label: "About Us" },
-      { href: "/team", label: "Team" },
-      { href: "/careers", label: "Careers" },
-      { href: "/impact", label: "Impact" },
-      { href: "/ecosystem", label: "Ecosystem" },
-      { href: "/investors", label: "Investors Hub" },
-      { href: "/innovation-labs", label: "Innovation Labs" },
-    ],
-  },
-  {
-    title: "Academy Network",
-    links: [
-      { href: "/academies/upskilling", label: "Upskilling", category: "upskilling" },
-      { href: "/academies/skills-training", label: "Skills Training", category: "skills-training" },
-      { href: "/academies/chef-academy", label: "Chef Academy", category: "chef-academy" },
-      { href: "/academies/business-school", label: "Business School", category: "business-school" },
-    ],
-  },
-  {
-    title: "Other Services",
-    links: [
-      { href: "/pricing", label: "Course pricing" },
-      { href: "/apply", label: "Application pathway" },
-      { href: "/rewards", label: "VowRewards" },
-      { href: "/support", label: "VowSupport" },
-      { href: "/opportunities", label: "PlugConnect" },
-      { href: "/learning-hubs", label: "Learning Hubs" },
-      { href: "/skillsshop", label: "SkillsShop" },
-      { href: "/vowtools", label: "VowTools" },
-      { href: "/cheforder", label: "ChefOrder" },
-    ],
-  },
-];
 
 const legalLinks = [
   { href: "/privacy", label: "Privacy Policy" },
@@ -52,6 +19,58 @@ const legalLinks = [
 ];
 
 export function Footer() {
+  // Deliberately client-side (like AcademyTopBar/EcosystemSidebar): keeps
+  // seed-data.ts out of the client bundle and avoids forcing every page in
+  // the app into dynamic rendering just because the shared footer is
+  // role-aware. Defaults to the strictest (signed-out/learner) view until
+  // the session resolves.
+  const session = useSession();
+  const role = session.status === "authenticated" ? session.user.role : null;
+  const isAdmin = role === "admin";
+  const academies = academyNavLinks.filter((link) => !isHiddenAcademyCategory(link.category, role));
+  const services = getEcosystemServices(role);
+  const innovationLabs = services.find((s) => s.slug === "innovation-labs");
+
+  const columns: {
+    title: string;
+    links: { href: string; label: string; category?: AcademyCategory; adminOnly?: boolean }[];
+  }[] = [
+    {
+      title: "About GoalVow",
+      links: [
+        { href: "/about", label: "About Us" },
+        { href: "/team", label: "Team" },
+        { href: "/careers", label: "Careers" },
+        { href: "/impact", label: "Impact" },
+        { href: "/ecosystem", label: "Ecosystem" },
+        { href: "/investors", label: "Investors Hub" },
+        ...(innovationLabs
+          ? [{ href: innovationLabs.href, label: innovationLabs.name, adminOnly: !innovationLabs.learnerVisible }]
+          : []),
+      ],
+    },
+    {
+      title: "Academy Network",
+      links: academies.map((academy) => ({
+        href: academy.href,
+        label: academy.label,
+        category: academy.category,
+      })),
+    },
+    {
+      title: "Other Services",
+      links: [
+        { href: "/pricing", label: "Course pricing" },
+        { href: "/apply", label: "Application pathway" },
+        ...services.map((service) => ({
+          href: service.href,
+          label: service.name,
+          adminOnly: !service.learnerVisible,
+        })),
+      ],
+    },
+  ];
+
   return (
     <footer className="mt-auto border-t-2 border-gold bg-[#0d2239] text-white">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-5 pt-12 sm:px-6 lg:px-8">
@@ -72,7 +91,7 @@ export function Footer() {
             <h2 className="border-b border-white/12 pb-3 text-lg font-semibold">{column.title}</h2>
             <div className="mt-4 flex flex-col gap-2.5">
               {column.links.map((link) => {
-                const comingSoon = link.category ? getComingSoonInfo(link.category) : null;
+                const comingSoon = link.category ? getComingSoonInfo(link.category, role) : null;
                 if (comingSoon) {
                   return (
                     <span
@@ -89,8 +108,13 @@ export function Footer() {
                   );
                 }
                 return (
-                  <Link key={link.href} href={link.href} className="text-sm text-white/78 transition hover:text-gold">
-                    {link.label}
+                  <Link key={link.href} href={link.href} className="flex items-center justify-between gap-2 text-sm text-white/78 transition hover:text-gold">
+                    <span>{link.label}</span>
+                    {isAdmin && link.adminOnly ? (
+                      <span className="shrink-0 rounded-full border border-white/15 bg-white/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white/50">
+                        Admin
+                      </span>
+                    ) : null}
                   </Link>
                 );
               })}

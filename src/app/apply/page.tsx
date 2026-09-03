@@ -29,7 +29,7 @@ const applyPaths = [
   {
     icon: "💼",
     title: "Entrepreneurship Support",
-    desc: "ChefOrder, SkillsShop, and VowTools are planned ecosystem services. Their commercial and support offers require separate confirmation.",
+    desc: "ChefOrder and SkillsShop are planned ecosystem services. Their commercial and support offers require separate confirmation.",
     href: "/innovation-labs",
     color: "#f97316",
     badge: "Ecosystem",
@@ -41,14 +41,6 @@ const applyPaths = [
     href: "/rewards",
     color: "#f5c542",
     badge: "Built-in",
-  },
-  {
-    icon: "🔧",
-    title: "VowTools for Career Readiness",
-    desc: "Use the CV builder, skill gap diagnostics, and interview preparation tools to present your GoalVow credentials to employers with confidence.",
-    href: "/vowtools",
-    color: "#06b6d4",
-    badge: "Coming soon",
   },
   {
     icon: "📊",

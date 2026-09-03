@@ -29,11 +29,14 @@ test.describe("canonical SEO", () => {
   });
 
   test("course pages stay focused on the selected course", async ({ page }) => {
+    // All 4 are real Upskilling courses — the only academy anonymous/learner
+    // visitors can reach today (Skills Training, Chef Academy, and Business
+    // School courses are admin-only until launched).
     const courses = [
       ["/courses/business-ethics", "Business Ethics"],
-      ["/courses/commercial-kitchenette-cleaner", "Commercial Kitchenette Cleaner"],
-      ["/courses/making-toad-in-the-hole", "Making Toad in the Hole"],
-      ["/courses/starting-a-business-in-africa", "Starting a Business in Africa"],
+      ["/courses/human-resources", "Human Resources"],
+      ["/courses/marketing", "Marketing"],
+      ["/courses/leadership", "Leadership"],
     ];
 
     for (const [url, title] of courses) {

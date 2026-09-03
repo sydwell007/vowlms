@@ -23,7 +23,6 @@ const publicRoutes = [
   "/careers",
   "/investors",
   "/innovation-labs",
-  "/vowtools",
   "/skillsshop",
   "/cheforder",
   "/pricing",

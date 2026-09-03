@@ -32,6 +32,7 @@ const modules = [
   { title: "Users and roles", href: "/dashboard/admin/users", description: "Review account and role administration" },
   { title: "Analytics readiness", href: "/dashboard/admin/analytics", description: "Review authorised reporting sources" },
   { title: "AI lesson presenters", href: "/dashboard/admin/lessons", description: "Assign VowHumans guides to course lessons" },
+  { title: "Visibility control center", href: "/dashboard/admin/visibility", description: "Control which academies, courses, and services learners can see" },
   { title: "Settings", href: "/dashboard/admin/settings", description: "Review platform integration settings" },
 ];
 

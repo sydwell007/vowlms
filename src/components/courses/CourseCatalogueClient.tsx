@@ -8,7 +8,7 @@ import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { goalTiles } from "@/data/goal-tiles";
-import type { Academy, AcademyCategory, CourseSummary } from "@/types/lms";
+import type { Academy, AcademyCategory, CourseSummary, Role } from "@/types/lms";
 
 const GROUPED_PREVIEW_SIZE = 3;
 
@@ -42,6 +42,7 @@ type CourseCatalogueClientProps = {
   courses: CourseSummary[];
   initialAcademy: string;
   initialQuery: string;
+  role?: Role | null;
 };
 
 export function CourseCatalogueClient({
@@ -49,6 +50,7 @@ export function CourseCatalogueClient({
   courses,
   initialAcademy,
   initialQuery,
+  role = null,
 }: CourseCatalogueClientProps) {
   const [academy, setAcademy] = useState(initialAcademy);
   const [level, setLevel] = useState<(typeof levelOptions)[number]>("All levels");
@@ -479,7 +481,7 @@ export function CourseCatalogueClient({
 
                     <div className={`mt-5 grid gap-5 ${view === "grid" ? "md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"}`}>
                       {preview.map((course, courseIndex) => (
-                        <CourseCard key={course.slug} course={course} layout={view} priority={academyIndex === 0 && courseIndex === 0} />
+                        <CourseCard key={course.slug} course={course} layout={view} priority={academyIndex === 0 && courseIndex === 0} role={role} />
                       ))}
                     </div>
 
@@ -526,7 +528,7 @@ export function CourseCatalogueClient({
             ) : (
               <div className={`grid gap-5 ${view === "grid" ? "md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"}`}>
                 {visibleCourses.map((course, index) => (
-                  <CourseCard key={course.slug} course={course} layout={view} priority={index === 0} />
+                  <CourseCard key={course.slug} course={course} layout={view} priority={index === 0} role={role} />
                 ))}
               </div>
             )}

@@ -14,6 +14,7 @@ import { getCourseSummaries } from "@/lib/data";
 import { siteConfig } from "@/lib/site";
 import { visualAssets } from "@/lib/visual-assets";
 import { getConnectedAcademyCount, getPlannedAcademyCount } from "@/lib/academy-launch";
+import { getServerRole } from "@/lib/auth/getServerRole";
 
 export const metadata: Metadata = {
   title: { absolute: "VowLMS | GoalVow Learning Platform" },
@@ -61,8 +62,9 @@ const trustSignals = [
   { Icon: Network, title: "Ecosystem clarity", description: "Live capabilities and planned GoalVow services are clearly separated." },
 ];
 
-export default function Home() {
-  const courses = getCourseSummaries();
+export default async function Home() {
+  const role = await getServerRole();
+  const courses = getCourseSummaries(role);
   const connectedAcademies = getConnectedAcademyCount();
   const featuredCourses = courses.slice(0, 6);
   const stats = [
@@ -161,7 +163,7 @@ export default function Home() {
       >
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {featuredCourses.map((course, index) => (
-            <CourseCard key={course.slug} course={course} priority={index === 0} />
+            <CourseCard key={course.slug} course={course} priority={index === 0} role={role} />
           ))}
         </div>
         <div className="mt-8 text-center">

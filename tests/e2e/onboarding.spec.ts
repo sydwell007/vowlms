@@ -1,8 +1,17 @@
 import { test, expect } from "@playwright/test";
 import { goalTiles } from "../../src/data/goal-tiles";
+import { isHiddenAcademyCategory } from "../../src/lib/academy-launch";
+
+// The anonymous/learner view only ever shows goal tiles whose academy is
+// currently live for learners (today, just Upskilling — Skills Training,
+// Chef Academy, and Business School are admin-only until launched). Tiles
+// with no academyCategory ("certificate"/"unsure") route into the quiz and
+// are always shown.
+const visibleTiles = goalTiles.filter((tile) => !tile.academyCategory || !isHiddenAcademyCategory(tile.academyCategory));
+const hiddenTiles = goalTiles.filter((tile) => tile.academyCategory && isHiddenAcademyCategory(tile.academyCategory));
 
 test.describe("Goal-first onboarding flow", () => {
-  for (const tile of goalTiles) {
+  for (const tile of visibleTiles) {
     test(`goal tile: ${tile.question}`, async ({ page }) => {
       await page.goto("/");
       await page.getByRole("button", { name: tile.question }).click();
@@ -41,10 +50,18 @@ test.describe("Goal-first onboarding flow", () => {
 
   test("Start over resets the flow back to goal tiles", async ({ page }) => {
     await page.goto("/");
-    const firstLiveTile = goalTiles.find((t) => t.roles.length > 0)!;
+    const firstLiveTile = visibleTiles.find((t) => t.roles.length > 0)!;
     await page.getByRole("button", { name: firstLiveTile.question }).click();
     await page.getByRole("button", { name: new RegExp(firstLiveTile.roles[0].label) }).first().click();
     await page.getByRole("button", { name: /Not what you were looking for\? Start over/i }).click();
     await expect(page.getByRole("button", { name: firstLiveTile.question })).toBeVisible();
+  });
+
+  test("goal tiles for admin-only academies are not offered to learners", async ({ page }) => {
+    test.skip(hiddenTiles.length === 0, "No admin-only goal tiles today");
+    await page.goto("/");
+    for (const tile of hiddenTiles) {
+      await expect(page.getByRole("button", { name: tile.question })).not.toBeVisible();
+    }
   });
 });

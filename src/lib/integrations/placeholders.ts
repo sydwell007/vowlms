@@ -3,7 +3,6 @@ const integrationEnv: Record<string, { url: string; key: string }> = {
   plugconnect: { url: "PLUGCONNECT_API_URL", key: "PLUGCONNECT_API_KEY" },
   vowsupport: { url: "VOWSUPPORT_API_URL", key: "VOWSUPPORT_API_KEY" },
   skillsshop: { url: "SKILLSSHOP_API_URL", key: "SKILLSSHOP_API_KEY" },
-  vowtools: { url: "VOWTOOLS_API_URL", key: "VOWTOOLS_API_KEY" },
   cheforder: { url: "CHEFORDER_API_URL", key: "CHEFORDER_API_KEY" },
 };
 

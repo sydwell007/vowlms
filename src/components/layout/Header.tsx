@@ -242,7 +242,7 @@ export function Header() {
                     className="absolute left-0 top-[calc(100%+0.5rem)] z-50 w-64 rounded-lg border border-white/10 bg-[#0b1b2d] p-2 shadow-[0_22px_50px_rgba(0,0,0,0.34)]"
                   >
                     {items.map((item) => {
-                      const comingSoon = item.category ? getComingSoonInfo(item.category) : null;
+                      const comingSoon = item.category ? getComingSoonInfo(item.category, user?.role) : null;
                       if (comingSoon) {
                         return (
                           <span
@@ -443,7 +443,7 @@ export function Header() {
                   {open ? (
                     <div id={menuId} className="grid gap-1 border-t border-white/8 p-2">
                       {items.map((item) => {
-                        const comingSoon = item.category ? getComingSoonInfo(item.category) : null;
+                        const comingSoon = item.category ? getComingSoonInfo(item.category, user?.role) : null;
                         if (comingSoon) {
                           return (
                             <span

@@ -16,14 +16,20 @@ import { getCourseStats } from "@/lib/course-content";
 import { visualAssets } from "@/lib/visual-assets";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
+import { getServerRole } from "@/lib/auth/getServerRole";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/lib/site";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const academy = getAcademyBySlug(slug);
-  if (!academy || isHiddenAcademyCategory(academy.category)) {
+  const role = await getServerRole();
+  if (!academy || isHiddenAcademyCategory(academy.category, role)) {
     return { title: "Academy", robots: { index: false, follow: false } };
+  }
+  // Never index admin-only preview content, even when the viewer is admin.
+  if (isHiddenAcademyCategory(academy.category, null)) {
+    return { title: academy.name, robots: { index: false, follow: false } };
   }
 
   const canonicalPath = `/academies/${academy.category}`;
@@ -49,14 +55,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function AcademyDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const academy = getAcademyBySlug(slug);
+  const role = await getServerRole();
 
-  if (!academy || isHiddenAcademyCategory(academy.category)) {
+  if (!academy || isHiddenAcademyCategory(academy.category, role)) {
     notFound();
   }
 
-  const courses = getCoursesByAcademy(academy.slug);
-  const courseSummaries = getCourseSummariesByAcademy(academy.slug);
-  const allCourses = getCourses();
+  const isAdminPreview = role === "admin" && isHiddenAcademyCategory(academy.category, null);
+  const courses = getCoursesByAcademy(academy.slug, role);
+  const courseSummaries = getCourseSummariesByAcademy(academy.slug, role);
+  const allCourses = getCourses(role);
 
   const accentColor = getAcademyAccentColor(academy.category);
   const canonicalPath = `/academies/${academy.category}`;
@@ -72,6 +80,11 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
   return (
     <main>
       <JsonLd data={breadcrumbSchema} />
+      {isAdminPreview ? (
+        <div role="status" className="border-b border-amber-200 bg-amber-50 px-5 py-2.5 text-center text-sm font-medium text-amber-900">
+          Admin preview — {academy.name} is not visible to learners yet.
+        </div>
+      ) : null}
       {/* Hero */}
       <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
         <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
@@ -121,7 +134,7 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
 
       {/* Paginated course grid — client component */}
       <Section tone="light" title={`${academy.name} courses`} description={`Audience: ${academy.audience}`}>
-        <AcademyCourseGrid courses={courseSummaries} />
+        <AcademyCourseGrid courses={courseSummaries} role={role} />
       </Section>
 
       {/* Other academies */}
@@ -129,7 +142,7 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted mb-4">Other GoalVow academies</p>
           <div className="flex flex-wrap gap-3">
-            {getAcademies()
+            {getAcademies(role)
               .filter((a) => a.slug !== academy.slug)
               .map((a) => {
                 const count = allCourses.filter((c) => c.academySlug === a.slug).length;

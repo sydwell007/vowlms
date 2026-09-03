@@ -12,8 +12,22 @@ import { signUpTestUser, signOut, signIn } from "./helpers/auth";
  * the browser on PayFast's real domain. So: the free Upskilling course gets the full
  * lesson-delivery/progress/resume test, and the other 3 academies get a lighter check that the
  * payment flow initiates correctly (a valid PayFast form response) without submitting it.
+ *
+ * Chef Academy, Skills Training, and Business School are admin-only until they launch to
+ * learners (see src/lib/academy-launch.ts), and Upskilling has zero paid courses — so the
+ * PAID_COURSES tests below are currently skipped: there is no course a real learner test
+ * account can reach to exercise the paid flow at all.
  */
-const FREE_COURSE_SLUG = "improving-your-mental-health";
+// A real, learner-visible free Upskilling course — one of the 20 complete
+// parent courses (the raw "improving-your-mental-health" course this used to
+// point at is one of the ~300 ungrouped courses, now admin-only).
+const FREE_COURSE_SLUG = "business-ethics";
+// Chef Academy, Skills Training, and Business School are admin-only until
+// launched, and Upskilling has zero paid courses — so there is currently no
+// course a real learner account can reach to exercise the paid-enrollment
+// PayFast flow at all. These 3 stay here, skipped, ready to re-enable the
+// moment one of these academies relaunches to learners (or this suite runs
+// as an admin test session instead of a plain signup).
 const PAID_COURSES = [
   { academy: "Chef Academy", slug: "making-toad-in-the-hole", price: 199 },
   { academy: "Skills Training Academy", slug: "commercial-kitchenette-cleaner", price: 299 },
@@ -66,6 +80,7 @@ test.describe("Course enrollment & delivery @destructive", () => {
 
   for (const course of PAID_COURSES) {
     test(`${course.academy}: paid enrollment initiates a valid PayFast request`, async ({ page }) => {
+      test.skip(true, `${course.academy} is admin-only until it launches to learners.`);
       await signUpTestUser(page, `pay-${course.slug.slice(0, 10)}`);
 
       await page.goto(`/courses/${course.slug}`);

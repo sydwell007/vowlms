@@ -4,6 +4,7 @@ import {
   getAcademyBySlug,
   getCourseSummaries,
 } from "@/lib/data";
+import { getServerRole } from "@/lib/auth/getServerRole";
 
 export const metadata = {
   title: "Courses",
@@ -20,14 +21,16 @@ type CoursesPageProps = {
 
 export default async function CoursesPage({ searchParams }: CoursesPageProps) {
   const params = await searchParams;
+  const role = await getServerRole();
   const selectedAcademy = params.academy ? getAcademyBySlug(params.academy) : undefined;
 
   return (
     <CourseCatalogueClient
-      academies={getAcademies()}
-      courses={getCourseSummaries()}
+      academies={getAcademies(role)}
+      courses={getCourseSummaries(role)}
       initialAcademy={selectedAcademy?.slug ?? "all"}
       initialQuery={params.q?.trim() ?? ""}
+      role={role}
     />
   );
 }

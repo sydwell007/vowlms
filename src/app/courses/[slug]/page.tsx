@@ -16,11 +16,11 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { CourseExperience } from "@/components/courses/CourseExperience";
 import { EnrollButton } from "@/components/courses/EnrollButton";
-import { getAcademyBySlug, getAcademyHref, getCourseBySlug } from "@/lib/data";
+import { getAcademyBySlug, getAcademyHref, getCourseBySlug, isCourseVisible } from "@/lib/data";
 import { formatCurrency } from "@/lib/format";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { formatDuration, getCourseStats } from "@/lib/course-content";
-import { isHiddenAcademyCategory } from "@/lib/academy-launch";
+import { getServerRole } from "@/lib/auth/getServerRole";
 import { getCourseVisual } from "@/lib/visual-assets";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/lib/site";
@@ -31,8 +31,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!course) return { title: "Course", robots: { index: false, follow: false } };
 
   const academy = getAcademyBySlug(course.academySlug);
-  if (isHiddenAcademyCategory(academy?.category)) {
+  const role = await getServerRole();
+  if (!isCourseVisible(course, role)) {
     return { title: "Course", robots: { index: false, follow: false } };
+  }
+  // Never index admin-only preview content, even when the viewer is admin.
+  if (!isCourseVisible(course, null)) {
+    return { title: course.title, robots: { index: false, follow: false } };
   }
 
   const description = course.description.length > 155
@@ -76,7 +81,9 @@ export default async function CourseDetailPage({
   if (!course) notFound();
 
   const academy = getAcademyBySlug(course.academySlug);
-  if (isHiddenAcademyCategory(academy?.category)) notFound();
+  const role = await getServerRole();
+  if (!isCourseVisible(course, role)) notFound();
+  const isAdminPreview = role === "admin" && !isCourseVisible(course, null);
 
   const accentColor = getAcademyAccentColor(academy?.category);
   const firstLesson = course.modules[0]?.lessons[0];
@@ -133,6 +140,11 @@ export default async function CourseDetailPage({
   return (
     <main>
       <JsonLd data={[courseSchema, breadcrumbSchema]} />
+      {isAdminPreview ? (
+        <div role="status" className="border-b border-amber-200 bg-amber-50 px-5 py-2.5 text-center text-sm font-medium text-amber-900">
+          Admin preview — {course.title} is not visible to learners yet.
+        </div>
+      ) : null}
       <section className="premium-section-dark surface-grid py-16 text-white md:py-20">
         <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 sm:px-6 lg:grid-cols-[1fr_360px] lg:px-8">
           <div>

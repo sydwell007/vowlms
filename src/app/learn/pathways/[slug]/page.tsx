@@ -5,10 +5,12 @@ import { Section } from "@/components/ui/Section";
 import { PathwayCourseList } from "@/components/learning/PathwayCourseList";
 import { getSkillPathwayBySlug } from "@/lib/data";
 import { getPathwayStats, formatDuration } from "@/lib/course-content";
+import { getServerRole } from "@/lib/auth/getServerRole";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const result = getSkillPathwayBySlug(slug);
+  const role = await getServerRole();
+  const result = getSkillPathwayBySlug(slug, role);
   if (!result) return { title: "Skill Pathway", robots: { index: false, follow: false } };
   return {
     title: `${result.pathway.title} — Skill Pathway`,
@@ -19,7 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function SkillPathwayPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const result = getSkillPathwayBySlug(slug);
+  const role = await getServerRole();
+  const result = getSkillPathwayBySlug(slug, role);
 
   if (!result) {
     notFound();

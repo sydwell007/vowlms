@@ -23,8 +23,9 @@ test.describe("Authentication @destructive", () => {
     await signUpTestUser(page, "adminblock");
 
     await page.goto("/dashboard/admin");
-    await expect(page.getByRole("alert")).toBeVisible({ timeout: 10_000 });
-    // Real admin totals should never render for a blocked request.
+    // The admin layout redirects a non-admin role away before the page ever
+    // renders — real admin totals should never be reachable at all.
+    await expect(page).toHaveURL(/\/dashboard\/learner/, { timeout: 10_000 });
     await expect(page.getByText(/Active accounts/)).not.toBeVisible();
   });
 

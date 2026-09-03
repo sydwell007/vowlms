@@ -8,16 +8,17 @@ import { formatCourseDurationWeeks } from "@/lib/course-content";
 import { getComingSoonInfo } from "@/lib/academy-launch";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { getCourseVisual, visualAssets } from "@/lib/visual-assets";
-import type { CourseSummary } from "@/types/lms";
+import type { CourseSummary, Role } from "@/types/lms";
 
 type Props = {
   course: CourseSummary;
   layout?: "grid" | "list";
   priority?: boolean;
+  role?: Role | null;
 };
 
-export function CourseCard({ course, layout = "grid", priority = false }: Props) {
-  const comingSoon = getComingSoonInfo(course.academyCategory);
+export function CourseCard({ course, layout = "grid", priority = false, role = null }: Props) {
+  const comingSoon = getComingSoonInfo(course.academyCategory, role);
   const accent = getAcademyAccentColor(course.academyCategory);
   const courseVisual = getCourseVisual(course, course.academyCategory);
   const isList = layout === "list";
@@ -46,6 +47,11 @@ export function CourseCard({ course, layout = "grid", priority = false }: Props)
           <span className="absolute left-4 top-4 rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold text-ink shadow-sm">
             {course.level}
           </span>
+          {course.isAdminPreview ? (
+            <span className="absolute right-4 top-4 rounded-md bg-gold/95 px-2.5 py-1 text-xs font-semibold text-[#06111f] shadow-sm">
+              Admin preview
+            </span>
+          ) : null}
           <span className="absolute bottom-4 left-4 rounded-md bg-[#06111f]/88 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
             {formatCurrency(course.price)}
           </span>

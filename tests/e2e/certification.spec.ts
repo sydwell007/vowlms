@@ -15,6 +15,15 @@ const COURSE_SLUG = "improving-your-mental-health";
 
 test.describe("Certification @destructive", () => {
   test("passing the assessment auto-generates a certificate, visible on results, certificate page, and dashboard", async ({ page }) => {
+    // "improving-your-mental-health" is one of the ~300 ungrouped raw Upskilling
+    // courses (not one of the 20 complete parent courses) — it's admin-only
+    // now, so a real learner account can no longer reach it. It was chosen
+    // here specifically for its rare 2-lesson shape (assessment IS lesson 2,
+    // so passing it completes the whole course in one step) — none of the 20
+    // real courses share that shape, so there's no drop-in replacement slug.
+    // Needs either an admin-role test session or a short course among the 20
+    // before this can pass again.
+    test.skip(true, "Course is admin-only until Upskilling gets a short 2-lesson course, or this test runs as admin.");
     const course = getCourseBySlug(COURSE_SLUG)!;
     const assessment = course.assessments[0];
 

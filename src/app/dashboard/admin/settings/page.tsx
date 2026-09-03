@@ -6,7 +6,7 @@ const configurationGroups = [
   { title: "Application", names: ["NEXT_PUBLIC_APP_URL", "BRIDGE_BASE_URL", "BRIDGE_API_KEY", "RESOURCE_SIGNING_SECRET", "JWT_SECRET"] },
   { title: "Payments", names: ["PAYFAST_MERCHANT_ID", "PAYFAST_MERCHANT_KEY", "PAYFAST_PASSPHRASE", "PAYFAST_SANDBOX"] },
   { title: "Messaging", names: ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASS", "SMTP_FROM"] },
-  { title: "Ecosystem", names: ["VOWREWARDS_API_URL", "PLUGCONNECT_API_URL", "VOWSUPPORT_API_URL", "SKILLSSHOP_API_URL", "VOWTOOLS_API_URL", "CHEFORDER_API_URL"] },
+  { title: "Ecosystem", names: ["VOWREWARDS_API_URL", "PLUGCONNECT_API_URL", "VOWSUPPORT_API_URL", "SKILLSSHOP_API_URL", "CHEFORDER_API_URL"] },
 ];
 
 export default function AdminSettingsPage() {

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Section } from "@/components/ui/Section";
 import { getSkillPathways, getSkillPathwayBySlug } from "@/lib/data";
 import { getPathwayStats, formatDuration } from "@/lib/course-content";
+import { getServerRole } from "@/lib/auth/getServerRole";
 
 export const metadata = {
   title: "Skill Pathways",
@@ -9,7 +10,8 @@ export const metadata = {
   alternates: { canonical: "/learn/pathways" },
 };
 
-export default function SkillPathwaysPage() {
+export default async function SkillPathwaysPage() {
+  const role = await getServerRole();
   const pathways = getSkillPathways();
 
   return (
@@ -31,7 +33,7 @@ export default function SkillPathwaysPage() {
       <Section tone="light">
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {pathways.map((pathway) => {
-            const result = getSkillPathwayBySlug(pathway.slug);
+            const result = getSkillPathwayBySlug(pathway.slug, role);
             const stats = result ? getPathwayStats(result.courses) : null;
 
             return (

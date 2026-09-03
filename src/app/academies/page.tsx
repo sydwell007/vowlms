@@ -4,6 +4,7 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import { getAcademies, getCourses } from "@/lib/data";
 import { visualAssets } from "@/lib/visual-assets";
+import { getServerRole } from "@/lib/auth/getServerRole";
 
 export const metadata = {
   title: "GoalVow Academies",
@@ -11,9 +12,10 @@ export const metadata = {
   alternates: { canonical: "/academies" },
 };
 
-export default function AcademiesPage() {
-  const academies = getAcademies();
-  const courses = getCourses();
+export default async function AcademiesPage() {
+  const role = await getServerRole();
+  const academies = getAcademies(role);
+  const courses = getCourses(role);
 
   return (
     <main>
@@ -53,7 +55,7 @@ export default function AcademiesPage() {
           {academies.map((academy) => {
             const count = courses.filter((c) => c.academySlug === academy.slug).length;
             return (
-              <AcademyCard key={academy.slug} academy={academy} courseCount={count} />
+              <AcademyCard key={academy.slug} academy={academy} courseCount={count} role={role} />
             );
           })}
         </div>

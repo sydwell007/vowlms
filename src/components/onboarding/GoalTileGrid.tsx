@@ -3,6 +3,8 @@
 import { goalTiles, type GoalTile } from "@/data/goal-tiles";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { getCourseSummaries } from "@/lib/data";
+import { isHiddenAcademyCategory } from "@/lib/academy-launch";
+import { useSession } from "@/lib/auth/useSession";
 
 function tileCourseCount(tile: GoalTile): number | null {
   if (!tile.academyCategory) return null;
@@ -10,9 +12,19 @@ function tileCourseCount(tile: GoalTile): number | null {
 }
 
 export function GoalTileGrid({ onSelect }: { onSelect: (tile: GoalTile) => void }) {
+  const session = useSession();
+  const role = session.status === "authenticated" ? session.user.role : null;
+  // Only offer a goal tile if its academy is actually live for this viewer —
+  // otherwise the tile leads to a role list with zero real courses behind
+  // it. Tiles with no academyCategory ("certificate"/"unsure") route into
+  // the quiz instead and are always shown.
+  const visibleTiles = goalTiles.filter(
+    (tile) => !tile.academyCategory || !isHiddenAcademyCategory(tile.academyCategory, role),
+  );
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Learning goals">
-      {goalTiles.map((tile) => {
+      {visibleTiles.map((tile) => {
         const count = tileCourseCount(tile);
         const accent = tile.academyCategory ? getAcademyAccentColor(tile.academyCategory) : "#f5c542";
 

@@ -1,4 +1,5 @@
 import { getCourseSummaries } from "@/lib/data";
+import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import type { RoleOption } from "@/data/goal-tiles";
 import type { AcademyCategory, CourseSummary } from "@/types/lms";
 
@@ -109,8 +110,13 @@ export function getQuizRecommendation(answers: QuizAnswers): {
     addScore(scores, "skills-training", 2);
   }
 
-  let winner: AcademyCategory = ACADEMY_ORDER[0];
-  for (const category of ACADEMY_ORDER) {
+  // Only ever recommend an academy that's actually live for learners today —
+  // otherwise a high-scoring but not-yet-launched academy (e.g. Skills
+  // Training) would win and hand back zero courses. Upskilling is always in
+  // this list, so there's always a real recommendation to fall back to.
+  const eligibleOrder = ACADEMY_ORDER.filter((category) => !isHiddenAcademyCategory(category));
+  let winner: AcademyCategory = eligibleOrder[0] ?? ACADEMY_ORDER[0];
+  for (const category of eligibleOrder) {
     if (scores[category] > scores[winner]) winner = category;
   }
 

@@ -4,19 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getComingSoonInfo, isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
-import type { AcademyCategory } from "@/types/lms";
-
-const allAcademyLinks: { href: string; label: string; icon: string; category: AcademyCategory }[] = [
-  { href: "/academies/upskilling", label: "Upskilling", icon: "📈", category: "upskilling" },
-  { href: "/academies/skills-training", label: "Skills Training", icon: "🔧", category: "skills-training" },
-  { href: "/academies/chef-academy", label: "Chef Academy", icon: "🍳", category: "chef-academy" },
-  { href: "/academies/private-school", label: "Private School", icon: "🎒", category: "private-school" },
-  { href: "/academies/sports-academy", label: "Sports Academy", icon: "🏅", category: "sports-academy" },
-  { href: "/academies/business-school", label: "Business School", icon: "💼", category: "business-school" },
-  { href: "/academies/university-online", label: "University Online", icon: "🎓", category: "university-online" },
-];
-
-const academyLinks = allAcademyLinks.filter((link) => !isHiddenAcademyCategory(link.category));
+import { useSession } from "@/lib/auth/useSession";
+import { academyNavLinks as allAcademyLinks } from "@/data/academy-nav";
 
 function isActive(pathname: string, href: string) {
   if (href === "/") {
@@ -28,6 +17,13 @@ function isActive(pathname: string, href: string) {
 
 export function AcademyTopBar() {
   const pathname = usePathname();
+  const session = useSession();
+  // Default to the strictest (signed-out/learner) view until the session
+  // resolves, so admin-only academies never flash for a moment before
+  // narrowing — safer than briefly over-showing then yanking links away.
+  const role = session.status === "authenticated" ? session.user.role : null;
+  const isAdmin = role === "admin";
+  const academyLinks = allAcademyLinks.filter((link) => !isHiddenAcademyCategory(link.category, role));
 
   return (
     <div className="border-b border-white/8 bg-[#0a1f36]">
@@ -35,8 +31,9 @@ export function AcademyTopBar() {
         <nav aria-label="GoalVow academy navigation" className="flex min-w-max items-center gap-1.5">
           {academyLinks.map((link) => {
             const active = isActive(pathname, link.href);
-            const comingSoon = getComingSoonInfo(link.category);
+            const comingSoon = getComingSoonInfo(link.category, role);
             const accent = getAcademyAccentColor(link.category);
+            const isAdminOnly = isAdmin && isHiddenAcademyCategory(link.category, null);
 
             if (comingSoon) {
               return (
@@ -74,6 +71,11 @@ export function AcademyTopBar() {
               >
                 <span aria-hidden="true" className="text-[0.85em]">{link.icon}</span>
                 {link.label}
+                {isAdminOnly ? (
+                  <span className="rounded-full bg-gold/20 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-gold">
+                    Admin
+                  </span>
+                ) : null}
               </Link>
             );
           })}

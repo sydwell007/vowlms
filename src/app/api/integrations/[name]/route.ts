@@ -1,7 +1,7 @@
 import { badRequest, created } from "@/lib/api/responses";
 import { runIntegrationPlaceholder, type IntegrationName } from "@/lib/integrations/placeholders";
 
-const allowed = ["vowrewards", "plugconnect", "vowsupport", "skillsshop", "vowtools", "cheforder"] as const;
+const allowed = ["vowrewards", "plugconnect", "vowsupport", "skillsshop", "cheforder"] as const;
 
 function isIntegrationName(name: string): name is IntegrationName {
   return (allowed as readonly string[]).includes(name);

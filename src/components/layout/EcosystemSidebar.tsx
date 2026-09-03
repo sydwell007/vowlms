@@ -4,87 +4,15 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { visualAssets } from "@/lib/visual-assets";
+import { getEcosystemServices, ecosystemStatusBadgeClass } from "@/data/ecosystem-services";
+import { useSession } from "@/lib/auth/useSession";
 
 const STORAGE_KEY = "gv_sidebar_open";
 
-type ServiceStatus = "Built-in" | "Coming soon" | "Connected" | "Support" | "In development";
-
-type Service = {
-  icon: string;
-  name: string;
-  tagline: string;
-  status: ServiceStatus;
-  href: string;
-};
-
-const services: Service[] = [
-  {
-    icon: "🤝",
-    name: "VowSupport",
-    tagline: "Account and learning support",
-    status: "Support",
-    href: "/support",
-  },
-  {
-    icon: "⭐",
-    name: "VowRewards",
-    tagline: "Eligible learning milestones",
-    status: "Built-in",
-    href: "/rewards",
-  },
-  {
-    icon: "🔧",
-    name: "VowTools",
-    tagline: "CV builder, diagnostics & prep",
-    status: "Coming soon",
-    href: "/vowtools",
-  },
-  {
-    icon: "🔗",
-    name: "PlugConnect",
-    tagline: "Planned opportunity routing",
-    status: "Coming soon",
-    href: "/opportunities",
-  },
-  {
-    icon: "🛍️",
-    name: "SkillsShop",
-    tagline: "Kits, tools & learning bundles",
-    status: "Coming soon",
-    href: "/skillsshop",
-  },
-  {
-    icon: "🏫",
-    name: "Learning Hubs",
-    tagline: "Planned partner access model",
-    status: "Coming soon",
-    href: "/learning-hubs",
-  },
-  {
-    icon: "🍳",
-    name: "ChefOrder",
-    tagline: "Chef business & food platform",
-    status: "Coming soon",
-    href: "/cheforder",
-  },
-  {
-    icon: "🔬",
-    name: "Innovation Labs",
-    tagline: "VR/AR & AI learning tools",
-    status: "In development",
-    href: "/innovation-labs",
-  },
-];
-
-const statusStyle: Record<ServiceStatus, string> = {
-  "Built-in":      "bg-emerald-100 text-emerald-700",
-  "Connected":     "bg-blue-100 text-blue-700",
-  "Support":       "bg-purple-100 text-purple-700",
-  "Coming soon":   "bg-amber-100 text-amber-700",
-  "In development":"bg-cyan-100 text-cyan-700",
-};
-
 export function EcosystemSidebar() {
+  const session = useSession();
+  const role = session.status === "authenticated" ? session.user.role : null;
+  const services = getEcosystemServices(role);
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -153,7 +81,7 @@ export function EcosystemSidebar() {
               <div className="flex flex-col gap-0 p-2">
                 {services.map((s) => (
                   <Link
-                    key={s.name}
+                    key={s.slug}
                     href={s.href}
                     className="group flex items-start gap-3 rounded-lg p-3 transition hover:bg-slate-50"
                   >
@@ -161,8 +89,15 @@ export function EcosystemSidebar() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <p className="text-[13px] font-semibold text-ink truncate">{s.name}</p>
-                        <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-semibold leading-none ${statusStyle[s.status]}`}>
-                          {s.status}
+                        <span className="flex shrink-0 items-center gap-1">
+                          {!s.learnerVisible ? (
+                            <span className="rounded-full bg-slate-200 px-1.5 py-0.5 text-[9px] font-semibold leading-none text-slate-600">
+                              Admin only
+                            </span>
+                          ) : null}
+                          <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold leading-none ${ecosystemStatusBadgeClass[s.status]}`}>
+                            {s.status}
+                          </span>
                         </span>
                       </div>
                       <p className="mt-0.5 text-[11px] leading-4 text-muted">{s.tagline}</p>
@@ -209,15 +144,15 @@ export function EcosystemSidebar() {
               <div className="grid grid-cols-2 gap-2 pt-3">
                 {services.map((s) => (
                   <Link
-                    key={s.name}
+                    key={s.slug}
                     href={s.href}
                     className="flex items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 p-3 transition hover:border-[#1e3a8a]/20"
                   >
                     <span className="text-xl">{s.icon}</span>
                     <div>
                       <p className="text-[12px] font-semibold text-ink">{s.name}</p>
-                      <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold ${statusStyle[s.status]}`}>
-                        {s.status}
+                      <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold ${ecosystemStatusBadgeClass[s.status]}`}>
+                        {s.learnerVisible ? s.status : "Admin only"}
                       </span>
                     </div>
                   </Link>

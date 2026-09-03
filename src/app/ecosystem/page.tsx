@@ -3,105 +3,25 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
 import { visualAssets } from "@/lib/visual-assets";
 import { getAcademies } from "@/lib/data";
+import { getEcosystemServices, ecosystemStatusBadgeClass } from "@/data/ecosystem-services";
+import { getServerRole } from "@/lib/auth/getServerRole";
 
 export const metadata = {
   title: "GoalVow Ecosystem · Connected Learning Services",
-  description: "Explore the full GoalVow Holdings ecosystem — academies, learning hubs, VowSupport, VowRewards, VowTools, PlugConnect, SkillsShop, ChefOrder, and Innovation Labs.",
+  description: "Explore the full GoalVow Holdings ecosystem — academies, learning hubs, VowSupport, VowRewards, PlugConnect, SkillsShop, ChefOrder, and Innovation Labs.",
   alternates: { canonical: "/ecosystem" },
 };
 
-const pillars = [
-  {
-    icon: "🎓",
-    name: "Academies",
-    tagline: "Connected academy catalogues",
-    desc: "Live GoalVow academies share one learner identity and learning-platform foundation.",
-    href: "/academies",
-    status: "Live",
-    statusColor: "bg-emerald-100 text-emerald-700",
-    color: "#1e3a8a",
-  },
-  {
-    icon: "🏫",
-    name: "Learning Hubs",
-    tagline: "Hybrid community access points",
-    desc: "A proposed partner model for supported device access, facilitated study, and selected Skills Practice activities.",
-    href: "/learning-hubs",
-    status: "Planned",
-    statusColor: "bg-amber-100 text-amber-700",
-    color: "#06b6d4",
-  },
-  {
-    icon: "🤝",
-    name: "VowSupport",
-    tagline: "Account, learning & registration help",
-    desc: "A verified support route for access, registration, course, assessment, and partnership enquiries.",
-    href: "/support",
-    status: "Built-in",
-    statusColor: "bg-emerald-100 text-emerald-700",
-    color: "#19c37d",
-  },
-  {
-    icon: "⭐",
-    name: "VowRewards",
-    tagline: "Rewards for eligible learning milestones",
-    desc: "The platform records VowRewards events for configured lesson, assessment, course, and certificate milestones.",
-    href: "/rewards",
-    status: "Built-in",
-    statusColor: "bg-emerald-100 text-emerald-700",
-    color: "#f5c542",
-  },
-  {
-    icon: "🔧",
-    name: "VowTools",
-    tagline: "Career tools for every learner",
-    desc: "CV builder, skill gap diagnostics, interview preparation, and productivity tools to help learners turn their credentials into opportunities.",
-    href: "/vowtools",
-    status: "Coming soon",
-    statusColor: "bg-amber-100 text-amber-700",
-    color: "#f97316",
-  },
-  {
-    icon: "🔗",
-    name: "PlugConnect",
-    tagline: "Jobs, internships & projects",
-    desc: "A planned consent-led route from learner-controlled evidence to confirmed employment, project, and enterprise opportunities.",
-    href: "/opportunities",
-    status: "Planned",
-    statusColor: "bg-amber-100 text-amber-700",
-    color: "#8b5cf6",
-  },
-  {
-    icon: "🛍️",
-    name: "SkillsShop",
-    tagline: "Academy-aligned product bundles",
-    desc: "Learning kits, trade tools, kitchen equipment, uniform bundles, and digital subscriptions — all aligned to specific academy pathways and redeemable with VowRewards points.",
-    href: "/skillsshop",
-    status: "Coming soon",
-    statusColor: "bg-amber-100 text-amber-700",
-    color: "#06b6d4",
-  },
-  {
-    icon: "🍳",
-    name: "ChefOrder",
-    tagline: "Chef business & food ordering platform",
-    desc: "A dedicated food-ordering and chef-business marketplace that creates a commercial revenue pathway for Chef Academy graduates and culinary entrepreneurs.",
-    href: "/cheforder",
-    status: "Coming soon",
-    statusColor: "bg-amber-100 text-amber-700",
-    color: "#f97316",
-  },
-  {
-    icon: "🔬",
-    name: "Innovation Labs",
-    tagline: "Skills Practice research and development",
-    desc: "A development pathway for safe simulations, future WebXR experiences, and evidence-led learning tools.",
-    href: "/innovation-labs",
-    status: "In development",
-    statusColor: "bg-cyan-100 text-cyan-700",
-    color: "#06b6d4",
-  },
-];
+const academiesPillar = {
+  icon: "🎓",
+  name: "Academies",
+  tagline: "Connected academy catalogues",
+  desc: "Live GoalVow academies share one learner identity and learning-platform foundation.",
+  href: "/academies",
+  status: "Live",
+  statusColor: "bg-emerald-100 text-emerald-700",
+  color: "#1e3a8a",
+};
 
 const platformFlow = [
   { from: "Learner enrols", to: "Account-owned enrolment", via: "Platform" },
@@ -112,17 +32,28 @@ const platformFlow = [
   { from: "Practice submitted", to: "Skills Practice record", via: "Practice service" },
 ];
 
-export default function EcosystemPage() {
-  const liveAcademies = getAcademies();
-  const ecosystemPillars = pillars.map((pillar) =>
-    pillar.name === "Academies"
-      ? {
-          ...pillar,
-          tagline: `${liveAcademies.length} connected academy catalogues`,
-          desc: `${liveAcademies.map((academy) => academy.name).join(", ")} share one VowLMS learning-platform foundation.`,
-        }
-      : pillar,
-  );
+export default async function EcosystemPage() {
+  const role = await getServerRole();
+  const liveAcademies = getAcademies(role);
+  const services = getEcosystemServices(role);
+
+  const ecosystemPillars = [
+    {
+      ...academiesPillar,
+      tagline: `${liveAcademies.length} connected academy catalogues`,
+      desc: `${liveAcademies.map((academy) => academy.name).join(", ")} share one VowLMS learning-platform foundation.`,
+    },
+    ...services.map((service) => ({
+      icon: service.icon,
+      name: service.name,
+      tagline: service.tagline,
+      desc: service.description,
+      href: service.href,
+      status: service.learnerVisible ? service.status : "Admin only",
+      statusColor: service.learnerVisible ? ecosystemStatusBadgeClass[service.status] : "bg-slate-200 text-slate-600",
+      color: service.accentColor,
+    })),
+  ];
 
   return (
     <main>
@@ -184,7 +115,7 @@ export default function EcosystemPage() {
           <h2 className="mt-2 text-3xl font-semibold text-ink">Every part of the ecosystem</h2>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {ecosystemPillars.map((p) => (
-              <Link key={p.name} href={p.href}>
+              <Link key={p.href} href={p.href}>
                 <article className="gv-card h-full rounded-2xl p-6 transition hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(30,58,138,0.12)]">
                   <div className="flex items-start justify-between">
                     <span className="text-3xl">{p.icon}</span>
