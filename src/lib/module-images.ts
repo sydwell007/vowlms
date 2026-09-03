@@ -9,6 +9,7 @@ const MODULE_IMAGE_DIR = "/images/upskilling_Module Images";
 const MODULE_IMAGES: Record<string, Record<number, string>> = {
   "business-ethics": {
     1: "Business Ethics Fundamentals.png",
+    2: "Employee Ethics.jpg",
     3: "Leadership on Ethics.png",
   },
   "workplace-compliance": {
@@ -35,6 +36,7 @@ const MODULE_IMAGES: Record<string, Record<number, string>> = {
     2: "Healthy Habits.png",
     3: "Positive Psychology in the workplace.png",
     4: "Exercise.png",
+    5: "Mental Health Awareness.png",
     6: "Difficult Emotions.png",
   },
   "human-resources": {
@@ -78,6 +80,7 @@ const MODULE_IMAGES: Record<string, Record<number, string>> = {
     5: "Project Scope Mnagement.png",
     6: "Project Reporting.png",
     7: "Project Improvement.jpg",
+    8: "Project Change Management.jpg",
   },
   "customer-service": {
     1: "Customer Service Fundamentals.png",
@@ -85,6 +88,7 @@ const MODULE_IMAGES: Record<string, Record<number, string>> = {
     3: "Customer Communication Basics.jpg",
     4: "Customer Communication Channels.jpg",
     5: "Team Management.png",
+    6: "Culture Sensitivity.png",
     7: "Customer Diffucult Situation.png",
   },
   "career-management": {
@@ -127,6 +131,7 @@ const MODULE_IMAGES: Record<string, Record<number, string>> = {
     2: "Career Resilience.jpg",
     3: "Leadership and Resilience.jpg",
     4: "Emotional and Physical Resilience3.jpg",
+    5: "Thriving Through Challenges.png",
   },
   "problem-solving": {
     1: "Problem Solving Fundamentals.png",
