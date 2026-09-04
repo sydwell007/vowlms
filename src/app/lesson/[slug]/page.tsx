@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { createHmac } from "node:crypto";
-import { cleanModuleTitle, getLessonBySlug, getParentGroupSlug } from "@/lib/data";
+import { getLessonBySlug, getParentGroupSlug } from "@/lib/data";
 import { LessonPlayer } from "@/components/learning/LessonPlayer";
 import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 import { hasActiveCourseEnrollment } from "@/lib/course-access";
@@ -220,7 +220,10 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
   );
 
   const courseModule: CourseModule = {
-    title: cleanModuleTitle(d.course.title),
+    // Keep the real "Module N:" prefix — it's the learner's only visible cue
+    // for which numbered module of the parent course they're in, since the
+    // bridge doesn't separately expose that ordering.
+    title: d.course.title,
     order: 1,
     lessons: flatLessons,
   };
@@ -229,7 +232,7 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
 
   const course = {
     slug: d.course.slug,
-    title: cleanModuleTitle(d.course.title),
+    title: d.course.title,
     moodleId: null,
     academySlug: d.course.academy_slug,
     description: "",
