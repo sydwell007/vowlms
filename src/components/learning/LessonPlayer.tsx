@@ -5,8 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { visualAssets } from "@/lib/visual-assets";
+import {
+  Award,
+  BarChart3,
+  ClipboardList,
+  GraduationCap,
+  Home,
+  MessageSquare,
+  type LucideIcon,
+} from "lucide-react";
 import { getAcademyBySlug, getAcademyHref } from "@/lib/data";
+import { getAcademyAccentColor } from "@/lib/academy-colors";
 import type { Lesson, Course, CourseModule } from "@/types/lms";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { CelebrationOverlay } from "@/components/learning/CelebrationOverlay";
@@ -40,7 +49,18 @@ type Props = {
    * enrollment is actually recorded per child course.
    */
   courseSlugForNav: string;
+  /** Real module/course banner image — a curated module image where one exists, otherwise the course or academy's real curated visual. Never blank. */
+  moduleImageSrc: string;
 };
+
+const MODULE_MENU_ITEMS: { label: string; icon: LucideIcon; href: (courseSlug: string) => string }[] = [
+  { label: "Course", icon: Home, href: (c) => `/courses/${c}` },
+  { label: "Discussion", icon: MessageSquare, href: (c) => `/courses/${c}/discussion` },
+  { label: "Assignments", icon: ClipboardList, href: (c) => `/courses/${c}/assignments` },
+  { label: "My Grades", icon: GraduationCap, href: () => "/dashboard/learner/grades" },
+  { label: "Rewards", icon: Award, href: () => "/rewards" },
+  { label: "Results", icon: BarChart3, href: (c) => `/results/${c}` },
+];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -138,7 +158,7 @@ function formatBytes(bytes: number): string {
 
 export function LessonPlayer({
   lesson, course, module, prevLesson, nextLesson,
-  allModules, currentLessonSlug, resources = [], courseSlugForNav,
+  allModules, currentLessonSlug, resources = [], courseSlugForNav, moduleImageSrc,
 }: Props) {
   const router = useRouter();
   const [completed, setCompleted] = useState(false);
@@ -152,6 +172,7 @@ export function LessonPlayer({
   const assessment = course.assessments.find((a) => a.lessonSlug === lesson.slug);
   const vrPractice = course.vrPractices.find((v) => v.lessonSlug === lesson.slug);
   const academy = getAcademyBySlug(course.academySlug);
+  const accentColor = getAcademyAccentColor(academy?.category);
 
   const totalLessonsInCourse = useMemo(
     () => allModules.reduce((sum, m) => sum + m.lessons.length, 0),
@@ -173,6 +194,17 @@ export function LessonPlayer({
     }
     return boundaries;
   }, [allModules, totalLessonsInCourse]);
+
+  // Progress within the module currently on screen — distinct from
+  // totalLessonsInCourse/courseProgressPct above (the whole course's total),
+  // which would be a confusing number to show next to a single module's banner.
+  const doneInCurrentModule = useMemo(
+    () => module.lessons.filter((l) => completedSlugs.includes(l.slug)).length,
+    [module, completedSlugs],
+  );
+  const moduleProgressPct = module.lessons.length > 0
+    ? Math.round((doneInCurrentModule / module.lessons.length) * 100)
+    : 0;
 
   const content = lesson.content ?? "";
   const videoInfo = getVideoInfo(lesson, content, resources);
@@ -292,8 +324,8 @@ export function LessonPlayer({
           <div className="flex h-full flex-col overflow-y-auto">
             <div className="border-b border-slate-100 p-4">
               <div className="flex items-center gap-3">
-                <span className="brand-mark-frame flex h-9 w-9 shrink-0 items-center justify-center rounded-lg p-1.5">
-                  <Image src={visualAssets.logo} alt="GoalVow logo" width={32} height={32} className="h-full w-full object-contain" />
+                <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg">
+                  <Image src={moduleImageSrc} alt="" fill sizes="36px" className="object-cover" />
                 </span>
                 <div className="min-w-0">
                   <p className="truncate text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">{course.title}</p>
@@ -367,6 +399,47 @@ export function LessonPlayer({
 
         {/* Main content */}
         <main className="flex-1 min-w-0">
+          {/* Module banner */}
+          <div className="relative h-40 w-full overflow-hidden sm:h-52 lg:h-60">
+            <Image
+              src={moduleImageSrc}
+              alt=""
+              fill
+              priority
+              sizes="(min-width: 1024px) 75vw, 100vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#06111f]/92 via-[#06111f]/35 to-[#06111f]/5" />
+            <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-6 sm:pb-5 lg:px-8">
+              {allModules.length > 1 ? (
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/70">Module {module.order}</p>
+              ) : null}
+              <h1 className="mt-1 text-balance text-xl font-semibold text-white sm:text-2xl lg:text-3xl">{module.title}</h1>
+              <p className="mt-1.5 text-xs font-medium text-white/75">
+                {doneInCurrentModule}/{module.lessons.length} lessons · {moduleProgressPct}% complete
+              </p>
+            </div>
+          </div>
+
+          {/* Module menu — real, reachable course-related pages */}
+          <nav aria-label="Module navigation" className="scrollbar-none overflow-x-auto border-b border-slate-200 bg-white">
+            <div className="mx-auto flex min-w-max max-w-5xl gap-1 px-4 sm:px-6 lg:px-8">
+              {MODULE_MENU_ITEMS.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.label}
+                    href={item.href(courseSlugForNav)}
+                    className="group flex items-center gap-2 border-b-2 border-transparent px-3 py-3 text-sm font-semibold text-muted transition hover:text-ink"
+                  >
+                    <Icon aria-hidden="true" className="h-4 w-4 transition group-hover:scale-110" style={{ color: accentColor }} />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </nav>
+
           <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
 
             <Breadcrumb

@@ -1,6 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 import { createHmac } from "node:crypto";
-import { getLessonBySlug, getParentGroupSlug } from "@/lib/data";
+import { getAcademyBySlug, getChildModuleOrder, getLessonBySlug, getParentGroupSlug } from "@/lib/data";
+import { getModuleImageSrc } from "@/lib/module-images";
+import { getCourseVisual } from "@/lib/visual-assets";
 import { LessonPlayer } from "@/components/learning/LessonPlayer";
 import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 import { hasActiveCourseEnrollment } from "@/lib/course-access";
@@ -219,12 +221,17 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
     })),
   );
 
+  // The bridge doesn't expose a child course's position within its parent
+  // grouping at all — resolve it ourselves from course-groupings.ts so the
+  // module banner and "Module N:" labels show the real number, not always 1.
+  const moduleOrder = getChildModuleOrder(d.course.slug) ?? 1;
+
   const courseModule: CourseModule = {
     // Keep the real "Module N:" prefix — it's the learner's only visible cue
     // for which numbered module of the parent course they're in, since the
     // bridge doesn't separately expose that ordering.
     title: d.course.title,
-    order: 1,
+    order: moduleOrder,
     lessons: flatLessons,
   };
 
@@ -282,7 +289,16 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
   // "back to course" / "view results" link must resolve to the parent.
   const resolvedCourseSlug = getParentGroupSlug(d.course.slug) ?? d.course.slug;
 
-  return { lesson, module: courseModule, course, allModules, prevLesson, nextLesson, resources, resolvedCourseSlug };
+  // Real module banner image where one exists (the 20 curated Upskilling
+  // courses); every other module — every other academy, and any Upskilling
+  // module without a specific image — falls back to its course/academy's
+  // real curated visual, so every module gets a real image, never a blank.
+  const academy = getAcademyBySlug(d.course.academy_slug);
+  const moduleImageSrc =
+    getModuleImageSrc(resolvedCourseSlug, moduleOrder) ??
+    getCourseVisual({ slug: resolvedCourseSlug, title: d.course.title }, academy?.category ?? "upskilling").src;
+
+  return { lesson, module: courseModule, course, allModules, prevLesson, nextLesson, resources, resolvedCourseSlug, moduleImageSrc };
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -328,6 +344,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
           currentLessonSlug={slug}
           resources={bridgeProps.resources}
           courseSlugForNav={bridgeProps.resolvedCourseSlug}
+          moduleImageSrc={bridgeProps.moduleImageSrc}
         />
       );
     }
@@ -342,6 +359,10 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   const currentIndex = allLessons.findIndex((l) => l.slug === slug);
   const prevLesson = currentIndex > 0 ? allLessons[currentIndex - 1] : null;
   const nextLesson = currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null;
+  const staticAcademy = getAcademyBySlug(course.academySlug);
+  const staticModuleImageSrc =
+    getModuleImageSrc(course.slug, courseModule.order) ??
+    getCourseVisual(course, staticAcademy?.category ?? "upskilling").src;
 
   return (
     <LessonPlayer
@@ -352,6 +373,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       nextLesson={nextLesson}
       allModules={course.modules}
       currentLessonSlug={slug}
+      moduleImageSrc={staticModuleImageSrc}
       courseSlugForNav={course.slug}
       resources={[]}
     />

@@ -270,6 +270,13 @@ export function getParentGroupSlug(childCourseSlug: string): string | null {
   return grouping ? grouping.slug : null;
 }
 
+/** A child course's 1-based position within its parent grouping (its real "Module N" number), or null if it's not part of any grouping. */
+export function getChildModuleOrder(childCourseSlug: string): number | null {
+  const grouping = allGroupings.find((g) => g.moduleSlugOrder.includes(childCourseSlug));
+  if (!grouping) return null;
+  return grouping.moduleSlugOrder.indexOf(childCourseSlug) + 1;
+}
+
 export function getSkillPathways() {
   return skillPathways;
 }
