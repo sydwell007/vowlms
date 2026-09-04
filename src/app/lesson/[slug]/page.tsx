@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { createHmac } from "node:crypto";
-import { getLessonBySlug, getParentGroupSlug } from "@/lib/data";
+import { cleanModuleTitle, getLessonBySlug, getParentGroupSlug } from "@/lib/data";
 import { LessonPlayer } from "@/components/learning/LessonPlayer";
 import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 import { hasActiveCourseEnrollment } from "@/lib/course-access";
@@ -201,12 +201,14 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
     vowHuman: normalizeVowHumanPresenter(d.lesson),
   };
 
-  const courseModule: CourseModule = { title: d.module.title, order: d.module.position, lessons: [] };
-
-  const allModules: CourseModule[] = d.all_modules.map((m) => ({
-    title: m.title,
-    order: m.position,
-    lessons: m.lessons.map((l) => ({
+  // The bridge's `all_modules` are the course's own internal Moodle sections
+  // (e.g. "Foundation", "Applied Practice 2", "Applied Practice 3") — pure
+  // authoring structure with no meaning to a learner, since this course IS
+  // already "one module" from the parent-course grouping's point of view.
+  // Flatten them into a single continuous lesson list so the sidebar never
+  // shows "modules nested inside a module".
+  const flatLessons: Lesson[] = d.all_modules.flatMap((m) =>
+    m.lessons.map((l) => ({
       slug: l.slug,
       title: l.title,
       type: (l.type as Lesson["type"]) ?? "text",
@@ -215,11 +217,19 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
       hasVRPractice: l.type === "vr-practice",
       durationMinutes: l.duration_minutes ?? 10,
     })),
-  }));
+  );
+
+  const courseModule: CourseModule = {
+    title: cleanModuleTitle(d.course.title),
+    order: 1,
+    lessons: flatLessons,
+  };
+
+  const allModules: CourseModule[] = [courseModule];
 
   const course = {
     slug: d.course.slug,
-    title: d.course.title,
+    title: cleanModuleTitle(d.course.title),
     moodleId: null,
     academySlug: d.course.academy_slug,
     description: "",

@@ -44,7 +44,7 @@ const rawCourseMap = new Map<string, Course>(rawCourses.map((c) => [c.slug, c]))
  * Clean a Moodle module title for display as a CourseModule title.
  * Strips leading "Module N: " prefix and trims whitespace.
  */
-function cleanModuleTitle(title: string): string {
+export function cleanModuleTitle(title: string): string {
   return title.replace(/^Module\s+\d+[:\s]+/i, "").trim();
 }
 

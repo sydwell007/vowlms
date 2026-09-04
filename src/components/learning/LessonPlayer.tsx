@@ -288,7 +288,9 @@ export function LessonPlayer({
                 </span>
                 <div className="min-w-0">
                   <p className="truncate text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">{course.title}</p>
-                  <h2 className="mt-1 truncate text-sm font-semibold text-ink">{module.title}</h2>
+                  {allModules.length > 1 ? (
+                    <h2 className="mt-1 truncate text-sm font-semibold text-ink">{module.title}</h2>
+                  ) : null}
                 </div>
               </div>
               <div className="mt-4">
@@ -317,10 +319,12 @@ export function LessonPlayer({
                 const doneInModule = m.lessons.filter((l) => completedSlugs.includes(l.slug)).length;
                 return (
                 <div key={m.title}>
-                  <p className="flex items-center justify-between px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                    <span>Module {m.order}: {m.title}</span>
-                    <span className="shrink-0 normal-case tracking-normal text-muted/80">{doneInModule}/{m.lessons.length}</span>
-                  </p>
+                  {allModules.length > 1 ? (
+                    <p className="flex items-center justify-between px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                      <span>Module {m.order}: {m.title}</span>
+                      <span className="shrink-0 normal-case tracking-normal text-muted/80">{doneInModule}/{m.lessons.length}</span>
+                    </p>
+                  ) : null}
                   <div className="mt-1 space-y-0.5">
                     {m.lessons.map((l) => {
                       const isCurrent = l.slug === currentLessonSlug;
@@ -361,7 +365,8 @@ export function LessonPlayer({
                 { label: "Academies", href: "/academies" },
                 ...(academy ? [{ label: academy.name, href: getAcademyHref(academy) }] : []),
                 { label: course.title, href: `/courses/${course.slug}` },
-                { label: `Module ${module.order}: ${module.title}` },
+                ...(allModules.length > 1 ? [{ label: `Module ${module.order}: ${module.title}` }] : []),
+                { label: lesson.title },
               ]}
             />
             <h1 className="mt-3 text-balance text-3xl font-semibold text-ink sm:text-4xl">{lesson.title}</h1>
