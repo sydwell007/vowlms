@@ -275,7 +275,14 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
       return acc;
     }, []);
 
-  return { lesson, module: courseModule, course, allModules, prevLesson, nextLesson, resources };
+  // The bridge always returns the child Moodle course's own slug (e.g.
+  // "marketing-fundamentals"), which has no reachable /courses or /results
+  // page of its own — child slugs are consumed into their parent grouping
+  // (e.g. "marketing") and excluded from the visible course list. Every
+  // "back to course" / "view results" link must resolve to the parent.
+  const resolvedCourseSlug = getParentGroupSlug(d.course.slug) ?? d.course.slug;
+
+  return { lesson, module: courseModule, course, allModules, prevLesson, nextLesson, resources, resolvedCourseSlug };
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -307,8 +314,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       }
 
       if (!hasAccess) {
-        const courseSlug = getParentGroupSlug(bridgeProps.course.slug) ?? bridgeProps.course.slug;
-        redirect(`/courses/${courseSlug}?enrolment=required`);
+        redirect(`/courses/${bridgeProps.resolvedCourseSlug}?enrolment=required`);
       }
 
       return (
@@ -321,6 +327,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
           allModules={bridgeProps.allModules}
           currentLessonSlug={slug}
           resources={bridgeProps.resources}
+          courseSlugForNav={bridgeProps.resolvedCourseSlug}
         />
       );
     }
@@ -345,6 +352,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       nextLesson={nextLesson}
       allModules={course.modules}
       currentLessonSlug={slug}
+      courseSlugForNav={course.slug}
       resources={[]}
     />
   );

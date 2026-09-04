@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { setSessionCache, useSession } from "@/lib/auth/useSession";
 import { visualAssets } from "@/lib/visual-assets";
 
@@ -15,7 +14,6 @@ const DASHBOARD: Record<string, string> = {
 };
 
 export default function SignInPage() {
-  const router = useRouter();
   const session = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,9 +25,12 @@ export default function SignInPage() {
 
     const requested = new URLSearchParams(window.location.search).get("returnTo");
     const safeReturnTo = requested?.startsWith("/") && !requested.startsWith("//") ? requested : null;
-    router.replace(safeReturnTo ?? DASHBOARD[session.user.role] ?? "/dashboard/learner");
-    router.refresh();
-  }, [router, session]);
+    // A real browser navigation (not router.replace + router.refresh) — that
+    // combo can race with the client router cache and land on the dashboard
+    // still showing the signed-out state until a manual reload. A hard
+    // navigation always fetches the new page fresh, cookie already set.
+    window.location.href = safeReturnTo ?? DASHBOARD[session.user.role] ?? "/dashboard/learner";
+  }, [session]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -58,8 +59,8 @@ export default function SignInPage() {
       const role: string = user?.role ?? "learner";
       const requested = new URLSearchParams(window.location.search).get("returnTo");
       const safeReturnTo = requested?.startsWith("/") && !requested.startsWith("//") ? requested : null;
-      router.replace(safeReturnTo ?? DASHBOARD[role] ?? "/dashboard/learner");
-      router.refresh();
+      window.location.href = safeReturnTo ?? DASHBOARD[role] ?? "/dashboard/learner";
+      return;
     } catch {
       setError("Unable to connect. Please check your connection and try again.");
     } finally {

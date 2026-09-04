@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { setSessionCache, useSession } from "@/lib/auth/useSession";
 import { visualAssets } from "@/lib/visual-assets";
 
@@ -15,7 +14,6 @@ const academyOptions = [
 ];
 
 export default function SignUpPage() {
-  const router = useRouter();
   const session = useSession();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -35,9 +33,11 @@ export default function SignUpPage() {
   useEffect(() => {
     if (session.status !== "authenticated") return;
 
-    router.replace("/dashboard/learner");
-    router.refresh();
-  }, [router, session]);
+    // A real browser navigation — router.replace + router.refresh can race
+    // with the client router cache and land on the dashboard still showing
+    // the signed-out state until a manual reload.
+    window.location.href = "/dashboard/learner";
+  }, [session]);
 
   function update(field: keyof typeof form, value: string | boolean) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -85,8 +85,8 @@ export default function SignUpPage() {
         setSessionCache(json.data);
       }
 
-      router.replace("/dashboard/learner");
-      router.refresh();
+      window.location.href = "/dashboard/learner";
+      return;
     } catch {
       setError("Unable to connect. Please check your connection.");
     } finally {

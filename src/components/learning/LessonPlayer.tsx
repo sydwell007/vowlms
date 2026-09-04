@@ -31,6 +31,15 @@ type Props = {
   allModules: CourseModule[];
   currentLessonSlug: string;
   resources?: LessonResource[];
+  /**
+   * The real, reachable course slug for "back to course" / "view results"
+   * links — course.slug may be a bridge child-course slug (e.g.
+   * "marketing-fundamentals") with no /courses or /results page of its own,
+   * since it's consumed into a parent grouping (e.g. "marketing"). Progress
+   * tracking below deliberately keeps using course.slug, matching how
+   * enrollment is actually recorded per child course.
+   */
+  courseSlugForNav: string;
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -129,7 +138,7 @@ function formatBytes(bytes: number): string {
 
 export function LessonPlayer({
   lesson, course, module, prevLesson, nextLesson,
-  allModules, currentLessonSlug, resources = [],
+  allModules, currentLessonSlug, resources = [], courseSlugForNav,
 }: Props) {
   const router = useRouter();
   const [completed, setCompleted] = useState(false);
@@ -256,7 +265,7 @@ export function LessonPlayer({
       {/* Top bar */}
       <div className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 backdrop-blur-xl">
         <div className="mx-auto flex h-14 w-full max-w-7xl items-center gap-4 px-4 sm:px-6">
-          <Link href={`/courses/${course.slug}`} className="flex items-center gap-2 text-sm font-medium text-muted hover:text-ink transition">
+          <Link href={`/courses/${courseSlugForNav}`} className="flex items-center gap-2 text-sm font-medium text-muted hover:text-ink transition">
             ← <span className="hidden sm:block">{course.title}</span><span className="sm:hidden">Course</span>
           </Link>
           <div className="mx-auto hidden max-w-xs truncate text-center text-sm font-semibold text-ink sm:block">
@@ -364,7 +373,7 @@ export function LessonPlayer({
               items={[
                 { label: "Academies", href: "/academies" },
                 ...(academy ? [{ label: academy.name, href: getAcademyHref(academy) }] : []),
-                { label: course.title, href: `/courses/${course.slug}` },
+                { label: course.title, href: `/courses/${courseSlugForNav}` },
                 ...(allModules.length > 1 ? [{ label: `Module ${module.order}: ${module.title}` }] : []),
                 { label: lesson.title },
               ]}
@@ -598,7 +607,7 @@ export function LessonPlayer({
               ) : (
                 <div className="premium-card-soft rounded-xl p-4 text-right">
                   <p className="text-xs font-semibold text-muted">Course complete</p>
-                  <Link href={`/results/${course.slug}`} className="mt-1 text-sm font-semibold text-[#1166c8] hover:underline">
+                  <Link href={`/results/${courseSlugForNav}`} className="mt-1 text-sm font-semibold text-[#1166c8] hover:underline">
                     View results →
                   </Link>
                 </div>
@@ -612,7 +621,7 @@ export function LessonPlayer({
       {showCelebration ? (
         <CelebrationOverlay
           courseTitle={course.title}
-          courseSlug={course.slug}
+          courseSlug={courseSlugForNav}
           onClose={() => setShowCelebration(false)}
         />
       ) : null}
