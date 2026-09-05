@@ -14,10 +14,9 @@ import {
   MessageSquare,
   type LucideIcon,
 } from "lucide-react";
-import { getAcademyBySlug, getAcademyHref } from "@/lib/data";
+import { getAcademyBySlug } from "@/lib/data";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import type { Lesson, Course, CourseModule } from "@/types/lms";
-import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { CelebrationOverlay } from "@/components/learning/CelebrationOverlay";
 import { PdfReader } from "@/components/learning/PdfReader";
 import { VowHumanPresenter } from "@/components/learning/VowHumanPresenter";
@@ -442,16 +441,7 @@ export function LessonPlayer({
 
           <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
 
-            <Breadcrumb
-              items={[
-                { label: "Academies", href: "/academies" },
-                ...(academy ? [{ label: academy.name, href: getAcademyHref(academy) }] : []),
-                { label: course.title, href: `/courses/${courseSlugForNav}` },
-                ...(allModules.length > 1 ? [{ label: `Module ${module.order}: ${module.title}` }] : []),
-                { label: lesson.title },
-              ]}
-            />
-            <h1 className="mt-3 text-balance text-3xl font-semibold text-ink sm:text-4xl">{lesson.title}</h1>
+            <h1 className="text-balance text-3xl font-semibold text-ink sm:text-4xl">{lesson.title}</h1>
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1166c8]/10 px-3 py-1 text-xs font-semibold text-[#1166c8]">
                 {lesson.type === "vr-practice" ? "🥽 VR Practice" : lesson.type === "assessment" ? "📝 Assessment" : "▸ Lesson"}
