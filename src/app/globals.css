@@ -218,6 +218,25 @@ body {
   background: linear-gradient(180deg, rgba(6,182,212,0.06) 0%, rgba(30,58,138,0.04) 100%);
 }
 
+/* ── VOWR wallet — matches wallet.vowrewards.co.za's own gold-to-blue mark ── */
+.vowr-gradient-text {
+  background: linear-gradient(90deg, #f7d05e 0%, #fff0a8 45%, #4aa3ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.vowr-gradient-bg {
+  background: linear-gradient(90deg, #f7d05e 0%, #fff0a8 45%, #4aa3ff 100%);
+}
+
+.vowr-gradient-border {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#06111f, #06111f) padding-box,
+    linear-gradient(90deg, #f7d05e 0%, #fff0a8 45%, #4aa3ff 100%) border-box;
+}
+
 .gv-badge-blue   { background: rgba(30,58,138,0.1); color: #1e3a8a; }
 .gv-badge-cyan   { background: rgba(6,182,212,0.12); color: #0891b2; }
 .gv-badge-orange { background: rgba(249,115,22,0.1); color: #ea580c; }

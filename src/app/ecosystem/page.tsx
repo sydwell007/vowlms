@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
@@ -45,6 +46,7 @@ export default async function EcosystemPage() {
     },
     ...services.map((service) => ({
       icon: service.icon,
+      iconImage: service.iconImage,
       name: service.name,
       tagline: service.tagline,
       desc: service.description,
@@ -118,7 +120,11 @@ export default async function EcosystemPage() {
               <Link key={p.href} href={p.href}>
                 <article className="gv-card h-full rounded-2xl p-6 transition hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(30,58,138,0.12)]">
                   <div className="flex items-start justify-between">
-                    <span className="text-3xl">{p.icon}</span>
+                    {"iconImage" in p && p.iconImage ? (
+                      <Image src={p.iconImage} alt="" width={36} height={36} className="h-9 w-9 rounded-lg object-contain" />
+                    ) : (
+                      <span className="text-3xl">{p.icon}</span>
+                    )}
                     <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${p.statusColor}`}>
                       {p.status}
                     </span>

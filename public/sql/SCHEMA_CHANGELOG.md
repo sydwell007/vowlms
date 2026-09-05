@@ -1,5 +1,21 @@
 # Schema Changelog
 
+## 019 - VOWR wallet redemption requests
+
+- Adds `redemption_requests`, tracking learner requests to spend VOWR balance
+  (`reward_events.points`) on catalogue items needing real-world or admin
+  fulfilment (course credit, data bundle, electricity token, mentorship
+  session, assessment retake waiver, VR practice credit).
+- No changes to `reward_events` itself — the existing `lesson_complete`
+  (5 pts), `assessment_pass` (100 pts), and `certificate_issued` (200 pts)
+  triggers in `progress/index.php`, `assessments/submit.php`, and
+  `certificates/generate.php` already write real, idempotent reward events
+  today; this patch only adds the new `/rewards/balance`, `/rewards/history`,
+  and `/rewards/redeem` endpoints that read/write against that existing ledger.
+- Peer-to-peer donation between learners (`donate_to_learner`) does not use
+  this table — it resolves instantly as a paired debit/credit in
+  `reward_events` and needs no fulfilment step.
+
 ## 018 - VowHumans lesson presenters
 
 - Adds structured, optional VowHumans fields to `lessons`; no lesson, course, or

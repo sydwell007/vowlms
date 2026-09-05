@@ -68,7 +68,7 @@ jsonOk([
         ['label' => 'Courses enrolled',  'value' => (string)$totalEnrolled],
         ['label' => 'Completed',          'value' => (string)$totalCompleted],
         ['label' => 'Certificates',       'value' => (string)count($certificates)],
-        ['label' => 'Reward points',      'value' => number_format($rewardPoints) . ' pts'],
+        ['label' => 'VOWR balance',       'value' => number_format($rewardPoints) . ' VOWR'],
     ],
     'enrolledCourses' => $enrollments,
     'certificates'    => $certificates,

@@ -311,7 +311,7 @@ export function getLearnerDashboard() {
       { label: "Courses enrolled", value: "0", detail: "Development mode" },
       { label: "Completed", value: "0", detail: "Development mode" },
       { label: "Certificates", value: "0", detail: "Development mode" },
-      { label: "Reward points", value: "0 pts", detail: "Development mode" },
+      { label: "VOWR balance", value: "0 VOWR", detail: "Development mode" },
     ],
   };
 }

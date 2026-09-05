@@ -605,7 +605,7 @@ export function LessonPlayer({
                   <div className="mt-8 premium-card rounded-xl p-6 text-center">
                     <p className="text-3xl mb-3">📝</p>
                     <h2 className="text-lg font-semibold text-ink mb-2">Assessment</h2>
-                    <p className="text-sm text-muted">Complete the assessment below to test your knowledge and earn points.</p>
+                    <p className="text-sm text-muted">Complete the assessment below to test your knowledge and earn VOWR.</p>
                   </div>
                 )}
                 {lesson.type === "vr-practice" && (

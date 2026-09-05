@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { WalletBalancePill } from "@/components/rewards/WalletBalancePill";
 import { clearSessionCache, useSession } from "@/lib/auth/useSession";
 import { visualAssets } from "@/lib/visual-assets";
 import { getComingSoonInfo } from "@/lib/academy-launch";
@@ -286,6 +287,8 @@ export function Header() {
           {session.status === "loading" ? (
             <div className="h-9 w-24 animate-pulse rounded-lg bg-white/10" />
           ) : isAuthed ? (
+            <>
+              <WalletBalancePill />
             <div ref={accountMenuRef} className="relative">
               <button
                 type="button"
@@ -353,6 +356,7 @@ export function Header() {
                 </div>
               ) : null}
             </div>
+            </>
           ) : (
             <>
               <Link
@@ -368,19 +372,22 @@ export function Header() {
           )}
         </div>
 
-        <button
-          type="button"
-          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileMenuOpen}
-          onClick={toggleMobileMenu}
-          className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/14 bg-white/6 text-white transition hover:bg-white/10 xl:hidden"
-        >
-          <span className="flex w-5 flex-col gap-1.5" aria-hidden="true">
-            <span className={`h-0.5 rounded-full bg-current transition ${mobileMenuOpen ? "translate-y-2 rotate-45" : ""}`} />
-            <span className={`h-0.5 rounded-full bg-current transition ${mobileMenuOpen ? "opacity-0" : "opacity-100"}`} />
-            <span className={`h-0.5 rounded-full bg-current transition ${mobileMenuOpen ? "-translate-y-2 -rotate-45" : ""}`} />
-          </span>
-        </button>
+        <div className="ml-auto flex items-center gap-2 xl:hidden">
+          {isAuthed ? <WalletBalancePill compact /> : null}
+          <button
+            type="button"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileMenuOpen}
+            onClick={toggleMobileMenu}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-white/14 bg-white/6 text-white transition hover:bg-white/10"
+          >
+            <span className="flex w-5 flex-col gap-1.5" aria-hidden="true">
+              <span className={`h-0.5 rounded-full bg-current transition ${mobileMenuOpen ? "translate-y-2 rotate-45" : ""}`} />
+              <span className={`h-0.5 rounded-full bg-current transition ${mobileMenuOpen ? "opacity-0" : "opacity-100"}`} />
+              <span className={`h-0.5 rounded-full bg-current transition ${mobileMenuOpen ? "-translate-y-2 -rotate-45" : ""}`} />
+            </span>
+          </button>
+        </div>
       </div>
 
       {mobileMenuOpen ? (

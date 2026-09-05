@@ -85,7 +85,11 @@ export function EcosystemSidebar() {
                     href={s.href}
                     className="group flex items-start gap-3 rounded-lg p-3 transition hover:bg-slate-50"
                   >
-                    <span className="mt-0.5 shrink-0 text-xl">{s.icon}</span>
+                    {s.iconImage ? (
+                      <Image src={s.iconImage} alt="" width={20} height={20} className="mt-0.5 h-5 w-5 shrink-0 rounded object-contain" />
+                    ) : (
+                      <span className="mt-0.5 shrink-0 text-xl">{s.icon}</span>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <p className="text-[13px] font-semibold text-ink truncate">{s.name}</p>
@@ -148,7 +152,11 @@ export function EcosystemSidebar() {
                     href={s.href}
                     className="flex items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 p-3 transition hover:border-[#1e3a8a]/20"
                   >
-                    <span className="text-xl">{s.icon}</span>
+                    {s.iconImage ? (
+                      <Image src={s.iconImage} alt="" width={22} height={22} className="h-[22px] w-[22px] shrink-0 rounded object-contain" />
+                    ) : (
+                      <span className="text-xl">{s.icon}</span>
+                    )}
                     <div>
                       <p className="text-[12px] font-semibold text-ink">{s.name}</p>
                       <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold ${ecosystemStatusBadgeClass[s.status]}`}>

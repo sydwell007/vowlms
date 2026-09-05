@@ -5,6 +5,8 @@ export type EcosystemServiceStatus = "Built-in" | "Support" | "Coming soon" | "I
 export type EcosystemService = {
   slug: string;
   icon: string;
+  /** Real brand mark image, shown instead of `icon` when set. */
+  iconImage?: string;
   name: string;
   tagline: string;
   /** Longer copy for the full ecosystem map page. */
@@ -37,6 +39,7 @@ export const ecosystemServices: EcosystemService[] = [
   {
     slug: "vowrewards",
     icon: "⭐",
+    iconImage: "/images/vowrewards-logo.png",
     name: "VowRewards",
     tagline: "Eligible learning milestones",
     description: "The platform records VowRewards events for configured lesson, assessment, course, and certificate milestones.",
@@ -61,7 +64,7 @@ export const ecosystemServices: EcosystemService[] = [
     icon: "🛍️",
     name: "SkillsShop",
     tagline: "Kits, tools & learning bundles",
-    description: "Learning kits, trade tools, kitchen equipment, uniform bundles, and digital subscriptions — all aligned to specific academy pathways and redeemable with VowRewards points.",
+    description: "Learning kits, trade tools, kitchen equipment, uniform bundles, and digital subscriptions — all aligned to specific academy pathways and redeemable with VOWR.",
     status: "Coming soon",
     href: "/skillsshop",
     accentColor: "#06b6d4",

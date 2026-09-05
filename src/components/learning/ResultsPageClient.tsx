@@ -93,7 +93,7 @@ export function ResultsPageClient({ course }: { course: Course }) {
             ) : (
               <MetricCard label="VR practice" value="—" detail="Not offered for this course" />
             )}
-            <MetricCard label="Rewards" value={`${course.rewards}`} detail="Points available for this course" />
+            <MetricCard label="Rewards" value={`${course.rewards}`} detail="VOWR available for this course" />
           </div>
           <div className="mt-8">
             <ProgressBar value={progress ?? 0} label="Completion" />

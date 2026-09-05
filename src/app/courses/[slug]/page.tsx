@@ -132,7 +132,7 @@ export default async function CourseDetailPage({
     { Icon: Smartphone, text: "Mobile and PWA access" },
     { Icon: Download, text: "Offline lesson content" },
     { Icon: BadgeCheck, text: "Certificate on completion" },
-    { Icon: Award, text: `${course.rewards} VowRewards points` },
+    { Icon: Award, text: `${course.rewards} VOWR` },
     ...(stats.hasVRPractice ? [{ Icon: Glasses, text: "VR practice included" }] : []),
     { Icon: BookOpenCheck, text: `${stats.lessonCount} structured lessons` },
   ];

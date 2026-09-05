@@ -25,6 +25,9 @@
 | `/payments/payfast-create` | POST | Learner JWT |
 | `/payments/payfast-notify` | POST | PayFast validation or trusted bridge relay |
 | `/rewards/award` | POST | Facilitator/admin JWT |
+| `/rewards/balance` | GET | Learner owner JWT |
+| `/rewards/history` | GET | Learner owner JWT |
+| `/rewards/redeem` | POST | Learner owner JWT |
 | `/dashboard/learner` | GET | Learner owner JWT |
 | `/dashboard/facilitator` | GET | Facilitator/admin JWT |
 | `/dashboard/employer` | GET | Employer/admin JWT, privacy restricted |

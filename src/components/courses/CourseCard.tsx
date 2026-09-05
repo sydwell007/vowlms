@@ -91,7 +91,7 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
             </div>
             <div className="flex items-center gap-2">
               <Award aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
-              <span>{course.rewards} points</span>
+              <span>{course.rewards} VOWR</span>
             </div>
           </dl>
 

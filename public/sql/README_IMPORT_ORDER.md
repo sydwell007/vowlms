@@ -29,7 +29,8 @@ This is a phpMyAdmin/Afrihost migration package. It must never be served by Verc
 13. `016_opportunity_matches.sql`
 14. `017_integration_health_log.sql`
 15. `018_vowhuman_presenters.sql`
-16. `verify_schema.sql`
+16. `019_redemption_requests.sql`
+17. `verify_schema.sql`
 
 `verify-seed-integrity.sql` is a separate, read-only diagnostic file (not part of
 the schema import order) — run it any time via phpMyAdmin or
@@ -73,14 +74,19 @@ already exists. Only `012` is written to be safely re-run.
    each one adds — see `SCHEMA_CHANGELOG.md` for what each number introduced).
 2. Import only the patches missing from that comparison, in ascending numeric order.
    The full historical chain is `007`, `009`, `011`, `012`, `013`, `014`, `015`,
-   `016`, `017`, `018` — this is a reference list of everything that has ever shipped, not
+   `016`, `017`, `018`, `019` — this is a reference list of everything that has ever shipped, not
    an instruction to run all of them regardless of what's already live.
 3. Run `verify_schema.sql` once you've applied whatever was missing.
 
-Migration `018_vowhuman_presenters.sql` is the newest patch. It adds only optional
-VowHumans presenter fields to `lessons` and safely seeds the approved Business
-Ethics presenter only when that lesson has no presenter URL. Import `018` after
-all earlier patches that are missing from the target database.
+Migration `019_redemption_requests.sql` is the newest patch. It only adds a new
+`redemption_requests` table (`CREATE TABLE IF NOT EXISTS`) tracking VOWR wallet
+redemption requests — it does not alter `reward_events` or any other existing
+table. Import `019` after all earlier patches that are missing from the target
+database.
+
+`018_vowhuman_presenters.sql` adds only optional VowHumans presenter fields to
+`lessons` and safely seeds the approved Business Ethics presenter only when
+that lesson has no presenter URL. Import `018` before `019`.
 
 ## Rollback
 

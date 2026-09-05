@@ -39,7 +39,7 @@ const loadingMetrics: DashboardMetric[] = [
   { label: "Courses enrolled", value: "-", detail: "Loading" },
   { label: "Completed", value: "-", detail: "Loading" },
   { label: "Certificates", value: "-", detail: "Loading" },
-  { label: "Reward points", value: "-", detail: "Loading" },
+  { label: "VOWR balance", value: "-", detail: "Loading" },
 ];
 
 const quickLinks = [

@@ -22,7 +22,7 @@ const faqs = [
   {
     question: "What is VowRewards?",
     answer:
-      "VowRewards is VowLMS's points system. You earn points for real milestones — completing a lesson, passing an assessment, earning a certificate — and your balance is calculated directly from your account's own reward record.",
+      "VowRewards is VowLMS's VOWR wallet. You earn VOWR for real milestones — completing a lesson, passing an assessment, earning a certificate — and your balance is calculated directly from your account's own reward record.",
   },
   {
     question: "Can I study on my phone?",

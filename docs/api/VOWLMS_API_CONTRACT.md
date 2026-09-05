@@ -41,6 +41,9 @@
 | POST | `/api/payments/payfast/create` | Learner | `courseSlug` | PayFast form action and signed fields | `/payments/payfast-create`; `payments` |
 | POST | `/api/payments/payfast/notify` | PayFast relay | Raw form payload | Processing status | `/payments/payfast-notify`; payments, enrolments, rewards |
 | POST | `/api/rewards/award` | Facilitator or admin | User, event, points, metadata | Reward event and balance | `/rewards/award`; `reward_events` |
+| GET | `/api/rewards/balance` | Learner owner | None | VOWR balance and last 3 events | `/rewards/balance`; `reward_events` |
+| GET | `/api/rewards/history` | Learner owner | Optional `filter`, `page`, `limit` | Paginated VOWR transaction history | `/rewards/history`; `reward_events` |
+| POST | `/api/rewards/redeem` | Learner owner | `redemptionType`, plus type-specific fields | Instant transfer or pending redemption request | `/rewards/redeem`; `reward_events`, `redemption_requests` |
 | GET, POST | `/api/learner-goals` | Learner for bridge sync; local draft otherwise | Goal tile, academy, role/quiz context | Own saved goal profile | `/learner-goals`, `/learner-goals/save`; `learner_goals` |
 | GET | `/api/dashboard/learner` | Learner owner | None | Own metrics, courses, certificates, events | `/dashboard/learner`; learner-owned tables |
 | GET | `/api/dashboard/facilitator` | Facilitator/admin | None | Assigned courses and learner aggregates | `/dashboard/facilitator`; facilitator-scoped tables |

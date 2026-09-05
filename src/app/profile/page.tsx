@@ -173,7 +173,7 @@ export default function ProfilePage() {
   const stats = [
     { label: "Courses enrolled", value: "2" },
     { label: "Lessons completed", value: "8" },
-    { label: "Rewards earned", value: "370 pts" },
+    { label: "Rewards earned", value: "370 VOWR" },
     { label: "Certificates", value: "2" },
   ];
 
