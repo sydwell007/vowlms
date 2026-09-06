@@ -9,6 +9,19 @@ export function stripLessonPrefix(title: string): string {
   return title.replace(/^Lesson\s*\d+\s*[:.-]?\s*/i, "").trim();
 }
 
+/**
+ * Ensures a lesson title displays with its "Lesson N:" number — most real
+ * titles already have one; for the handful that don't (older content
+ * migrated without it), `fallbackNumber` (the lesson's own position within
+ * its module) is used instead, so no lesson in the Course Preview outline
+ * is ever shown without one.
+ */
+export function withLessonNumber(title: string, fallbackNumber: number): string {
+  const trimmed = title.trim();
+  if (/^lesson\s*\d+/i.test(trimmed)) return trimmed;
+  return `Lesson ${fallbackNumber}: ${trimmed}`;
+}
+
 function lowerFirst(text: string): string {
   return text.length > 0 ? text[0].toLowerCase() + text.slice(1) : text;
 }

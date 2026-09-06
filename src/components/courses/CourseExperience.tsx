@@ -18,7 +18,7 @@ import { CourseCurriculum } from "@/components/courses/CourseCurriculum";
 import { CourseReviews } from "@/components/courses/CourseReviews";
 import { CourseTrailer } from "@/components/courses/CourseTrailer";
 import { getModuleOutcome, getModuleTopics } from "@/lib/course-content";
-import { getLessonPreviewBlurb, stripLessonPrefix } from "@/lib/lesson-preview";
+import { getLessonPreviewBlurb, withLessonNumber } from "@/lib/lesson-preview";
 import type { Academy, Course } from "@/types/lms";
 
 type Tab = "overview" | "curriculum" | "preview" | "teaching" | "reviews";
@@ -256,7 +256,7 @@ export function CourseExperience({ course, academy, accentColor }: Props) {
 
                         {isOpen ? (
                           <div id={panelId} className="space-y-2.5 border-t border-slate-100 bg-slate-50/70 px-5 py-4">
-                            {lessons.map((lesson) => (
+                            {lessons.map((lesson, lessonIndex) => (
                               <div key={lesson.slug} className="flex items-start gap-2.5 text-sm leading-6">
                                 <span
                                   aria-hidden="true"
@@ -264,7 +264,7 @@ export function CourseExperience({ course, academy, accentColor }: Props) {
                                   style={{ backgroundColor: accentColor }}
                                 />
                                 <p>
-                                  <span className="font-semibold text-ink">{stripLessonPrefix(lesson.title)}</span>
+                                  <span className="font-semibold text-ink">{withLessonNumber(lesson.title, lessonIndex + 1)}</span>
                                   <span className="text-muted"> — {getLessonPreviewBlurb(lesson.title)}</span>
                                 </p>
                               </div>
