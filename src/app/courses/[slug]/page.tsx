@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import {
   Award,
   BadgeCheck,
-  BookOpenCheck,
+  CalendarClock,
   ClipboardCheck,
   Download,
   Glasses,
@@ -19,7 +19,7 @@ import { EnrollButton } from "@/components/courses/EnrollButton";
 import { getAcademyBySlug, getAcademyHref, getCourseBySlug, isCourseVisible } from "@/lib/data";
 import { formatCurrency } from "@/lib/format";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
-import { formatDuration, getCourseStats } from "@/lib/course-content";
+import { formatCourseDurationWeeks, formatDuration, getCourseStats } from "@/lib/course-content";
 import { getServerRole } from "@/lib/auth/getServerRole";
 import { getCourseVisual } from "@/lib/visual-assets";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -128,13 +128,19 @@ export default async function CourseDetailPage({
       { "@type": "ListItem", position: academy ? 3 : 2, name: course.title, item: canonicalUrl },
     ],
   };
-  const courseFeatures = [
-    { Icon: Smartphone, text: "Mobile and PWA access" },
-    { Icon: Download, text: "Offline lesson content" },
-    { Icon: BadgeCheck, text: "Certificate on completion" },
+  // Trust badges shown once, over the banner — kept out of the enrol card and the
+  // quick-facts stat bar below so the same fact never appears three times on one page.
+  const heroBadges = [
+    { Icon: BadgeCheck, text: "Certificate included" },
     { Icon: Award, text: `${course.rewards} VOWR` },
     ...(stats.hasVRPractice ? [{ Icon: Glasses, text: "VR practice included" }] : []),
-    { Icon: BookOpenCheck, text: `${stats.lessonCount} structured lessons` },
+  ];
+  // Enrol card only lists what isn't already stated in the hero badges above or the
+  // Modules/Lessons/Total time/Level stat bar below.
+  const cardFeatures = [
+    { Icon: Smartphone, text: "Mobile and PWA access" },
+    { Icon: Download, text: "Offline lesson content" },
+    { Icon: CalendarClock, text: "Learn at your own pace" },
   ];
 
   return (
@@ -145,9 +151,16 @@ export default async function CourseDetailPage({
           Admin preview — {course.title} is not visible to learners yet.
         </div>
       ) : null}
-      <section className="premium-section-dark surface-grid py-16 text-white md:py-20">
-        <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 sm:px-6 lg:grid-cols-[1fr_360px] lg:px-8">
-          <div>
+      <section className="relative isolate text-white">
+        {/* Full-bleed banner — the same image shown on the course card, now the page hero */}
+        <div className="absolute inset-0 -z-10 bg-slate-900">
+          <Image src={courseVisual.src} alt="" fill priority sizes="100vw" className="object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#06111f] via-[#06111f]/74 to-[#06111f]/15" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#06111f]/90 via-[#06111f]/45 to-transparent" />
+        </div>
+
+        <div className="mx-auto grid w-full max-w-7xl gap-8 px-5 pb-10 pt-14 sm:px-6 lg:grid-cols-[1fr_360px] lg:gap-10 lg:px-8 lg:pb-0 lg:pt-20">
+          <div className="lg:pb-28 lg:pt-4">
             <Breadcrumb
               tone="dark"
               items={[
@@ -172,9 +185,12 @@ export default async function CourseDetailPage({
               </div>
             ) : null}
 
-            <div className="mt-5 flex flex-wrap gap-4 text-sm text-white/70">
-              <span className="flex items-center gap-1.5"><BadgeCheck aria-hidden="true" className="h-4 w-4" /> Certificate included</span>
-              <span className="flex items-center gap-1.5"><Award aria-hidden="true" className="h-4 w-4" /> {course.rewards} VowRewards</span>
+            <div className="mt-5 flex flex-wrap gap-4 text-sm text-white/80">
+              {heroBadges.map(({ Icon, text }) => (
+                <span key={text} className="flex items-center gap-1.5">
+                  <Icon aria-hidden="true" className="h-4 w-4 text-gold" /> {text}
+                </span>
+              ))}
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -199,13 +215,11 @@ export default async function CourseDetailPage({
             </div>
           </div>
 
-          <aside className="hidden self-start lg:sticky lg:top-24 lg:block">
-            <div className="premium-card overflow-hidden rounded-lg text-ink">
-              <div className="relative aspect-[16/8] overflow-hidden bg-slate-100">
-                <Image src={courseVisual.src} alt={courseVisual.alt} fill priority sizes="360px" className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#06111f]/65 to-transparent" />
-                <span className="absolute bottom-3 left-4 text-xs font-semibold uppercase tracking-[0.14em] text-white">Course preview</span>
-              </div>
+          {/* Enrol card floats over the seam between the banner and the white section
+              below — deliberately image-free so it never competes with the hero photo. */}
+          <aside className="lg:sticky lg:top-24 lg:translate-y-16">
+            <div className="premium-card overflow-hidden rounded-xl text-ink shadow-[0_28px_64px_rgba(6,17,31,0.32)]">
+              <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${accentColor}, ${accentColor}00)` }} />
               <div className="p-6">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>Enrol now</p>
                 <p className="mt-3 text-4xl font-bold text-ink">{formatCurrency(course.price)}</p>
@@ -213,7 +227,7 @@ export default async function CourseDetailPage({
                 <div className="mt-5"><EnrollButton course={course} /></div>
 
                 <div className="mt-5 space-y-2.5 text-sm">
-                  {courseFeatures.map(({ Icon, text }) => (
+                  {cardFeatures.map(({ Icon, text }) => (
                     <div key={text} className="flex items-center gap-2.5 text-muted">
                       <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />
                       <span>{text}</span>
@@ -223,7 +237,7 @@ export default async function CourseDetailPage({
 
                 <div className="mt-6 border-t border-slate-100 pt-4">
                   <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted">Duration</p>
-                  <p className="text-sm font-semibold text-ink">{course.duration}</p>
+                  <p className="text-sm font-semibold text-ink">{formatCourseDurationWeeks(stats.totalMinutes)}</p>
                 </div>
               </div>
             </div>
@@ -231,7 +245,7 @@ export default async function CourseDetailPage({
         </div>
       </section>
 
-      <section className="border-b border-slate-100 bg-white py-6">
+      <section className="relative border-b border-slate-100 bg-white pb-6 pt-6 lg:pt-24">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-6 px-5 sm:grid-cols-4 sm:px-6 lg:px-8">
           {[
             { label: "Modules", value: String(stats.moduleCount) },
