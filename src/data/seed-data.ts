@@ -136,11 +136,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -333,11 +329,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -515,11 +507,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -712,11 +700,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -893,11 +877,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -1074,11 +1054,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -1337,11 +1313,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -1534,11 +1506,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -1695,11 +1663,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -1856,11 +1820,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -2027,11 +1987,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -2234,11 +2190,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -2405,11 +2357,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -2576,11 +2524,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -2747,11 +2691,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -2928,11 +2868,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -3099,11 +3035,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -3280,11 +3212,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -3461,11 +3389,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -3668,11 +3592,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -3865,11 +3785,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -4046,11 +3962,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -4243,11 +4155,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -4440,11 +4348,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -4611,11 +4515,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -4828,11 +4728,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -4999,11 +4895,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -5160,11 +5052,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -5341,11 +5229,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -5522,11 +5406,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -5729,11 +5609,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -5910,11 +5786,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -6137,11 +6009,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -6344,11 +6212,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -6515,11 +6379,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -6696,11 +6556,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -6913,11 +6769,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -7130,11 +6982,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -7367,11 +7215,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -7518,11 +7362,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -7689,11 +7529,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -7896,11 +7732,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -8057,11 +7889,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -8304,11 +8132,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -8531,11 +8355,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -8712,11 +8532,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -8893,11 +8709,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -9100,11 +8912,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -9261,11 +9069,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -9432,11 +9236,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -9603,11 +9403,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -9784,11 +9580,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -9945,11 +9737,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -10126,11 +9914,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -10307,11 +10091,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -10488,11 +10268,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -10685,11 +10461,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -10882,11 +10654,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -11043,11 +10811,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -11240,11 +11004,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -11391,11 +11151,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -11562,11 +11318,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -11769,11 +11521,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -11950,11 +11698,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -12167,11 +11911,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -12364,11 +12104,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -12525,11 +12261,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -12696,11 +12428,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -12913,11 +12641,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -13120,11 +12844,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -13281,11 +13001,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -13442,11 +13158,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -13613,11 +13325,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -13784,11 +13492,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -13935,11 +13639,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -14086,11 +13786,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -14247,11 +13943,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -14418,11 +14110,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -14625,11 +14313,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -14796,11 +14480,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -14967,11 +14647,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -15148,11 +14824,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -15319,11 +14991,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -15536,11 +15204,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -15733,11 +15397,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -15930,11 +15590,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -16101,11 +15757,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -16282,11 +15934,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -16443,11 +16091,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -16624,11 +16268,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -16775,11 +16415,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -16946,11 +16582,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -17097,11 +16729,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -17248,11 +16876,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -17445,11 +17069,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -17616,11 +17236,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -17787,11 +17403,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -17948,11 +17560,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -18109,11 +17717,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -18280,11 +17884,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -18441,11 +18041,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -18592,11 +18188,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -18743,11 +18335,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -18914,11 +18502,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -19075,11 +18659,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -19246,11 +18826,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -19443,11 +19019,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -19614,11 +19186,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -19785,11 +19353,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -19956,11 +19520,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -20127,11 +19687,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -20288,11 +19844,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -20505,11 +20057,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -20686,11 +20234,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -20867,11 +20411,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -21048,11 +20588,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -21199,11 +20735,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -21370,11 +20902,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -21531,11 +21059,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -21702,11 +21226,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -21853,11 +21373,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -22004,11 +21520,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -22155,11 +21667,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -22306,11 +21814,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -22467,11 +21971,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -22638,11 +22138,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -22789,11 +22285,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -22940,11 +22432,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -23121,11 +22609,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -23272,11 +22756,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -23443,11 +22923,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -23594,11 +23070,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -23735,11 +23207,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -23896,11 +23364,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -24057,11 +23521,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -24198,11 +23658,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -24339,11 +23795,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -24490,11 +23942,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -24651,11 +24099,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -24822,11 +24266,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -24993,11 +24433,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -25190,11 +24626,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -25341,11 +24773,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -25502,11 +24930,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -25673,11 +25097,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -25834,11 +25254,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -25995,11 +25411,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -26166,11 +25578,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -26363,11 +25771,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -26504,11 +25908,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -26675,11 +26075,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -26846,11 +26242,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -27017,11 +26409,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -27198,11 +26586,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -27379,11 +26763,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -27530,11 +26910,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -27711,11 +27087,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -27852,11 +27224,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -28023,11 +27391,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -28184,11 +27548,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -28335,11 +27695,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -28486,11 +27842,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -28637,11 +27989,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -28778,11 +28126,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -28919,11 +28263,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -29060,11 +28400,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -29201,11 +28537,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -29352,11 +28684,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -29549,11 +28877,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -29720,11 +29044,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -29891,11 +29211,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -30052,11 +29368,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -30223,11 +29535,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -30298,11 +29606,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -30373,11 +29677,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -30448,11 +29748,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -30523,11 +29819,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -30598,11 +29890,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -30673,11 +29961,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -30748,11 +30032,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -30863,11 +30143,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -31034,11 +30310,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -31175,11 +30447,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -31326,11 +30594,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -31457,11 +30721,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -31572,11 +30832,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -31779,11 +31035,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -31950,11 +31202,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32025,11 +31273,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32100,11 +31344,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32175,11 +31415,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32250,11 +31486,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32325,11 +31557,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32400,11 +31628,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32475,11 +31699,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32550,11 +31770,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32625,11 +31841,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32700,11 +31912,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32775,11 +31983,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32850,11 +32054,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -32925,11 +32125,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33000,11 +32196,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33075,11 +32267,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33150,11 +32338,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33225,11 +32409,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33300,11 +32480,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33375,11 +32551,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33450,11 +32622,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33525,11 +32693,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33600,11 +32764,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33675,11 +32835,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33750,11 +32906,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33825,11 +32977,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33900,11 +33048,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -33975,11 +33119,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34050,11 +33190,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34125,11 +33261,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34200,11 +33332,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34275,11 +33403,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34350,11 +33474,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34425,11 +33545,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34500,11 +33616,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34575,11 +33687,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34650,11 +33758,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34725,11 +33829,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34800,11 +33900,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34875,11 +33971,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -34950,11 +34042,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35025,11 +34113,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35100,11 +34184,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35175,11 +34255,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35250,11 +34326,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35325,11 +34397,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35400,11 +34468,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35475,11 +34539,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35550,11 +34610,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35625,11 +34681,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35700,11 +34752,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35775,11 +34823,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35850,11 +34894,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -35925,11 +34965,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36000,11 +35036,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36075,11 +35107,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36150,11 +35178,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36225,11 +35249,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36300,11 +35320,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36375,11 +35391,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36450,11 +35462,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36525,11 +35533,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36600,11 +35604,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36675,11 +35675,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36750,11 +35746,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36825,11 +35817,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36900,11 +35888,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -36975,11 +35959,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37050,11 +36030,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37125,11 +36101,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37200,11 +36172,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37275,11 +36243,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37350,11 +36314,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37425,11 +36385,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37500,11 +36456,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37575,11 +36527,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37650,11 +36598,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37725,11 +36669,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37800,11 +36740,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37875,11 +36811,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -37950,11 +36882,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38025,11 +36953,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38100,11 +37024,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38175,11 +37095,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38250,11 +37166,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38325,11 +37237,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38400,11 +37308,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38475,11 +37379,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38550,11 +37450,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38625,11 +37521,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38700,11 +37592,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -38831,11 +37719,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -39038,11 +37922,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -39189,11 +38069,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -39340,11 +38216,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -39455,11 +38327,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -39560,11 +38428,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -39675,11 +38539,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -39790,11 +38650,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -39855,11 +38711,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -39920,11 +38772,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -39985,11 +38833,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40050,11 +38894,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40115,11 +38955,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40180,11 +39016,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40245,11 +39077,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40310,11 +39138,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40375,11 +39199,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40440,11 +39260,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40505,11 +39321,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40570,11 +39382,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40635,11 +39443,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40700,11 +39504,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40765,11 +39565,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40830,11 +39626,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40895,11 +39687,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -40960,11 +39748,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -41025,11 +39809,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -41090,11 +39870,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -41287,11 +40063,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -41494,11 +40266,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -41701,11 +40469,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -41908,11 +40672,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -42257,11 +41017,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -42606,11 +41362,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -42813,11 +41565,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -42994,11 +41742,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -43089,11 +41833,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -43184,11 +41924,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -43279,11 +42015,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -43374,11 +42106,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -43469,11 +42197,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -43564,11 +42288,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -43659,11 +42379,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -43754,11 +42470,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -43849,11 +42561,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -43944,11 +42652,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44039,11 +42743,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44134,11 +42834,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44229,11 +42925,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44324,11 +43016,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44419,11 +43107,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44514,11 +43198,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44609,11 +43289,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44704,11 +43380,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44799,11 +43471,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44894,11 +43562,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -44989,11 +43653,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -45084,11 +43744,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -45179,11 +43835,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -45274,11 +43926,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -45369,11 +44017,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -45464,11 +44108,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -45559,11 +44199,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -45654,11 +44290,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -45749,11 +44381,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -45844,11 +44472,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -45939,11 +44563,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46034,11 +44654,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46129,11 +44745,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46224,11 +44836,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46319,11 +44927,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46414,11 +45018,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46509,11 +45109,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46604,11 +45200,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46699,11 +45291,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46794,11 +45382,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46889,11 +45473,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -46984,11 +45564,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -47079,11 +45655,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -47174,11 +45746,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -47269,11 +45837,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -47364,11 +45928,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -47459,11 +46019,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -47554,11 +46110,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -47649,11 +46201,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -47744,11 +46292,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -47839,11 +46383,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -47934,11 +46474,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48029,11 +46565,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48124,11 +46656,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48219,11 +46747,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48314,11 +46838,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48409,11 +46929,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48504,11 +47020,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48599,11 +47111,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48694,11 +47202,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48789,11 +47293,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48884,11 +47384,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -48979,11 +47475,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -49074,11 +47566,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -49169,11 +47657,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -49264,11 +47748,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -49359,11 +47839,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -49454,11 +47930,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -49549,11 +48021,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -49644,11 +48112,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -49739,11 +48203,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -49834,11 +48294,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -49929,11 +48385,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -50456,11 +48908,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -50551,11 +48999,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -50646,11 +49090,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -50741,11 +49181,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -50836,11 +49272,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -50931,11 +49363,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51026,11 +49454,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51121,11 +49545,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51216,11 +49636,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51311,11 +49727,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51406,11 +49818,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51501,11 +49909,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51596,11 +50000,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51691,11 +50091,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51786,11 +50182,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51881,11 +50273,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -51976,11 +50364,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -52183,11 +50567,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -52364,11 +50744,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -52561,11 +50937,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -52722,11 +51094,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -52903,11 +51271,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -53100,11 +51464,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -53297,11 +51657,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -53494,11 +51850,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -53665,11 +52017,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -53846,11 +52194,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -53941,11 +52285,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54036,11 +52376,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54131,11 +52467,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54226,11 +52558,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54321,11 +52649,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54416,11 +52740,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54511,11 +52831,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54606,11 +52922,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54701,11 +53013,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54796,11 +53104,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54891,11 +53195,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -54986,11 +53286,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -55081,11 +53377,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -55176,11 +53468,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -55271,11 +53559,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -55366,11 +53650,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -55461,11 +53741,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -55556,11 +53832,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -55651,11 +53923,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -55746,11 +54014,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -55841,11 +54105,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -55936,11 +54196,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56031,11 +54287,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56126,11 +54378,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56221,11 +54469,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56316,11 +54560,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56411,11 +54651,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56506,11 +54742,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56601,11 +54833,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56696,11 +54924,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56791,11 +55015,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56886,11 +55106,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -56981,11 +55197,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -57076,11 +55288,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -57171,11 +55379,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -57266,11 +55470,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -57361,11 +55561,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -57456,11 +55652,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -57551,11 +55743,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -57646,11 +55834,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -57741,11 +55925,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -57836,11 +56016,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -57931,11 +56107,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58026,11 +56198,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58121,11 +56289,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58216,11 +56380,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58311,11 +56471,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58406,11 +56562,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58501,11 +56653,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58596,11 +56744,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58691,11 +56835,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58786,11 +56926,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58881,11 +57017,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -58976,11 +57108,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -59071,11 +57199,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -59166,11 +57290,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -59261,11 +57381,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -59442,11 +57558,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -59537,11 +57649,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -59632,11 +57740,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -59813,11 +57917,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -59994,11 +58094,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -60089,11 +58185,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -60184,11 +58276,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -60365,11 +58453,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -60460,11 +58544,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -60555,11 +58635,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -60650,11 +58726,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -60745,11 +58817,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -60840,11 +58908,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -61021,11 +59085,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -61202,11 +59262,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -61383,11 +59439,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -61478,11 +59530,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -61573,11 +59621,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -61668,11 +59712,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -61763,11 +59803,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -61858,11 +59894,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -61953,11 +59985,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -62134,11 +60162,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -62229,11 +60253,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -62324,11 +60344,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -62419,11 +60435,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -62514,11 +60526,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -62609,11 +60617,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -62704,11 +60708,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -62799,11 +60799,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -62894,11 +60890,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -62989,11 +60981,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -63084,11 +61072,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -63179,11 +61163,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -63274,11 +61254,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -63369,11 +61345,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -63464,11 +61436,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -63559,11 +61527,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -63654,11 +61618,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -63749,11 +61709,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -63844,11 +61800,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -63939,11 +61891,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64034,11 +61982,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64129,11 +62073,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64224,11 +62164,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64319,11 +62255,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64414,11 +62346,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64509,11 +62437,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64604,11 +62528,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64699,11 +62619,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64794,11 +62710,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64889,11 +62801,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -64984,11 +62892,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -65079,11 +62983,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -65174,11 +63074,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -65269,11 +63165,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -65364,11 +63256,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -65459,11 +63347,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -65554,11 +63438,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -65649,11 +63529,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -65744,11 +63620,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -65839,11 +63711,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -65934,11 +63802,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66029,11 +63893,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66124,11 +63984,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66219,11 +64075,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66314,11 +64166,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66409,11 +64257,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66504,11 +64348,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66599,11 +64439,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66694,11 +64530,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66789,11 +64621,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66884,11 +64712,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -66979,11 +64803,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -67074,11 +64894,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -67169,11 +64985,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -67264,11 +65076,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -67359,11 +65167,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -67454,11 +65258,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -67549,11 +65349,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -67644,11 +65440,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -67739,11 +65531,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -67834,11 +65622,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -67929,11 +65713,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68024,11 +65804,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68119,11 +65895,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68214,11 +65986,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68309,11 +66077,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68404,11 +66168,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68499,11 +66259,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68594,11 +66350,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68689,11 +66441,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68784,11 +66532,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68879,11 +66623,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -68974,11 +66714,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -69069,11 +66805,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -69164,11 +66896,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -69259,11 +66987,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -69354,11 +67078,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -69459,11 +67179,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -69574,11 +67290,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -69669,11 +67381,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -69774,11 +67482,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -70011,11 +67715,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -70248,11 +67948,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -70399,11 +68095,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -70540,11 +68232,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -70635,11 +68323,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -70730,11 +68414,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 120,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -70825,11 +68505,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -70920,11 +68596,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71015,11 +68687,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71110,11 +68778,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71205,11 +68869,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71300,11 +68960,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71395,11 +69051,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71490,11 +69142,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71585,11 +69233,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71680,11 +69324,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71775,11 +69415,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71870,11 +69506,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -71965,15 +69597,11 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
-    slug: "time-management",
+    slug: "time-management-business-school",
     moodleId: 15,
     title: "Time Management",
     academySlug: "business-school",
@@ -72060,11 +69688,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -72155,11 +69779,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -72250,11 +69870,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -72345,11 +69961,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -72440,11 +70052,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -72535,11 +70143,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -72630,11 +70234,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -72725,11 +70325,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -72820,11 +70416,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -72915,11 +70507,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73010,11 +70598,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73105,11 +70689,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73200,11 +70780,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73295,11 +70871,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73390,11 +70962,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73485,11 +71053,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73580,11 +71144,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73675,11 +71235,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73770,11 +71326,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73865,11 +71417,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   },
 
   {
@@ -73960,11 +71508,7 @@ export const courses: Course[] = [
     "Unlock matched opportunities via VowRewards"
     ],
     rewards: 250,
-    opportunityPathways: [
-    "Employment",
-    "Entrepreneurship",
-    "Further study"
-    ],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
   }
 ];
 

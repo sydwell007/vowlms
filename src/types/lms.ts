@@ -90,6 +90,18 @@ export type VRPractice = {
   scorePlaceholder: number;
 };
 
+/**
+ * What a specific course leads to — real, course-specific answers to "what
+ * jobs/business ideas/further study does this actually unlock", shown as
+ * three clickable categories on the course landing page. `employment` items
+ * are the ones that will later link out to matching PlugConnect listings.
+ */
+export type CourseOpportunityPathways = {
+  employment: string[];
+  entrepreneurship: string[];
+  furtherStudy: string[];
+};
+
 export type Course = {
   slug: string;
   moodleId?: number | null;
@@ -105,7 +117,7 @@ export type Course = {
   vrPractices: VRPractice[];
   outcomes: string[];
   rewards: number;
-  opportunityPathways: string[];
+  opportunityPathways: CourseOpportunityPathways;
 };
 
 export type CourseSummary = Pick<

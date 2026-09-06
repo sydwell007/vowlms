@@ -1,12 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { BriefcaseBusiness, Check, GraduationCap, ListChecks, MessageSquareText, UsersRound } from "lucide-react";
+import Link from "next/link";
+import {
+  Briefcase,
+  Check,
+  ChevronDown,
+  GraduationCap,
+  ListChecks,
+  MessageSquareText,
+  Rocket,
+  UsersRound,
+} from "lucide-react";
 import { CourseCurriculum } from "@/components/courses/CourseCurriculum";
 import { CourseReviews } from "@/components/courses/CourseReviews";
 import type { Academy, Course } from "@/types/lms";
 
 type Tab = "overview" | "curriculum" | "teaching" | "reviews";
+type PathwayKey = "employment" | "entrepreneurship" | "furtherStudy";
 
 type Props = {
   course: Course;
@@ -21,8 +32,15 @@ const tabs: Array<{ id: Tab; label: string; icon: typeof ListChecks }> = [
   { id: "reviews", label: "Reviews", icon: MessageSquareText },
 ];
 
+const pathwayMeta: Array<{ key: PathwayKey; label: string; icon: typeof Briefcase; blurb: string }> = [
+  { key: "employment", label: "Employment", icon: Briefcase, blurb: "Real jobs this course prepares you for" },
+  { key: "entrepreneurship", label: "Entrepreneurship", icon: Rocket, blurb: "Business ideas you could start with this skill" },
+  { key: "furtherStudy", label: "Further study", icon: GraduationCap, blurb: "Where to take this further" },
+];
+
 export function CourseExperience({ course, academy, accentColor }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>("overview");
+  const [openPathway, setOpenPathway] = useState<PathwayKey | null>("employment");
 
   return (
     <section className="border-y border-slate-200 bg-white py-12 sm:py-16">
@@ -70,13 +88,76 @@ export function CourseExperience({ course, academy, accentColor }: Props) {
                 </div>
               </div>
               <aside className="border-l-2 border-slate-200 pl-6">
-                <BriefcaseBusiness aria-hidden="true" className="h-6 w-6" style={{ color: accentColor }} />
-                <h2 className="mt-4 text-xl font-semibold text-ink">Opportunity pathways</h2>
-                <ul className="mt-4 space-y-3">
-                  {course.opportunityPathways.map((pathway) => (
-                    <li key={pathway} className="text-sm leading-6 text-muted">{pathway}</li>
-                  ))}
-                </ul>
+                <h2 className="text-xl font-semibold text-ink">Opportunity pathways</h2>
+                <p className="mt-1.5 text-sm leading-6 text-muted">
+                  Click a pathway to see what {course.title} specifically leads to.
+                </p>
+
+                <div className="mt-4 space-y-2.5">
+                  {pathwayMeta.map(({ key, label, icon: Icon, blurb }) => {
+                    const items = course.opportunityPathways[key];
+                    const isOpen = openPathway === key;
+                    return (
+                      <div key={key} className="overflow-hidden rounded-lg border border-slate-200">
+                        <button
+                          type="button"
+                          onClick={() => setOpenPathway(isOpen ? null : key)}
+                          aria-expanded={isOpen}
+                          aria-controls={`pathway-panel-${key}`}
+                          className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition hover:bg-slate-50"
+                        >
+                          <span className="flex items-center gap-2.5 min-w-0">
+                            <span
+                              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full"
+                              style={{ backgroundColor: `${accentColor}16`, color: accentColor }}
+                            >
+                              <Icon aria-hidden="true" className="h-4 w-4" />
+                            </span>
+                            <span className="min-w-0">
+                              <span className="block text-sm font-semibold text-ink">{label}</span>
+                              <span className="block truncate text-xs text-muted">{blurb}</span>
+                            </span>
+                          </span>
+                          <span className="flex shrink-0 items-center gap-2">
+                            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-muted">
+                              {items.length}
+                            </span>
+                            <ChevronDown
+                              aria-hidden="true"
+                              className={`h-4 w-4 text-muted transition-transform ${isOpen ? "rotate-180" : ""}`}
+                            />
+                          </span>
+                        </button>
+
+                        {isOpen ? (
+                          <div id={`pathway-panel-${key}`} className="border-t border-slate-100 bg-slate-50/70 px-4 py-3">
+                            <ul className="space-y-2">
+                              {items.map((item) => (
+                                <li key={item} className="flex items-start gap-2.5 text-sm leading-6 text-muted">
+                                  <span
+                                    aria-hidden="true"
+                                    className="mt-2.5 h-1 w-1 shrink-0 rounded-full"
+                                    style={{ backgroundColor: accentColor }}
+                                  />
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                            {key === "employment" ? (
+                              <p className="mt-3 border-t border-slate-200 pt-3 text-xs leading-5 text-muted">
+                                Matching live roles from{" "}
+                                <Link href="/opportunities" className="font-semibold underline underline-offset-2 hover:text-ink">
+                                  PlugConnect
+                                </Link>{" "}
+                                are coming soon for this course.
+                              </p>
+                            ) : null}
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                </div>
               </aside>
             </div>
           ) : null}

@@ -250,7 +250,7 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
     modules: allModules,
     outcomes: [],
     rewards: 0,
-    opportunityPathways: [],
+    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
     assessments: isAssessment
       ? [{ slug: currentSlug, lessonSlug: currentSlug, title: lesson.title, passMark: 70, questions: [] }]
       : [],

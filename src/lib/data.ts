@@ -8,6 +8,7 @@ import {
   parentPlaceholderSlugs,
 } from "@/data/course-groupings";
 import { skillPathways } from "@/data/skill-pathways";
+import { getOpportunityPathways } from "@/data/opportunity-pathways";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { isLearnerVisibleUpskillingCourse } from "@/lib/upskilling-visibility";
 import { getCourseStats } from "@/lib/course-content";
@@ -99,7 +100,11 @@ function buildParentCourse(grouping: typeof allGroupings[number]): Course {
     vrPractices,
     outcomes: grouping.outcomes,
     rewards: totalRewards || modules.length * 120,
-    opportunityPathways: ["Employment", "Entrepreneurship", "Further study"],
+    opportunityPathways: getOpportunityPathways({
+      slug: grouping.slug,
+      title: grouping.title,
+      academySlug: "upskilling-academy",
+    }),
   };
 }
 
@@ -115,7 +120,9 @@ function buildGroupedCourses(): Course[] {
   // Slugs to remove from the flat list: consumed children + MS Office placeholder stubs
   const excluded = new Set([...consumedSlugs, ...parentPlaceholderSlugs]);
 
-  const remaining = rawCourses.filter((c) => !excluded.has(c.slug));
+  const remaining = rawCourses
+    .filter((c) => !excluded.has(c.slug))
+    .map((c) => ({ ...c, opportunityPathways: getOpportunityPathways(c) }));
 
   // Deduplicate by slug — first occurrence wins
   const seen = new Set<string>();

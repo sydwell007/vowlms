@@ -51,6 +51,7 @@ export const ecosystemServices: EcosystemService[] = [
   {
     slug: "plugconnect",
     icon: "🔗",
+    iconImage: "/images/plugconnect-logo-mark.png",
     name: "PlugConnect",
     tagline: "Planned opportunity routing",
     description: "A planned consent-led route from learner-controlled evidence to confirmed employment, project, and enterprise opportunities.",
