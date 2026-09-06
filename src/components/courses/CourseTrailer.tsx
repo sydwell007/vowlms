@@ -21,15 +21,20 @@ const SLIDE_MS = 4800;
 const CLIP_CAP_MS = 5500;
 
 /**
- * Cinematic, auto-playing "course trailer". Real per-lesson videos live in
- * the bridge's `lessons` table, not this app's static course catalogue — so
- * on mount this fetches `/api/courses/{slug}/trailer-clips`, which asks the
- * bridge for one real lesson video per module. When real clips come back,
- * the trailer cycles through genuine lesson footage (with its own real
- * audio). When they don't — bridge unavailable locally, or a course's
- * lessons don't have video yet — it falls back to a Ken-Burns slideshow of
- * the course's real module images with an optional background theme track
- * (silently disabled if no track file has been provided yet).
+ * Cinematic, auto-playing "course trailer" with three tiers, best-available first:
+ *
+ * 1. A pre-rendered `/videos/course-trailers/{slug}.mp4` — real lesson footage
+ *    for this course, cross-faded together by `scripts/generate-course-trailers.mjs`
+ *    from the actual GoalVow lesson MP4s. Silent by design (crossfading unrelated
+ *    lesson voiceovers reads as noise, not narration) — the mute button instead
+ *    controls an optional background theme track layered underneath.
+ * 2. If that file doesn't exist for a course, live per-lesson video fetched from
+ *    the bridge (`/api/courses/{slug}/trailer-clips`) — real footage, real audio.
+ * 3. If neither is available, a Ken-Burns slideshow of the course's real module
+ *    images — always available, since every course has module artwork.
+ *
+ * The optional background track fails silently if no file has been dropped at
+ * that path yet, so the trailer never claims a soundtrack it doesn't have.
  */
 export function CourseTrailer({ course, academyCategory, academyName }: Props) {
   const stats = getCourseStats(course);
@@ -43,10 +48,14 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
     return unique.length > 0 ? unique.slice(0, 6) : [courseVisual.src];
   }, [course.modules, course.slug, courseVisual.src]);
 
+  const [staticTrailerFailed, setStaticTrailerFailed] = useState(false);
   const [clips, setClips] = useState<TrailerClip[]>([]);
   const [clipsChecked, setClipsChecked] = useState(false);
 
+  // Only fall back to the live-bridge clip fetch once the pre-rendered static
+  // trailer has proven unavailable for this course.
   useEffect(() => {
+    if (!staticTrailerFailed) return;
     let cancelled = false;
     fetch(`/api/courses/${course.slug}/trailer-clips`, { cache: "no-store" })
       .then((res) => res.json())
@@ -63,9 +72,10 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
     return () => {
       cancelled = true;
     };
-  }, [course.slug]);
+  }, [staticTrailerFailed, course.slug]);
 
   const hasRealClips = clips.length > 0;
+  const showSlideshow = staticTrailerFailed && !hasRealClips;
   const slideCount = hasRealClips ? clips.length : images.length;
 
   const [rawIndex, setRawIndex] = useState(0);
@@ -76,20 +86,20 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
   const [muted, setMuted] = useState(true);
   const [musicAvailable, setMusicAvailable] = useState(true);
   const musicRef = useRef<HTMLAudioElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const clipVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (slideCount < 2) return;
+    if (!staticTrailerFailed || slideCount < 2) return;
     const ms = hasRealClips ? CLIP_CAP_MS : SLIDE_MS;
     const id = setInterval(() => {
       setRawIndex((i) => i + 1);
     }, ms);
     return () => clearInterval(id);
-  }, [slideCount, hasRealClips]);
+  }, [staticTrailerFailed, slideCount, hasRealClips]);
 
   useEffect(() => {
     if (!hasRealClips) return;
-    const video = videoRef.current;
+    const video = clipVideoRef.current;
     if (!video) return;
     video.currentTime = 0;
     video.play().catch(() => {
@@ -97,8 +107,13 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
     });
   }, [activeIndex, hasRealClips]);
 
+  // The pre-rendered trailer and the image slideshow both ship with no
+  // narration of their own, so both use the same optional background track;
+  // only the live-bridge tier has its own real speech to toggle instead.
+  const usesBackgroundMusic = !hasRealClips;
+
   function toggleSound() {
-    if (hasRealClips) {
+    if (!usesBackgroundMusic) {
       setMuted((value) => !value);
       return;
     }
@@ -114,11 +129,12 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
     setMuted((value) => !value);
   }
 
-  const soundControlAvailable = hasRealClips || musicAvailable;
+  const soundControlAvailable = !usesBackgroundMusic || musicAvailable;
+  const soundControlReady = usesBackgroundMusic ? true : clipsChecked;
 
   return (
     <section className="relative isolate overflow-hidden rounded-2xl text-white shadow-[0_28px_64px_rgba(6,17,31,0.32)]">
-      {!hasRealClips ? (
+      {usesBackgroundMusic ? (
         <audio
           ref={musicRef}
           src="/audio/course-trailer-theme.mp3"
@@ -130,10 +146,20 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
       ) : null}
 
       <div className="absolute inset-0 -z-10 bg-slate-900">
-        {hasRealClips ? (
+        {!staticTrailerFailed ? (
+          <video
+            src={`/videos/course-trailers/${course.slug}.mp4`}
+            autoPlay
+            loop
+            muted
+            playsInline
+            onError={() => setStaticTrailerFailed(true)}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : hasRealClips ? (
           <video
             key={clips[activeIndex].src}
-            ref={videoRef}
+            ref={clipVideoRef}
             src={clips[activeIndex].src}
             muted={muted}
             autoPlay
@@ -165,8 +191,10 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
         <div className="absolute inset-0 bg-gradient-to-r from-[#06111f]/75 via-[#06111f]/20 to-transparent" />
       </div>
 
-      {/* Story-style progress segments */}
-      {slideCount > 1 ? (
+      {/* Story-style progress segments — only meaningful once we're on the
+          manually-timed slideshow/clip tiers; the pre-rendered trailer already
+          has its own crossfades baked in. */}
+      {showSlideshow && slideCount > 1 ? (
         <div className="absolute inset-x-4 top-4 z-10 flex gap-1.5 sm:inset-x-6 sm:top-5">
           {Array.from({ length: slideCount }, (_, index) => (
             <span key={index} className="h-1 flex-1 overflow-hidden rounded-full bg-white/25">
@@ -185,7 +213,7 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
         </div>
       ) : null}
 
-      {clipsChecked && soundControlAvailable ? (
+      {soundControlReady && soundControlAvailable ? (
         <button
           type="button"
           onClick={toggleSound}
@@ -199,7 +227,7 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
       <div className="relative flex min-h-[420px] flex-col justify-end gap-5 p-6 pt-16 sm:min-h-[480px] sm:p-10">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold">
-            {academyName ?? "Upskilling Academy"} · {hasRealClips ? "Real Lesson Footage" : "Course Trailer"}
+            {academyName ?? "Upskilling Academy"} · {showSlideshow ? "Course Trailer" : "Real Lesson Footage"}
           </p>
           <h2 className="mt-3 max-w-2xl text-balance text-3xl font-bold sm:text-4xl">{course.title}</h2>
           {course.coursePreview ? (
