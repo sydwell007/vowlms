@@ -51,6 +51,27 @@ function filenameFromUrl(string $url, string $fallback = 'video.mp4'): string
     return $filename !== '' ? $filename : $fallback;
 }
 
+// Rewrites every Moodle pluginfile.php link embedded in lesson HTML (e.g. a
+// PDF the learner is meant to click under "Lesson Content") into a signed
+// /files/serve URL, the same way $lesson['media_url'] already is above.
+// This must happen server-side — signing here uses this bridge's own
+// RESOURCE_SIGNING_SECRET, the same secret files/serve.php verifies with, so
+// there is no risk of the two sides holding different copies of it.
+function rewriteContentMediaUrls(string $html): string
+{
+    if ($html === '') return $html;
+    return preg_replace_callback(
+        '/\b(src|href)="(https?:\/\/[^"]*\/(?:webservice\/)?pluginfile\.php\/[^"]*)"/i',
+        function (array $m): string {
+            $cleanUrl = cleanMoodleSourceUrl($m[2]);
+            $filename = filenameFromUrl($cleanUrl, 'file');
+            $signed = signedMediaUrl('url', $cleanUrl, $filename);
+            return $signed ? ($m[1] . '="' . $signed . '"') : $m[0];
+        },
+        $html
+    ) ?? $html;
+}
+
 $slug = trim($_GET['slug'] ?? '');
 if ($slug === '') jsonError('Lesson slug is required', 400);
 
@@ -170,6 +191,8 @@ if (!empty($lesson['video_hash'])) {
     $sourceUrl = cleanMoodleSourceUrl($mediaMatch[1]);
     $lesson['media_url'] = signedMediaUrl('url', $sourceUrl, filenameFromUrl($sourceUrl));
 }
+
+$lesson['content'] = rewriteContentMediaUrls((string)($lesson['content'] ?? ''));
 
 // ── 7. Return ─────────────────────────────────────────────────────────────────
 jsonOk([
