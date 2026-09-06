@@ -102,6 +102,19 @@ export type CourseOpportunityPathways = {
   furtherStudy: string[];
 };
 
+/**
+ * Marketing/sales content for the "Course Preview" tab — real, course-specific
+ * copy that sells the value of enrolling, distinct from the more academic
+ * `outcomes` list shown on the Overview tab. Only authored for the 20
+ * Upskilling Academy courses today; `undefined` elsewhere hides the tab.
+ */
+export type CoursePreviewContent = {
+  /** Why this course exists — the real problem it solves for the learner. */
+  purpose: string;
+  /** Value-focused reasons to enrol, not a skills list — career/life impact. */
+  benefits: string[];
+};
+
 export type Course = {
   slug: string;
   moodleId?: number | null;
@@ -118,6 +131,7 @@ export type Course = {
   outcomes: string[];
   rewards: number;
   opportunityPathways: CourseOpportunityPathways;
+  coursePreview?: CoursePreviewContent;
 };
 
 export type CourseSummary = Pick<

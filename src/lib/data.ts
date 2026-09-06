@@ -9,6 +9,7 @@ import {
 } from "@/data/course-groupings";
 import { skillPathways } from "@/data/skill-pathways";
 import { getOpportunityPathways } from "@/data/opportunity-pathways";
+import { getCoursePreviewContent } from "@/data/course-preview-content";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { isLearnerVisibleUpskillingCourse } from "@/lib/upskilling-visibility";
 import { getCourseStats } from "@/lib/course-content";
@@ -105,6 +106,7 @@ function buildParentCourse(grouping: typeof allGroupings[number]): Course {
       title: grouping.title,
       academySlug: "upskilling-academy",
     }),
+    coursePreview: getCoursePreviewContent(grouping.slug),
   };
 }
 

@@ -271,6 +271,18 @@ body {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 250, 253, 0.96));
 }
 
+/* Course Trailer (CourseTrailer.tsx) — slow continuous zoom on the active
+   slide, and a per-slide fill sweep for the story-style progress segments. */
+@keyframes trailer-zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+@keyframes trailer-progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
