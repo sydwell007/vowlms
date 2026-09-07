@@ -10,49 +10,62 @@ setCors();
 requireBridgeKey();
 
 $db = getDb();
-$courseSlug = trim($_GET['slug'] ?? '');
-if ($courseSlug === '') jsonError('Course slug is required', 400);
 
-$courseStmt = $db->prepare('SELECT id FROM courses WHERE slug = ? AND status = "published" LIMIT 1');
-$courseStmt->execute([$courseSlug]);
-$course = $courseStmt->fetch();
-if (!$course) jsonError('Course not found', 404);
-$courseId = $course['id'];
+// A VowLMS "course" the learner sees (e.g. "career-management") is often a
+// virtual parent assembled from several real, individually Moodle-migrated
+// child courses — the parent slug itself never has its own row in `courses`.
+// The Next.js route already resolves this and sends every real child slug
+// here, comma-separated, so reviews aggregate across all of them instead of
+// 404ing on a slug that was never meant to exist in this table.
+$courseSlugs = array_values(array_filter(array_map('trim', explode(',', $_GET['slug'] ?? ''))));
+if (empty($courseSlugs)) jsonError('Course slug is required', 400);
 
-function getReviewSummary(PDO $db, string $courseId): array {
+$placeholders = implode(',', array_fill(0, count($courseSlugs), '?'));
+$courseStmt = $db->prepare("SELECT id FROM courses WHERE slug IN ({$placeholders}) AND status = 'published'");
+$courseStmt->execute($courseSlugs);
+$courseIds = array_column($courseStmt->fetchAll(), 'id');
+if (empty($courseIds)) jsonError('Course not found', 404);
+// Reviews of a grouped course are attached to its first real child module —
+// a stable, deterministic target so repeat submissions from the same learner
+// update one row (see the ON DUPLICATE KEY UPDATE below) instead of piling up.
+$primaryCourseId = $courseIds[0];
+
+function getReviewSummary(PDO $db, array $courseIds): array {
+    $idPlaceholders = implode(',', array_fill(0, count($courseIds), '?'));
+
     $summaryStmt = $db->prepare(
-        'SELECT COUNT(*) AS total_reviews,
+        "SELECT COUNT(*) AS total_reviews,
                 ROUND(AVG(rating), 1) AS average_rating,
                 SUM(CASE WHEN would_recommend = 1 THEN 1 ELSE 0 END) AS recommend_yes,
                 SUM(CASE WHEN would_recommend IS NOT NULL THEN 1 ELSE 0 END) AS recommend_total
          FROM course_evaluations
-         WHERE course_id = ?'
+         WHERE course_id IN ({$idPlaceholders})"
     );
-    $summaryStmt->execute([$courseId]);
+    $summaryStmt->execute($courseIds);
     $row = $summaryStmt->fetch();
 
     $distributionStmt = $db->prepare(
-        'SELECT rating, COUNT(*) AS rating_count
+        "SELECT rating, COUNT(*) AS rating_count
          FROM course_evaluations
-         WHERE course_id = ?
-         GROUP BY rating'
+         WHERE course_id IN ({$idPlaceholders})
+         GROUP BY rating"
     );
-    $distributionStmt->execute([$courseId]);
+    $distributionStmt->execute($courseIds);
     $distribution = ['1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0];
     foreach ($distributionStmt->fetchAll() as $ratingRow) {
         $distribution[(string)$ratingRow['rating']] = (int)$ratingRow['rating_count'];
     }
 
     $reviewsStmt = $db->prepare(
-        'SELECT ce.id, ce.rating, ce.instructor_rating, ce.feedback_text,
+        "SELECT ce.id, ce.rating, ce.instructor_rating, ce.feedback_text,
                 ce.would_recommend, ce.created_at, u.name
          FROM course_evaluations ce
          JOIN users u ON u.id = ce.user_id
-         WHERE ce.course_id = ? AND ce.feedback_text IS NOT NULL AND TRIM(ce.feedback_text) <> ""
+         WHERE ce.course_id IN ({$idPlaceholders}) AND ce.feedback_text IS NOT NULL AND TRIM(ce.feedback_text) <> ''
          ORDER BY ce.created_at DESC
-         LIMIT 20'
+         LIMIT 20"
     );
-    $reviewsStmt->execute([$courseId]);
+    $reviewsStmt->execute($courseIds);
     $reviews = array_map(static function (array $review): array {
         $firstName = preg_split('/\s+/', trim((string)$review['name']))[0] ?: 'Learner';
         return [
@@ -79,7 +92,7 @@ function getReviewSummary(PDO $db, string $courseId): array {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    jsonOk(getReviewSummary($db, $courseId));
+    jsonOk(getReviewSummary($db, $courseIds));
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -95,13 +108,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mb_strlen($feedback) > 1500) jsonError('Feedback must be 1,500 characters or fewer', 400);
     $wouldRecommend = array_key_exists('wouldRecommend', $body) ? (int)(bool)$body['wouldRecommend'] : null;
 
+    // Enrolled in ANY child module of this grouping is enough to review the
+    // course as a whole — enrolling in a grouped parent creates one real
+    // enrollment row per child course, not one per parent.
+    $enrollIdPlaceholders = implode(',', array_fill(0, count($courseIds), '?'));
     $enrollmentStmt = $db->prepare(
-        'SELECT id FROM enrollments
-         WHERE user_id = ? AND course_id = ? AND status IN ("active", "completed")
-         LIMIT 1'
+        "SELECT id FROM enrollments
+         WHERE user_id = ? AND course_id IN ({$enrollIdPlaceholders}) AND status IN ('active', 'completed')
+         LIMIT 1"
     );
-    $enrollmentStmt->execute([$userId, $courseId]);
+    $enrollmentStmt->execute([$userId, ...$courseIds]);
     if (!$enrollmentStmt->fetch()) jsonError('Only enrolled learners can review this course', 403);
+
+    // If the learner already reviewed a different child module of this same
+    // grouping (e.g. under an older single-course review), keep updating
+    // that same row instead of creating a second review for one course.
+    $existingStmt = $db->prepare(
+        "SELECT course_id FROM course_evaluations
+         WHERE user_id = ? AND course_id IN ({$enrollIdPlaceholders})
+         LIMIT 1"
+    );
+    $existingStmt->execute([$userId, ...$courseIds]);
+    $existing = $existingStmt->fetch();
+    $targetCourseId = $existing['course_id'] ?? $primaryCourseId;
 
     $reviewStmt = $db->prepare(
         'INSERT INTO course_evaluations
@@ -116,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $reviewStmt->execute([
         generateId(),
         $userId,
-        $courseId,
+        $targetCourseId,
         $rating,
         $feedback === '' ? null : $feedback,
         $wouldRecommend,

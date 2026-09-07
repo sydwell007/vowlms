@@ -1,6 +1,19 @@
 import { badRequest, ok, serverError } from "@/lib/api/responses";
 import { bridgeGet, bridgePost, BridgeError, isBridgeConfigured } from "@/lib/bridge";
+import { getEnrollableCourseSlugs } from "@/lib/data";
 import type { CourseReviewSummary } from "@/types/lms";
+
+/**
+ * A course slug like "career-management" is often a virtual parent grouping
+ * several real, individually Moodle-migrated child courses — that parent
+ * slug has no row of its own in the bridge's `courses` table, so calling the
+ * bridge with it directly 404s ("Course not found"). Resolve to the real
+ * child slugs first (comma-separated, matched by `.htaccess`'s `[^/]+`
+ * capture) so the bridge aggregates reviews across all of them instead.
+ */
+function resolveBridgeSlug(slug: string): string {
+  return getEnrollableCourseSlugs(slug).join(",");
+}
 
 const emptySummary: CourseReviewSummary = {
   averageRating: null,
@@ -23,7 +36,7 @@ export async function GET(_request: Request, context: { params: Promise<{ slug: 
   if (!isBridgeConfigured()) return ok(emptySummary);
 
   try {
-    return ok(await bridgeGet<CourseReviewSummary>(`/courses/${encodeURIComponent(slug)}/reviews`, { noAuth: true }));
+    return ok(await bridgeGet<CourseReviewSummary>(`/courses/${encodeURIComponent(resolveBridgeSlug(slug))}/reviews`, { noAuth: true }));
   } catch (error) {
     if (error instanceof BridgeError) return bridgeError(error);
     return serverError("Course reviews could not be loaded.");
@@ -45,7 +58,7 @@ export async function POST(request: Request, context: { params: Promise<{ slug: 
   if (!isBridgeConfigured()) return serverError("Course reviews require the backend bridge.");
 
   try {
-    return ok(await bridgePost(`/courses/${encodeURIComponent(slug)}/reviews`, body));
+    return ok(await bridgePost(`/courses/${encodeURIComponent(resolveBridgeSlug(slug))}/reviews`, body));
   } catch (error) {
     if (error instanceof BridgeError) return bridgeError(error);
     return serverError("Your review could not be saved.");
