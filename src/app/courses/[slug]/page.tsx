@@ -15,6 +15,7 @@ import {
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { CourseExperience } from "@/components/courses/CourseExperience";
+import { CourseRatingBadge } from "@/components/courses/CourseRatingBadge";
 import { EnrollButton } from "@/components/courses/EnrollButton";
 import { getAcademyBySlug, getAcademyHref, getCourseBySlug, isCourseVisible } from "@/lib/data";
 import { formatCurrency } from "@/lib/format";
@@ -185,7 +186,8 @@ export default async function CourseDetailPage({
               </div>
             ) : null}
 
-            <div className="mt-5 flex flex-wrap gap-4 text-sm text-white/80">
+            <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-white/80">
+              <CourseRatingBadge courseSlug={course.slug} variant="hero" />
               {heroBadges.map(({ Icon, text }) => (
                 <span key={text} className="flex items-center gap-1.5">
                   <Icon aria-hidden="true" className="h-4 w-4 text-gold" /> {text}

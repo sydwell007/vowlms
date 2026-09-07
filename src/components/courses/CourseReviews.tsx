@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { LoaderCircle, Star } from "lucide-react";
 import { useSession } from "@/lib/auth/useSession";
+import { invalidateCourseReviewSummaries } from "@/lib/course-review-summaries-client";
 import type { CourseReviewSummary } from "@/types/lms";
 
 type Props = {
@@ -93,6 +94,7 @@ export function CourseReviews({ courseSlug, accentColor }: Props) {
 
       setMessage("Your review has been saved.");
       setFeedback("");
+      invalidateCourseReviewSummaries(courseSlug);
       await loadReviews();
     } catch (reviewError) {
       setError(reviewError instanceof Error ? reviewError.message : "Your review could not be saved.");

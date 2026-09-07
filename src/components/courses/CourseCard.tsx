@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Award, BookOpen, Clock3, MoveRight } from "lucide-react";
 import { CourseEnrollmentCount } from "@/components/courses/CourseEnrollmentCount";
+import { CourseRatingBadge } from "@/components/courses/CourseRatingBadge";
 import { ComingSoonOverlay } from "@/components/ui/ComingSoonOverlay";
 import { formatCurrency } from "@/lib/format";
 import { formatCourseDurationWeeks } from "@/lib/course-content";
@@ -66,6 +67,7 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
               {course.title}
             </Link>
           </h3>
+          <CourseRatingBadge courseSlug={course.slug} className="mt-1.5" />
           <p className={`mt-2 text-sm leading-6 text-muted ${isList ? "line-clamp-3" : "line-clamp-2"}`}>
             {course.description}
           </p>
