@@ -6,6 +6,7 @@ import { EcosystemSidebar } from "@/components/layout/EcosystemSidebar";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { ServiceWorkerRegistration } from "@/components/pwa/ServiceWorkerRegistration";
+import { ThandiPanel } from "@/components/thandi/ThandiPanel";
 import { visualAssets } from "@/lib/visual-assets";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
@@ -80,6 +81,7 @@ export default function RootLayout({
         </div>
 
         <Footer />
+        <ThandiPanel />
         <ServiceWorkerRegistration />
         <Toaster
           position="bottom-right"

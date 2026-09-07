@@ -6,6 +6,7 @@ import Link from "next/link";
 import { visualAssets } from "@/lib/visual-assets";
 import { getEcosystemServices, ecosystemStatusBadgeClass } from "@/data/ecosystem-services";
 import { useSession } from "@/lib/auth/useSession";
+import { ThandiSidebarEntryDesktop, ThandiSidebarEntryMobile } from "@/components/thandi/ThandiSidebarEntry";
 
 const STORAGE_KEY = "gv_sidebar_open";
 
@@ -77,6 +78,11 @@ export function EcosystemSidebar() {
                 </div>
               </div>
 
+              {/* Thandi — AI tutor, opens a live panel instead of navigating */}
+              <div className="border-b border-slate-100 p-2">
+                <ThandiSidebarEntryDesktop />
+              </div>
+
               {/* Services */}
               <div className="flex flex-col gap-0 p-2">
                 {services.map((s) => (
@@ -146,6 +152,7 @@ export function EcosystemSidebar() {
           {open && (
             <div className="max-h-64 overflow-y-auto border-t border-slate-100 px-4 pb-4">
               <div className="grid grid-cols-2 gap-2 pt-3">
+                <ThandiSidebarEntryMobile />
                 {services.map((s) => (
                   <Link
                     key={s.slug}

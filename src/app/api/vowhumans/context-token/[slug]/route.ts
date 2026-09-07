@@ -2,19 +2,25 @@ import { NextResponse } from "next/server";
 import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 import { hasActiveCourseEnrollment } from "@/lib/course-access";
 import { mintVowHumansLessonContextToken } from "@/lib/vowhumans-context-token";
+import { classifyThandiContextKey } from "@/lib/thandi/knowledge";
 
 const LESSON_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
+  const lang = new URL(request.url).searchParams.get("lang") ?? undefined;
   if (!LESSON_SLUG.test(slug)) {
     return NextResponse.json({ error: "Invalid lesson" }, { status: 400 });
   }
 
-  if (isBridgeConfigured()) {
+  // Thandi's sidewide "guide" key and real course slugs are public context —
+  // only an actual lesson slug needs the bridge lookup + active-enrolment gate.
+  const kind = classifyThandiContextKey(slug);
+
+  if (kind === "lesson" && isBridgeConfigured()) {
     try {
       const lesson = await bridgeGet<{ course: { slug: string } }>(`/lessons/${slug}`, { noAuth: true });
       if (!await hasActiveCourseEnrollment([lesson.course.slug])) {
@@ -31,7 +37,7 @@ export async function GET(
     }
   }
 
-  const token = mintVowHumansLessonContextToken(slug);
+  const token = mintVowHumansLessonContextToken(slug, lang);
   if (!token) {
     return NextResponse.json(
       { error: "AI lesson context is not configured" },

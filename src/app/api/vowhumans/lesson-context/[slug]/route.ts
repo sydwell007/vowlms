@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { bridgeGet } from "@/lib/bridge";
 import { getLessonBySlug } from "@/lib/data";
-import { verifyVowHumansLessonContextToken } from "@/lib/vowhumans-context-token";
+import { readVowHumansLessonContextLang, verifyVowHumansLessonContextToken } from "@/lib/vowhumans-context-token";
+import { THANDI_GUIDE_KEY } from "@/lib/thandi/config";
+import { buildCourseDigest, buildSiteDigest, classifyThandiContextKey } from "@/lib/thandi/knowledge";
 
 type ContextResource = {
   type: string;
@@ -54,6 +56,51 @@ export async function GET(
     return NextResponse.json({ error: "Invalid or expired context token" }, { status: 401 });
   }
 
+  const kind = classifyThandiContextKey(slug);
+  const lang = readVowHumansLessonContextLang(bearerToken(request));
+  // Advisory only — asks Thandi to try responding in this language, never a
+  // guaranteed switch (VowHumans' own multilingual quality varies by
+  // language and capability; see `src/lib/thandi/languages.ts`).
+  const langPreface = lang
+    ? `The learner has requested responses in ${lang}. Greet them and reply in ${lang} where you confidently can; if you are not confident in ${lang} for a given answer, say so honestly and continue in English rather than guessing.\n\n`
+    : "";
+
+  // Thandi asking about VowLMS generally, or about a specific course's page —
+  // neither needs the bridge or an enrolment check: course-preview content is
+  // already public, and the site digest is static, hand-authored copy.
+  if (kind === "guide") {
+    return NextResponse.json(
+      {
+        academy_name: "GoalVow Academy",
+        course_title: "VowLMS",
+        lesson_slug: THANDI_GUIDE_KEY,
+        lesson_title: "Ask Thandi",
+        module_title: "VowLMS site guide",
+        lesson_text: langPreface + buildSiteDigest(),
+        resource: null,
+      },
+      { headers: { "Cache-Control": "no-store, private" } },
+    );
+  }
+  if (kind === "course") {
+    const digest = buildCourseDigest(slug);
+    if (!digest) {
+      return NextResponse.json({ error: "Course not found" }, { status: 404 });
+    }
+    return NextResponse.json(
+      {
+        academy_name: "GoalVow Academy",
+        course_title: digest.title,
+        lesson_slug: slug,
+        lesson_title: "Course guide",
+        module_title: digest.title,
+        lesson_text: langPreface + digest.text,
+        resource: null,
+      },
+      { headers: { "Cache-Control": "no-store, private" } },
+    );
+  }
+
   try {
     const data = await bridgeGet<ContextLessonResponse>(`/lessons/${slug}`, {
       noAuth: true,
@@ -69,7 +116,7 @@ export async function GET(
         lesson_slug: data.lesson.slug,
         lesson_title: data.lesson.title,
         module_title: data.module.title,
-        lesson_text: plainText(data.lesson.content ?? ""),
+        lesson_text: langPreface + plainText(data.lesson.content ?? ""),
         resource: pdf
           ? {
               filename: pdf.filename,
@@ -95,7 +142,7 @@ export async function GET(
         lesson_slug: fallback.lesson.slug,
         lesson_title: fallback.lesson.title,
         module_title: fallback.module.title,
-        lesson_text: plainText(fallback.lesson.content ?? ""),
+        lesson_text: langPreface + plainText(fallback.lesson.content ?? ""),
         resource: null,
       },
       { headers: { "Cache-Control": "no-store, private" } },

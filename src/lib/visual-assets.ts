@@ -5,6 +5,7 @@ export const visualAssets = {
   dashboardExperience: "/images/vowlms/dashboard-experience.png",
   vrPracticeLab: "/images/vowlms/vr-practice-lab.png",
   coursePresenter: "/images/vowlms/course-presenter.webp",
+  vowhumansLogo: "/images/vowhumans-logo.png",
 } as const;
 
 type CourseVisual = {
