@@ -302,6 +302,24 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
     $range  = $_SERVER['HTTP_RANGE'] ?? '';
     $isHead = $_SERVER['REQUEST_METHOD'] === 'HEAD';
 
+    // goalvow.com's own pluginfile.php ignores Range entirely on these
+    // mod_label videos — confirmed live: a `Range: bytes=0-1023` request
+    // still comes back `200 OK` / `Transfer-Encoding: chunked` with the
+    // *entire* multi-megabyte file. Safari requests a small range before it
+    // will play a video at all and expects `206` back for exactly that
+    // range; getting `200` with the whole file instead is why playback
+    // failed even after the HEAD fix. Since we can't change goalvow.com,
+    // $rangeStart/$rangeEnd let the WRITEFUNCTION below slice the requested
+    // window out of upstream's response itself and answer with a real 206 —
+    // aborting the transfer the moment we have those bytes, so a small seek
+    // doesn't still cost a full download every time.
+    $rangeStart = null;
+    $rangeEnd   = null;
+    if (!$isHead && $range !== '' && preg_match('/^bytes=(\d*)-(\d*)$/', $range, $rm)) {
+        $rangeStart = $rm[1] !== '' ? (int)$rm[1] : 0;
+        $rangeEnd   = $rm[2] !== '' ? (int)$rm[2] : null;
+    }
+
     $ch = curl_init($url);
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => false,
@@ -318,6 +336,8 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         // A real upstream HEAD: no video body ever gets fetched or sent.
         curl_setopt($ch, CURLOPT_NOBODY, true);
     } elseif ($range !== '') {
+        // Still ask upstream properly — if it ever starts honouring Range,
+        // $upstream206 below takes the cheap passthrough path instead.
         curl_setopt($ch, CURLOPT_RANGE, str_replace('bytes=', '', $range));
     }
 
@@ -331,14 +351,16 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         return strlen($headerLine);
     });
 
-    $headersSet = false;
+    $headersSet   = false;
+    $upstream206  = false;
 
     // Shared by both the streaming path (GET, called on the first body byte)
     // and the no-body path (HEAD, called after curl_exec) so a HEAD response
     // gets identical Content-Type/Accept-Ranges/Content-Length headers to
     // what the follow-up ranged GET will send — never a guess, never a body.
-    $emitHeaders = function () use (&$moodleHeaders, $mimeType, $safe, $ch): void {
+    $emitHeaders = function () use (&$moodleHeaders, $mimeType, $safe, $ch, $rangeStart, $rangeEnd, &$upstream206): void {
         $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $upstream206 = ($httpCode === 206 && isset($moodleHeaders['content-range']));
 
         $upstreamType = strtolower($moodleHeaders['content-type'] ?? '');
         $isErrorPayload = $httpCode >= 400
@@ -353,11 +375,24 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
             return;
         }
 
-        if ($httpCode === 206 && isset($moodleHeaders['content-range'])) {
+        if ($upstream206) {
             http_response_code(206);
             header("Content-Range: {$moodleHeaders['content-range']}");
+            if (isset($moodleHeaders['content-length'])) {
+                header("Content-Length: {$moodleHeaders['content-length']}");
+            }
+        } elseif ($rangeStart !== null) {
+            // Upstream ignored our Range — we'll slice it out ourselves.
+            $total = isset($moodleHeaders['content-length']) ? (int)$moodleHeaders['content-length'] : null;
+            $end = $rangeEnd ?? ($total !== null ? $total - 1 : $rangeStart + 1048575);
+            http_response_code(206);
+            header("Content-Range: bytes {$rangeStart}-{$end}/" . ($total !== null ? $total : '*'));
+            header('Content-Length: ' . ($end - $rangeStart + 1));
         } else {
             http_response_code($httpCode >= 400 ? $httpCode : 200);
+            if (isset($moodleHeaders['content-length'])) {
+                header("Content-Length: {$moodleHeaders['content-length']}");
+            }
         }
 
         header("Content-Type: {$mimeType}");
@@ -367,21 +402,51 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         header("X-Content-Type-Options: nosniff");
         header_remove('X-Frame-Options');
         header("Cross-Origin-Resource-Policy: cross-origin");
-
-        if (isset($moodleHeaders['content-length'])) {
-            header("Content-Length: {$moodleHeaders['content-length']}");
-        }
     };
 
     // ob_end_clean() was already called at script start — headers are clean.
-    curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use (&$headersSet, $emitHeaders) {
+    $consumed = 0; // absolute byte offset of upstream data seen so far
+    curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use (
+        &$headersSet, $emitHeaders, &$upstream206, $rangeStart, $rangeEnd, &$consumed
+    ) {
         if (!$headersSet) {
             $emitHeaders();
             $headersSet = true;
         }
-        echo $data;
-        flush();
-        return strlen($data);
+
+        $len = strlen($data);
+
+        // No range requested, or upstream honoured ours with a real 206 —
+        // plain passthrough.
+        if ($rangeStart === null || $upstream206) {
+            echo $data;
+            flush();
+            return $len;
+        }
+
+        // Upstream is sending the whole file regardless — keep only the
+        // slice of it the client actually asked for.
+        $chunkStart = $consumed;
+        $chunkEnd   = $consumed + $len - 1;
+        $consumed  += $len;
+
+        $wantEnd = $rangeEnd ?? PHP_INT_MAX;
+        $overlapStart = max($chunkStart, $rangeStart);
+        $overlapEnd   = min($chunkEnd, $wantEnd);
+
+        if ($overlapStart <= $overlapEnd) {
+            echo substr($data, $overlapStart - $chunkStart, $overlapEnd - $overlapStart + 1);
+            flush();
+        }
+
+        // We have everything the client asked for — abort the transfer
+        // rather than keep downloading (and discarding) the rest of a
+        // multi-megabyte file just to satisfy a small Range request.
+        if ($chunkEnd >= $wantEnd) {
+            return 0;
+        }
+
+        return $len;
     });
 
     curl_exec($ch);
