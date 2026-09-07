@@ -268,6 +268,18 @@ function serveFromFilesystem(string $path, int $size, string $mimeType, string $
 // Proxy a file from Moodle via cURL.
 // All response headers are set in the WRITEFUNCTION on the first data chunk,
 // after the output buffer has already been cleaned at script start.
+//
+// iOS Safari always sends a HEAD request to a <video> URL before it will play
+// it, to inspect Accept-Ranges/Content-Length/Content-Type — and refuses to
+// play at all if that HEAD response is malformed (e.g. carries a body, which
+// is exactly what happened here: HEAD was never special-cased, so this proxy
+// ran a full GET against Moodle regardless of the client's method and then
+// echoed the entire video body onto what should have been a bodyless HEAD
+// response). Desktop browsers tolerate that; iOS does not. CURLOPT_NOBODY
+// below makes the upstream request a real HEAD too when the client's was,
+// and $emitHeaders is shared so the exact same header logic runs whether it's
+// triggered by the first streamed byte (GET) or by curl_exec finishing with
+// no body at all (HEAD).
 // ─────────────────────────────────────────────────────────────────────────────
 function proxyFromMoodle(string $url, string $mimeType, string $filename): void
 {
@@ -286,8 +298,9 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         return;
     }
 
-    $safe  = rawurlencode(preg_replace('/[^\w.\- ]/u', '_', $filename));
-    $range = $_SERVER['HTTP_RANGE'] ?? '';
+    $safe   = rawurlencode(preg_replace('/[^\w.\- ]/u', '_', $filename));
+    $range  = $_SERVER['HTTP_RANGE'] ?? '';
+    $isHead = $_SERVER['REQUEST_METHOD'] === 'HEAD';
 
     $ch = curl_init($url);
     curl_setopt_array($ch, [
@@ -301,7 +314,10 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         CURLOPT_BUFFERSIZE     => 65536,
     ]);
 
-    if ($range !== '') {
+    if ($isHead) {
+        // A real upstream HEAD: no video body ever gets fetched or sent.
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+    } elseif ($range !== '') {
         curl_setopt($ch, CURLOPT_RANGE, str_replace('bytes=', '', $range));
     }
 
@@ -315,51 +331,52 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
         return strlen($headerLine);
     });
 
-    // ob_end_clean() was already called at script start — headers are clean.
-    // This WRITEFUNCTION just sets response headers on the first chunk and
-    // streams body bytes directly without any additional buffering.
     $headersSet = false;
-    curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use (
-        &$headersSet, &$moodleHeaders, $mimeType, $safe, $range
-    ) {
+
+    // Shared by both the streaming path (GET, called on the first body byte)
+    // and the no-body path (HEAD, called after curl_exec) so a HEAD response
+    // gets identical Content-Type/Accept-Ranges/Content-Length headers to
+    // what the follow-up ranged GET will send — never a guess, never a body.
+    $emitHeaders = function () use (&$moodleHeaders, $mimeType, $safe, $ch): void {
+        $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        $upstreamType = strtolower($moodleHeaders['content-type'] ?? '');
+        $isErrorPayload = $httpCode >= 400
+            || str_contains($upstreamType, 'application/json')
+            || str_contains($upstreamType, 'text/html');
+
+        if ($isErrorPayload) {
+            http_response_code($httpCode >= 400 ? $httpCode : 502);
+            header('Content-Type: ' . ($upstreamType ?: 'application/json'));
+            header('Cache-Control: no-store');
+            header('X-Content-Type-Options: nosniff');
+            return;
+        }
+
+        if ($httpCode === 206 && isset($moodleHeaders['content-range'])) {
+            http_response_code(206);
+            header("Content-Range: {$moodleHeaders['content-range']}");
+        } else {
+            http_response_code($httpCode >= 400 ? $httpCode : 200);
+        }
+
+        header("Content-Type: {$mimeType}");
+        header("Content-Disposition: inline; filename=\"{$safe}\"");
+        header("Accept-Ranges: bytes");
+        header("Cache-Control: private, max-age=3600");
+        header("X-Content-Type-Options: nosniff");
+        header_remove('X-Frame-Options');
+        header("Cross-Origin-Resource-Policy: cross-origin");
+
+        if (isset($moodleHeaders['content-length'])) {
+            header("Content-Length: {$moodleHeaders['content-length']}");
+        }
+    };
+
+    // ob_end_clean() was already called at script start — headers are clean.
+    curl_setopt($ch, CURLOPT_WRITEFUNCTION, function ($ch, $data) use (&$headersSet, $emitHeaders) {
         if (!$headersSet) {
-            $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-            $upstreamType = strtolower($moodleHeaders['content-type'] ?? '');
-            $isErrorPayload = $httpCode >= 400
-                || str_contains($upstreamType, 'application/json')
-                || str_contains($upstreamType, 'text/html');
-
-            if ($isErrorPayload) {
-                http_response_code($httpCode >= 400 ? $httpCode : 502);
-                header('Content-Type: ' . ($upstreamType ?: 'application/json'));
-                header('Cache-Control: no-store');
-                header('X-Content-Type-Options: nosniff');
-                $headersSet = true;
-                echo $data;
-                flush();
-                return strlen($data);
-            }
-
-            if ($httpCode === 206 && isset($moodleHeaders['content-range'])) {
-                http_response_code(206);
-                header("Content-Range: {$moodleHeaders['content-range']}");
-            } else {
-                http_response_code($httpCode >= 400 ? $httpCode : 200);
-            }
-
-            header("Content-Type: {$mimeType}");
-            header("Content-Disposition: inline; filename=\"{$safe}\"");
-            header("Accept-Ranges: bytes");
-            header("Cache-Control: private, max-age=3600");
-            header("X-Content-Type-Options: nosniff");
-            header_remove('X-Frame-Options');
-            header("Cross-Origin-Resource-Policy: cross-origin");
-
-            if (isset($moodleHeaders['content-length'])) {
-                header("Content-Length: {$moodleHeaders['content-length']}");
-            }
-
+            $emitHeaders();
             $headersSet = true;
         }
         echo $data;
@@ -369,14 +386,24 @@ function proxyFromMoodle(string $url, string $mimeType, string $filename): void
 
     curl_exec($ch);
     $err = curl_error($ch);
-    curl_close($ch);
 
     if ($err && !$headersSet) {
         http_response_code(502);
         header('Content-Type: application/json');
         error_log('Moodle resource proxy failed: ' . $err);
         echo json_encode(['ok' => false, 'error' => 'Resource fetch failed']);
+        curl_close($ch);
+        return;
     }
+
+    // HEAD (or any successful response with zero bytes of body) never
+    // triggers WRITEFUNCTION — emit the same headers now, from the same
+    // curl handle, before it's closed. No body follows, matching a real HEAD.
+    if (!$headersSet) {
+        $emitHeaders();
+    }
+
+    curl_close($ch);
 }
 
 function moodleTokenForUrl(string $url): string
