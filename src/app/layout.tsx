@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import { AcademyTopBar } from "@/components/layout/AcademyTopBar";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { EcosystemSidebar } from "@/components/layout/EcosystemSidebar";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
@@ -66,6 +67,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full`}
     >
       <body className="flex min-h-full flex-col antialiased">
+        <GoogleAnalytics />
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
