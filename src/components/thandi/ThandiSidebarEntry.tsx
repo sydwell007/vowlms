@@ -44,8 +44,8 @@ export function ThandiSidebarEntryDesktop() {
           </span>
         </div>
         <p className="mt-0.5 text-[11px] leading-4 text-muted">Your AI tutor — ask me anything</p>
-        <span className="mt-1 flex items-center gap-1 text-[10px] text-slate-400">
-          <Image src={visualAssets.vowhumansLogo} alt="" width={12} height={12} className="h-3 w-3 object-contain" />
+        <span className="mt-1 flex items-center gap-1.5 text-[10px] text-slate-400">
+          <Image src={visualAssets.vowhumansLogo} alt="VowHumans" width={20} height={16} className="h-4 w-5 object-contain" />
           Powered by VowHumans
         </span>
       </div>

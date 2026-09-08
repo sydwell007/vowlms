@@ -331,8 +331,8 @@ export function ThandiPanel() {
               ) : (
                 <span />
               )}
-              <span className="flex items-center gap-1 text-[9px] text-slate-400">
-                <Image src={visualAssets.vowhumansLogo} alt="" width={10} height={10} className="h-2.5 w-2.5 object-contain" />
+              <span className="flex items-center gap-1.5 text-[9px] text-slate-400">
+                <Image src={visualAssets.vowhumansLogo} alt="VowHumans" width={18} height={15} className="h-3.5 w-[1.05rem] object-contain" />
                 VowHumans
               </span>
             </div>
