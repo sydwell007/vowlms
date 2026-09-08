@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ChartNoAxesCombined, Network, ShieldCheck, Smartphone } from "lucide-react";
+import { ArrowRight, BadgeCheck, BrainCircuit, Coins, Compass } from "lucide-react";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { AIAndRewardsSection } from "@/components/home/AIAndRewardsSection";
 import { EcosystemShowcaseSection } from "@/components/home/EcosystemShowcaseSection";
 import { FAQSection } from "@/components/home/FAQSection";
 import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getCourseSummaries } from "@/lib/data";
@@ -35,32 +34,31 @@ export const metadata: Metadata = {
   },
 };
 
-const journey = [
+const experiencePath = [
   {
-    step: "01",
-    title: "Learn",
-    description: "Structured courses across GoalVow academies with progress tracking, assessments, and certificates.",
-    href: "/learn",
+    Icon: Compass,
+    title: "Find your direction",
+    description: "Match your goal to a practical starting point.",
+    href: "/find-my-path",
   },
   {
-    step: "02",
-    title: "Practice",
-    description: "Guided Skills Practice previews and planned facilitated pathways help learners move beyond course content.",
-    href: "/practice",
+    Icon: BrainCircuit,
+    title: "Learn with guidance",
+    description: "Build skill with structured courses and AI support.",
+    href: "/courses",
   },
   {
-    step: "03",
-    title: "Apply",
-    description: "Carry account-owned progress and certificate records into confirmed study, work, and enterprise routes.",
-    href: "/apply",
+    Icon: BadgeCheck,
+    title: "Prove your progress",
+    description: "Complete assessments and own your certificates.",
+    href: "/certificates",
   },
-];
-
-const trustSignals = [
-  { Icon: ChartNoAxesCombined, title: "Visible progress", description: "Role-based dashboards for learning, facilitation, employers, and administration." },
-  { Icon: ShieldCheck, title: "Account-owned records", description: "Enrolments, assessments, certificates, and secure PayFast checkout." },
-  { Icon: Smartphone, title: "Mobile ready", description: "A PWA foundation with an offline-safe public fallback." },
-  { Icon: Network, title: "Ecosystem clarity", description: "Live capabilities and planned GoalVow services are clearly separated." },
+  {
+    Icon: Coins,
+    title: "Turn effort into value",
+    description: "Earn VOWR and connect learning to opportunity.",
+    href: "/rewards",
+  },
 ];
 
 export default async function Home() {
@@ -93,37 +91,41 @@ export default async function Home() {
   return (
     <main>
       <JsonLd data={organisationSchema} />
-      <section className="relative isolate overflow-hidden bg-[#06111f] py-12 text-white sm:py-14 md:py-16">
+
+      <section className="relative isolate overflow-hidden bg-[#061725] text-white">
         <Image
           src={visualAssets.ecosystemHero}
           alt="VowLMS learners using laptops, tablets, and VR practice in a modern GoalVow learning ecosystem"
           fill
           priority
           sizes="100vw"
-          className="absolute inset-0 -z-20 object-cover object-[78%_28%]"
+          className="home-hero-media absolute inset-0 -z-20 object-cover object-[76%_30%]"
         />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(6,17,31,0.94)_0%,rgba(6,17,31,0.8)_42%,rgba(6,17,31,0.32)_80%)]" />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,17,31,0.2)_0%,rgba(6,17,31,0.88)_100%)]" />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(6,23,37,0.97)_0%,rgba(6,23,37,0.85)_42%,rgba(6,23,37,0.26)_82%)]" />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,23,37,0.12)_0%,rgba(6,23,37,0.88)_100%)]" />
 
-        <div className="mx-auto flex min-h-[380px] w-full max-w-7xl flex-col justify-center px-5 sm:min-h-[420px] sm:px-6 md:min-h-[460px] lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold">
+        <div className="home-hero-copy mx-auto flex min-h-[570px] w-full max-w-7xl flex-col justify-center px-5 py-14 sm:min-h-[610px] sm:px-6 lg:px-8">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-gold">
             GoalVow academy ecosystem
           </p>
-          <h1 className="mt-5 max-w-3xl text-balance text-5xl font-semibold leading-[1.04] sm:text-6xl lg:text-7xl">
-            What do you want to achieve?
+          <h1 className="mt-4 max-w-3xl text-balance text-6xl font-semibold leading-none sm:text-7xl">
+            VowLMS
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-white/76">
-            Tell VowLMS your goal and we will match you to the right courses. You do not need to know which academy to choose.
+          <p className="mt-5 max-w-3xl text-balance text-3xl font-semibold leading-tight text-white sm:text-4xl">
+            Learn skills. Prove progress. Move into opportunity.
+          </p>
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-white/74">
+            One connected learning experience for choosing a direction, building practical skills, earning recognised proof, and moving forward.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/auth/signup" variant="primary">
-              Start Learning
+              Start learning
             </ButtonLink>
             <ButtonLink href="/courses" variant="secondary">
-              Browse all courses
+              Browse courses
             </ButtonLink>
           </div>
-          <div className="mt-12 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-12 grid max-w-2xl grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
             {stats.map((stat) => (
               <div key={stat.label} className="border-l border-white/16 pl-4">
                 <p className="text-2xl font-semibold text-white">{stat.value}</p>
@@ -134,116 +136,105 @@ export default async function Home() {
         </div>
       </section>
 
-      <Section tone="light" eyebrow="Find your path" description="Pick what you're working toward and we'll show you exactly which courses to start with.">
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto grid w-full max-w-7xl divide-y divide-slate-200 px-5 sm:px-6 md:grid-cols-2 md:divide-x md:divide-y-0 lg:grid-cols-4 lg:px-8">
+          {experiencePath.map(({ Icon, title, description, href }) => (
+            <Link key={title} href={href} className="group flex min-h-32 items-start gap-4 px-1 py-7 md:px-5">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#e8f4f4] text-[#176f78]">
+                <Icon aria-hidden="true" className="h-5 w-5" />
+              </span>
+              <span>
+                <span className="flex items-center gap-2 text-sm font-semibold text-ink">
+                  {title}
+                  <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 text-muted transition group-hover:translate-x-0.5 group-hover:text-[#1765a6]" />
+                </span>
+                <span className="mt-1 block text-sm leading-5 text-muted">{description}</span>
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <Section
+        tone="light"
+        eyebrow="Find your path"
+        title="Start with where you want to go"
+        description="Choose the outcome that matters now. VowLMS will surface the most relevant courses and a practical next step."
+      >
         <OnboardingFlow />
       </Section>
 
-      <section className="gv-section-dark py-16 text-white md:py-24">
+      <section className="border-y border-slate-200 bg-white py-14 md:py-20">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Learner journey</p>
-          <h2 className="mt-3 max-w-2xl text-balance text-3xl font-semibold sm:text-4xl">
-            Learn, practice, and apply without leaving the ecosystem
-          </h2>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {journey.map((item) => (
-              <Link key={item.title} href={item.href} className="premium-card-dark rounded-lg p-6 transition hover:-translate-y-1">
-                <p className="text-sm font-semibold text-gold">{item.step}</p>
-                <h3 className="mt-4 text-2xl font-semibold">{item.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-white/66">{item.description}</p>
-              </Link>
+          <div className="mb-9 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+            <div className="max-w-3xl">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#1765a6]">Featured courses</p>
+              <h2 className="mt-3 text-balance text-3xl font-semibold leading-tight text-ink sm:text-4xl">
+                Practical learning, selected for momentum
+              </h2>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
+                Explore {courses.length.toLocaleString()} courses with structured lessons, assessments, certificates, and VowRewards.
+              </p>
+            </div>
+            <ButtonLink href="/courses" variant="outline" className="self-start md:self-auto">
+              View catalogue
+            </ButtonLink>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {featuredCourses.map((course, index) => (
+              <CourseCard key={course.slug} course={course} priority={index === 0} role={role} />
             ))}
           </div>
         </div>
       </section>
 
       <Section
-        tone="light"
-        eyebrow="Featured courses"
-        title="Start with focused, outcome-led courses"
-        description={`Browse ${courses.length.toLocaleString()} courses with assessments, certificates, and VowRewards built in.`}
-      >
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {featuredCourses.map((course, index) => (
-            <CourseCard key={course.slug} course={course} priority={index === 0} role={role} />
-          ))}
-        </div>
-        <div className="mt-8 text-center">
-          <ButtonLink href="/courses" variant="outline">
-            Browse all courses
-          </ButtonLink>
-        </div>
-      </Section>
-
-      <Section
-        eyebrow="AI-guided learning · Real rewards"
+        eyebrow="AI-guided learning + real rewards"
         title="Learn with a 24/7 AI tutor. Earn VOWR from day one."
-        description="Every VowLMS course comes with Thandi, GoalVow's digital human tutor, by your side — and every real milestone you hit earns VOWR, automatically."
+        description="Every VowLMS course connects guidance, progress, and rewards in one continuous learning experience."
       >
         <AIAndRewardsSection />
       </Section>
-
-      <section className="border-y border-slate-100 bg-white py-16 md:py-24">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#1166c8]">Platform foundation</p>
-            <h2 className="mt-3 text-balance text-3xl font-semibold text-ink sm:text-4xl">
-              A focused LMS now, a scalable ecosystem platform next
-            </h2>
-            <div className="mt-7 grid gap-x-8 gap-y-6 sm:grid-cols-2">
-              {trustSignals.map(({ Icon, title, description }) => (
-                <div key={title} className="border-t border-slate-200 pt-4">
-                  <Icon aria-hidden="true" className="h-5 w-5 text-[#1166c8]" />
-                  <h3 className="mt-3 text-sm font-semibold text-ink">{title}</h3>
-                  <p className="mt-1 text-sm leading-6 text-muted">{description}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <ButtonLink href="/dashboard/learner" variant="ink">
-                View dashboard
-              </ButtonLink>
-              <ButtonLink href="/ecosystem" variant="outline">
-                Ecosystem map
-              </ButtonLink>
-            </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.dashboardExperience}
-            alt="VowLMS dashboard experience showing progress, certificates, rewards, and opportunities"
-            tone="light"
-            aspect="video"
-          />
-        </div>
-      </section>
 
       <Section
         tone="light"
         eyebrow="GoalVow ecosystem"
         title="One account. A whole ecosystem."
-        description="VowLMS connects directly to the wider GoalVow network — rewards, support, opportunities, and more — all reachable without ever leaving your learning journey."
+        description="Learning, certificates, rewards, support, and opportunity routes stay connected to one learner account."
       >
         <EcosystemShowcaseSection role={role} />
       </Section>
 
-      <Section tone="light" eyebrow="FAQ" title="Questions learners ask before they start" description="Straight answers about cost, certificates, rewards, and how VowLMS actually works.">
-        <FAQSection />
-      </Section>
+      <section className="border-t border-slate-200 bg-white py-14 md:py-20">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+          <div className="mb-9 max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#1765a6]">FAQ</p>
+            <h2 className="mt-3 text-balance text-3xl font-semibold leading-tight text-ink sm:text-4xl">
+              Clear answers before you start
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
+              Understand cost, certificates, rewards, support, and how learning works across VowLMS.
+            </p>
+          </div>
+          <FAQSection />
+        </div>
+      </section>
 
-      <section className="gv-hero py-16 text-white md:py-24">
+      <section className="page-hero border-t border-white/8 py-14 text-white md:py-20">
         <div className="mx-auto w-full max-w-3xl px-5 text-center sm:px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-300">Your next step</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#7de0e2]">Your next step</p>
           <h2 className="mt-3 text-balance text-3xl font-semibold sm:text-4xl">
-            Build skill, earn rewards, and move into opportunity
+            Your next move starts with one clear goal
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-white/68">
-            VowLMS gives learners one place to study, practise, prove progress, and connect to the wider GoalVow ecosystem.
+            Find the right course, learn with intelligent support, and keep every milestone connected to what comes next.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <ButtonLink href="/auth/signup" variant="primary">
               Create free account
             </ButtonLink>
-            <ButtonLink href="/courses" variant="secondary">
-              Browse courses
+            <ButtonLink href="/find-my-path" variant="secondary">
+              Find my path
             </ButtonLink>
           </div>
         </div>

@@ -25,10 +25,18 @@ export function AcademyTopBar() {
   const isAdmin = role === "admin";
   const academyLinks = allAcademyLinks.filter((link) => !isHiddenAcademyCategory(link.category, role));
 
+  // A switcher with one destination duplicates the main navigation and makes
+  // the product shell feel fragmented. It appears automatically as the live
+  // academy network expands.
+  if (academyLinks.length <= 1) return null;
+
   return (
-    <div className="border-b border-white/8 bg-[#0a1f36]">
+    <div className="border-b border-white/8 bg-[#05131f]">
       <div className="scrollbar-none mx-auto flex w-full max-w-7xl items-center overflow-x-auto px-4 py-2.5 sm:px-6 lg:px-8">
-        <nav aria-label="GoalVow academy navigation" className="flex min-w-max items-center gap-1.5">
+        <nav aria-label="GoalVow academy navigation" className="flex min-w-max items-center gap-2">
+          <span className="mr-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-white/44">
+            Academy network
+          </span>
           {academyLinks.map((link) => {
             const active = isActive(pathname, link.href);
             const comingSoon = getComingSoonInfo(link.category, role);

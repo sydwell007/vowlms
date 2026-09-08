@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Search } from "lucide-react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { WalletBalancePill } from "@/components/rewards/WalletBalancePill";
 import { clearSessionCache, useSession } from "@/lib/auth/useSession";
@@ -38,6 +39,7 @@ const navEntries: NavEntry[] = [
     group: {
       label: "Learning",
       items: [
+        { href: "/academies", label: "Academy network" },
         { href: "/courses", label: "Course catalogue" },
         { href: "/learn/pathways", label: "Skill pathways" },
         { href: "/learn", label: "Learning pathway" },
@@ -151,10 +153,11 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#06111f]/94 text-white shadow-[0_20px_48px_rgba(2,10,24,0.32)] backdrop-blur-xl">
-      <div className="mx-auto flex min-h-[76px] w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#061725]/96 text-white shadow-[0_12px_36px_rgba(2,10,18,0.24)] backdrop-blur-xl">
+      <div className="brand-rule h-[3px] w-full" aria-hidden="true" />
+      <div className="mx-auto flex min-h-[72px] w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
         <Link href="/" onClick={closeAllMenus} className="flex shrink-0 items-center gap-3" aria-label="VowLMS home">
-          <span className="brand-mark-frame flex h-11 w-11 items-center justify-center rounded-xl p-1.5 shadow-[0_12px_28px_rgba(6,182,212,0.16)]">
+          <span className="brand-mark-frame flex h-10 w-10 items-center justify-center rounded-lg p-1.5 shadow-[0_10px_24px_rgba(57,195,200,0.14)]">
             <Image
               src={visualAssets.logo}
               alt=""
@@ -167,17 +170,17 @@ export function Header() {
           <span className="flex flex-col">
             <span className="text-base font-bold sm:text-lg">VowLMS</span>
             <span className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-white/52">
-              GoalVow LMS
+              GoalVow Learning
             </span>
           </span>
         </Link>
 
         <Link
           href="/search"
-          className="mx-2 hidden max-w-[160px] flex-1 items-center gap-2 rounded-lg border border-white/12 bg-white/6 px-3 py-2 text-sm text-white/52 transition hover:border-white/20 hover:bg-white/10 xl:flex"
+          className="mx-2 hidden max-w-[164px] flex-1 items-center gap-2 rounded-md border border-white/12 bg-white/6 px-3 py-2 text-sm text-white/58 transition hover:border-white/22 hover:bg-white/10 xl:flex"
         >
-          <span aria-hidden="true">Search</span>
-          <span className="sr-only">Search VowLMS</span>
+          <Search aria-hidden="true" className="h-4 w-4" />
+          <span>Search</span>
         </Link>
 
         <nav ref={desktopNavRef} className="ml-auto hidden items-center gap-1 xl:flex" aria-label="Primary navigation">
@@ -392,7 +395,7 @@ export function Header() {
 
       {mobileMenuOpen ? (
         <nav
-          className="max-h-[calc(100dvh-76px)] overflow-y-auto border-t border-white/10 bg-[#081626]/98 px-4 py-4 xl:hidden"
+          className="max-h-[calc(100dvh-75px)] overflow-y-auto border-t border-white/10 bg-[#061725]/98 px-4 py-4 xl:hidden"
           aria-label="Mobile navigation"
         >
           <div className="mx-auto grid w-full max-w-7xl gap-2">

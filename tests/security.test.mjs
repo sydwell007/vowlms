@@ -141,7 +141,8 @@ test("course reviews require a verified learner enrollment", async () => {
   assert.match(endpoint, /requireRole\(\$payload, 'learner'\)/);
   assert.match(endpoint, /status IN \(\"active\", \"completed\"\)/);
   assert.match(endpoint, /Only enrolled learners can review this course/);
-  assert.match(route, /bridgePost\(`\/courses\/\$\{encodeURIComponent\(slug\)\}\/reviews`/);
+  assert.match(route, /const \[primarySlug\] = getEnrollableCourseSlugs\(slug\)/);
+  assert.match(route, /bridgePost\(`\/courses\/\$\{encodeURIComponent\(primarySlug\)\}\/reviews`/);
 });
 
 test("course-card enrolment totals are aggregate and bridge protected", async () => {

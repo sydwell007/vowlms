@@ -15,20 +15,20 @@ export function Section({ eyebrow, title, description, children, tone = "dark", 
   const isTight = size === "tight";
   const hasHeader = eyebrow || title || description;
 
-  const paddingClass = isTight ? "py-8 md:py-12" : "py-16 md:py-24";
+  const paddingClass = isTight ? "py-9 md:py-12" : "py-14 md:py-20";
 
   return (
     <section className={`${isLight ? "premium-section-light text-ink" : "premium-section-dark text-white"} ${paddingClass}`}>
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
         {hasHeader ? (
-          <div className={isTight ? "mb-6 max-w-3xl" : "mb-10 max-w-3xl"}>
+          <div className={isTight ? "mb-6 max-w-3xl" : "mb-9 max-w-3xl"}>
             {eyebrow ? (
-              <p className={isLight ? "mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#1166c8]" : "mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-gold"}>
+              <p className={isLight ? "mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#1765a6]" : "mb-3 text-xs font-bold uppercase tracking-[0.2em] text-gold"}>
                 {eyebrow}
               </p>
             ) : null}
             {title ? (
-              <h2 className="text-balance text-3xl font-semibold tracking-normal sm:text-4xl">{title}</h2>
+              <h2 className="text-balance text-3xl font-semibold leading-tight tracking-normal sm:text-4xl">{title}</h2>
             ) : null}
             {description ? (
               <p className={isLight ? "mt-4 max-w-2xl text-base leading-7 text-muted" : "mt-4 max-w-2xl text-base leading-7 text-white/72"}>

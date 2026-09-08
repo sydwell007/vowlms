@@ -16,6 +16,7 @@ export default async function AcademiesPage() {
   const role = await getServerRole();
   const academies = getAcademies(role);
   const courses = getCourses(role);
+  const academyCountLabel = `${academies.length} connected ${academies.length === 1 ? "academy" : "academies"}`;
 
   return (
     <main>
@@ -25,10 +26,10 @@ export default async function AcademiesPage() {
           <div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">GoalVow Holdings</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">
-            {academies.length} connected academies. {courses.length.toLocaleString()} courses. One platform.
+            {academyCountLabel}. {courses.length.toLocaleString()} courses. One platform.
           </h1>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-white/74">
-            From workplace upskilling and culinary learning to school, business, and university-level online study, VowLMS brings the current GoalVow catalogues into one place.
+            Explore the learning available today and see how the wider GoalVow academy network is designed to grow around one learner account.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/courses">Browse all courses</ButtonLink>

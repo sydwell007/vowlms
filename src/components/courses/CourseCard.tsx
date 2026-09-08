@@ -27,7 +27,7 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
   return (
     <ComingSoonOverlay info={comingSoon}>
       <article
-        className={`group premium-card h-full overflow-hidden rounded-lg transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_20px_48px_rgba(6,17,31,0.12)] ${
+        className={`group premium-card interactive-lift h-full overflow-hidden rounded-lg ${
           isList ? "grid md:grid-cols-[220px_1fr]" : "flex flex-col"
         }`}
       >
@@ -38,14 +38,14 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
         >
           <Image
             src={courseVisual.src}
-            alt=""
+            alt={courseVisual.alt}
             fill
             priority={priority}
             sizes={isList ? "(min-width: 768px) 220px, 100vw" : "(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"}
             className="object-cover transition duration-500 group-hover:scale-[1.025]"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#06111f]/64 via-transparent to-transparent" />
-          <span className="absolute left-4 top-4 rounded-md bg-white/95 px-2.5 py-1 text-xs font-semibold text-ink shadow-sm">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#061725]/66 via-transparent to-transparent" />
+          <span className="absolute left-4 top-4 rounded-md border border-white/50 bg-white/92 px-2.5 py-1 text-xs font-semibold text-ink shadow-sm backdrop-blur">
             {course.level}
           </span>
           {course.isAdminPreview ? (
@@ -53,17 +53,17 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
               Admin preview
             </span>
           ) : null}
-          <span className="absolute bottom-4 left-4 rounded-md bg-[#06111f]/88 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
+          <span className="absolute bottom-4 left-4 rounded-md bg-[#061725]/90 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
             {formatCurrency(course.price)}
           </span>
         </Link>
 
         <div className="flex min-w-0 flex-1 flex-col p-5">
-          <p className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: accent }}>
+          <p className="text-[0.68rem] font-bold uppercase tracking-[0.16em]" style={{ color: accent }}>
             {course.academyName}
           </p>
           <h3 className="mt-2 line-clamp-2 text-lg font-semibold leading-snug text-ink">
-            <Link href={`/courses/${course.slug}`} className="transition hover:text-[#1166c8]">
+            <Link href={`/courses/${course.slug}`} className="transition hover:text-[#1765a6]">
               {course.title}
             </Link>
           </h3>
@@ -82,17 +82,17 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
             </div>
           </div>
 
-          <dl className="mt-4 grid grid-cols-3 gap-x-2 border-y border-slate-100 py-3 text-xs text-muted">
-            <div className="flex items-center gap-2">
-              <BookOpen aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
+          <dl className="mt-4 grid grid-cols-3 gap-x-2 border-y border-slate-200 py-3 text-xs text-muted">
+            <div className="flex min-w-0 items-center gap-2">
+              <BookOpen aria-hidden="true" className="h-4 w-4 shrink-0 text-[#1765a6]" />
               <span>{course.lessonCount} lessons</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Clock3 aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
+            <div className="flex min-w-0 items-center gap-2">
+              <Clock3 aria-hidden="true" className="h-4 w-4 shrink-0 text-[#179aa0]" />
               <span>{formatCourseDurationWeeks(course.totalMinutes)}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Award aria-hidden="true" className="h-4 w-4 text-[#1166c8]" />
+            <div className="flex min-w-0 items-center gap-2">
+              <Award aria-hidden="true" className="h-4 w-4 shrink-0 text-[#b98713]" />
               <span>{course.rewards} VOWR</span>
             </div>
           </dl>
@@ -101,7 +101,7 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
             <CourseEnrollmentCount courseSlug={course.slug} />
             <Link
               href={`/courses/${course.slug}`}
-              className="inline-flex min-h-10 items-center gap-2 rounded-md bg-[#06111f] px-4 text-sm font-semibold text-white transition hover:bg-[#1166c8]"
+              className="inline-flex min-h-10 items-center gap-2 rounded-md bg-[#071b29] px-4 text-sm font-semibold text-white transition hover:bg-[#1765a6]"
             >
               View course
               <MoveRight aria-hidden="true" className="h-4 w-4" />

@@ -21,18 +21,18 @@ export function AcademyCard({
   return (
     <ComingSoonOverlay info={comingSoon}>
       <article
-        className="premium-card flex h-full flex-col rounded-xl border-t-4 p-7 text-ink transition duration-200 hover:-translate-y-1 hover:shadow-[0_24px_54px_rgba(6,17,31,0.1)]"
+        className="premium-card interactive-lift flex h-full flex-col rounded-lg border-t-4 p-7 text-ink"
         style={{ borderTopColor: accent }}
       >
         <div className="flex items-start justify-between gap-3">
           <span
-            className="rounded-full px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em]"
+            className="rounded-md px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em]"
             style={{ backgroundColor: `${accent}18`, color: accent }}
           >
             {academy.category.replaceAll("-", " ")}
           </span>
           {courseCount !== undefined && (
-            <span className="shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-muted">
+            <span className="shrink-0 rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold text-muted">
               {courseCount} courses
             </span>
           )}

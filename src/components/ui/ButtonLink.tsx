@@ -10,10 +10,10 @@ type ButtonLinkProps = {
 };
 
 const variants = {
-  primary: "border border-[#e6b63e] bg-[linear-gradient(180deg,#ffd86b_0%,#f5c542_100%)] text-[#07101d] shadow-[0_14px_28px_rgba(245,197,66,0.2)] hover:brightness-[1.03]",
-  secondary: "border border-white/20 bg-white/10 text-white hover:bg-white/20",
-  ink: "border border-[#0e2440] bg-[linear-gradient(180deg,#0d2239_0%,#06111f_100%)] text-white shadow-[0_14px_28px_rgba(6,17,31,0.16)] hover:border-[#163657] hover:bg-[#0d2239]",
-  outline: "border border-slate-200 bg-white text-ink hover:border-[#1166c8]/30 hover:bg-[#f5f9ff]",
+  primary: "border border-[#d9aa32] bg-[#efc14b] text-[#071623] shadow-[0_12px_26px_rgba(239,193,75,0.2)] hover:bg-[#f5cc62]",
+  secondary: "border border-white/20 bg-white/8 text-white hover:border-white/32 hover:bg-white/14",
+  ink: "border border-[#102c3a] bg-[#071b29] text-white shadow-[0_12px_26px_rgba(6,23,37,0.15)] hover:border-[#1d4b5c] hover:bg-[#0c2938]",
+  outline: "border border-slate-200 bg-white text-ink hover:border-[#1765a6]/30 hover:bg-[#f3f8fa]",
   ghost: "text-white/78 hover:text-white",
 };
 
@@ -22,7 +22,7 @@ export function ButtonLink({ href, children, variant = "primary", className = ""
     <Link
       href={href}
       onClick={onClick}
-      className={`inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-3 text-sm font-semibold transition duration-200 ${variants[variant]} ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center rounded-md px-5 py-3 text-sm font-semibold transition duration-200 ${variants[variant]} ${className}`}
     >
       {children}
     </Link>

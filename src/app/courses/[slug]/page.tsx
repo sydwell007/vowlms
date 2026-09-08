@@ -155,7 +155,7 @@ export default async function CourseDetailPage({
       <section className="relative isolate text-white">
         {/* Full-bleed banner — the same image shown on the course card, now the page hero */}
         <div className="absolute inset-0 -z-10 bg-slate-900">
-          <Image src={courseVisual.src} alt="" fill priority sizes="100vw" className="object-cover" />
+          <Image src={courseVisual.src} alt={courseVisual.alt} fill priority sizes="100vw" className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#06111f] via-[#06111f]/74 to-[#06111f]/15" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#06111f]/90 via-[#06111f]/45 to-transparent" />
         </div>

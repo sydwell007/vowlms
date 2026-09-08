@@ -72,10 +72,11 @@ export function Footer() {
   ];
 
   return (
-    <footer className="mt-auto border-t-2 border-gold bg-[#0d2239] text-white">
+    <footer className="mt-auto bg-[#081e2b] text-white">
+      <div className="brand-rule h-[3px] w-full" aria-hidden="true" />
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-5 pt-12 sm:px-6 lg:px-8">
         <Link href="/" className="flex w-fit items-center gap-3">
-          <span className="brand-mark-frame flex h-12 w-12 items-center justify-center rounded-xl p-1.5">
+          <span className="brand-mark-frame flex h-11 w-11 items-center justify-center rounded-lg p-1.5">
             <Image src={visualAssets.logo} alt="GoalVow logo" width={44} height={44} className="h-full w-full object-contain" />
           </span>
           <span>
@@ -139,7 +140,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10 bg-[#081626]">
+      <div className="border-t border-white/10 bg-[#05131f]">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-5 py-4 text-xs text-white/72 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
           <p>Copyright &copy; 2026 GoalVow Holdings. All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-y-1">

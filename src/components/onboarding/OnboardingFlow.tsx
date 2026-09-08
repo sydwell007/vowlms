@@ -64,7 +64,7 @@ export function OnboardingFlow({ initialStep = "tiles" }: { initialStep?: "tiles
     setProfile(null);
   }
 
-  if (!mounted) return null;
+  if (!mounted) return <GoalTileGrid onSelect={handleSelectTile} />;
 
   if (profile) {
     return <ReturningLearnerBanner profile={profile} onChangeGoal={reset} />;

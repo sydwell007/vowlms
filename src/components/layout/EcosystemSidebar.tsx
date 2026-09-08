@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ChevronDown, ChevronLeft, Network, X } from "lucide-react";
 import { visualAssets } from "@/lib/visual-assets";
 import { getEcosystemServices, ecosystemStatusBadgeClass } from "@/data/ecosystem-services";
 import { useSession } from "@/lib/auth/useSession";
@@ -42,22 +43,23 @@ export function EcosystemSidebar() {
   return (
     <>
       {/* ── Desktop sidebar ─────────────────────────────────────────────── */}
-      <aside className="fixed right-0 top-[7.5rem] z-30 hidden items-start xl:flex">
+      <aside className="fixed right-0 top-[75px] z-30 hidden items-start xl:flex">
         {/* Toggle tab */}
         <button
           onClick={toggle}
           aria-label={open ? "Collapse ecosystem sidebar" : "Expand ecosystem sidebar"}
-          className="flex h-fit items-center gap-1.5 rounded-l-xl border border-r-0 border-slate-200 bg-white px-2 py-6 text-[10px] font-bold uppercase tracking-widest text-muted shadow-md transition hover:text-ink"
+          className="flex h-fit items-center gap-1.5 rounded-l-lg border border-r-0 border-white/12 bg-[#0c2938] px-2 py-5 text-[10px] font-bold uppercase tracking-widest text-white/72 shadow-md transition hover:bg-[#123746] hover:text-white"
           style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
         >
-          {open ? "✕ Ecosystem" : "Ecosystem ▸"}
+          {open ? <X aria-hidden="true" className="h-3.5 w-3.5" /> : <ChevronLeft aria-hidden="true" className="h-3.5 w-3.5" />}
+          Ecosystem
         </button>
 
         {/* Panel */}
         <div
-          className={`h-[calc(100vh-7.5rem)] overflow-y-auto shadow-[0_8px_40px_rgba(30,58,138,0.08)] transition-all duration-250 ${
+          className={`h-[calc(100vh-75px)] overflow-y-auto shadow-[0_8px_40px_rgba(6,23,37,0.16)] transition-all duration-250 ${
             open
-              ? "w-64 translate-x-0 rounded-l-xl border border-r-0 border-slate-200 bg-white opacity-100"
+              ? "w-64 translate-x-0 rounded-l-lg border border-r-0 border-slate-200 bg-white opacity-100"
               : "pointer-events-none w-0 translate-x-full overflow-hidden border-0 opacity-0"
           }`}
         >
@@ -130,33 +132,27 @@ export function EcosystemSidebar() {
         </div>
       </aside>
 
-      {/* ── Mobile bottom accordion ──────────────────────────────────────── */}
       <div className="xl:hidden">
-        <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200 bg-white shadow-[0_-8px_32px_rgba(0,0,0,0.1)]">
-          {/* Mobile toggle */}
-          <button
-            onClick={toggle}
-            className="flex w-full items-center justify-between px-5 py-3"
-          >
-            <div className="flex items-center gap-2">
-              <span className="text-lg">🌐</span>
-              <span className="text-sm font-semibold text-ink">GoalVow Ecosystem</span>
-              <span className="rounded-full bg-[#1e3a8a]/10 px-2 py-0.5 text-[10px] font-semibold text-[#1e3a8a]">
-                {services.length} services
+        {open ? (
+          <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-slate-200 bg-white shadow-[0_-14px_42px_rgba(6,23,37,0.16)]">
+            <button onClick={toggle} className="flex w-full items-center justify-between px-5 py-3">
+              <span className="flex items-center gap-2">
+                <Network aria-hidden="true" className="h-5 w-5 text-[#1765a6]" />
+                <span className="text-sm font-semibold text-ink">GoalVow ecosystem</span>
+                <span className="rounded-full bg-[#1765a6]/10 px-2 py-0.5 text-[10px] font-semibold text-[#1765a6]">
+                  {services.length}
+                </span>
               </span>
-            </div>
-            <span className="text-muted text-lg">{open ? "↓" : "↑"}</span>
-          </button>
+              <ChevronDown aria-hidden="true" className="h-5 w-5 text-muted" />
+            </button>
 
-          {/* Mobile expanded panel */}
-          {open && (
             <div className="max-h-64 overflow-y-auto border-t border-slate-100 px-4 pb-4">
               <div className="grid grid-cols-2 gap-2 pt-3">
                 {services.map((s) => (
                   <Link
                     key={s.slug}
                     href={s.href}
-                    className="flex items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 p-3 transition hover:border-[#1e3a8a]/20"
+                    className="flex items-center gap-2 rounded-lg border border-slate-100 bg-slate-50 p-3 transition hover:border-[#1765a6]/20"
                   >
                     {s.iconImage ? (
                       <Image src={s.iconImage} alt="" width={22} height={22} className="h-[22px] w-[22px] shrink-0 rounded object-contain" />
@@ -174,11 +170,20 @@ export function EcosystemSidebar() {
                 <ThandiSidebarEntryMobile />
               </div>
             </div>
-          )}
-        </div>
-
-        {/* Spacer so content isn&apos;t hidden behind fixed bar */}
-        <div className="h-14" />
+          </div>
+        ) : (
+          <button
+            onClick={toggle}
+            aria-label="Open GoalVow ecosystem"
+            title="GoalVow ecosystem"
+            className="fixed bottom-4 right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-[#0c2938] text-white shadow-[0_12px_32px_rgba(6,23,37,0.3)] transition hover:bg-[#1765a6]"
+          >
+            <Network aria-hidden="true" className="h-5 w-5" />
+            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-[9px] font-bold text-[#061725]">
+              {services.length}
+            </span>
+          </button>
+        )}
       </div>
     </>
   );

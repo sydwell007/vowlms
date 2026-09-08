@@ -13,12 +13,12 @@ import type { Role } from "@/types/lms";
  * their own launch.
  */
 const journeyDestinations = [
-  { Icon: Route, name: "Skill Pathways", href: "/learn/pathways", description: "Structured, multi-course routes built toward one outcome, not one course at a time.", accentColor: "#8b5cf6" },
-  { Icon: Headset, name: "VR Practice", href: "/vr-practice", description: "Rehearse real workplace scenarios safely, before you do them for real.", accentColor: "#06b6d4" },
-  { Icon: Award, name: "Certificates", href: "/certificates", description: "Real, account-owned proof of what you've completed — not a downloadable PDF that expires.", accentColor: "#f5c542" },
-  { Icon: LayoutDashboard, name: "Your Dashboard", href: "/dashboard/learner", description: "Every course, assessment, and reward, tracked in one place.", accentColor: "#1e3a8a" },
-  { Icon: Briefcase, name: "Opportunities", href: "/opportunities", description: "Where your learning progress leads next — the planned route from evidence to opportunity.", accentColor: "#22c55e" },
-  { Icon: LifeBuoy, name: "VowSupport", href: "/support", description: "A verified route for access, course, and account help when you need a real person.", accentColor: "#19c37d" },
+  { Icon: Route, name: "Skill Pathways", href: "/learn/pathways", description: "Structured routes that connect several courses to one outcome.", accentColor: "#1765a6" },
+  { Icon: Headset, name: "VR Practice", href: "/vr-practice", description: "Rehearse workplace scenarios safely before applying them for real.", accentColor: "#179aa0" },
+  { Icon: Award, name: "Certificates", href: "/certificates", description: "Account-owned proof of the learning you have completed.", accentColor: "#b98713" },
+  { Icon: LayoutDashboard, name: "Your Dashboard", href: "/dashboard/learner", description: "Courses, assessments, certificates, and rewards in one view.", accentColor: "#184f78" },
+  { Icon: Briefcase, name: "Opportunities", href: "/opportunities", description: "A planned route from verified learning evidence to opportunity.", accentColor: "#20885f" },
+  { Icon: LifeBuoy, name: "VowSupport", href: "/support", description: "A direct route to learner, course, and account support.", accentColor: "#d45e3e" },
 ];
 
 export function EcosystemShowcaseSection({ role }: { role?: Role | null }) {
@@ -32,7 +32,7 @@ export function EcosystemShowcaseSection({ role }: { role?: Role | null }) {
           <Link
             key={name}
             href={name === "Your Dashboard" ? dashboardHref : href}
-            className="gv-card group flex items-start gap-4 rounded-xl p-5 transition hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(30,58,138,0.12)]"
+            className="gv-card interactive-lift group flex items-start gap-4 rounded-lg p-5"
           >
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg" style={{ background: `${accentColor}18` }}>
               <Icon aria-hidden="true" className="h-5 w-5" style={{ color: accentColor }} />
@@ -52,7 +52,7 @@ export function EcosystemShowcaseSection({ role }: { role?: Role | null }) {
           (like VowRewards, already spotlighted above), others are planned
           services in progress. Real status, never overclaimed. */}
       {growingServices.length > 0 ? (
-        <div className="mt-8 rounded-xl border border-dashed border-slate-200 bg-slate-50/60 p-5">
+        <div className="mt-8 rounded-lg border border-dashed border-slate-300 bg-[#eef3f5] p-5">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
             And VowLMS keeps connecting to the GoalVow network
           </p>

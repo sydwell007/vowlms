@@ -234,6 +234,7 @@ export function CourseCatalogueClient({
           <ImagePanel
             src={visualAssets.academyNetwork}
             alt="GoalVow academy network course catalogue"
+            priority
             aspect="video"
             className="hidden lg:block"
           />

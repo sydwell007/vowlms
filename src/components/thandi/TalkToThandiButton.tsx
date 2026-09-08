@@ -22,8 +22,7 @@ export function TalkToThandiButton({
     <button
       type="button"
       onClick={openThandiPanel}
-      className={`inline-flex min-h-11 items-center justify-center rounded-lg border border-white/20 px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(74,163,255,0.25)] transition duration-200 hover:brightness-110 ${className}`}
-      style={{ background: "linear-gradient(135deg, #4aa3ff 0%, #7c6bf5 55%, #f7d05e 100%)" }}
+      className={`inline-flex min-h-11 items-center justify-center rounded-md border border-[#5ed8dc]/45 bg-[#176f78] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(23,111,120,0.24)] transition duration-200 hover:bg-[#21848c] ${className}`}
     >
       {children}
     </button>

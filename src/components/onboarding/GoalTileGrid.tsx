@@ -1,10 +1,20 @@
 "use client";
 
-import { goalTiles, type GoalTile } from "@/data/goal-tiles";
+import { BriefcaseBusiness, ChefHat, GraduationCap, Search, TrendingUp, Wrench } from "lucide-react";
+import { goalTiles, type GoalTile, type GoalTileId } from "@/data/goal-tiles";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { getCourseSummaries } from "@/lib/data";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { useSession } from "@/lib/auth/useSession";
+
+const goalIcons = {
+  kitchen: ChefHat,
+  trade: Wrench,
+  career: TrendingUp,
+  business: BriefcaseBusiness,
+  certificate: GraduationCap,
+  unsure: Search,
+} satisfies Record<GoalTileId, typeof Search>;
 
 function tileCourseCount(tile: GoalTile): number | null {
   if (!tile.academyCategory) return null;
@@ -27,6 +37,7 @@ export function GoalTileGrid({ onSelect }: { onSelect: (tile: GoalTile) => void 
       {visibleTiles.map((tile) => {
         const count = tileCourseCount(tile);
         const accent = tile.academyCategory ? getAcademyAccentColor(tile.academyCategory) : "#f5c542";
+        const Icon = goalIcons[tile.id];
 
         return (
           <button
@@ -34,10 +45,15 @@ export function GoalTileGrid({ onSelect }: { onSelect: (tile: GoalTile) => void 
             type="button"
             aria-label={tile.question}
             onClick={() => onSelect(tile)}
-            className="premium-card flex min-h-[180px] flex-col items-start rounded-xl border-t-4 p-6 text-left text-ink transition duration-200 hover:-translate-y-1 hover:shadow-[0_24px_54px_rgba(6,17,31,0.1)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1166c8]"
+            className="premium-card interactive-lift flex min-h-[164px] flex-col items-start rounded-lg border-t-4 p-6 text-left text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1765a6]"
             style={{ borderTopColor: accent }}
           >
-            <span className="text-4xl" aria-hidden="true">{tile.icon}</span>
+            <span
+              className="flex h-10 w-10 items-center justify-center rounded-md"
+              style={{ backgroundColor: `${accent}18`, color: accent }}
+            >
+              <Icon aria-hidden="true" className="h-5 w-5" />
+            </span>
             <p className="mt-4 text-lg font-semibold leading-snug">{tile.question}</p>
             {count !== null ? (
               <span className="mt-auto pt-4 text-sm font-semibold" style={{ color: accent }}>

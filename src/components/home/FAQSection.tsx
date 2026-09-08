@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { ChevronDown, LifeBuoy } from "lucide-react";
 
 const faqs = [
   {
@@ -35,11 +36,6 @@ const faqs = [
       "You can retake it. Every assessment shows its pass mark upfront, and you're free to review the lesson and try again until you pass.",
   },
   {
-    question: "Which academies are open right now?",
-    answer:
-      "Upskilling, Skills Training, Chef Academy, and Business School are live today, with more academies in development as they're ready.",
-  },
-  {
     question: "Is my payment information safe?",
     answer:
       "Yes. Paid course checkouts are processed securely through PayFast, a trusted South African payment gateway — VowLMS never sees or stores your card details.",
@@ -61,8 +57,9 @@ export function FAQSection() {
         </p>
         <Link
           href="/support"
-          className="mt-4 inline-flex min-h-11 items-center justify-center rounded-lg border border-[#0e2440] bg-[linear-gradient(180deg,#0d2239_0%,#06111f_100%)] px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(6,17,31,0.16)] transition hover:border-[#163657]"
+          className="mt-4 inline-flex min-h-11 items-center justify-center rounded-md border border-[#102c3a] bg-[#071b29] px-5 py-3 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(6,23,37,0.15)] transition hover:bg-[#0c2938]"
         >
+          <LifeBuoy aria-hidden="true" className="mr-2 h-4 w-4" />
           Contact learner support
         </Link>
       </div>
@@ -73,7 +70,7 @@ export function FAQSection() {
           const panelId = `faq-panel-${index}`;
 
           return (
-            <article key={item.question} className="premium-card overflow-hidden rounded-xl">
+            <article key={item.question} className="premium-card overflow-hidden rounded-lg">
               <button
                 type="button"
                 onClick={() => toggle(index)}
@@ -82,12 +79,10 @@ export function FAQSection() {
                 className="flex w-full items-center justify-between gap-4 p-5 text-left transition hover:bg-[#f5f9ff]"
               >
                 <span className="text-base font-semibold text-ink">{item.question}</span>
-                <span
-                  className={`shrink-0 text-muted transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                <ChevronDown
+                  className={`h-4 w-4 shrink-0 text-muted transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                   aria-hidden="true"
-                >
-                  ▾
-                </span>
+                />
               </button>
               <div
                 id={panelId}
