@@ -43,15 +43,27 @@ test.describe("Thandi sidebar tutor", () => {
       }
 
       const frame = panel.locator("iframe");
+      // The call defaults to English (South Africa) — VowHumans' own real
+      // language code, sent as `language_code` so the live call actually
+      // starts in that language server-side (not just VowLMS UI copy).
       await expect(frame).toHaveAttribute(
         "src",
-        `${THANDI_EMBED_URL}#lesson_context_token=thandi-ui-test-token`,
+        `${THANDI_EMBED_URL}#lesson_context_token=thandi-ui-test-token&language_code=en-ZA`,
       );
 
-      // All 11 South African official languages are selectable.
+      // All 11 South African official languages are selectable, and picking
+      // one restarts the call with that real VowHumans language code.
       const languageSelect = panel.getByLabel("Thandi's response language");
       const optionCount = await languageSelect.locator("option").count();
       expect(optionCount).toBe(THANDI_LANGUAGES.length);
+
+      const secondTokenRequest = page.waitForRequest("**/api/vowhumans/context-token/vowlms-guide**");
+      await languageSelect.selectOption("xh-ZA");
+      await secondTokenRequest;
+      await expect(frame).toHaveAttribute(
+        "src",
+        `${THANDI_EMBED_URL}#lesson_context_token=thandi-ui-test-token&language_code=xh-ZA`,
+      );
 
       await panel.getByRole("button", { name: "Close Thandi" }).click();
       await expect(panel).toBeHidden();

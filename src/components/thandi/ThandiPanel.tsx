@@ -39,7 +39,7 @@ export function ThandiPanel() {
   const [frameKey, setFrameKey] = useState(0);
   const [contextToken, setContextToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [languageCode, setLanguageCode] = useState("en");
+  const [languageCode, setLanguageCode] = useState(THANDI_LANGUAGES[0].code);
   const { key: contextKey } = useThandiContextKey();
 
   useEffect(() => {
@@ -263,7 +263,7 @@ export function ThandiPanel() {
               {contextToken ? (
                 <iframe
                   key={frameKey}
-                  src={`${THANDI_EMBED_URL}#${new URLSearchParams({ lesson_context_token: contextToken })}`}
+                  src={`${THANDI_EMBED_URL}#${new URLSearchParams({ lesson_context_token: contextToken, language_code: languageCode })}`}
                   title="Thandi, VowLMS AI tutor"
                   allow="microphone; fullscreen"
                   allowFullScreen
