@@ -1,14 +1,15 @@
+import Image from "next/image";
 import { Sparkles } from "lucide-react";
+import { visualAssets } from "@/lib/visual-assets";
 
 /**
- * Thandi's portrait. VowHumans has no stable, publicly-servable static
- * likeness image for this identity — its face is only rendered live,
- * per-session, once a real call starts (`/api/public/v1/embed-face?session_id=...`).
- * Rather than hotlink a session-scoped URL into a static sidebar (which would
- * break) or fabricate a photo, this is a designed portrait mark: a warm
- * gradient bust silhouette with a small "AI" sparkle, consistent with how
- * VowHumans itself discloses every persona here as AI-generated, not a real
- * person.
+ * Thandi's portrait — a still frame cropped from her own live, disclosed
+ * "AI-generated digital human" call (`public/images/thandi-avatar.jpg`), used
+ * for the sidebar entry and the panel header/idle state where a live video
+ * feed isn't running. The small sparkle badge is kept on top of the photo
+ * for the same reason the live call itself always shows it on-screen: this
+ * is a synthetic persona, not a photo of a real person, and that stays
+ * visible everywhere her face appears, not just during an active call.
  */
 export function ThandiAvatar({
   size = 40,
@@ -21,26 +22,20 @@ export function ThandiAvatar({
 }) {
   return (
     <span
-      className={`relative inline-flex shrink-0 items-center justify-center rounded-full ${className}`}
-      style={{
-        width: size,
-        height: size,
-        background: "linear-gradient(135deg, #4aa3ff 0%, #7c6bf5 55%, #f7d05e 100%)",
-      }}
+      className={`relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full ring-1 ring-inset ring-white/15 ${className}`}
+      style={{ width: size, height: size }}
     >
-      <svg viewBox="0 0 24 24" width={size * 0.6} height={size * 0.6} fill="none" aria-hidden="true">
-        <circle cx="12" cy="8.5" r="4" fill="white" fillOpacity="0.92" />
-        <path
-          d="M4 20c0-3.6 3.58-6.5 8-6.5s8 2.9 8 6.5"
-          stroke="white"
-          strokeOpacity="0.92"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </svg>
+      <Image
+        src={visualAssets.thandiAvatar}
+        alt="Thandi, VowLMS's AI-generated digital human tutor"
+        width={size}
+        height={size}
+        className="h-full w-full object-cover"
+      />
       <span
         className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center rounded-full bg-white shadow-sm"
         style={{ width: size * 0.36, height: size * 0.36 }}
+        title="AI-generated digital human"
       >
         <Sparkles size={size * 0.22} className="text-[#4aa3ff]" />
       </span>

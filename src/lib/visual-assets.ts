@@ -6,6 +6,7 @@ export const visualAssets = {
   vrPracticeLab: "/images/vowlms/vr-practice-lab.png",
   coursePresenter: "/images/vowlms/course-presenter.webp",
   vowhumansLogo: "/images/vowhumans-logo.png",
+  thandiAvatar: "/images/thandi-avatar.jpg",
 } as const;
 
 type CourseVisual = {
