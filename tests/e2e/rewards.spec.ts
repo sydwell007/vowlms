@@ -58,11 +58,15 @@ test.describe("VOWR wallet", () => {
     await expect(pill).toBeVisible();
 
     await pill.click();
-    await expect(page.getByText("Your VOWR balance")).toBeVisible();
-    await expect(page.getByText("305 VOWR", { exact: false }).first()).toBeVisible();
-    await expect(page.getByText("Certificate issued")).toBeVisible();
-    await expect(page.getByText("Lesson completed")).toBeVisible();
-    await expect(page.getByRole("link", { name: "View Full Wallet" })).toHaveAttribute("href", "/rewards");
+    // Scoped to the dropdown itself — the homepage's own AI-and-rewards
+    // section also mentions "First lesson completed" as one of its real
+    // earn-milestones, so an unscoped page-wide text match is ambiguous here.
+    const dropdown = page.getByRole("menu");
+    await expect(dropdown.getByText("Your VOWR balance")).toBeVisible();
+    await expect(dropdown.getByText("305 VOWR", { exact: false }).first()).toBeVisible();
+    await expect(dropdown.getByText("Certificate issued")).toBeVisible();
+    await expect(dropdown.getByText("Lesson completed")).toBeVisible();
+    await expect(dropdown.getByRole("link", { name: "View Full Wallet" })).toHaveAttribute("href", "/rewards");
   });
 
   test("/rewards renders the wallet hero, ways to earn, history, and redemption catalog", async ({ page }) => {

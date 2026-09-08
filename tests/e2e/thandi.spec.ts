@@ -19,10 +19,10 @@ test.describe("Thandi sidebar tutor", () => {
       await page.goto("/");
 
       await page.getByRole("button", { name: "Expand ecosystem sidebar" }).click();
-      await expect(page.getByRole("button", { name: "Talk to Thandi" })).toBeVisible();
+      await expect(page.getByRole("button", { name: "Talk to Thandi", exact: true })).toBeVisible();
 
       const tokenRequest = page.waitForRequest("**/api/vowhumans/context-token/vowlms-guide**");
-      await page.getByRole("button", { name: "Talk to Thandi" }).click();
+      await page.getByRole("button", { name: "Talk to Thandi", exact: true }).click();
       await tokenRequest;
 
       const panel = page.getByRole("region", { name: "Thandi, VowLMS AI tutor" });
@@ -77,7 +77,7 @@ test.describe("Thandi sidebar tutor", () => {
     test("minimizing collapses to a portrait bubble without ending the call, and the rest of the page stays usable", async ({ page }) => {
       await page.goto("/courses");
       await page.getByRole("button", { name: "Expand ecosystem sidebar" }).click();
-      await page.getByRole("button", { name: "Talk to Thandi" }).click();
+      await page.getByRole("button", { name: "Talk to Thandi", exact: true }).click();
 
       const panel = page.getByRole("region", { name: "Thandi, VowLMS AI tutor" });
       await expect(panel).toBeVisible();
@@ -109,7 +109,7 @@ test.describe("Thandi sidebar tutor", () => {
       await page.getByRole("button", { name: "Expand ecosystem sidebar" }).click();
 
       const tokenRequest = page.waitForRequest(`**/api/vowhumans/context-token/${slug}**`);
-      await page.getByRole("button", { name: "Talk to Thandi" }).click();
+      await page.getByRole("button", { name: "Talk to Thandi", exact: true }).click();
       await tokenRequest;
 
       await expect(page.getByRole("region", { name: "Thandi, VowLMS AI tutor" })).toBeVisible();
@@ -123,7 +123,7 @@ test.describe("Thandi sidebar tutor", () => {
       await page.goto("/");
 
       await page.getByRole("button", { name: "GoalVow Ecosystem" }).click();
-      await page.getByRole("button", { name: "Talk to Thandi" }).click();
+      await page.getByRole("button", { name: "Talk to Thandi", exact: true }).click();
 
       const panel = page.getByRole("region", { name: "Thandi, VowLMS AI tutor" });
       await expect(panel).toBeVisible();

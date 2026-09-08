@@ -3,8 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChartNoAxesCombined, Network, ShieldCheck, Smartphone } from "lucide-react";
 import { CourseCard } from "@/components/courses/CourseCard";
+import { AIAndRewardsSection } from "@/components/home/AIAndRewardsSection";
+import { EcosystemShowcaseSection } from "@/components/home/EcosystemShowcaseSection";
 import { FAQSection } from "@/components/home/FAQSection";
-import { PresentersSection } from "@/components/home/PresentersSection";
 import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { ImagePanel } from "@/components/ui/ImagePanel";
@@ -174,11 +175,11 @@ export default async function Home() {
       </Section>
 
       <Section
-        eyebrow="AI-guided learning"
-        title="Meet your AI course presenters"
-        description="A GoalVow-built, on-demand interactive presenter available inside select lessons."
+        eyebrow="AI-guided learning · Real rewards"
+        title="Learn with a 24/7 AI tutor. Earn VOWR from day one."
+        description="Every VowLMS course comes with Thandi, GoalVow's digital human tutor, by your side — and every real milestone you hit earns VOWR, automatically."
       >
-        <PresentersSection />
+        <AIAndRewardsSection />
       </Section>
 
       <section className="border-y border-slate-100 bg-white py-16 md:py-24">
@@ -214,6 +215,15 @@ export default async function Home() {
           />
         </div>
       </section>
+
+      <Section
+        tone="light"
+        eyebrow="GoalVow ecosystem"
+        title="One account. A whole ecosystem."
+        description="VowLMS connects directly to the wider GoalVow network — rewards, support, opportunities, and more — all reachable without ever leaving your learning journey."
+      >
+        <EcosystemShowcaseSection role={role} />
+      </Section>
 
       <Section tone="light" eyebrow="FAQ" title="Questions learners ask before they start" description="Straight answers about cost, certificates, rewards, and how VowLMS actually works.">
         <FAQSection />
