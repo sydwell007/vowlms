@@ -46,6 +46,23 @@ test.describe("Homepage — AI-guided learning & ecosystem sections", () => {
     await expect(academyNavigation.getByRole("link")).toHaveCount(1);
   });
 
+  test("academy network shows the full network only to admins", async ({ page }) => {
+    await page.route("**/api/auth/session", async (route) => {
+      await route.fulfill({
+        contentType: "application/json",
+        body: JSON.stringify({
+          ok: true,
+          data: { id: "admin-1", name: "Admin", email: "admin@example.com", role: "admin" },
+        }),
+      });
+    });
+    await page.goto("/");
+
+    const academyNavigation = page.getByRole("navigation", { name: "GoalVow academy navigation" });
+    await expect(academyNavigation.getByRole("link")).toHaveCount(7);
+    await expect(academyNavigation.getByText("Admin", { exact: true })).toHaveCount(6);
+  });
+
   test("featured courses expand six at a time until every course is visible", async ({ page }) => {
     await page.goto("/");
     const courseGrid = page.getByTestId("featured-course-grid");
