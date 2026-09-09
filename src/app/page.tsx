@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, BrainCircuit, Coins, Compass } from "lucide-react";
-import { CourseCard } from "@/components/courses/CourseCard";
 import { AIAndRewardsSection } from "@/components/home/AIAndRewardsSection";
 import { EcosystemShowcaseSection } from "@/components/home/EcosystemShowcaseSection";
 import { FAQSection } from "@/components/home/FAQSection";
+import { FeaturedCourseGrid } from "@/components/home/FeaturedCourseGrid";
 import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Section } from "@/components/ui/Section";
@@ -65,7 +65,6 @@ export default async function Home() {
   const role = await getServerRole();
   const courses = getCourseSummaries(role);
   const connectedAcademies = getConnectedAcademyCount();
-  const featuredCourses = courses.slice(0, 6);
   const stats = [
     { value: connectedAcademies.toLocaleString(), label: "Connected academies" },
     { value: courses.length.toLocaleString(), label: "Courses" },
@@ -180,11 +179,7 @@ export default async function Home() {
               View catalogue
             </ButtonLink>
           </div>
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {featuredCourses.map((course, index) => (
-              <CourseCard key={course.slug} course={course} priority={index === 0} role={role} />
-            ))}
-          </div>
+          <FeaturedCourseGrid courses={courses} role={role} />
         </div>
       </section>
 

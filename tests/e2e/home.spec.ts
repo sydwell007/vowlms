@@ -37,4 +37,27 @@ test.describe("Homepage — AI-guided learning & ecosystem sections", () => {
     );
     expect(overflow).toBe(false);
   });
+
+  test("academy network shows only the enabled Upskilling Academy", async ({ page }) => {
+    await page.goto("/");
+    const academyNavigation = page.getByRole("navigation", { name: "GoalVow academy navigation" });
+    await expect(academyNavigation).toBeVisible();
+    await expect(academyNavigation.getByRole("link", { name: "Upskilling Academy" })).toBeVisible();
+    await expect(academyNavigation.getByRole("link")).toHaveCount(1);
+  });
+
+  test("featured courses expand six at a time until every course is visible", async ({ page }) => {
+    await page.goto("/");
+    const courseGrid = page.getByTestId("featured-course-grid");
+    const exploreButton = page.getByRole("button", { name: "Explore more courses" });
+
+    await expect(courseGrid.locator("article")).toHaveCount(6);
+    await exploreButton.click();
+    await expect(courseGrid.locator("article")).toHaveCount(12);
+    await exploreButton.click();
+    await expect(courseGrid.locator("article")).toHaveCount(18);
+    await exploreButton.click();
+    await expect(courseGrid.locator("article")).toHaveCount(20);
+    await expect(exploreButton).toBeHidden();
+  });
 });

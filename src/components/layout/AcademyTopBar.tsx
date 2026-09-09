@@ -1,34 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import { ChartNoAxesCombined } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { getComingSoonInfo, isHiddenAcademyCategory } from "@/lib/academy-launch";
-import { getAcademyAccentColor } from "@/lib/academy-colors";
-import { useSession } from "@/lib/auth/useSession";
 import { academyNavLinks as allAcademyLinks } from "@/data/academy-nav";
+import { getAcademyAccentColor } from "@/lib/academy-colors";
+import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 
 function isActive(pathname: string, href: string) {
-  if (href === "/") {
-    return pathname === "/";
-  }
-
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export function AcademyTopBar() {
   const pathname = usePathname();
-  const session = useSession();
-  // Default to the strictest (signed-out/learner) view until the session
-  // resolves, so admin-only academies never flash for a moment before
-  // narrowing — safer than briefly over-showing then yanking links away.
-  const role = session.status === "authenticated" ? session.user.role : null;
-  const isAdmin = role === "admin";
-  const academyLinks = allAcademyLinks.filter((link) => !isHiddenAcademyCategory(link.category, role));
-
-  // A switcher with one destination duplicates the main navigation and makes
-  // the product shell feel fragmented. It appears automatically as the live
-  // academy network expands.
-  if (academyLinks.length <= 1) return null;
+  // Keep the learner-facing academy network identical for every role. Admins
+  // manage unreleased academies elsewhere instead of exposing them here.
+  const academyLinks = allAcademyLinks.filter((link) => !isHiddenAcademyCategory(link.category, null));
 
   return (
     <div className="border-b border-white/8 bg-[#05131f]">
@@ -39,26 +26,7 @@ export function AcademyTopBar() {
           </span>
           {academyLinks.map((link) => {
             const active = isActive(pathname, link.href);
-            const comingSoon = getComingSoonInfo(link.category, role);
             const accent = getAcademyAccentColor(link.category);
-            const isAdminOnly = isAdmin && isHiddenAcademyCategory(link.category, null);
-
-            if (comingSoon) {
-              return (
-                <span
-                  key={link.href}
-                  aria-disabled="true"
-                  title={`${link.label} — ${comingSoon.label}`}
-                  className="flex cursor-not-allowed items-center gap-1.5 whitespace-nowrap rounded-full border border-white/8 bg-white/[0.03] px-3 py-1.5 text-[0.72rem] font-semibold text-white/32 sm:text-xs"
-                >
-                  <span aria-hidden="true" className="text-[0.85em] grayscale opacity-60">{link.icon}</span>
-                  {link.label}
-                  <span className="rounded-full bg-white/8 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white/40">
-                    Soon
-                  </span>
-                </span>
-              );
-            }
 
             return (
               <Link
@@ -77,13 +45,8 @@ export function AcademyTopBar() {
                   if (!active) event.currentTarget.style.backgroundColor = "rgba(255,255,255,0.03)";
                 }}
               >
-                <span aria-hidden="true" className="text-[0.85em]">{link.icon}</span>
-                {link.label}
-                {isAdminOnly ? (
-                  <span className="rounded-full bg-gold/20 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-gold">
-                    Admin
-                  </span>
-                ) : null}
+                <ChartNoAxesCombined aria-hidden="true" className="h-3.5 w-3.5" />
+                {link.label} Academy
               </Link>
             );
           })}
