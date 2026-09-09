@@ -1,7 +1,5 @@
 import type { ReactNode } from "react";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { visualAssets } from "@/lib/visual-assets";
 import type { DashboardMetric, Role } from "@/types/lms";
 
 type DashboardShellProps = {
@@ -16,21 +14,13 @@ export function DashboardShell({ role, title, description, metrics, children }: 
   return (
     <main className="premium-page">
       <section className="visual-hero hero-achievement border-b border-white/6 py-12 text-white md:py-16">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-8 px-5 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">{role} dashboard</p>
-            <h1 className="mt-4 text-balance text-3xl font-semibold sm:text-5xl">{title}</h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-white/70">{description}</p>
-          </div>
-          <ImagePanel
-            src={visualAssets.dashboardExperience}
-            alt="VowLMS dashboard showing learner progress, certificates, rewards, and opportunity pathways"
-            aspect="video"
-            className="hidden lg:block"
-          />
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">{role} dashboard</p>
+          <h1 className="mt-4 max-w-3xl text-balance text-3xl font-semibold sm:text-5xl">{title}</h1>
+          <p className="mt-4 max-w-2xl text-base leading-7 text-white/70">{description}</p>
         </div>
       </section>
-      <section className="mx-auto -mt-8 w-full max-w-7xl px-5 pb-12 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl px-5 py-10 sm:px-6 lg:px-8">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {metrics.map((metric) => (
             <MetricCard key={metric.label} {...metric} />
