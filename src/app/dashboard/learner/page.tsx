@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DashboardShell } from "@/components/dashboards/DashboardShell";
@@ -15,10 +16,15 @@ type Enrollment = {
   courseTitle?: string;
   course_title?: string;
   description?: string;
+  academyName?: string;
   academy_name?: string;
   progress: number;
   status: string;
   nextLessonSlug?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  moduleCount?: number;
+  completedModules?: number;
   course?: { title?: string; description?: string };
 };
 
@@ -132,14 +138,34 @@ export default function LearnerDashboardPage() {
                 const description = item.course?.description ?? item.description;
                 const continueHref = item.nextLessonSlug ? `/lesson/${item.nextLessonSlug}` : `/courses/${slug}`;
                 return (
-                  <article key={`${slug}-${title}`} className="rounded-lg border border-slate-200 bg-white p-6 shadow-[0_14px_38px_rgba(6,17,31,0.05)]">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#1166c8]">{item.academy_name ?? "Enrolled course"}</p>
-                    <h3 className="mt-2 text-xl font-semibold text-ink">{title}</h3>
-                    {description ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">{description}</p> : null}
-                    <div className="mt-5"><ProgressBar value={Number(item.progress) || 0} /></div>
-                    <div className="mt-5 flex flex-wrap gap-3">
-                      <ButtonLink href={continueHref} variant="ink">{item.progress > 0 ? "Continue learning" : "Open course"}</ButtonLink>
-                      <ButtonLink href={`/courses/${slug}`} variant="outline">Course details</ButtonLink>
+                  <article key={`${slug}-${title}`} className="premium-card overflow-hidden rounded-lg md:grid md:grid-cols-[220px_1fr]">
+                    {item.imageSrc ? (
+                      <Link href={`/courses/${slug}`} className="relative block aspect-[16/9] overflow-hidden bg-slate-100 md:aspect-auto md:min-h-64">
+                        <Image
+                          src={item.imageSrc}
+                          alt={item.imageAlt ?? `${title} course`}
+                          fill
+                          sizes="(min-width: 1024px) 220px, 100vw"
+                          className="object-cover transition duration-500 hover:scale-[1.025]"
+                        />
+                      </Link>
+                    ) : null}
+                    <div className="flex min-w-0 flex-col p-6">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#1166c8]">{item.academyName ?? item.academy_name ?? "Enrolled course"}</p>
+                      <h3 className="mt-2 text-xl font-semibold text-ink">
+                        <Link href={`/courses/${slug}`} className="transition hover:text-[#1166c8]">{title}</Link>
+                      </h3>
+                      {description ? <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">{description}</p> : null}
+                      {item.moduleCount ? (
+                        <p className="mt-3 text-xs font-medium text-slate-500">
+                          {item.completedModules ?? 0} of {item.moduleCount} modules complete
+                        </p>
+                      ) : null}
+                      <div className="mt-4"><ProgressBar value={Number(item.progress) || 0} label="Course progress" /></div>
+                      <div className="mt-5 flex flex-wrap gap-3">
+                        <ButtonLink href={continueHref} variant="ink">{item.progress > 0 ? "Continue learning" : "Start course"}</ButtonLink>
+                        <ButtonLink href={`/courses/${slug}`} variant="outline">Course details</ButtonLink>
+                      </div>
                     </div>
                   </article>
                 );

@@ -23,12 +23,19 @@ $user = $uStmt->fetch();
 $enrStmt = $db->prepare(
     'SELECT e.id, e.progress, e.status, e.enrolled_at,
             c.slug AS course_slug, c.title AS course_title,
-            c.description, c.level, a.name AS academy_name
+            c.description, c.level, a.name AS academy_name, a.slug AS academy_slug,
+            (SELECT l.slug
+             FROM lessons l
+             JOIN modules m ON m.id = l.module_id
+             LEFT JOIN progress p ON p.lesson_id = l.id AND p.user_id = e.user_id
+             WHERE m.course_id = c.id AND COALESCE(p.completed, 0) = 0
+             ORDER BY m.position ASC, l.position ASC
+             LIMIT 1) AS next_lesson_slug
      FROM enrollments e
      JOIN courses c ON c.id = e.course_id
      JOIN academies a ON a.id = c.academy_id
-     WHERE e.user_id = ?
-     ORDER BY e.enrolled_at DESC LIMIT 10'
+     WHERE e.user_id = ? AND e.status IN ("active", "completed")
+     ORDER BY e.enrolled_at DESC'
 );
 $enrStmt->execute([$userId]);
 $enrollments = $enrStmt->fetchAll();
