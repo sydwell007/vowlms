@@ -44,9 +44,13 @@ test.describe("Responsive layout", () => {
   test("goal tiles remain individually clickable on mobile width", async ({ page }) => {
     await page.goto("/");
     const tiles = page.locator('[aria-label="Learning goals"] button');
-    await tiles.first().waitFor({ state: "visible" }); // OnboardingFlow renders nothing until mounted
+    await expect(tiles.first()).toBeEnabled();
     const count = await tiles.count();
     expect(count).toBe(visibleGoalTileCount);
+
+    // The homepage uses content-visibility to avoid painting distant sections.
+    // Bring the complete grid into the render viewport before reading geometry.
+    await tiles.last().scrollIntoViewIfNeeded();
 
     const boxes = [];
     for (let i = 0; i < count; i++) {

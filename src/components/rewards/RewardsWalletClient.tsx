@@ -7,6 +7,7 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { useWalletBalance, type RewardEvent } from "@/lib/rewards/useWalletBalance";
 import { useCountUp } from "@/lib/rewards/useCountUp";
 import { humanizeRewardEvent } from "@/lib/rewards/format";
+import { useSession } from "@/lib/auth/useSession";
 
 const WALLET_PORTAL_URL = "https://wallet.vowrewards.co.za";
 
@@ -79,7 +80,8 @@ function formatDate(iso: string) {
 }
 
 export function RewardsWalletClient() {
-  const wallet = useWalletBalance();
+  const session = useSession();
+  const wallet = useWalletBalance(session.status === "authenticated");
   const displayBalance = useCountUp(wallet.status === "ready" ? wallet.balance : 0);
 
   const [historyFilter, setHistoryFilter] = useState<"all" | "earned" | "redeemed">("all");
@@ -106,6 +108,18 @@ export function RewardsWalletClient() {
   }
 
   useEffect(() => {
+    if (session.status !== "authenticated") {
+      let cancelled = false;
+      if (session.status === "unauthenticated") {
+        Promise.resolve().then(() => {
+          if (cancelled) return;
+          setHistory(null);
+          setHistoryLoading(false);
+        });
+      }
+      return () => { cancelled = true; };
+    }
+
     let cancelled = false;
     // Deferred to a microtask so the initial setHistoryLoading(true) inside
     // loadHistory isn't a synchronous setState call within the effect body
@@ -117,7 +131,7 @@ export function RewardsWalletClient() {
       cancelled = true;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [historyFilter]);
+  }, [historyFilter, session.status]);
 
   async function submitRequestRedemption(item: CatalogItem) {
     if (wallet.status !== "ready" || wallet.balance < item.cost) {

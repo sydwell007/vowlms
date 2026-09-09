@@ -4,18 +4,20 @@ import Link from "next/link";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { getCoursesForRole } from "@/lib/goal-routing";
 import type { RoleOption } from "@/data/goal-tiles";
-import type { AcademyCategory } from "@/types/lms";
+import type { AcademyCategory, CourseSummary } from "@/types/lms";
 
 export function SmartCourseFeed({
   academyCategory,
   role,
+  availableCourses,
   onStartOver,
 }: {
   academyCategory: AcademyCategory;
   role: RoleOption;
+  availableCourses: CourseSummary[];
   onStartOver: () => void;
 }) {
-  const courses = getCoursesForRole(academyCategory, role, 6);
+  const courses = getCoursesForRole(availableCourses, academyCategory, role, 6);
 
   return (
     <div>

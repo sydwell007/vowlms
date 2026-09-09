@@ -73,21 +73,27 @@ function refreshBalance(): Promise<void> {
  * pill, wallet page hero) and revalidates on window focus so a redemption or
  * a freshly-completed lesson on another tab shows up without a hard refresh.
  */
-export function useWalletBalance() {
+export function useWalletBalance(enabled = true) {
   const [state, setState] = useState<WalletState>(cachedState);
 
-  const refresh = useCallback(() => refreshBalance(), []);
+  const refresh = useCallback(() => {
+    if (!enabled) {
+      emit({ status: "signed-out" });
+      return Promise.resolve();
+    }
+    return refreshBalance();
+  }, [enabled]);
 
   useEffect(() => {
     listeners.add(setState);
-    refresh();
+    Promise.resolve().then(refresh);
 
-    window.addEventListener("focus", refresh);
+    if (enabled) window.addEventListener("focus", refresh);
     return () => {
       listeners.delete(setState);
-      window.removeEventListener("focus", refresh);
+      if (enabled) window.removeEventListener("focus", refresh);
     };
-  }, [refresh]);
+  }, [enabled, refresh]);
 
   return { ...state, refresh };
 }

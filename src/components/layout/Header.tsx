@@ -156,7 +156,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#061725]/96 text-white shadow-[0_12px_36px_rgba(2,10,18,0.24)] backdrop-blur-xl">
       <div className="brand-rule h-[3px] w-full" aria-hidden="true" />
       <div className="mx-auto flex min-h-[72px] w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
-        <Link href="/" onClick={closeAllMenus} className="flex shrink-0 items-center gap-3" aria-label="VowLMS home">
+        <Link href="/" onClick={closeAllMenus} className="flex shrink-0 items-center gap-3">
           <span className="brand-mark-frame flex h-10 w-10 items-center justify-center rounded-lg p-1.5 shadow-[0_10px_24px_rgba(57,195,200,0.14)]">
             <Image
               src={visualAssets.logo}

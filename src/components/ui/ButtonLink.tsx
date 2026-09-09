@@ -7,6 +7,7 @@ type ButtonLinkProps = {
   variant?: "primary" | "secondary" | "ink" | "outline" | "ghost";
   className?: string;
   onClick?: MouseEventHandler<HTMLAnchorElement>;
+  prefetch?: boolean;
 };
 
 const variants = {
@@ -17,11 +18,12 @@ const variants = {
   ghost: "text-white/78 hover:text-white",
 };
 
-export function ButtonLink({ href, children, variant = "primary", className = "", onClick }: ButtonLinkProps) {
+export function ButtonLink({ href, children, variant = "primary", className = "", onClick, prefetch }: ButtonLinkProps) {
   return (
     <Link
       href={href}
       onClick={onClick}
+      prefetch={prefetch}
       className={`inline-flex min-h-11 items-center justify-center rounded-md px-5 py-3 text-sm font-semibold transition duration-200 ${variants[variant]} ${className}`}
     >
       {children}

@@ -1,5 +1,5 @@
-import { bridgeUnavailable, ok, serverError } from "@/lib/api/responses";
-import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
+import { ok } from "@/lib/api/responses";
+import { bridgeGet, isBridgeConfigured } from "@/lib/bridge";
 import { allGroupings } from "@/data/course-groupings";
 
 type RawSummary = { averageRating: number | null; totalReviews: number };
@@ -13,7 +13,9 @@ type Summaries = Record<string, RawSummary>;
  * excluded rather than dragging the average toward "unrated").
  */
 export async function GET() {
-  if (!isBridgeConfigured()) return bridgeUnavailable();
+  if (!isBridgeConfigured()) {
+    return ok<Summaries>({}, { headers: { "X-VowLMS-Degraded": "bridge" } });
+  }
 
   try {
     const summaries = await bridgeGet<Summaries>("/courses/review-summaries", { noAuth: true });
@@ -32,8 +34,8 @@ export async function GET() {
     }
 
     return ok(summaries);
-  } catch (error) {
-    if (error instanceof BridgeError) return serverError(error.message);
-    return serverError("Failed to load course rating summaries");
+  } catch {
+    // Ratings are optional public metadata; keep browsing resilient during bridge maintenance.
+    return ok<Summaries>({}, { headers: { "X-VowLMS-Degraded": "bridge" } });
   }
 }

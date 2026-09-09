@@ -6,16 +6,20 @@ import { toast } from "sonner";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { CelebrationOverlay } from "@/components/learning/CelebrationOverlay";
-import { getAcademyBySlug, getAcademyHref } from "@/lib/data";
 import type { Assessment, Course } from "@/types/lms";
 
-type Props = { assessment: Assessment; course: Course };
+type Props = {
+  assessment: Assessment;
+  course: Course;
+  academyName?: string;
+  academyHref?: string;
+};
 type Phase = "intro" | "quiz" | "results";
 
 type ServerResult = { score: number; passed: boolean; passMark: number };
 type CertificateState = "idle" | "pending" | "ready" | "incomplete" | "error";
 
-export function AssessmentPlayer({ assessment, course }: Props) {
+export function AssessmentPlayer({ assessment, course, academyName, academyHref }: Props) {
   const [phase, setPhase] = useState<Phase>("intro");
   const [current, setCurrent] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -122,10 +126,9 @@ export function AssessmentPlayer({ assessment, course }: Props) {
   const passed = serverResult?.passed ?? score >= assessment.passMark;
   const answeredCount = Object.keys(answers).length;
 
-  const academy = getAcademyBySlug(course.academySlug);
   const breadcrumbItems = [
     { label: "Academies", href: "/academies" },
-    ...(academy ? [{ label: academy.name, href: getAcademyHref(academy) }] : []),
+    ...(academyName && academyHref ? [{ label: academyName, href: academyHref }] : []),
     { label: course.title, href: `/courses/${course.slug}` },
     { label: "Assessment" },
   ];

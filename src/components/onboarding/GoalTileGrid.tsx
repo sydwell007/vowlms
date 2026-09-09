@@ -3,9 +3,9 @@
 import { BriefcaseBusiness, ChefHat, GraduationCap, Search, TrendingUp, Wrench } from "lucide-react";
 import { goalTiles, type GoalTile, type GoalTileId } from "@/data/goal-tiles";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
-import { getCourseSummaries } from "@/lib/data";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { useSession } from "@/lib/auth/useSession";
+import type { CourseSummary } from "@/types/lms";
 
 const goalIcons = {
   kitchen: ChefHat,
@@ -16,12 +16,20 @@ const goalIcons = {
   unsure: Search,
 } satisfies Record<GoalTileId, typeof Search>;
 
-function tileCourseCount(tile: GoalTile): number | null {
+function tileCourseCount(tile: GoalTile, courses: CourseSummary[]): number | null {
   if (!tile.academyCategory) return null;
-  return getCourseSummaries().filter((course) => course.academyCategory === tile.academyCategory).length;
+  return courses.filter((course) => course.academyCategory === tile.academyCategory).length;
 }
 
-export function GoalTileGrid({ onSelect }: { onSelect: (tile: GoalTile) => void }) {
+export function GoalTileGrid({
+  onSelect,
+  courses,
+  disabled = false,
+}: {
+  onSelect: (tile: GoalTile) => void;
+  courses: CourseSummary[];
+  disabled?: boolean;
+}) {
   const session = useSession();
   const role = session.status === "authenticated" ? session.user.role : null;
   // Only offer a goal tile if its academy is actually live for this viewer —
@@ -33,9 +41,13 @@ export function GoalTileGrid({ onSelect }: { onSelect: (tile: GoalTile) => void 
   );
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Learning goals">
+    <div
+      className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      aria-label="Learning goals"
+      aria-busy={disabled}
+    >
       {visibleTiles.map((tile) => {
-        const count = tileCourseCount(tile);
+        const count = tileCourseCount(tile, courses);
         const accent = tile.academyCategory ? getAcademyAccentColor(tile.academyCategory) : "#f5c542";
         const Icon = goalIcons[tile.id];
 
@@ -43,9 +55,9 @@ export function GoalTileGrid({ onSelect }: { onSelect: (tile: GoalTile) => void 
           <button
             key={tile.id}
             type="button"
-            aria-label={tile.question}
+            disabled={disabled}
             onClick={() => onSelect(tile)}
-            className="premium-card interactive-lift flex min-h-[164px] flex-col items-start rounded-lg border-t-4 p-6 text-left text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1765a6]"
+            className="premium-card interactive-lift flex min-h-[164px] flex-col items-start rounded-lg border-t-4 p-6 text-left text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1765a6] disabled:cursor-wait"
             style={{ borderTopColor: accent }}
           >
             <span
@@ -60,7 +72,7 @@ export function GoalTileGrid({ onSelect }: { onSelect: (tile: GoalTile) => void 
                 → {count} courses
               </span>
             ) : (
-              <span className="mt-auto pt-4 text-sm font-semibold text-gold">→ Answer 4 quick questions</span>
+              <span className="mt-auto pt-4 text-sm font-semibold text-[#806000]">→ Answer 4 quick questions</span>
             )}
           </button>
         );

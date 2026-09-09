@@ -196,20 +196,22 @@ export default async function CourseDetailPage({
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              {firstLesson ? <ButtonLink href={`/lesson/${firstLesson.slug}`}>Start first lesson</ButtonLink> : null}
-              {assessment ? <ButtonLink href={`/assessment/${assessment.slug}`} variant="secondary">Take assessment</ButtonLink> : null}
-              {practice ? <ButtonLink href={`/vr-practice/${practice.slug}`} variant="secondary">Open VR practice</ButtonLink> : null}
+              {firstLesson ? <ButtonLink href={`/lesson/${firstLesson.slug}`} prefetch={false}>Start first lesson</ButtonLink> : null}
+              {assessment ? <ButtonLink href={`/assessment/${assessment.slug}`} variant="secondary" prefetch={false}>Take assessment</ButtonLink> : null}
+              {practice ? <ButtonLink href={`/vr-practice/${practice.slug}`} variant="secondary" prefetch={false}>Open VR practice</ButtonLink> : null}
             </div>
 
             <div className="mt-5 flex flex-wrap gap-3">
               <Link
                 href={`/courses/${slug}/discussion`}
+                prefetch={false}
                 className="flex items-center gap-2 rounded-md border border-white/20 bg-white/8 px-4 py-2 text-sm font-medium text-white/80 transition hover:bg-white/12 hover:text-white"
               >
                 <MessageCircle aria-hidden="true" className="h-4 w-4" /> Discussion
               </Link>
               <Link
                 href={`/courses/${slug}/assignments`}
+                prefetch={false}
                 className="flex items-center gap-2 rounded-md border border-white/20 bg-white/8 px-4 py-2 text-sm font-medium text-white/80 transition hover:bg-white/12 hover:text-white"
               >
                 <ClipboardCheck aria-hidden="true" className="h-4 w-4" /> Assignments

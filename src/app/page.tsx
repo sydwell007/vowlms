@@ -97,13 +97,14 @@ export default async function Home() {
           alt="VowLMS learners using laptops, tablets, and VR practice in a modern GoalVow learning ecosystem"
           fill
           priority
+          fetchPriority="high"
           sizes="100vw"
-          className="home-hero-media absolute inset-0 -z-20 object-cover object-[76%_30%]"
+          className="home-hero-media absolute inset-0 z-0 object-cover object-[76%_30%]"
         />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(6,23,37,0.97)_0%,rgba(6,23,37,0.85)_42%,rgba(6,23,37,0.26)_82%)]" />
-        <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,23,37,0.12)_0%,rgba(6,23,37,0.88)_100%)]" />
+        <div className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(6,23,37,0.97)_0%,rgba(6,23,37,0.85)_42%,rgba(6,23,37,0.26)_82%)]" />
+        <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(6,23,37,0.12)_0%,rgba(6,23,37,0.88)_100%)]" />
 
-        <div className="home-hero-copy mx-auto flex min-h-[570px] w-full max-w-7xl flex-col justify-center px-5 py-14 sm:min-h-[610px] sm:px-6 lg:px-8">
+        <div className="home-hero-copy relative z-10 mx-auto flex min-h-[570px] w-full max-w-7xl flex-col justify-center px-5 py-14 sm:min-h-[610px] sm:px-6 lg:px-8">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-gold">
             GoalVow academy ecosystem
           </p>
@@ -160,7 +161,7 @@ export default async function Home() {
         title="Start with where you want to go"
         description="Choose the outcome that matters now. VowLMS will surface the most relevant courses and a practical next step."
       >
-        <OnboardingFlow />
+        <OnboardingFlow courses={courses} />
       </Section>
 
       <section className="border-y border-slate-200 bg-white py-14 md:py-20">

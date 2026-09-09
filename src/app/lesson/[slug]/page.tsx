@@ -298,7 +298,18 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
     getModuleImageSrc(resolvedCourseSlug, moduleOrder) ??
     getCourseVisual({ slug: resolvedCourseSlug, title: d.course.title }, academy?.category ?? "upskilling").src;
 
-  return { lesson, module: courseModule, course, allModules, prevLesson, nextLesson, resources, resolvedCourseSlug, moduleImageSrc };
+  return {
+    lesson,
+    module: courseModule,
+    course,
+    allModules,
+    prevLesson,
+    nextLesson,
+    resources,
+    resolvedCourseSlug,
+    moduleImageSrc,
+    academyCategory: academy?.category ?? "upskilling",
+  };
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -345,6 +356,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
           resources={bridgeProps.resources}
           courseSlugForNav={bridgeProps.resolvedCourseSlug}
           moduleImageSrc={bridgeProps.moduleImageSrc}
+          academyCategory={bridgeProps.academyCategory}
         />
       );
     }
@@ -374,6 +386,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
       allModules={course.modules}
       currentLessonSlug={slug}
       moduleImageSrc={staticModuleImageSrc}
+      academyCategory={staticAcademy?.category ?? "upskilling"}
       courseSlugForNav={course.slug}
       resources={[]}
     />

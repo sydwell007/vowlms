@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/format";
+import { useSession } from "@/lib/auth/useSession";
 
 type PathwayCourseSummary = {
   slug: string;
@@ -20,9 +21,20 @@ type Enrollment = {
 };
 
 export function PathwayCourseList({ courses }: { courses: PathwayCourseSummary[] }) {
+  const session = useSession();
   const [enrolledSlugs, setEnrolledSlugs] = useState<Set<string> | null>(null);
 
   useEffect(() => {
+    if (session.status !== "authenticated") {
+      let cancelled = false;
+      if (session.status === "unauthenticated") {
+        Promise.resolve().then(() => {
+          if (!cancelled) setEnrolledSlugs(new Set());
+        });
+      }
+      return () => { cancelled = true; };
+    }
+
     const controller = new AbortController();
 
     fetch("/api/enrollments", { cache: "no-store", credentials: "same-origin", signal: controller.signal })
@@ -37,7 +49,7 @@ export function PathwayCourseList({ courses }: { courses: PathwayCourseSummary[]
       .catch(() => setEnrolledSlugs(new Set()));
 
     return () => controller.abort();
-  }, []);
+  }, [session.status]);
 
   const startedCount = enrolledSlugs ? courses.filter((c) => enrolledSlugs.has(c.slug)).length : null;
 

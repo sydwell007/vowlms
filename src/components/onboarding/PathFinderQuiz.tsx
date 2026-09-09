@@ -6,8 +6,9 @@ import { ArrowLeft, MoveRight, RotateCcw } from "lucide-react";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { AcademyBadge } from "@/components/ui/AcademyBadge";
 import { getQuizRecommendation, type QuizAnswers } from "@/lib/goal-routing";
-import { getAcademies } from "@/lib/data";
+import { academyNavLinks } from "@/data/academy-nav";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
+import type { CourseSummary } from "@/types/lms";
 
 const DRAFT_STORAGE_KEY = "vowlms_path_finder_draft";
 
@@ -85,9 +86,11 @@ function readDraft(): QuizDraft | null {
 export function PathFinderQuiz({
   onComplete,
   onClearSavedProfile,
+  courses,
 }: {
   onComplete: (answers: QuizAnswers, result: ReturnType<typeof getQuizRecommendation>) => void;
   onClearSavedProfile: () => void;
+  courses: CourseSummary[];
 }) {
   const [initialDraft] = useState(readDraft);
   const [step, setStep] = useState(initialDraft?.step ?? 0);
@@ -124,7 +127,7 @@ export function PathFinderQuiz({
     }
 
     const complete = next as QuizAnswers;
-    const recommendation = getQuizRecommendation(complete);
+    const recommendation = getQuizRecommendation(complete, courses);
     clearDraft();
     setResult(recommendation);
     onComplete(complete, recommendation);
@@ -145,7 +148,8 @@ export function PathFinderQuiz({
   }
 
   if (result) {
-    const academy = getAcademies().find((item) => item.category === result.academyCategory);
+    const academy = academyNavLinks.find((item) => item.category === result.academyCategory);
+    const academyName = academy?.label === "Upskilling" ? "Upskilling Academy" : academy?.label ?? "GoalVow Academy";
     const accent = getAcademyAccentColor(result.academyCategory);
 
     return (
@@ -154,7 +158,7 @@ export function PathFinderQuiz({
           Based on your answers, we recommend
         </p>
         <div className="mt-3">
-          <AcademyBadge name={academy?.name ?? "GoalVow Academy"} category={result.academyCategory} />
+          <AcademyBadge name={academyName} category={result.academyCategory} />
         </div>
         <div className="mt-5 max-w-3xl border-l-4 border-[#1166c8] bg-[#f5f9ff] px-5 py-4">
           <h3 className="text-base font-semibold text-ink">Why this path</h3>

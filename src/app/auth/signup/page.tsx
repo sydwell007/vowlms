@@ -8,9 +8,6 @@ import { visualAssets } from "@/lib/visual-assets";
 
 const academyOptions = [
   "Upskilling Academy",
-  "Skills Training Academy",
-  "Chef Academy",
-  "Business School",
 ];
 
 export default function SignUpPage() {
@@ -23,7 +20,7 @@ export default function SignUpPage() {
     phone: "",
     password: "",
     confirm: "",
-    academy: "",
+    academy: "Upskilling Academy",
     city: "",
     country: "South Africa",
     agreeTerms: false,

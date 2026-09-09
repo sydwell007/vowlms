@@ -33,7 +33,6 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
       >
         <Link
           href={`/courses/${course.slug}`}
-          aria-label={`View ${course.title}`}
           className={`relative block overflow-hidden bg-slate-100 ${isList ? "min-h-48 md:min-h-full" : "aspect-[16/9]"}`}
         >
           <Image
@@ -83,17 +82,26 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
           </div>
 
           <dl className="mt-4 grid grid-cols-3 gap-x-2 border-y border-slate-200 py-3 text-xs text-muted">
-            <div className="flex min-w-0 items-center gap-2">
-              <BookOpen aria-hidden="true" className="h-4 w-4 shrink-0 text-[#1765a6]" />
-              <span>{course.lessonCount} lessons</span>
+            <div className="min-w-0">
+              <dt className="sr-only">Lessons</dt>
+              <dd className="flex items-center gap-2">
+                <BookOpen aria-hidden="true" className="h-4 w-4 shrink-0 text-[#1765a6]" />
+                <span>{course.lessonCount} lessons</span>
+              </dd>
             </div>
-            <div className="flex min-w-0 items-center gap-2">
-              <Clock3 aria-hidden="true" className="h-4 w-4 shrink-0 text-[#179aa0]" />
-              <span>{formatCourseDurationWeeks(course.totalMinutes)}</span>
+            <div className="min-w-0">
+              <dt className="sr-only">Duration</dt>
+              <dd className="flex items-center gap-2">
+                <Clock3 aria-hidden="true" className="h-4 w-4 shrink-0 text-[#179aa0]" />
+                <span>{formatCourseDurationWeeks(course.totalMinutes)}</span>
+              </dd>
             </div>
-            <div className="flex min-w-0 items-center gap-2">
-              <Award aria-hidden="true" className="h-4 w-4 shrink-0 text-[#b98713]" />
-              <span>{course.rewards} VOWR</span>
+            <div className="min-w-0">
+              <dt className="sr-only">VowRewards</dt>
+              <dd className="flex items-center gap-2">
+                <Award aria-hidden="true" className="h-4 w-4 shrink-0 text-[#b98713]" />
+                <span>{course.rewards} VOWR</span>
+              </dd>
             </div>
           </dl>
 

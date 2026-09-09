@@ -8,7 +8,7 @@ import net from "node:net";
 const PAGES = [
   { name: "Homepage", path: "/" },
   { name: "Course catalog", path: "/courses" },
-  { name: "Course detail", path: "/courses/improving-your-mental-health" },
+  { name: "Course detail", path: "/courses/business-ethics" },
 ];
 
 const THRESHOLDS = { performance: 70, accessibility: 85 };
@@ -32,39 +32,52 @@ function waitForPort(port, timeoutMs = 60_000) {
   });
 }
 
-async function runLighthouse(url) {
+async function runLighthouse(url, chromePort) {
   const lighthouse = (await import("lighthouse")).default;
-  const chromeLauncher = await import("chrome-launcher").catch(() => null);
+  const result = await lighthouse(url, {
+    port: chromePort,
+    output: "json",
+    onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
+    logLevel: "error",
+  });
 
-  let chrome;
-  try {
-    if (chromeLauncher) {
-      chrome = await chromeLauncher.launch({ chromeFlags: ["--headless", "--no-sandbox", "--disable-gpu"] });
-    }
-  } catch (err) {
-    return { error: `Could not launch Chrome for Lighthouse: ${err.message}` };
+  if (result.lhr.runtimeError) {
+    return { error: `${result.lhr.runtimeError.code}: ${result.lhr.runtimeError.message}` };
   }
 
-  if (!chrome) return { error: "chrome-launcher unavailable in this environment" };
-
-  try {
-    const result = await lighthouse(url, {
-      port: chrome.port,
-      output: "json",
-      onlyCategories: ["performance", "accessibility", "best-practices", "seo"],
-      logLevel: "error",
-    });
-
-    const categories = result.lhr.categories;
-    return {
-      performance: Math.round((categories.performance?.score ?? 0) * 100),
-      accessibility: Math.round((categories.accessibility?.score ?? 0) * 100),
-      bestPractices: Math.round((categories["best-practices"]?.score ?? 0) * 100),
-      seo: Math.round((categories.seo?.score ?? 0) * 100),
-    };
-  } finally {
-    await chrome.kill();
-  }
+  const categories = result.lhr.categories;
+  const failedAudits = (category) => (category?.auditRefs ?? [])
+    .map(({ id }) => result.lhr.audits[id])
+    .filter((audit) => audit && audit.scoreDisplayMode === "binary" && audit.score === 0)
+    .map((audit) => ({
+      title: audit.title,
+      nodes: (audit.details?.items ?? []).slice(0, 8).map((item) => ({
+        selector: item.node?.selector,
+        snippet: item.node?.snippet,
+        explanation: item.node?.explanation,
+        source: item.source,
+        description: item.description,
+        url: item.url,
+        lineNumber: item.lineNumber,
+      })),
+    }));
+  const accessibilityIssues = failedAudits(categories.accessibility);
+  const bestPracticeIssues = failedAudits(categories["best-practices"]);
+  const seoIssues = failedAudits(categories.seo);
+  const performanceMetrics = Object.fromEntries(
+    ["first-contentful-paint", "largest-contentful-paint", "total-blocking-time", "cumulative-layout-shift"]
+      .map((id) => [id, result.lhr.audits[id]?.displayValue ?? "not measured"]),
+  );
+  return {
+    performance: Math.round((categories.performance?.score ?? 0) * 100),
+    accessibility: Math.round((categories.accessibility?.score ?? 0) * 100),
+    bestPractices: Math.round((categories["best-practices"]?.score ?? 0) * 100),
+    seo: Math.round((categories.seo?.score ?? 0) * 100),
+    accessibilityIssues,
+    bestPracticeIssues,
+    seoIssues,
+    performanceMetrics,
+  };
 }
 
 async function main() {
@@ -88,14 +101,32 @@ async function main() {
     }
   }
 
+  const chromeLauncher = await import("chrome-launcher").catch(() => null);
+  if (!chromeLauncher) return { error: "chrome-launcher unavailable in this environment", results: [] };
+
+  let chrome;
+  let lighthouseError = "";
   const results = [];
-  for (const page of PAGES) {
-    const url = `${baseUrl}${page.path}`;
-    try {
-      const scores = await runLighthouse(url);
-      results.push({ ...page, url, ...scores });
-    } catch (err) {
-      results.push({ ...page, url, error: err.message });
+  try {
+    chrome = await chromeLauncher.launch({ chromeFlags: ["--headless", "--no-sandbox", "--disable-gpu"] });
+    for (const page of PAGES) {
+      const url = `${baseUrl}${page.path}`;
+      try {
+        const scores = await runLighthouse(url, chrome.port);
+        results.push({ ...page, url, ...scores });
+      } catch (err) {
+        results.push({ ...page, url, error: err.message });
+      }
+    }
+  } catch (err) {
+    lighthouseError = `Could not launch Chrome for Lighthouse: ${err.message}`;
+  } finally {
+    if (chrome) {
+      try {
+        await chrome.kill();
+      } catch {
+        // Chrome has already exited; audit results remain valid.
+      }
     }
   }
 
@@ -107,18 +138,21 @@ async function main() {
     }
   }
 
+  if (lighthouseError) return { error: lighthouseError, results };
+
   const flagged = results.filter(
     (r) => !r.error && (r.performance < THRESHOLDS.performance || r.accessibility < THRESHOLDS.accessibility),
   );
+  const errors = results.filter((r) => r.error);
 
-  return { results, flagged, thresholds: THRESHOLDS };
+  return { results, flagged, errors, thresholds: THRESHOLDS };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   main()
     .then((result) => {
       console.log(JSON.stringify(result, null, 2));
-      if (result.error || result.flagged?.length) process.exitCode = 1;
+      if (result.error || result.errors?.length || result.flagged?.length) process.exitCode = 1;
     })
     .catch((err) => {
       console.error(JSON.stringify({ error: err.message }, null, 2));

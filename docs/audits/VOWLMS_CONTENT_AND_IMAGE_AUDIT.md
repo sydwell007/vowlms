@@ -25,7 +25,7 @@ Verified: 31 August 2026
 
 | Asset | Source size | Current use | Decision |
 |---|---:|---|---|
-| `hero-ecosystem.png` | 1,965,021 bytes | Homepage hero and Chef Academy fallback | Retain; effective and responsive through `next/image`; convert source to AVIF/WebP in a later asset pass |
+| `hero-ecosystem.webp` | 169,542 bytes | Homepage hero and Chef Academy fallback | Converted from PNG to WebP for a 91% source-weight reduction while preserving the 1728 x 910 composition |
 | `academy-network.png` | 2,165,121 bytes | Academy and default course discovery | Retain; strongest immediate academy signal; source optimisation recommended |
 | `dashboard-experience.png` | 1,948,106 bytes | Dashboard/platform preview and Business School | Retain; source optimisation recommended |
 | `vr-practice-lab.png` | 1,713,363 bytes | Skills Training and practice | Retain; source optimisation recommended |

@@ -6,7 +6,7 @@
 |---|---:|---:|---|---|---|
 | `public/images/GoalVow - Logo.png` | 1134 x 1164 | 44 KB | Original supplied brand mark | Approved source; filename is awkward for code | Retain as original |
 | `public/images/goalvow-logo.png` | 1134 x 1164 | 44 KB | Header, footer, auth, sidebar, manifest | Strong brand alignment; transparent background | Retain |
-| `public/images/vowlms/hero-ecosystem.png` | 1728 x 910 | 1.96 MB | Home and investor/ecosystem hero | Strong subject relevance and wide composition | Retain; Next.js responsive optimisation required |
+| `public/images/vowlms/hero-ecosystem.webp` | 1728 x 910 | 166 KB | Home and investor/ecosystem hero | Strong subject relevance and wide composition | Production WebP source with responsive `next/image` delivery |
 | `public/images/vowlms/academy-network.png` | 1672 x 941 | 2.17 MB | Academy, course, catalogue, and service discovery | Consistent visual language | Retain; consider source WebP later |
 | `public/images/vowlms/dashboard-experience.png` | 1536 x 1024 | 1.95 MB | Role dashboards, rewards, opportunities | Useful product-context visual | Retain; crop via `object-fit`, not separate duplicates |
 | `public/images/vowlms/vr-practice-lab.png` | 1694 x 929 | 1.71 MB | Skills Practice, learning hubs, support | Clear applied-learning context | Retain |

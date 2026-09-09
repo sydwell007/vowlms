@@ -45,7 +45,7 @@ export function AcademyTopBar() {
     <div className="border-b border-white/8 bg-[#05131f]">
       <div className="scrollbar-none mx-auto flex w-full max-w-[1536px] items-center overflow-x-auto px-4 py-2.5 sm:px-6">
         <nav aria-label="GoalVow academy navigation" className="flex min-w-max items-center gap-2">
-          <span className="mr-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-white/44">
+          <span className="mr-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-white/60">
             Academy network
           </span>
           {academyLinks.map((link) => {

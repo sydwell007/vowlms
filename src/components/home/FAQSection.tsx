@@ -8,7 +8,7 @@ const faqs = [
   {
     question: "Is VowLMS free to use?",
     answer:
-      "Creating an account is always free. Most Upskilling Academy courses are free to enrol in — Chef Academy, Skills Training, and Business School courses are paid per course, with the price shown clearly before you enrol, and secure checkout handled by PayFast.",
+      "Creating an account is always free. The Upskilling Academy courses currently open to learners are free to enrol in. Any future paid course will show its price clearly before enrolment and use secure checkout.",
   },
   {
     question: "How do I know which course is right for me?",

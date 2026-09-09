@@ -16,9 +16,11 @@ type Enrollment = {
 
 export function ReturningLearnerBanner({
   profile,
+  courses,
   onChangeGoal,
 }: {
   profile: LearnerProfile;
+  courses: CourseSummary[];
   onChangeGoal: () => void;
 }) {
   const [enrolledSlugs, setEnrolledSlugs] = useState<Set<string>>(new Set());
@@ -42,7 +44,7 @@ export function ReturningLearnerBanner({
   const roleFromTile = tile?.roles.find((r) => r.id === profile.roleId);
 
   const recommended: CourseSummary[] = roleFromTile
-    ? getCoursesForRole(profile.academyCategory, roleFromTile, 6)
+    ? getCoursesForRole(courses, profile.academyCategory, roleFromTile, 6)
     : [];
 
   const inProgress = recommended.filter((c) => enrolledSlugs.has(c.slug));

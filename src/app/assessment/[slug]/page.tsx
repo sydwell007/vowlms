@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { getAssessmentBySlug, getEnrollableCourseSlugs } from "@/lib/data";
+import { getAcademyBySlug, getAcademyHref, getAssessmentBySlug, getEnrollableCourseSlugs } from "@/lib/data";
 import { AssessmentPlayer } from "@/components/learning/AssessmentPlayer";
 import { BridgeError } from "@/lib/bridge";
 import { hasActiveCourseEnrollment } from "@/lib/course-access";
@@ -30,5 +30,13 @@ export default async function AssessmentPage({ params }: { params: Promise<{ slu
     throw error;
   }
 
-  return <AssessmentPlayer assessment={result.assessment} course={result.course} />;
+  const academy = getAcademyBySlug(result.course.academySlug);
+  return (
+    <AssessmentPlayer
+      assessment={result.assessment}
+      course={result.course}
+      academyName={academy?.name}
+      academyHref={academy ? getAcademyHref(academy) : undefined}
+    />
+  );
 }

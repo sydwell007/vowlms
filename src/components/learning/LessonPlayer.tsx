@@ -14,9 +14,8 @@ import {
   MessageSquare,
   type LucideIcon,
 } from "lucide-react";
-import { getAcademyBySlug } from "@/lib/data";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
-import type { Lesson, Course, CourseModule } from "@/types/lms";
+import type { AcademyCategory, Lesson, Course, CourseModule } from "@/types/lms";
 import { CelebrationOverlay } from "@/components/learning/CelebrationOverlay";
 import { PdfReader } from "@/components/learning/PdfReader";
 import { VowHumanPresenter } from "@/components/learning/VowHumanPresenter";
@@ -50,6 +49,7 @@ type Props = {
   courseSlugForNav: string;
   /** Real module/course banner image — a curated module image where one exists, otherwise the course or academy's real curated visual. Never blank. */
   moduleImageSrc: string;
+  academyCategory: AcademyCategory;
 };
 
 const MODULE_MENU_ITEMS: { label: string; icon: LucideIcon; href: (courseSlug: string) => string }[] = [
@@ -157,7 +157,7 @@ function formatBytes(bytes: number): string {
 
 export function LessonPlayer({
   lesson, course, module, prevLesson, nextLesson,
-  allModules, currentLessonSlug, resources = [], courseSlugForNav, moduleImageSrc,
+  allModules, currentLessonSlug, resources = [], courseSlugForNav, moduleImageSrc, academyCategory,
 }: Props) {
   const router = useRouter();
   const [completed, setCompleted] = useState(false);
@@ -170,8 +170,7 @@ export function LessonPlayer({
 
   const assessment = course.assessments.find((a) => a.lessonSlug === lesson.slug);
   const vrPractice = course.vrPractices.find((v) => v.lessonSlug === lesson.slug);
-  const academy = getAcademyBySlug(course.academySlug);
-  const accentColor = getAcademyAccentColor(academy?.category);
+  const accentColor = getAcademyAccentColor(academyCategory);
 
   const totalLessonsInCourse = useMemo(
     () => allModules.reduce((sum, m) => sum + m.lessons.length, 0),

@@ -84,7 +84,7 @@ export function CourseExperience({ course, academy, accentColor }: Props) {
         <div className="pt-9">
           {activeTab === "overview" ? (
             <div id="course-panel-overview" role="tabpanel" aria-labelledby="course-tab-overview" className="grid gap-10 lg:grid-cols-[1fr_360px]">
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>Course outcomes</p>
                 <h2 className="mt-2 text-3xl font-semibold text-ink">What you will learn</h2>
                 <div className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2">
@@ -98,7 +98,7 @@ export function CourseExperience({ course, academy, accentColor }: Props) {
                   ))}
                 </div>
               </div>
-              <aside className="border-l-2 border-slate-200 pl-6">
+              <aside className="min-w-0 border-t-2 border-slate-200 pt-8 lg:border-l-2 lg:border-t-0 lg:pl-6 lg:pt-0">
                 <h2 className="text-xl font-semibold text-ink">Opportunity pathways</h2>
                 <p className="mt-1.5 text-sm leading-6 text-muted">
                   Click a pathway to see what {course.title} specifically leads to.
@@ -189,7 +189,7 @@ export function CourseExperience({ course, academy, accentColor }: Props) {
               <CourseTrailer course={course} academyCategory={academy?.category ?? "upskilling"} academyName={academy?.name} />
 
               <div className="grid gap-10 lg:grid-cols-[1fr_360px]">
-                <div>
+                <div className="min-w-0">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>Course description</p>
                   <h2 className="mt-2 text-3xl font-semibold text-ink">{course.title}</h2>
                   <p className="mt-4 text-base leading-7 text-muted">{course.description}</p>
@@ -198,7 +198,7 @@ export function CourseExperience({ course, academy, accentColor }: Props) {
                   <p className="mt-2 text-base leading-7 text-ink">{course.coursePreview.purpose}</p>
                 </div>
 
-                <aside className="rounded-xl p-6" style={{ backgroundColor: `${accentColor}0d` }}>
+                <aside className="min-w-0 rounded-xl p-6" style={{ backgroundColor: `${accentColor}0d` }}>
                   <h3 className="flex items-center gap-2 text-lg font-semibold text-ink">
                     <Sparkles aria-hidden="true" className="h-5 w-5" style={{ color: accentColor }} />
                     Why this course is worth your time
@@ -284,7 +284,7 @@ export function CourseExperience({ course, academy, accentColor }: Props) {
               <div className="flex aspect-[4/3] items-center justify-center rounded-lg bg-[#06111f] text-white">
                 <UsersRound aria-hidden="true" className="h-12 w-12" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>{academy?.name ?? "GoalVow Academy"}</p>
                 <h2 className="mt-2 text-3xl font-semibold text-ink">Academy teaching team</h2>
                 <p className="mt-4 max-w-3xl text-sm leading-7 text-muted">

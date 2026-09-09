@@ -41,7 +41,7 @@ export function CourseEnrollmentCount({ courseSlug }: { courseSlug: string }) {
     <span className="flex items-center gap-1.5 text-xs font-medium text-muted">
       <Users aria-hidden="true" className="h-4 w-4" />
       {count === null ? (
-        <span aria-label="Loading enrolment total" className="h-3 w-14 animate-pulse rounded-sm bg-slate-200" />
+        <span role="status" aria-label="Loading enrolment total" className="h-3 w-14 animate-pulse rounded-sm bg-slate-200" />
       ) : (
         `${count.toLocaleString()} enrolled`
       )}

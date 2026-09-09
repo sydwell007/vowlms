@@ -146,7 +146,7 @@ export function Footer() {
           <div className="flex flex-wrap items-center gap-y-1">
             {legalLinks.map((link, index) => (
               <div key={link.href} className="flex items-center">
-                <Link href={link.href} className="transition hover:text-gold">
+                <Link href={link.href} className="inline-flex min-h-6 items-center transition hover:text-gold">
                   {link.label}
                 </Link>
                 {index < legalLinks.length - 1 ? (

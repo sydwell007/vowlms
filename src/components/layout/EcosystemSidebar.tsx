@@ -174,12 +174,12 @@ export function EcosystemSidebar() {
         ) : (
           <button
             onClick={toggle}
-            aria-label="Open GoalVow ecosystem"
-            title="GoalVow ecosystem"
+            aria-label={`Open GoalVow ecosystem, ${services.length} ${services.length === 1 ? "service" : "services"}`}
+            title="Open GoalVow ecosystem"
             className="fixed bottom-4 right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full border border-white/15 bg-[#0c2938] text-white shadow-[0_12px_32px_rgba(6,23,37,0.3)] transition hover:bg-[#1765a6]"
           >
             <Network aria-hidden="true" className="h-5 w-5" />
-            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-[9px] font-bold text-[#061725]">
+            <span aria-hidden="true" className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold px-1 text-[9px] font-bold text-[#061725]">
               {services.length}
             </span>
           </button>

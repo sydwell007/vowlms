@@ -95,20 +95,20 @@ function writeReport({ staticResult, contentResult, linksResult, lighthouseResul
   if (contentResult.overallStatus !== "PASS") blockers.push("Content integrity check failed — see Step 4 below.");
   if (playwrightResult.failures.length > 0) blockers.push(`${playwrightResult.failures.length} Playwright test(s) failed — see Step 2 below.`);
   if (lighthouseResult.flagged?.length) blockers.push(`${lighthouseResult.flagged.length} page(s) scored below threshold on Lighthouse — see Step 3 below.`);
+  if (lighthouseResult.errors?.length) blockers.push(`${lighthouseResult.errors.length} page(s) could not be audited by Lighthouse — see Step 3 below.`);
 
   // Known, verified findings surfaced by tracing the actual code — not test failures, but
   // real pre-launch-relevant facts worth keeping visible at the top of the report. Update this
   // list whenever a finding gets fixed or a new one is confirmed — it's meant to reflect the
   // current true state of the app, not a historical log of past QA passes.
   const knownFindings = [
-    "Fixed: AssessmentPlayer.tsx now submits every attempt to POST /api/assessments/submit (real assessment_attempts row, server-authoritative score) and, on a pass, POSTs /api/progress for the assessment's lesson then POST /api/certificates/generate — a learner who passes now gets a real certificate without any manual step.",
-    "Fixed: /results/[courseSlug] now fetches real per-learner data (lesson completion % from /api/dashboard/learner, last local assessment score, live certificate status) instead of hardcoded demo numbers. VR practice is intentionally shown as \"Preview\" — there is no real VR scoring backend to report a true score from (see VR practice finding below).",
-    "Fixed: /dashboard/learner/grades now shows real assessment history (new GET /api/assessments/history -> public/php/api/assessments/history.php, querying assessment_attempts) instead of an honest-but-empty placeholder.",
-    "Fixed: certificate issuance now emails the learner (certificates/generate.php calls the pre-existing but previously-unused certificateEmail() template) in addition to the existing certificate PDF/dashboard listing.",
-    "Only Upskilling Academy has free courses (140/140 checked); Chef Academy, Skills Training, and Business School are 100% paid — enrollment in those 3 academies can only be tested up to a real PayFast handoff, not completed automatically. Confirm this is the intended business model, not an oversight.",
-    "No link anywhere in the codebase points to the external VR platform (virtual-reality-simulation.vercel.app) — all \"VR practice\" is VowLMS's own internal /vr-practice route, and that page is honestly labeled \"Simulation preview\" / \"Scoring opens only in an enabled practice session\" rather than faking a score. This is correct, intentional framing, not a bug — leave as-is until the VR platform (which has zero backend today, confirmed by reading that repo directly) is ready.",
-    "public/php/lib/mail.php sends via PHP's native mail() against Afrihost's local MTA, not the configured SMTP_HOST/PORT/USER/PASS env vars (those are unused). This may be fine on shared hosting or may hurt deliverability — run public/php/api/qa/test-smtp-email.php for real (see qa-reports/README.md) to confirm before assuming either way; don't rewrite this blind without a way to test PHP execution.",
-    "`/assessment` (and /lesson, /certificates, /profile, /results, /calendar, /announcements, /dashboard) are gated by the Next.js middleware's protectedPrefixes list (src/proxy.ts:12-21), not by the page components themselves — worth knowing since a page component having no visible auth check doesn't mean the route is actually public.",
+    "The live learner catalogue contains 20 Upskilling Academy courses. The other six academies are intentionally admin-only until launch; registration and learner profile preferences offer only Upskilling, while authenticated admins retain the full Academy Network.",
+    "Assessment attempts, progress, learner results, grades, certificate generation, and VowRewards are connected to account-owned APIs rather than demo totals. Profile summary metrics now use the same learner dashboard source.",
+    "Password changes use the real email reset workflow. Two-factor authentication is not advertised as active because no 2FA backend contract exists yet.",
+    "VR practice remains an explicitly labelled simulation preview until its scoring backend is enabled. Admin analytics and facilitator demo-data states are also labelled honestly rather than presenting invented production data.",
+    "VowHumans presenter availability and audio/lip-sync quality depend on its separately deployed gateway, realtime agent, participant service, and GPU worker. Automated frontend tests verify the integration shell when configured; final audio/video sync requires a real-device staging check.",
+    "The default browser suite is non-destructive. Real account creation, enrolment, assessment writes, certificate issuance, email delivery, and PayFast handoff remain manual staging gates unless RUN_DESTRUCTIVE_TESTS=1 is explicitly enabled.",
+    "Protected learning, account, certificate, and dashboard routes are enforced by src/proxy.ts before their page components render.",
   ];
 
   const launchReady = blockers.length === 0;
@@ -116,7 +116,7 @@ function writeReport({ staticResult, contentResult, linksResult, lighthouseResul
   const lines = [];
   lines.push(`# VowLMS Pre-Launch Frontend QA Report`);
   lines.push("");
-  lines.push(`**LAUNCH READY: ${launchReady ? "YES" : "NO"}**${blockers.length ? ` — blocking issues:` : ""}`);
+  lines.push(`**AUTOMATED RELEASE GATE: ${launchReady ? "PASS" : "FAIL"}**${blockers.length ? ` — blocking issues:` : ""}`);
   if (blockers.length) {
     for (const b of blockers) lines.push(`- ${b}`);
   }
@@ -189,7 +189,7 @@ function writeReport({ staticResult, contentResult, linksResult, lighthouseResul
   // Step 2 detail (Playwright)
   lines.push("## Step 2 — End-to-end flow testing (Playwright)");
   lines.push("");
-  lines.push(`Ran the non-destructive suite (\`onboarding\`, \`quiz\`, \`catalog\`, \`responsive\`) across all 3 required viewports (360×640, 768×1024, 1440×900). Destructive specs (\`auth\`, \`enrollment\`, \`assessment\`, \`certification\`) require \`RUN_DESTRUCTIVE_TESTS=1\` and a real test account — see \`tests/e2e/README.md\`. (\`assessment\` submission now writes a real \`assessment_attempts\` row and can trigger real certificate issuance, so it's gated for the same real-production-data reason as the others, not just the auth middleware.)`);
+  lines.push(`Ran the complete non-destructive suite across all 3 required viewports (360×640, 768×1024, 1440×900), covering onboarding, quiz, catalogue, homepage, responsive layout, account forms, profile settings, rewards, SEO, Thandi, and configured VowHumans behavior. Destructive specs (real registration, enrolment, assessment writes, certification, and password-email delivery) require \`RUN_DESTRUCTIVE_TESTS=1\` and a staging test account — see \`tests/e2e/README.md\`.`);
   lines.push("");
   if (playwrightResult.failures.length === 0) {
     lines.push("All executed tests passed.");
@@ -253,7 +253,7 @@ function writeReport({ staticResult, contentResult, linksResult, lighthouseResul
   const outPath = path.join(REPORT_DIR, "pre-launch-frontend-report.md");
   writeFileSync(outPath, lines.join("\n"));
   console.log(`\nReport written to ${path.relative(ROOT, outPath)}`);
-  console.log(`LAUNCH READY: ${launchReady ? "YES" : "NO"}`);
+  console.log(`AUTOMATED RELEASE GATE: ${launchReady ? "PASS" : "FAIL"}`);
 }
 
 main().catch((err) => {

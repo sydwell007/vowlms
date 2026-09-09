@@ -1,4 +1,3 @@
-import { getCourseSummaries } from "@/lib/data";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import type { RoleOption } from "@/data/goal-tiles";
 import type { AcademyCategory, CourseSummary } from "@/types/lms";
@@ -13,8 +12,13 @@ function scoreCourseForRole(course: CourseSummary, role: RoleOption): number {
 }
 
 /** Top courses in an academy for a given role, ranked by keyword relevance then reward value. Never empty if the academy has courses. */
-export function getCoursesForRole(academyCategory: AcademyCategory, role: RoleOption, limit = 6): CourseSummary[] {
-  const academyCourses = getCourseSummaries().filter((course) => course.academyCategory === academyCategory);
+export function getCoursesForRole(
+  courses: CourseSummary[],
+  academyCategory: AcademyCategory,
+  role: RoleOption,
+  limit = 6,
+): CourseSummary[] {
+  const academyCourses = courses.filter((course) => course.academyCategory === academyCategory);
 
   const ranked = [...academyCourses].sort((a, b) => {
     const scoreDiff = scoreCourseForRole(b, role) - scoreCourseForRole(a, role);
@@ -26,8 +30,12 @@ export function getCoursesForRole(academyCategory: AcademyCategory, role: RoleOp
 }
 
 /** Count shown on a role card — courses that actually match the role's keywords, falling back to the whole academy's count so it's never "0 courses available". */
-export function getRoleCourseCount(academyCategory: AcademyCategory, role: RoleOption): number {
-  const academyCourses = getCourseSummaries().filter((course) => course.academyCategory === academyCategory);
+export function getRoleCourseCount(
+  courses: CourseSummary[],
+  academyCategory: AcademyCategory,
+  role: RoleOption,
+): number {
+  const academyCourses = courses.filter((course) => course.academyCategory === academyCategory);
   const matched = academyCourses.filter((course) => scoreCourseForRole(course, role) > 0).length;
   return matched > 0 ? matched : academyCourses.length;
 }
@@ -53,7 +61,7 @@ function addScore(scores: AcademyScores, category: AcademyCategory, points: numb
  * assigned them points, so they're stored for context/copy only rather than
  * silently folded into another question's weight.
  */
-export function getQuizRecommendation(answers: QuizAnswers): {
+export function getQuizRecommendation(answers: QuizAnswers, availableCourses: CourseSummary[]): {
   academyCategory: AcademyCategory;
   courses: CourseSummary[];
   reason: string;
@@ -120,7 +128,7 @@ export function getQuizRecommendation(answers: QuizAnswers): {
     if (scores[category] > scores[winner]) winner = category;
   }
 
-  const courses = getCourseSummaries()
+  const courses = availableCourses
     .filter((course) => course.academyCategory === winner)
     .sort((a, b) => b.rewards - a.rewards)
     .slice(0, 3);

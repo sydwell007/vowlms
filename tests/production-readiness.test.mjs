@@ -101,6 +101,20 @@ test("authentication forms provide names and complete autocomplete semantics", a
   assert.match(authLayout, /index: false/);
 });
 
+test("learner account settings expose only live choices and real account data", async () => {
+  const signUp = await read("src/app/auth/signup/page.tsx");
+  const profile = await read("src/app/profile/page.tsx");
+
+  assert.doesNotMatch(signUp, /"Chef Academy"/);
+  assert.doesNotMatch(signUp, /"Skills Training Academy"/);
+  assert.match(profile, /fetch\("\/api\/dashboard\/learner"/);
+  assert.doesNotMatch(profile, /value: "370 VOWR"/);
+  assert.match(profile, /fetch\("\/api\/auth\/forgot-password"/);
+  assert.match(profile, /htmlFor="profile-name"/);
+  assert.match(profile, /name=\{key\}/);
+  assert.match(profile, /emailNotifications: true/);
+});
+
 test("Find My Path has semantic progress, recovery, navigation, and rationale", async () => {
   const quiz = await read("src/components/onboarding/PathFinderQuiz.tsx");
   const routing = await read("src/lib/goal-routing.ts");

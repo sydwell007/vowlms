@@ -9,10 +9,17 @@ import { ReturningLearnerBanner } from "@/components/onboarding/ReturningLearner
 import type { GoalTile, RoleOption } from "@/data/goal-tiles";
 import { clearLearnerProfile, getLearnerProfile, saveLearnerProfile, type LearnerProfile } from "@/lib/learner-profile";
 import { getQuizRecommendation, type QuizAnswers } from "@/lib/goal-routing";
+import type { CourseSummary } from "@/types/lms";
 
 type Step = "tiles" | "roles" | "feed" | "quiz";
 
-export function OnboardingFlow({ initialStep = "tiles" }: { initialStep?: "tiles" | "quiz" }) {
+export function OnboardingFlow({
+  courses,
+  initialStep = "tiles",
+}: {
+  courses: CourseSummary[];
+  initialStep?: "tiles" | "quiz";
+}) {
   const [mounted, setMounted] = useState(false);
   const [profile, setProfile] = useState<LearnerProfile | null>(null);
   const [step, setStep] = useState<Step>(initialStep);
@@ -64,25 +71,25 @@ export function OnboardingFlow({ initialStep = "tiles" }: { initialStep?: "tiles
     setProfile(null);
   }
 
-  if (!mounted) return <GoalTileGrid onSelect={handleSelectTile} />;
+  if (!mounted) return <GoalTileGrid courses={courses} onSelect={handleSelectTile} disabled />;
 
   if (profile) {
-    return <ReturningLearnerBanner profile={profile} onChangeGoal={reset} />;
+    return <ReturningLearnerBanner profile={profile} courses={courses} onChangeGoal={reset} />;
   }
 
   return (
     <div className="transition-all duration-300 ease-out">
-      {step === "tiles" ? <GoalTileGrid onSelect={handleSelectTile} /> : null}
+      {step === "tiles" ? <GoalTileGrid courses={courses} onSelect={handleSelectTile} /> : null}
 
       {step === "roles" && selectedTile ? (
-        <RoleSelector tile={selectedTile} onSelect={handleSelectRole} onBack={() => setStep("tiles")} />
+        <RoleSelector tile={selectedTile} courses={courses} onSelect={handleSelectRole} onBack={() => setStep("tiles")} />
       ) : null}
 
       {step === "feed" && selectedTile?.academyCategory && selectedRole ? (
-        <SmartCourseFeed academyCategory={selectedTile.academyCategory} role={selectedRole} onStartOver={reset} />
+        <SmartCourseFeed academyCategory={selectedTile.academyCategory} role={selectedRole} availableCourses={courses} onStartOver={reset} />
       ) : null}
 
-      {step === "quiz" ? <PathFinderQuiz onComplete={handleQuizComplete} onClearSavedProfile={clearLearnerProfile} /> : null}
+      {step === "quiz" ? <PathFinderQuiz courses={courses} onComplete={handleQuizComplete} onClearSavedProfile={clearLearnerProfile} /> : null}
     </div>
   );
 }

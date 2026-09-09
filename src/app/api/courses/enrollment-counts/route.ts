@@ -1,11 +1,13 @@
-import { bridgeUnavailable, ok, serverError } from "@/lib/api/responses";
-import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
+import { ok } from "@/lib/api/responses";
+import { bridgeGet, isBridgeConfigured } from "@/lib/bridge";
 import { allGroupings } from "@/data/course-groupings";
 
 type EnrollmentCounts = Record<string, number>;
 
 export async function GET() {
-  if (!isBridgeConfigured()) return bridgeUnavailable();
+  if (!isBridgeConfigured()) {
+    return ok<EnrollmentCounts>({}, { headers: { "X-VowLMS-Degraded": "bridge" } });
+  }
 
   try {
     const counts = await bridgeGet<EnrollmentCounts>("/courses/enrollment-counts", { noAuth: true });
@@ -16,8 +18,8 @@ export async function GET() {
     }
 
     return ok(counts);
-  } catch (error) {
-    if (error instanceof BridgeError) return serverError(error.message);
-    return serverError("Failed to load course enrolment totals");
+  } catch {
+    // Counts enrich public cards but must not make the catalogue unavailable.
+    return ok<EnrollmentCounts>({}, { headers: { "X-VowLMS-Degraded": "bridge" } });
   }
 }

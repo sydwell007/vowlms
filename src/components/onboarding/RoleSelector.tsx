@@ -3,13 +3,16 @@
 import type { GoalTile, RoleOption } from "@/data/goal-tiles";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { getRoleCourseCount } from "@/lib/goal-routing";
+import type { CourseSummary } from "@/types/lms";
 
 export function RoleSelector({
   tile,
+  courses,
   onSelect,
   onBack,
 }: {
   tile: GoalTile;
+  courses: CourseSummary[];
   onSelect: (role: RoleOption) => void;
   onBack: () => void;
 }) {
@@ -27,7 +30,7 @@ export function RoleSelector({
       <h3 className="text-2xl font-semibold text-ink">Great — now tell us more:</h3>
       <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Role options">
         {tile.roles.map((role) => {
-          const count = tile.academyCategory ? getRoleCourseCount(tile.academyCategory, role) : 0;
+          const count = tile.academyCategory ? getRoleCourseCount(courses, tile.academyCategory, role) : 0;
           return (
             <button
               key={role.id}

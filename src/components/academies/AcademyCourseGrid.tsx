@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Search, X } from "lucide-react";
 import { CourseCard } from "@/components/courses/CourseCard";
 import type { CourseSummary, Role } from "@/types/lms";
 
@@ -34,11 +35,11 @@ export function AcademyCourseGrid({ courses, role = null }: { courses: CourseSum
       {/* Filters */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Search */}
-        <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 max-w-sm w-full">
-          <svg className="h-4 w-4 shrink-0 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+        <div className="flex w-full max-w-sm items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2.5">
+          <Search aria-hidden="true" className="h-4 w-4 shrink-0 text-muted" />
           <input
+            aria-label="Search courses in this academy"
+            name="academyCourseSearch"
             type="search"
             placeholder="Search in this academy…"
             value={query}
@@ -46,7 +47,14 @@ export function AcademyCourseGrid({ courses, role = null }: { courses: CourseSum
             className="flex-1 bg-transparent text-sm text-ink placeholder-muted outline-none"
           />
           {query && (
-            <button onClick={() => { setQuery(""); setPage(1); }} className="text-muted hover:text-ink text-xs">✕</button>
+            <button
+              type="button"
+              aria-label="Clear academy course search"
+              onClick={() => { setQuery(""); setPage(1); }}
+              className="flex h-7 w-7 items-center justify-center rounded-md text-muted transition hover:bg-slate-100 hover:text-ink"
+            >
+              <X aria-hidden="true" className="h-4 w-4" />
+            </button>
           )}
         </div>
 
@@ -54,7 +62,7 @@ export function AcademyCourseGrid({ courses, role = null }: { courses: CourseSum
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex gap-1">
             {LEVEL_OPTS.map((l) => (
-              <button key={l} onClick={() => { setLevel(l); setPage(1); }}
+              <button key={l} type="button" aria-pressed={level === l} onClick={() => { setLevel(l); setPage(1); }}
                 className={`rounded-md px-3 py-1.5 text-xs font-semibold transition ${level === l ? "bg-[#1166c8] text-white" : "premium-card-soft text-muted hover:text-ink"}`}>
                 {l}
               </button>
@@ -63,7 +71,7 @@ export function AcademyCourseGrid({ courses, role = null }: { courses: CourseSum
           <span className="h-4 border-r border-slate-200" />
           <div className="flex gap-1">
             {PRICE_OPTS.map((p) => (
-              <button key={p} onClick={() => { setPrice(p); setPage(1); }}
+              <button key={p} type="button" aria-pressed={price === p} onClick={() => { setPrice(p); setPage(1); }}
                 className={`rounded-md px-3 py-1.5 text-xs font-semibold transition ${price === p ? "bg-gold/90 text-[#06111f]" : "premium-card-soft text-muted hover:text-ink"}`}>
                 {p}
               </button>
@@ -84,8 +92,9 @@ export function AcademyCourseGrid({ courses, role = null }: { courses: CourseSum
           <h3 className="text-lg font-semibold text-ink">No courses found</h3>
           <p className="text-sm text-muted">Try a different keyword or adjust your filters.</p>
           <button
+            type="button"
             onClick={() => { setLevel("All levels"); setPrice("All"); setQuery(""); setPage(1); }}
-            className="mt-2 rounded-xl bg-[#06111f] px-6 py-3 text-sm font-semibold text-white hover:bg-[#0d2239] transition"
+            className="mt-2 rounded-lg bg-[#06111f] px-6 py-3 text-sm font-semibold text-white hover:bg-[#0d2239] transition"
           >
             Clear filters
           </button>
@@ -103,8 +112,9 @@ export function AcademyCourseGrid({ courses, role = null }: { courses: CourseSum
       {hasMore && (
         <div className="mt-10 flex flex-col items-center gap-2">
           <button
+            type="button"
             onClick={() => setPage((p) => p + 1)}
-            className="rounded-xl border border-slate-200 bg-white px-10 py-3.5 text-sm font-semibold text-ink shadow-sm transition hover:bg-slate-50 hover:border-[#1166c8]/30"
+            className="rounded-lg border border-slate-200 bg-white px-10 py-3.5 text-sm font-semibold text-ink shadow-sm transition hover:bg-slate-50 hover:border-[#1166c8]/30"
           >
             Load more ({filtered.length - paginated.length} remaining)
           </button>

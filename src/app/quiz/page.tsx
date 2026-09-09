@@ -1,5 +1,6 @@
 import { Section } from "@/components/ui/Section";
 import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
+import { getCourseSummaries } from "@/lib/data";
 
 export const metadata = {
   title: "Path Finder Quiz",
@@ -9,6 +10,7 @@ export const metadata = {
 };
 
 export default function QuizPage() {
+  const courses = getCourseSummaries();
   return (
     <main>
       <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
@@ -24,7 +26,7 @@ export default function QuizPage() {
       </section>
 
       <Section tone="light">
-        <OnboardingFlow initialStep="quiz" />
+        <OnboardingFlow courses={courses} initialStep="quiz" />
       </Section>
     </main>
   );
