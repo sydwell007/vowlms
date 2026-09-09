@@ -5,7 +5,7 @@ export const metadata = { title: "Terms of Use — VowLMS", alternates: { canoni
 export default function TermsPage() {
   return (
     <main>
-      <section className="premium-section-dark surface-grid py-14 text-white">
+      <section className="visual-hero hero-support py-14 text-white">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Legal</p>
           <h1 className="mt-4 text-4xl font-semibold">Terms of Use</h1>

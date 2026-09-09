@@ -17,6 +17,7 @@
     "qa:content": "tsx scripts/qa/content-integrity.mjs",
     "qa:links": "node scripts/qa/integration-links.mjs",
     "qa:routes": "node scripts/qa/browser-route-audit.mjs",
+    "qa:visual": "node scripts/qa/visual-system-audit.mjs",
     "qa:lighthouse": "node scripts/qa/lighthouse-check.mjs",
     "qa:report": "tsx scripts/qa/generate-report.mjs",
     "prisma:generate": "prisma generate",

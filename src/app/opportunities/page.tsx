@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
 import { getOpportunities } from "@/lib/data";
-import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "Opportunities — VowLMS",
@@ -33,9 +31,8 @@ export default function OpportunitiesPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-opportunity py-16 text-white md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">PlugConnect pathways</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">
             Learning that leads somewhere
@@ -44,12 +41,6 @@ export default function OpportunitiesPage() {
             Build a reliable learning record and review employment, enterprise, supplier, internship, or further-study pathways when GoalVow publishes them.
           </p>
           <ButtonLink href="/courses" className="mt-8">Build your learning record</ButtonLink>
-          </div>
-          <ImagePanel
-            src={visualAssets.dashboardExperience}
-            alt="VowLMS learner dashboard connecting certificates, progress, and opportunities"
-            aspect="video"
-          />
         </div>
       </section>
 

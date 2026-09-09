@@ -1,8 +1,6 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import { Section } from "@/components/ui/Section";
 import { siteConfig } from "@/lib/site";
-import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "VowSupport - GoalVow Learner Support",
@@ -20,9 +18,8 @@ const supportAreas = [
 export default function SupportPage() {
   return (
     <main>
-      <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-support py-16 text-white md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">VowSupport</p>
             <h1 className="mt-3 max-w-2xl text-balance text-4xl font-semibold sm:text-5xl">A clear route to the right support</h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-white/72">
@@ -32,12 +29,6 @@ export default function SupportPage() {
               <a href={`mailto:${siteConfig.contact.email}`} className="inline-flex min-h-11 items-center rounded-lg bg-gold px-6 py-3 text-sm font-semibold text-[#06111f] transition hover:bg-[#e8b830]">Email support</a>
               <a href={siteConfig.contact.whatsappHref} className="inline-flex min-h-11 items-center rounded-lg border border-white/20 bg-white/8 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/12">WhatsApp</a>
             </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.dashboardExperience}
-            alt="VowLMS learner dashboard concept for course progress and support access"
-            aspect="video"
-          />
         </div>
       </section>
 

@@ -19,7 +19,7 @@ export default function CareersPage() {
 
   return (
     <main>
-      <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
+      <section className="visual-hero hero-pathways py-16 text-white md:py-24">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Careers</p>
           <h1 className="mt-4 max-w-4xl text-balance text-4xl font-semibold sm:text-6xl">Build useful learning systems with GoalVow</h1>

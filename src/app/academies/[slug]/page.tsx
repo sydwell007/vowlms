@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Section } from "@/components/ui/Section";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import {
   getAcademies,
   getAcademyBySlug,
@@ -86,9 +85,8 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
         </div>
       ) : null}
       {/* Hero */}
-      <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-discovery py-16 text-white md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <Breadcrumb tone="dark" items={[{ label: "Academies", href: "/academies" }, { label: academy.name }]} />
           <div className="mt-4 flex items-center gap-3">
             <span
@@ -122,13 +120,6 @@ export default async function AcademyDetailPage({ params }: { params: Promise<{ 
               <span className="ml-2 text-white/60">free courses</span>
             </div>
           </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.academyNetwork}
-            alt={`${academy.name} in the GoalVow academy network`}
-            priority
-            aspect="video"
-          />
         </div>
       </section>
 

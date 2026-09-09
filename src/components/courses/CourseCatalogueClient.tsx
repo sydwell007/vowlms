@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { LayoutGrid, List, Search, SlidersHorizontal, X } from "lucide-react";
 import { CourseCard } from "@/components/courses/CourseCard";
-import { ImagePanel } from "@/components/ui/ImagePanel";
-import { visualAssets } from "@/lib/visual-assets";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { goalTiles } from "@/data/goal-tiles";
 import type { Academy, AcademyCategory, CourseSummary, Role } from "@/types/lms";
@@ -167,9 +165,8 @@ export function CourseCatalogueClient({
 
   return (
     <main>
-      <section className="premium-section-dark surface-grid py-14 text-white md:py-20">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-8 px-5 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-discovery py-14 text-white md:py-20">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">
               GoalVow Academy Network
             </p>
@@ -230,14 +227,6 @@ export function CourseCatalogueClient({
                 </button>
               ))}
             </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.academyNetwork}
-            alt="GoalVow academy network course catalogue"
-            priority
-            aspect="video"
-            className="hidden lg:block"
-          />
         </div>
       </section>
 

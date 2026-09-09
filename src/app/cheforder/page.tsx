@@ -1,6 +1,4 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ImagePanel } from "@/components/ui/ImagePanel";
-import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "ChefOrder - Planned Chef Business Platform",
@@ -20,9 +18,8 @@ const features = [
 export default function ChefOrderPage() {
   return (
     <main>
-      <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-learning py-16 text-white md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <span className="inline-flex items-center gap-2 rounded-full bg-orange-500/15 px-3 py-1 text-xs font-semibold text-orange-300">
             Coming soon
           </span>
@@ -38,12 +35,6 @@ export default function ChefOrderPage() {
               Register your interest →
             </a>
           </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.academyNetwork}
-            alt="Chef Academy and GoalVow academy network for culinary business pathways"
-            aspect="video"
-          />
         </div>
       </section>
       <section className="gv-section-blue py-14">

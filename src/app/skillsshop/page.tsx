@@ -1,5 +1,3 @@
-import { ImagePanel } from "@/components/ui/ImagePanel";
-import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "SkillsShop - Planned Learning Marketplace",
@@ -19,9 +17,8 @@ const categories = [
 export default function SkillsShopPage() {
   return (
     <main>
-      <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-learning py-16 text-white md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <span className="inline-flex items-center gap-2 rounded-full bg-amber-500/15 px-3 py-1 text-xs font-semibold text-amber-300">
             Coming soon
           </span>
@@ -34,12 +31,6 @@ export default function SkillsShopPage() {
               Notify me on launch →
             </a>
           </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.academyNetwork}
-            alt="SkillsShop learning kits and equipment across the GoalVow academy network"
-            aspect="video"
-          />
         </div>
       </section>
       <section className="gv-section-blue py-14">

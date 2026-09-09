@@ -15,7 +15,7 @@ type DashboardShellProps = {
 export function DashboardShell({ role, title, description, metrics, children }: DashboardShellProps) {
   return (
     <main className="premium-page">
-      <section className="premium-section-dark surface-grid border-b border-white/6 py-12 text-white md:py-16">
+      <section className="visual-hero hero-achievement border-b border-white/6 py-12 text-white md:py-16">
         <div className="mx-auto grid w-full max-w-7xl items-center gap-8 px-5 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">{role} dashboard</p>

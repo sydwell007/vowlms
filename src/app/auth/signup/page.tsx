@@ -92,9 +92,9 @@ export default function SignUpPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4 py-20">
+    <main className="auth-visual flex min-h-screen items-center justify-center px-4 py-20">
       <div className="w-full max-w-lg">
-        <div className="mb-8 text-center">
+        <div className="auth-intro mb-8 text-center">
           <div className="brand-mark-frame mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg p-2 shadow-[0_10px_24px_rgba(6,17,31,0.14)]">
             <Image src={visualAssets.logo} alt="GoalVow" width={48} height={48} className="h-full w-full object-contain" priority />
           </div>
@@ -103,7 +103,7 @@ export default function SignUpPage() {
         </div>
 
         {/* Step indicator */}
-        <div className="mb-6 flex items-center gap-3">
+        <div className="auth-progress mb-6 flex items-center gap-3">
           {[1, 2].map((s) => (
             <div key={s} className="flex flex-1 items-center gap-3">
               <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition ${step >= s ? "bg-gold text-[#06111f]" : "bg-slate-100 text-muted"}`}>

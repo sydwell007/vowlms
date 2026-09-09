@@ -17,7 +17,8 @@ The audit covered the signed-out application, protected-route entry behavior, re
 | ESLint | PASS |
 | Static regression tests | PASS - 28/28 |
 | Full non-destructive Playwright baseline | PASS - 156 passed, 3 configuration-dependent VowHumans checks skipped |
-| Post-change focused Playwright suite | PASS - 93/93 across mobile, tablet, and desktop |
+| Final visual release Playwright suite | PASS - 156 passed, 3 configuration-dependent VowHumans checks skipped |
+| Visual-system browser audit | PASS - 20 representative page/viewport combinations |
 | Browser route crawl | PASS - 79/79, no failures or integration warnings |
 | Content integrity | PASS - 20 learner-visible Upskilling courses |
 | Broken images | PASS - none detected |
@@ -52,6 +53,11 @@ All three pages recorded a cumulative layout shift of 0.
 - Removed the 3.4 MB curriculum seed from homepage, lesson, and assessment client dependencies. The homepage entry payload fell from about 2.68 MB to about 164 KB.
 - Deferred Google Analytics until browser idle and explicitly prioritised the hero image.
 - Added repeatable route-crawl, form, profile, and responsive regression coverage.
+- Added six human-centred, production-optimised WebP banner scenes for discovery, pathways, learning, achievement, opportunity, and support page families.
+- Replaced repeated patterned hero backgrounds and redundant framed hero previews with readable image-overlay banners across public, learner, and role-dashboard destinations.
+- Added subtle hero and section-entry motion with a complete `prefers-reduced-motion` fallback.
+- Upgraded sign-in, sign-up, and password-reset surfaces with a consistent human-centred visual treatment.
+- Added a reusable `qa:visual` browser gate for banner rendering, broken images, error overlays, and horizontal overflow on desktop and mobile.
 
 ## Staging Gates
 

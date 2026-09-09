@@ -104,20 +104,20 @@ export default async function Home() {
         <div className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(6,23,37,0.97)_0%,rgba(6,23,37,0.85)_42%,rgba(6,23,37,0.26)_82%)]" />
         <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(6,23,37,0.12)_0%,rgba(6,23,37,0.88)_100%)]" />
 
-        <div className="home-hero-copy relative z-10 mx-auto flex min-h-[570px] w-full max-w-7xl flex-col justify-center px-5 py-14 sm:min-h-[610px] sm:px-6 lg:px-8">
+        <div className="home-hero-copy relative z-10 mx-auto flex min-h-[540px] w-full max-w-7xl flex-col justify-center px-5 py-10 sm:min-h-[610px] sm:px-6 sm:py-14 lg:px-8">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-gold">
             GoalVow academy ecosystem
           </p>
-          <h1 className="mt-4 max-w-3xl text-balance text-6xl font-semibold leading-none sm:text-7xl">
+          <h1 className="mt-4 max-w-3xl text-balance text-5xl font-semibold leading-none sm:text-7xl">
             VowLMS
           </h1>
-          <p className="mt-5 max-w-3xl text-balance text-3xl font-semibold leading-tight text-white sm:text-4xl">
+          <p className="mt-4 max-w-3xl text-balance text-2xl font-semibold leading-tight text-white sm:mt-5 sm:text-4xl">
             Learn skills. Prove progress. Move into opportunity.
           </p>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-white/74">
+          <p className="mt-4 max-w-2xl text-base leading-7 text-white/74 sm:mt-5 sm:text-lg sm:leading-8">
             One connected learning experience for choosing a direction, building practical skills, earning recognised proof, and moving forward.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
             <ButtonLink href="/auth/signup" variant="primary">
               Start learning
             </ButtonLink>
@@ -125,7 +125,7 @@ export default async function Home() {
               Browse courses
             </ButtonLink>
           </div>
-          <div className="mt-12 grid max-w-2xl grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-4">
+          <div className="mt-8 grid max-w-2xl grid-cols-2 gap-x-4 gap-y-4 sm:mt-12 sm:grid-cols-4 sm:gap-y-5">
             {stats.map((stat) => (
               <div key={stat.label} className="border-l border-white/16 pl-4">
                 <p className="text-2xl font-semibold text-white">{stat.value}</p>
@@ -216,7 +216,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="page-hero border-t border-white/8 py-14 text-white md:py-20">
+      <section className="visual-hero hero-pathways border-t border-white/8 py-14 text-white md:py-20">
         <div className="mx-auto w-full max-w-3xl px-5 text-center sm:px-6">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#7de0e2]">Your next step</p>
           <h2 className="mt-3 text-balance text-3xl font-semibold sm:text-4xl">

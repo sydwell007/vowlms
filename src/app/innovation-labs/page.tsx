@@ -1,7 +1,5 @@
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import { siteConfig } from "@/lib/site";
-import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "Innovation Labs - GoalVow R&D",
@@ -28,9 +26,8 @@ const statusColors: Record<string, string> = {
 export default function InnovationLabsPage() {
   return (
     <main>
-      <section className="gv-hero py-20 text-white md:py-28">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-learning py-20 text-white md:py-28">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <span className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-300">
             🔬 R&D in progress
           </span>
@@ -47,13 +44,6 @@ export default function InnovationLabsPage() {
             </a>
             <ButtonLink href="/investors" variant="secondary">Innovation investment case</ButtonLink>
           </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.vrPracticeLab}
-            alt="GoalVow Innovation Labs VR practice and simulation environment"
-            priority
-            aspect="video"
-          />
         </div>
       </section>
 

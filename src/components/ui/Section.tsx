@@ -18,7 +18,7 @@ export function Section({ eyebrow, title, description, children, tone = "dark", 
   const paddingClass = isTight ? "py-9 md:py-12" : "py-14 md:py-20";
 
   return (
-    <section className={`${isLight ? "premium-section-light text-ink" : "premium-section-dark text-white"} ${paddingClass}`}>
+    <section className={`content-reveal ${isLight ? "premium-section-light text-ink" : "premium-section-dark text-white"} ${paddingClass}`}>
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
         {hasHeader ? (
           <div className={isTight ? "mb-6 max-w-3xl" : "mb-9 max-w-3xl"}>

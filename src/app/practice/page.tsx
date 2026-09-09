@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ImagePanel } from "@/components/ui/ImagePanel";
-import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "Skills Practice - VowLMS",
@@ -53,9 +51,8 @@ export default function PracticePage() {
   return (
     <main>
       {/* Hero */}
-      <section className="gv-hero py-20 text-white md:py-28">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-learning py-20 text-white md:py-28">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-purple-400/30 bg-purple-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-purple-300">
             Step 2 of 3
           </div>
@@ -69,13 +66,6 @@ export default function PracticePage() {
             <ButtonLink href="/vr-practice" variant="primary">Explore Skills Practice</ButtonLink>
             <ButtonLink href="/innovation-labs" variant="secondary">Development roadmap</ButtonLink>
           </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.vrPracticeLab}
-            alt="Concept image for GoalVow Skills Practice and simulation development"
-            priority
-            aspect="video"
-          />
         </div>
       </section>
 

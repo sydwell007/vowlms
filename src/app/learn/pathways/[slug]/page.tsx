@@ -34,7 +34,7 @@ export default async function SkillPathwayPage({ params }: { params: Promise<{ s
 
   return (
     <main>
-      <section className="premium-section-dark surface-grid py-16 text-white md:py-20">
+      <section className="visual-hero hero-pathways py-16 text-white md:py-20">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <div className="mb-4 flex items-center gap-2 text-sm text-white/60">
             <Link href="/learn/pathways" className="hover:text-white transition">Skill Pathways</Link>

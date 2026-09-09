@@ -289,6 +289,127 @@ body {
     linear-gradient(135deg, #061725 0%, #0b2533 58%, #102b37 100%);
 }
 
+/* Human-centred banner system shared by public page families. The image is
+   decorative; page copy remains real HTML with robust contrast above it. */
+.visual-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #061725;
+}
+
+.visual-hero::before {
+  position: absolute;
+  inset: -2%;
+  z-index: -2;
+  content: "";
+  background-image: var(--hero-image);
+  background-position: center;
+  background-size: cover;
+  transform: scale(1.025);
+}
+
+.visual-hero::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: "";
+  background:
+    linear-gradient(90deg, rgba(4, 18, 29, 0.98) 0%, rgba(4, 18, 29, 0.93) 38%, rgba(4, 18, 29, 0.58) 67%, rgba(4, 18, 29, 0.28) 100%),
+    linear-gradient(180deg, rgba(6, 23, 37, 0.08) 45%, rgba(6, 23, 37, 0.72) 100%);
+}
+
+.hero-discovery { --hero-image: url("/images/vowlms/banners/discovery.webp"); }
+.hero-pathways { --hero-image: url("/images/vowlms/banners/pathways.webp"); }
+.hero-achievement { --hero-image: url("/images/vowlms/banners/achievement.webp"); }
+.hero-opportunity { --hero-image: url("/images/vowlms/banners/opportunity.webp"); }
+.hero-support { --hero-image: url("/images/vowlms/banners/support.webp"); }
+.hero-learning { --hero-image: url("/images/vowlms/banners/learning.webp"); }
+
+.visual-hero h1,
+.visual-hero h2,
+.visual-hero p,
+.visual-hero a,
+.visual-hero button,
+.visual-hero label,
+.visual-hero input {
+  text-shadow: 0 1px 18px rgba(1, 10, 18, 0.2);
+}
+
+@keyframes hero-image-breathe {
+  from { transform: scale(1.025); }
+  to { transform: scale(1.065); }
+}
+
+@keyframes hero-copy-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes section-enter {
+  from { opacity: 0.72; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .visual-hero::before {
+    animation: hero-image-breathe 18s ease-in-out alternate infinite;
+  }
+
+  .visual-hero > div {
+    animation: hero-copy-enter 640ms cubic-bezier(0.2, 0.72, 0.24, 1) both;
+  }
+
+  @supports (animation-timeline: view()) {
+    .content-reveal > div {
+      animation: section-enter linear both;
+      animation-timeline: view();
+      animation-range: entry 4% entry 28%;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .visual-hero::before {
+    background-position: 62% center;
+  }
+
+  .visual-hero::after {
+    background: linear-gradient(90deg, rgba(4, 18, 29, 0.96), rgba(4, 18, 29, 0.72));
+  }
+}
+
+.auth-visual {
+  background:
+    linear-gradient(90deg, rgba(4, 18, 29, 0.86), rgba(4, 18, 29, 0.62)),
+    url("/images/vowlms/banners/pathways.webp") 62% center / cover;
+}
+
+.auth-intro h1,
+.auth-intro p,
+.auth-footnote {
+  color: #ffffff;
+  text-shadow: 0 1px 18px rgba(1, 10, 18, 0.3);
+}
+
+.auth-intro p,
+.auth-footnote {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.auth-progress {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0.5rem;
+  background: rgba(4, 18, 29, 0.72);
+  padding: 0.75rem;
+  color: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(12px);
+}
+
+.auth-progress span {
+  color: inherit !important;
+}
+
 .interactive-lift {
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }

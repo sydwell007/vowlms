@@ -5,6 +5,14 @@ export const visualAssets = {
   dashboardExperience: "/images/vowlms/dashboard-experience.png",
   vrPracticeLab: "/images/vowlms/vr-practice-lab.png",
   coursePresenter: "/images/vowlms/course-presenter.webp",
+  banners: {
+    discovery: "/images/vowlms/banners/discovery.webp",
+    pathways: "/images/vowlms/banners/pathways.webp",
+    achievement: "/images/vowlms/banners/achievement.webp",
+    opportunity: "/images/vowlms/banners/opportunity.webp",
+    support: "/images/vowlms/banners/support.webp",
+    learning: "/images/vowlms/banners/learning.webp",
+  },
   vowhumansLogo: "/images/vowhumans-logo.png",
   thandiAvatar: "/images/thandi-avatar.jpg",
 } as const;

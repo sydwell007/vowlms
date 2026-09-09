@@ -30,7 +30,7 @@ export default async function VRPracticePage({ params }: { params: Promise<{ slu
 
   return (
     <main>
-      <section className="premium-section-dark surface-grid py-12 text-white md:py-16">
+      <section className="visual-hero hero-learning py-12 text-white md:py-16">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <Breadcrumb
             tone="dark"

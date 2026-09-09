@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import { getAcademies, getCourses } from "@/lib/data";
 import { siteConfig } from "@/lib/site";
-import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "Investors Hub",
@@ -59,9 +57,8 @@ export default function InvestorsPage() {
 
   return (
     <main>
-      <section className="gv-hero py-20 text-white md:py-28">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-opportunity py-20 text-white md:py-28">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">GoalVow Holdings</p>
             <h1 className="mt-3 max-w-3xl text-balance text-4xl font-semibold sm:text-5xl lg:text-6xl">
               A connected foundation for learning and progression
@@ -73,13 +70,6 @@ export default function InvestorsPage() {
               <ButtonLink href="/support">Request a platform briefing</ButtonLink>
               <ButtonLink href="/ecosystem" variant="secondary">Explore the ecosystem</ButtonLink>
             </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.ecosystemHero}
-            alt="GoalVow learning ecosystem with digital learning and Skills Practice pathways"
-            priority
-            aspect="video"
-          />
         </div>
       </section>
 

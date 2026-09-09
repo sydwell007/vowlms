@@ -111,7 +111,7 @@ export default async function VRPracticeIndexPage({ searchParams }: VRPracticeIn
 
     return (
       <main>
-        <section className="premium-section-dark surface-grid py-16 text-white md:py-20">
+        <section className="visual-hero hero-learning py-16 text-white md:py-20">
           <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
             <Breadcrumb tone="dark" items={[{ label: "VR Practice", href: "/vr-practice" }, { label: `Search: "${query}"` }]} />
             <h1 className="mt-5 text-balance text-3xl font-semibold sm:text-5xl">Search results</h1>
@@ -242,7 +242,7 @@ export default async function VRPracticeIndexPage({ searchParams }: VRPracticeIn
   if (!selectedAcademyEntry) {
     return (
       <main>
-        <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
+        <section className="visual-hero hero-learning py-16 text-white md:py-24">
           <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">{heroCopy!.eyebrow}</p>
@@ -320,7 +320,7 @@ export default async function VRPracticeIndexPage({ searchParams }: VRPracticeIn
   if (!selectedCourse) {
     return (
       <main>
-        <section className="premium-section-dark surface-grid py-14 text-white md:py-16">
+        <section className="visual-hero hero-learning py-14 text-white md:py-16">
           <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
             <Breadcrumb
               tone="dark"
@@ -389,7 +389,7 @@ export default async function VRPracticeIndexPage({ searchParams }: VRPracticeIn
 
   return (
     <main>
-      <section className="premium-section-dark surface-grid py-14 text-white md:py-16">
+      <section className="visual-hero hero-learning py-14 text-white md:py-16">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <Breadcrumb
             tone="dark"

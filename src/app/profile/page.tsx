@@ -218,7 +218,7 @@ export default function ProfilePage() {
     <main className="premium-page">
       <div className="mx-auto w-full max-w-5xl px-5 py-10 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="premium-section-dark rounded-2xl p-8 text-white mb-6">
+        <div className="visual-hero hero-achievement mb-6 rounded-lg p-8 text-white">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-6">
             <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-gold text-3xl font-black text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)]">
               {avatarUrl ? (

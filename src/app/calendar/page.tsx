@@ -95,7 +95,7 @@ export default function CalendarPage() {
 
   return (
     <main className="premium-page">
-      <section className="premium-section-dark py-16 text-white">
+      <section className="visual-hero hero-achievement py-16 text-white">
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">GoalVow Academy</p>
           <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">Learning Calendar</h1>

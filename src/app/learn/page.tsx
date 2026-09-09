@@ -1,11 +1,9 @@
 import Link from "next/link";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import { ComingSoonOverlay } from "@/components/ui/ComingSoonOverlay";
 import { getAcademies, getCourses } from "@/lib/data";
 import { getComingSoonInfo } from "@/lib/academy-launch";
 import { getServerRole } from "@/lib/auth/getServerRole";
-import { visualAssets } from "@/lib/visual-assets";
 
 export const metadata = {
   title: "Learn · GoalVow Academies",
@@ -29,9 +27,8 @@ export default async function LearnPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="gv-hero py-20 text-white md:py-28">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-learning py-20 text-white md:py-28">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-cyan-300">
             Step 1 of 3
           </div>
@@ -52,13 +49,6 @@ export default async function LearnPage() {
             <ButtonLink href="/courses" variant="primary">Browse all courses</ButtonLink>
             <ButtonLink href="/courses" variant="secondary">Course catalogue</ButtonLink>
           </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.academyNetwork}
-            alt="GoalVow academy learning network for online and hybrid study"
-            priority
-            aspect="video"
-          />
         </div>
       </section>
 

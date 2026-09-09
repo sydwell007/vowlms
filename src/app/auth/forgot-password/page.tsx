@@ -33,9 +33,9 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-4 py-20">
+    <main className="auth-visual flex min-h-screen items-center justify-center px-4 py-20">
       <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
+        <div className="auth-intro mb-8 text-center">
           <div className="brand-mark-frame mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg p-2 shadow-[0_10px_24px_rgba(6,17,31,0.14)]">
             <Image src={visualAssets.logo} alt="GoalVow" width={48} height={48} className="h-full w-full object-contain" priority />
           </div>

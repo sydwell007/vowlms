@@ -1,9 +1,7 @@
 import { AcademyCard } from "@/components/academies/AcademyCard";
 import { Section } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ImagePanel } from "@/components/ui/ImagePanel";
 import { getAcademies, getCourses } from "@/lib/data";
-import { visualAssets } from "@/lib/visual-assets";
 import { getServerRole } from "@/lib/auth/getServerRole";
 
 export const metadata = {
@@ -21,9 +19,8 @@ export default async function AcademiesPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="premium-section-dark surface-grid py-16 text-white md:py-24">
-        <div className="mx-auto grid w-full max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:px-8">
-          <div>
+      <section className="visual-hero hero-discovery py-16 text-white md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">GoalVow Holdings</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">
             {academyCountLabel}. {courses.length.toLocaleString()} courses. One platform.
@@ -35,13 +32,6 @@ export default async function AcademiesPage() {
             <ButtonLink href="/courses">Browse all courses</ButtonLink>
             <ButtonLink href="/auth/signup" variant="secondary">Create account</ButtonLink>
           </div>
-          </div>
-          <ImagePanel
-            src={visualAssets.academyNetwork}
-            alt="GoalVow academy network for school, skills, culinary, business, and online study"
-            priority
-            aspect="video"
-          />
         </div>
       </section>
 

@@ -17,7 +17,7 @@ export default function PricingPage() {
 
   return (
     <main>
-      <section className="premium-section-dark surface-grid py-16 text-white md:py-20">
+      <section className="visual-hero hero-discovery py-16 text-white md:py-20">
         <div className="mx-auto w-full max-w-7xl px-5 text-center sm:px-6 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Course pricing and funding</p>
           <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-5xl">See the price before you enrol</h1>

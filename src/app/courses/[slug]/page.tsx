@@ -267,7 +267,7 @@ export default async function CourseDetailPage({
 
       <CourseExperience course={course} academy={academy} accentColor={accentColor} />
 
-      <section className="premium-section-dark surface-grid py-14 pb-36 text-white lg:pb-14">
+      <section className="visual-hero hero-learning py-14 pb-36 text-white lg:pb-14">
         <div className="mx-auto flex w-full max-w-4xl flex-col items-center gap-5 px-5 text-center sm:px-6 lg:px-8">
           <h2 className="text-balance text-3xl font-semibold sm:text-4xl">Ready to start {course.title}?</h2>
           <p className="max-w-xl text-white/70">
