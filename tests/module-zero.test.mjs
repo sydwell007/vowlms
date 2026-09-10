@@ -25,9 +25,9 @@ test("all 20 Upskilling courses have relevant Module 0 profiles", () => {
   assert.match(moduleZeroSource, /0\.4 Orientation Summary and Readiness Check/);
 });
 
-test("Module 0 is assembled before imported modules and uses the supplied image", () => {
+test("Module 0 is assembled before imported modules and uses the shared orientation image", () => {
   assert.ok(dataSource.indexOf("if (moduleZero) modules.push(moduleZero)") < dataSource.indexOf("grouping.moduleSlugOrder.forEach"));
   assert.match(imageSource, /moduleOrder === 0/);
-  assert.match(imageSource, /Course Intro, Purpose, Objectives Image\.png/);
-  assert.equal(existsSync(new URL("public/images/Course Intro, Purpose, Objectives Image.png", root)), true);
+  assert.match(imageSource, /module-zero-orientation\.jpg/);
+  assert.equal(existsSync(new URL("public/images/module-zero-orientation.jpg", root)), true);
 });

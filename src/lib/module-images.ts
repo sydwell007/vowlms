@@ -169,7 +169,7 @@ const MODULE_IMAGES: Record<string, Record<number, string>> = {
 
 export function getModuleImageSrc(courseSlug: string, moduleOrder: number): string | null {
   if (moduleOrder === 0 && MODULE_IMAGES[courseSlug]) {
-    return "/images/Course Intro, Purpose, Objectives Image.png";
+    return "/images/module-zero-orientation.jpg";
   }
   const filename = MODULE_IMAGES[courseSlug]?.[moduleOrder];
   if (!filename) return null;
