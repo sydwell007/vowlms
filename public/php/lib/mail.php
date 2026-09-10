@@ -56,7 +56,7 @@ function welcomeEmail(string $name): string {
     </body></html>";
 }
 
-function certificateEmail(string $name, string $courseName, string $certificateId): string {
+function certificateEmail(string $name, string $courseName, string $certificateId, string $courseSlug = ''): string {
     $url = env('VOWLMS_APP_URL', 'https://vowlms.vercel.app');
 
     return "
@@ -72,7 +72,7 @@ function certificateEmail(string $name, string $courseName, string $certificateI
       <div style='text-align:center;margin:32px 0;'>
         <a href='{$url}/certificates' style='display:inline-block;background:#f5c542;color:#06111f;font-weight:700;font-size:14px;padding:14px 28px;border-radius:10px;text-decoration:none;'>View certificate</a>
       </div>
-      <p style='color:#6b7280;font-size:13px;'>Certificate ID: {$certificateId}</p>
+      <p style='color:#6b7280;font-size:13px;'>Certificate authentication number: {$certificateId}</p>
       <p style='color:#6b7280;font-size:12px;margin-top:32px;padding-top:16px;border-top:1px solid #e5e7eb;'>GoalVow Holdings (Pty) Ltd · 17 Vultee, Cape Town · support@goalvow.com</p>
     </div>
     </body></html>";

@@ -1,212 +1,75 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { visualAssets } from "@/lib/visual-assets";
+import { Download, Mail, ShieldCheck, Share2 } from "lucide-react";
+import { getCertificateTemplateSrc } from "@/lib/certificates/catalogue";
 import type { Course } from "@/types/lms";
 
-type Props = {
-  course: Course;
-  academyName: string;
-  learnerName: string;
-  completionDate: string;
-  certificateId: string;
-};
+type Props = { course: Course; academyName: string; learnerName: string; completionDate: string; certificateId: string };
 
 export function CertificateViewer({ course, academyName, learnerName, completionDate, certificateId }: Props) {
-  const certRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
-  const [shared, setShared] = useState(false);
+  const [emailing, setEmailing] = useState(false);
+  const [notice, setNotice] = useState("");
+  const templateSrc = getCertificateTemplateSrc(course.slug);
 
   async function downloadPDF() {
-    setDownloading(true);
+    setDownloading(true); setNotice("");
     try {
-      // Dynamic import to avoid SSR issues
       const jsPDF = (await import("jspdf")).default;
       const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
-
-      // Gradient-like background
-      doc.setFillColor(6, 17, 31);
-      doc.rect(0, 0, 297, 210, "F");
-
-      // Gold border
-      doc.setDrawColor(245, 197, 66);
-      doc.setLineWidth(3);
-      doc.rect(10, 10, 277, 190);
-      doc.setLineWidth(1);
-      doc.rect(13, 13, 271, 184);
-
-      // Header
-      doc.setTextColor(245, 197, 66);
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "bold");
-      doc.text("GOALVOW HOLDINGS", 148.5, 30, { align: "center" });
-
-      doc.setFontSize(22);
-      doc.setTextColor(255, 255, 255);
-      doc.text("Certificate of Completion", 148.5, 50, { align: "center" });
-
-      // Academy name
-      doc.setFontSize(11);
-      doc.setTextColor(245, 197, 66);
-      doc.text(academyName.toUpperCase(), 148.5, 62, { align: "center" });
-
-      // Recipient
-      doc.setFontSize(12);
-      doc.setTextColor(255, 255, 255);
-      doc.setFont("helvetica", "normal");
-      doc.text("This certifies that", 148.5, 80, { align: "center" });
-
-      doc.setFontSize(28);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(245, 197, 66);
-      doc.text(learnerName, 148.5, 97, { align: "center" });
-
-      doc.setFontSize(12);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(255, 255, 255);
-      doc.text("has successfully completed the course", 148.5, 113, { align: "center" });
-
-      doc.setFontSize(18);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(255, 255, 255);
-      const courseLines = doc.splitTextToSize(course.title, 220);
-      doc.text(courseLines, 148.5, 128, { align: "center" });
-
-      // Footer details
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(200, 200, 200);
-      doc.text(`Completed: ${completionDate}`, 40, 175);
-      doc.text(`Certificate ID: ${certificateId}`, 148.5, 175, { align: "center" });
-      doc.text("VowLMS - GoalVow Holdings", 258, 175, { align: "right" });
-
-      // Divider line
-      doc.setDrawColor(245, 197, 66);
-      doc.setLineWidth(0.5);
-      doc.line(30, 165, 267, 165);
-
+      if (templateSrc) {
+        const image = await fetch(templateSrc).then((response) => response.blob());
+        const dataUrl = await new Promise<string>((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(String(reader.result)); reader.onerror = reject; reader.readAsDataURL(image); });
+        doc.addImage(dataUrl, "PNG", 0, 0, 297, 210);
+        doc.setTextColor(31, 35, 120); doc.setFont("helvetica", "normal"); doc.setFontSize(17);
+        doc.text(learnerName.toUpperCase(), 148.5, 82, { align: "center", maxWidth: 190 });
+        doc.setTextColor(75, 75, 75); doc.setFontSize(7);
+        doc.text(`Achieved: ${completionDate}   |   Authentication: ${certificateId}`, 148.5, 193, { align: "center" });
+      } else {
+        doc.setFillColor(6, 17, 31); doc.rect(0, 0, 297, 210, "F"); doc.setTextColor(245, 197, 66); doc.setFontSize(24); doc.text("Certificate of Completion", 148.5, 50, { align: "center" }); doc.setTextColor(255, 255, 255); doc.setFontSize(26); doc.text(learnerName, 148.5, 95, { align: "center" }); doc.setFontSize(18); doc.text(course.title, 148.5, 120, { align: "center" }); doc.setFontSize(10); doc.text(`Achieved: ${completionDate} | ${certificateId}`, 148.5, 175, { align: "center" });
+      }
       doc.save(`${certificateId}.pdf`);
-    } catch (err) {
-      console.error("PDF generation failed:", err);
-      alert("PDF download failed. Please try again.");
-    } finally {
-      setDownloading(false);
-    }
+    } catch { setNotice("PDF download failed. Please try again."); }
+    finally { setDownloading(false); }
   }
 
-  function shareCertificate() {
-    const url = window.location.href;
-    if (navigator.share) {
-      navigator.share({ title: `${learnerName} — ${course.title} Certificate`, url });
-    } else {
-      navigator.clipboard.writeText(url);
-      setShared(true);
-      setTimeout(() => setShared(false), 2000);
-    }
+  async function emailCertificate() {
+    setEmailing(true); setNotice("");
+    try {
+      const response = await fetch("/api/certificates/email", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ certificateId }) });
+      const payload = await response.json();
+      if (!response.ok || !payload.ok) throw new Error(payload.error ?? "Certificate email could not be sent.");
+      setNotice("A secure certificate link has been emailed to your account address.");
+    } catch (error) { setNotice(error instanceof Error ? error.message : "Certificate email could not be sent."); }
+    finally { setEmailing(false); }
   }
 
-  return (
-    <main className="premium-page">
-      <div className="mx-auto w-full max-w-5xl px-5 py-10 sm:px-6 lg:px-8">
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">GoalVow Academy</p>
-            <h1 className="mt-1 text-2xl font-semibold text-ink">Certificate of Completion</h1>
-          </div>
-          <Link href="/dashboard/learner" className="text-sm font-medium text-muted hover:text-ink transition">
-            ← Dashboard
-          </Link>
+  async function shareCertificate() {
+    const url = `${window.location.origin}/verify-certificate?certificateId=${encodeURIComponent(certificateId)}`;
+    if (navigator.share) await navigator.share({ title: `${course.title} certificate`, url });
+    else { await navigator.clipboard.writeText(url); setNotice("Verification link copied."); }
+  }
+
+  return <main className="premium-page">
+    <div className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-6 lg:px-8">
+      <div className="mb-6 flex items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">GoalVow achievements</p><h1 className="mt-1 text-2xl font-semibold text-ink">Certificate of Completion</h1></div><Link href="/certificates" className="text-sm font-semibold text-[#1166c8] hover:underline">All certificates</Link></div>
+      <section className="overflow-hidden rounded-lg border border-slate-200 bg-white p-2 shadow-[0_20px_50px_rgba(6,17,31,0.12)]">
+        <div className="relative aspect-[1.414/1] overflow-hidden bg-white">
+          {templateSrc ? <Image src={templateSrc} alt={`${course.title} certificate`} fill priority sizes="(min-width: 1024px) 1100px, 100vw" className="object-contain" /> : null}
+          <p className="absolute left-[12%] right-[12%] top-[37%] text-center text-xl font-medium tracking-[0.1em] text-[#202176] sm:text-3xl">{learnerName.toUpperCase()}</p>
+          <p className="absolute bottom-[5.5%] left-[24%] right-[24%] text-center text-[7px] font-medium tracking-wide text-slate-600 sm:text-xs">Achieved {completionDate}  |  Authentication {certificateId}</p>
         </div>
-
-        {/* Certificate visual */}
-        <div ref={certRef} className="overflow-hidden rounded-2xl">
-          <div className="relative bg-gradient-to-br from-[#06111f] via-[#0d2239] to-[#081626] p-1">
-            {/* Double border */}
-            <div className="rounded-xl border-2 border-gold p-1">
-              <div className="rounded-lg border border-gold/40 p-8 sm:p-12">
-                {/* Corner decorations */}
-                <div className="absolute left-4 top-4 h-6 w-6 border-l-2 border-t-2 border-gold/60 rounded-tl-sm" />
-                <div className="absolute right-4 top-4 h-6 w-6 border-r-2 border-t-2 border-gold/60 rounded-tr-sm" />
-                <div className="absolute bottom-4 left-4 h-6 w-6 border-b-2 border-l-2 border-gold/60 rounded-bl-sm" />
-                <div className="absolute bottom-4 right-4 h-6 w-6 border-b-2 border-r-2 border-gold/60 rounded-br-sm" />
-
-                <div className="text-center">
-                  {/* Logo */}
-                  <div className="brand-mark-frame mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg p-2 shadow-[0_10px_24px_rgba(245,197,66,0.2)]">
-                    <Image src={visualAssets.logo} alt="GoalVow" width={48} height={48} className="h-full w-full object-contain" />
-                  </div>
-
-                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gold mb-2">GoalVow Holdings</p>
-                  <h2 className="text-3xl font-black text-white sm:text-4xl tracking-tight">Certificate of Completion</h2>
-                  <p className="mt-2 text-sm font-semibold uppercase tracking-[0.2em] text-gold/80">{academyName}</p>
-
-                  <div className="my-8 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-
-                  <p className="text-sm text-white/70 mb-2">This is to certify that</p>
-                  <h3 className="text-4xl font-black text-gold sm:text-5xl" style={{ fontFamily: "serif" }}>
-                    {learnerName}
-                  </h3>
-                  <p className="mt-4 text-sm text-white/70 mb-3">has successfully completed the course</p>
-                  <p className="text-2xl font-semibold text-white sm:text-3xl">{course.title}</p>
-
-                  <div className="my-8 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-
-                  <div className="grid gap-4 text-center sm:grid-cols-2">
-                    <div>
-                      <p className="text-xs text-white/50 uppercase tracking-[0.14em]">Completed</p>
-                      <p className="mt-1 text-sm font-semibold text-white">{completionDate}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-white/50 uppercase tracking-[0.14em]">Certificate ID</p>
-                      <p className="mt-1 text-xs font-mono font-semibold text-white/80">{certificateId}</p>
-                    </div>
-                  </div>
-
-                  <p className="mt-6 text-xs text-white/40">
-                    Issued by VowLMS - GoalVow Holdings
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <button
-            onClick={downloadPDF}
-            disabled={downloading}
-            className="flex-1 rounded-xl bg-gold px-6 py-3 text-sm font-semibold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)] transition hover:bg-[#e8b830] disabled:opacity-60 text-center"
-          >
-            {downloading ? "Generating PDF…" : "⬇ Download PDF certificate"}
-          </button>
-          <button
-            onClick={shareCertificate}
-            className="flex-1 rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:bg-slate-50 text-center"
-          >
-            {shared ? "✓ Link copied!" : "↗ Share certificate"}
-          </button>
-          <Link href="/opportunities" className="flex-1 rounded-xl bg-[#06111f] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#0d2239] text-center">
-            View opportunities →
-          </Link>
-        </div>
-
-        {/* Next steps */}
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          {[
-            { title: "Review rewards", desc: "Open VowRewards to review learning rewards recorded for your account.", href: "/rewards" },
-            { title: "View opportunities", desc: "Review opportunity pathways currently published by GoalVow.", href: "/opportunities" },
-            { title: "Continue learning", desc: "Explore more courses in the GoalVow academy ecosystem.", href: "/courses" },
-          ].map((item) => (
-            <Link key={item.title} href={item.href} className="premium-card-soft rounded-xl p-5 transition hover:border-[#1166c8]/20">
-              <p className="text-sm font-semibold text-ink">{item.title}</p>
-              <p className="mt-1 text-xs text-muted leading-5">{item.desc}</p>
-            </Link>
-          ))}
-        </div>
+      </section>
+      <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+        <button onClick={downloadPDF} disabled={downloading} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#06111f] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#0d2239] disabled:opacity-60"><Download size={17} />{downloading ? "Preparing PDF" : "Download certificate"}</button>
+        <button onClick={emailCertificate} disabled={emailing} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-slate-50 disabled:opacity-60"><Mail size={17} />{emailing ? "Sending" : "Email me a copy"}</button>
+        <button onClick={shareCertificate} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-slate-50"><Share2 size={17} />Share verification</button>
       </div>
-    </main>
-  );
+      {notice ? <p role="status" className="mt-4 rounded-lg border border-[#1166c8]/20 bg-[#1166c8]/5 px-4 py-3 text-sm text-ink">{notice}</p> : null}
+      <section className="mt-6 grid gap-4 rounded-lg border border-slate-200 bg-white p-5 sm:grid-cols-3"><div><p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Course</p><p className="mt-1 text-sm font-semibold text-ink">{course.title}</p></div><div><p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted">Issued by</p><p className="mt-1 text-sm font-semibold text-ink">{academyName}</p></div><Link href={`/verify-certificate?certificateId=${encodeURIComponent(certificateId)}`} className="inline-flex items-center gap-2 text-sm font-semibold text-[#1166c8] hover:underline"><ShieldCheck size={18} />Verify this credential</Link></section>
+    </div>
+  </main>;
 }

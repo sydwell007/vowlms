@@ -1,6 +1,7 @@
 import { badRequest, bridgeUnavailable, created, notFound, ok, serverError, unauthorized } from "@/lib/api/responses";
 import { buildCertificatePdfBytes } from "@/lib/certificates/pdf";
 import { bridgeGet, bridgePost, BridgeError, isBridgeConfigured } from "@/lib/bridge";
+import { getCertificateIssuePayload } from "@/lib/certificates/eligibility";
 
 type CertificateData = {
   learnerName: string;
@@ -33,6 +34,8 @@ export async function GET(request: Request) {
   const format = url.searchParams.get("format");
 
   if (!courseSlug) return badRequest("courseSlug is required");
+  const issuePayload = getCertificateIssuePayload(courseSlug);
+  if (!issuePayload) return notFound("Certificate is not available for this course");
 
   let certificate: CertificateData;
 
@@ -40,7 +43,7 @@ export async function GET(request: Request) {
 
   {
     try {
-      const result = await bridgeGet<unknown>(`/certificates?courseSlug=${encodeURIComponent(courseSlug)}`);
+      const result = await bridgeGet<unknown>(`/certificates?courseSlug=${encodeURIComponent(issuePayload.courseSlug)}&anchorCourseSlug=${encodeURIComponent(issuePayload.anchorCourseSlug)}`);
       certificate = normaliseCertificate(result);
     } catch (e) {
       if (e instanceof BridgeError && e.status === 401) return unauthorized();
@@ -71,7 +74,9 @@ export async function POST(request: Request) {
   if (!isBridgeConfigured()) return bridgeUnavailable();
 
   try {
-    const result = await bridgePost<unknown>("/certificates/generate", { courseSlug: payload.courseSlug });
+    const issuePayload = getCertificateIssuePayload(payload.courseSlug);
+    if (!issuePayload) return notFound("Certificate is not available for this course");
+    const result = await bridgePost<unknown>("/certificates/generate", issuePayload);
     return created(normaliseCertificate(result));
   } catch (e) {
     if (e instanceof BridgeError && e.status === 401) return unauthorized();

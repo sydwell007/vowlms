@@ -1,5 +1,6 @@
 import { badRequest, created, serverError, unauthorized } from "@/lib/api/responses";
 import { bridgePost, BridgeError, isBridgeConfigured } from "@/lib/bridge";
+import { getCertificateIssuePayload } from "@/lib/certificates/eligibility";
 
 export async function POST(request: Request) {
   const payload = await request.json().catch(() => null);
@@ -18,12 +19,23 @@ export async function POST(request: Request) {
   }
 
   try {
-    return created(
-      await bridgePost("/progress", {
+    const result = await bridgePost("/progress", {
         lessonSlug: payload.lessonSlug,
         completed: Boolean(payload.completed),
-      }),
-    );
+      });
+
+    if (payload.completed) {
+      const certificatePayload = getCertificateIssuePayload(payload.lessonSlug);
+      if (certificatePayload) {
+        try {
+          await bridgePost("/certificates/generate", certificatePayload);
+        } catch (e) {
+          if (!(e instanceof BridgeError && e.status === 400)) console.error("Certificate eligibility check failed", e);
+        }
+      }
+    }
+
+    return created(result);
   } catch (e) {
     if (e instanceof BridgeError && e.status === 401) return unauthorized();
     if (e instanceof BridgeError) return serverError(e.message);

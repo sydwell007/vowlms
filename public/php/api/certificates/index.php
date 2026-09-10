@@ -15,6 +15,7 @@ $userId  = $payload['sub'];
 $db      = getDb();
 
 $courseSlug = $_GET['courseSlug'] ?? '';
+$anchorCourseSlug = $_GET['anchorCourseSlug'] ?? $courseSlug;
 
 if ($courseSlug !== '') {
     $stmt = $db->prepare(
@@ -22,7 +23,7 @@ if ($courseSlug !== '') {
          JOIN courses c ON c.id = cert.course_id
          WHERE cert.user_id = ? AND c.slug = ? LIMIT 1'
     );
-    $stmt->execute([$userId, $courseSlug]);
+    $stmt->execute([$userId, $anchorCourseSlug]);
     $cert = $stmt->fetch();
     if (!$cert) jsonError('Certificate not found', 404);
     jsonOk($cert);

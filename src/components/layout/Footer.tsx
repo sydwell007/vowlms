@@ -62,6 +62,7 @@ export function Footer() {
       links: [
         { href: "/pricing", label: "Course pricing" },
         { href: "/apply", label: "Application pathway" },
+        { href: "/verify-certificate", label: "Verify a certificate" },
         ...services.map((service) => ({
           href: service.href,
           label: service.name,

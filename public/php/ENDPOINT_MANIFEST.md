@@ -21,7 +21,8 @@
 | `/progress` | POST | Enrolled learner JWT |
 | `/assessments/submit` | POST | Enrolled learner JWT |
 | `/vr/submit` | POST | Enrolled learner JWT; no automatic reward |
-| `/certificates`, `/certificates/generate` | GET/POST | Learner owner JWT |
+| `/certificates`, `/certificates/generate`, `/certificates/email` | GET/POST | Learner owner JWT |
+| `/certificates/verify` | GET | Trusted bridge; public verification page |
 | `/payments/payfast-create` | POST | Learner JWT |
 | `/payments/payfast-notify` | POST | PayFast validation or trusted bridge relay |
 | `/rewards/award` | POST | Facilitator/admin JWT |
