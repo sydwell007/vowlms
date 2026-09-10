@@ -18,7 +18,7 @@
 | `/auth/forgot-password` | POST | Bridge key, rate limited |
 | `/auth/reset-password` | POST | Bridge key, rate limited |
 | `/enrollments` | GET/POST | Learner JWT |
-| `/progress` | POST | Enrolled learner JWT |
+| `/progress` | POST | Enrolled learner JWT; includes VowLMS Module 0 orientation progress |
 | `/assessments/submit` | POST | Enrolled learner JWT |
 | `/vr/submit` | POST | Enrolled learner JWT; no automatic reward |
 | `/certificates`, `/certificates/generate`, `/certificates/email` | GET/POST | Learner owner JWT |

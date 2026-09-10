@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { createHmac } from "node:crypto";
-import { getAcademyBySlug, getChildModuleOrder, getLessonBySlug, getParentGroupSlug } from "@/lib/data";
+import { getAcademyBySlug, getChildModuleOrder, getCourseBySlug, getEnrollableCourseSlugs, getLessonBySlug, getParentGroupSlug } from "@/lib/data";
 import { getModuleImageSrc } from "@/lib/module-images";
 import { getCourseVisual } from "@/lib/visual-assets";
 import { LessonPlayer } from "@/components/learning/LessonPlayer";
@@ -235,36 +235,45 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
     lessons: flatLessons,
   };
 
-  const allModules: CourseModule[] = [courseModule];
+  const resolvedCourseSlug = getParentGroupSlug(d.course.slug) ?? d.course.slug;
+  const parentCourse = getCourseBySlug(resolvedCourseSlug);
+  const allModules: CourseModule[] = parentCourse?.modules ?? [courseModule];
+  const currentModule = allModules.find((moduleItem) =>
+    moduleItem.lessons.some((moduleLesson) => moduleLesson.slug === currentSlug),
+  ) ?? courseModule;
 
   const course = {
+    ...(parentCourse ?? {
+      slug: d.course.slug,
+      title: d.course.title,
+      moodleId: null,
+      academySlug: d.course.academy_slug,
+      description: "",
+      level: (d.course.level as Course["level"]) ?? "Foundation",
+      duration: "",
+      price: d.course.price ?? 0,
+      status: "published" as Course["status"],
+      outcomes: [],
+      rewards: 0,
+      opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
+    }),
+    // Progress remains linked to the imported child course in PHP while the
+    // learner sees the complete parent-course curriculum.
     slug: d.course.slug,
-    title: d.course.title,
-    moodleId: null,
-    academySlug: d.course.academy_slug,
-    description: "",
-    level: (d.course.level as Course["level"]) ?? "Foundation",
-    duration: "",
-    price: d.course.price ?? 0,
-    status: "published" as Course["status"],
     modules: allModules,
-    outcomes: [],
-    rewards: 0,
-    opportunityPathways: { employment: [], entrepreneurship: [], furtherStudy: [] },
-    assessments: isAssessment
+    assessments: parentCourse?.assessments ?? (isAssessment
       ? [{ slug: currentSlug, lessonSlug: currentSlug, title: lesson.title, passMark: 70, questions: [] }]
-      : [],
-    vrPractices: isVR
+      : []),
+    vrPractices: parentCourse?.vrPractices ?? (isVR
       ? [{ slug: currentSlug, lessonSlug: currentSlug, title: lesson.title, scenario: "", skillsPracticed: [], scorePlaceholder: 0 }]
-      : [],
+      : []),
   } satisfies Course;
 
-  const prevLesson: Lesson | null = d.prev_lesson
-    ? { slug: d.prev_lesson.slug, title: d.prev_lesson.title, type: "text", content: "", hasAssessment: false, hasVRPractice: false, durationMinutes: d.prev_lesson.duration_minutes ?? 10 }
-    : null;
-
-  const nextLesson: Lesson | null = d.next_lesson
-    ? { slug: d.next_lesson.slug, title: d.next_lesson.title, type: "text", content: "", hasAssessment: false, hasVRPractice: false, durationMinutes: d.next_lesson.duration_minutes ?? 10 }
+  const navigationLessons = allModules.flatMap((moduleItem) => moduleItem.lessons);
+  const currentIndex = navigationLessons.findIndex((moduleLesson) => moduleLesson.slug === currentSlug);
+  const prevLesson: Lesson | null = currentIndex > 0 ? navigationLessons[currentIndex - 1] : null;
+  const nextLesson: Lesson | null = currentIndex >= 0 && currentIndex < navigationLessons.length - 1
+    ? navigationLessons[currentIndex + 1]
     : null;
 
   // Build resource URLs server-side so BRIDGE_BASE_URL stays server-only
@@ -287,20 +296,18 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
   // page of its own — child slugs are consumed into their parent grouping
   // (e.g. "marketing") and excluded from the visible course list. Every
   // "back to course" / "view results" link must resolve to the parent.
-  const resolvedCourseSlug = getParentGroupSlug(d.course.slug) ?? d.course.slug;
-
   // Real module banner image where one exists (the 20 curated Upskilling
   // courses); every other module — every other academy, and any Upskilling
   // module without a specific image — falls back to its course/academy's
   // real curated visual, so every module gets a real image, never a blank.
   const academy = getAcademyBySlug(d.course.academy_slug);
   const moduleImageSrc =
-    getModuleImageSrc(resolvedCourseSlug, moduleOrder) ??
+    getModuleImageSrc(resolvedCourseSlug, currentModule.order) ??
     getCourseVisual({ slug: resolvedCourseSlug, title: d.course.title }, academy?.category ?? "upskilling").src;
 
   return {
     lesson,
-    module: courseModule,
+    module: currentModule,
     course,
     allModules,
     prevLesson,
@@ -316,6 +323,41 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
 
 export default async function LessonPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const staticResult = getLessonBySlug(slug);
+
+  // Module 0 is native VowLMS orientation content rather than a Moodle row.
+  // Serve it from the grouped course model while enforcing the same enrolment
+  // gate as the imported learning modules.
+  if (staticResult?.module.order === 0) {
+    const { lesson, course, module: courseModule } = staticResult;
+    if (isBridgeConfigured()) {
+      try {
+        const hasAccess = await hasActiveCourseEnrollment(getEnrollableCourseSlugs(course.slug));
+        if (!hasAccess) redirect(`/courses/${course.slug}?enrolment=required`);
+      } catch (error) {
+        if (error instanceof BridgeError && error.status === 401) {
+          redirect(`/auth/signin?returnTo=${encodeURIComponent(`/lesson/${slug}`)}`);
+        }
+        throw error;
+      }
+    }
+    const allLessons = course.modules.flatMap((moduleItem) => moduleItem.lessons);
+    const currentIndex = allLessons.findIndex((moduleLesson) => moduleLesson.slug === slug);
+    const academy = getAcademyBySlug(course.academySlug);
+    return <LessonPlayer
+      lesson={lesson}
+      course={course}
+      module={courseModule}
+      prevLesson={currentIndex > 0 ? allLessons[currentIndex - 1] : null}
+      nextLesson={currentIndex < allLessons.length - 1 ? allLessons[currentIndex + 1] : null}
+      allModules={course.modules}
+      currentLessonSlug={slug}
+      resources={[]}
+      courseSlugForNav={course.slug}
+      moduleImageSrc={getModuleImageSrc(course.slug, 0) ?? getCourseVisual(course, academy?.category ?? "upskilling").src}
+      academyCategory={academy?.category ?? "upskilling"}
+    />;
+  }
 
   // When bridge is configured, fetch from PHP (real content + resources)
   if (isBridgeConfigured()) {
@@ -363,7 +405,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   }
 
   // Static seed-data fallback (development / pre-DB)
-  const result = getLessonBySlug(slug);
+  const result = staticResult;
   if (!result) notFound();
 
   const { lesson, course, module: courseModule } = result;

@@ -10,6 +10,7 @@ import {
 import { skillPathways } from "@/data/skill-pathways";
 import { getOpportunityPathways } from "@/data/opportunity-pathways";
 import { getCoursePreviewContent } from "@/data/course-preview-content";
+import { buildModuleZero } from "@/data/course-module-zero";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { isLearnerVisibleUpskillingCourse } from "@/lib/upskilling-visibility";
 import { getCourseStats } from "@/lib/course-content";
@@ -58,6 +59,20 @@ export function cleanModuleTitle(title: string): string {
 function buildParentCourse(grouping: typeof allGroupings[number]): Course {
   const modules: CourseModule[] = [];
   let totalRewards = 0;
+
+  const moduleTitles = grouping.moduleSlugOrder
+    .map((childSlug) => rawCourseMap.get(childSlug))
+    .filter(Boolean)
+    .map((child) => cleanModuleTitle(child!.title));
+  const moduleZero = buildModuleZero({
+    slug: grouping.slug,
+    title: grouping.title,
+    description: grouping.description,
+    outcomes: grouping.outcomes,
+    moduleTitles,
+    preview: getCoursePreviewContent(grouping.slug),
+  });
+  if (moduleZero) modules.push(moduleZero);
 
   grouping.moduleSlugOrder.forEach((childSlug, idx) => {
     const child = rawCourseMap.get(childSlug);

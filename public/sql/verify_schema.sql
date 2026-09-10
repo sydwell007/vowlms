@@ -13,7 +13,8 @@ WHERE table_schema = 'goalvxiw_vowlms'
   AND table_name IN (
     'users','academies','courses','modules','lessons','enrollments','progress',
     'assessments','assessment_attempts','vr_practices','vr_attempts',
-    'certificates','reward_events','payments','password_resets'
+    'certificates','reward_events','payments','password_resets',
+    'course_orientation_progress'
   )
 ORDER BY table_name;
 
@@ -36,7 +37,7 @@ ORDER BY table_name, column_name;
 SELECT table_name, index_name, non_unique
 FROM information_schema.statistics
 WHERE table_schema = 'goalvxiw_vowlms'
-  AND index_name IN ('uq_enrollment','uq_progress','uq_cert_id','uq_user_course','uq_payfast_payment_id')
+  AND index_name IN ('uq_enrollment','uq_progress','uq_cert_id','uq_user_course','uq_payfast_payment_id','uq_orientation_user_lesson')
 ORDER BY table_name, index_name;
 
 SELECT COUNT(*) AS invalid_progress_rows
@@ -48,6 +49,11 @@ FROM `goalvxiw_vowlms`.`progress` p
 LEFT JOIN `goalvxiw_vowlms`.`users` u ON u.id = p.user_id
 LEFT JOIN `goalvxiw_vowlms`.`lessons` l ON l.id = p.lesson_id
 WHERE u.id IS NULL OR l.id IS NULL;
+
+SELECT COUNT(*) AS invalid_orientation_progress_rows
+FROM `goalvxiw_vowlms`.`course_orientation_progress`
+WHERE completed NOT IN (0, 1)
+   OR lesson_slug NOT LIKE CONCAT(course_slug, '-module-0-%');
 
 SELECT
   slug,

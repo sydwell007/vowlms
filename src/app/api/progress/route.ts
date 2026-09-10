@@ -1,6 +1,8 @@
 import { badRequest, created, serverError, unauthorized } from "@/lib/api/responses";
 import { bridgePost, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 import { getCertificateIssuePayload } from "@/lib/certificates/eligibility";
+import { getModuleZeroCourseSlug } from "@/data/course-module-zero";
+import { getEnrollableCourseSlugs } from "@/lib/data";
 
 export async function POST(request: Request) {
   const payload = await request.json().catch(() => null);
@@ -19,13 +21,24 @@ export async function POST(request: Request) {
   }
 
   try {
-    const result = await bridgePost("/progress", {
-        lessonSlug: payload.lessonSlug,
-        completed: Boolean(payload.completed),
-      });
+    const orientationCourseSlug = getModuleZeroCourseSlug(payload.lessonSlug);
+    const result = await bridgePost("/progress", orientationCourseSlug
+      ? {
+          lessonSlug: payload.lessonSlug,
+          completed: Boolean(payload.completed),
+          orientation: true,
+          courseSlug: orientationCourseSlug,
+          courseSlugs: getEnrollableCourseSlugs(orientationCourseSlug),
+        }
+      : {
+          lessonSlug: payload.lessonSlug,
+          completed: Boolean(payload.completed),
+        });
 
     if (payload.completed) {
-      const certificatePayload = getCertificateIssuePayload(payload.lessonSlug);
+      const certificatePayload = getCertificateIssuePayload(
+        orientationCourseSlug ?? (typeof payload.courseSlug === "string" ? payload.courseSlug : payload.lessonSlug),
+      );
       if (certificatePayload) {
         try {
           await bridgePost("/certificates/generate", certificatePayload);

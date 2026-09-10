@@ -70,6 +70,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             jsonError('Complete every course module before a certificate can be issued', 400);
         }
 
+        $orientationStmt = $db->prepare(
+            'SELECT COUNT(DISTINCT lesson_slug) FROM course_orientation_progress
+             WHERE user_id = ? AND course_slug = ? AND completed = 1'
+        );
+        $orientationStmt->execute([$userId, $courseSlug]);
+        if ((int)$orientationStmt->fetchColumn() < 4) {
+            $db->rollBack();
+            jsonError('Complete all four Module 0 orientation lessons before a certificate can be issued', 400);
+        }
+
         $assessmentStmt = $db->prepare("SELECT id FROM assessments WHERE course_id IN ({$idPlaceholders})");
         $assessmentStmt->execute($courseIds);
         $assessmentIds = array_column($assessmentStmt->fetchAll(), 'id');

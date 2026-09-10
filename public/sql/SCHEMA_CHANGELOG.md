@@ -108,3 +108,14 @@
 - Creates core users, academy, course, learning, assessment, certificate, reward, payment, opportunity, and hub tables plus initial reference data.
 
 All production imports require a backup, staging verification, and an authorised operator.
+
+## 020 - Course orientation progress
+
+- Adds the additive `course_orientation_progress` table for the four native
+  VowLMS Module 0 lessons attached to each production Upskilling parent course.
+- Keeps Moodle-imported course, module, lesson, assessment, and progress rows
+  unchanged.
+- Requires an active enrolment in every child course before Module 0 progress
+  can be recorded.
+- Certificate issuance now verifies completion of all four orientation lessons
+  alongside the existing module-completion and assessment-pass checks.

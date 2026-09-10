@@ -6,6 +6,7 @@ import {
   BookOpen,
   ChevronDown,
   ClipboardCheck,
+  Compass,
   Clock3,
   FileText,
   Glasses,
@@ -39,7 +40,9 @@ const LESSON_ICON: Record<string, LucideIcon> = {
 };
 
 export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug }: Props) {
-  const [expanded, setExpanded] = useState<Set<number>>(new Set());
+  const [expanded, setExpanded] = useState<Set<number>>(
+    new Set(modules.filter((moduleItem) => moduleItem.order === 0).map((moduleItem) => moduleItem.order)),
+  );
   const [view, setView] = useState<"list" | "tiles">("list");
   const allOpen = expanded.size === modules.length;
 
@@ -108,6 +111,7 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug 
 
           const statChips = (
             <>
+              {moduleItem.order === 0 ? <span className="flex items-center gap-1.5 font-semibold" style={{ color: accentColor }}><Compass aria-hidden="true" className="h-3.5 w-3.5" /> Start here</span> : null}
               <span className="flex items-center gap-1.5"><BookOpen aria-hidden="true" className="h-3.5 w-3.5" /> {stats.lessonCount} lesson{stats.lessonCount === 1 ? "" : "s"}</span>
               <span className="flex items-center gap-1.5"><Clock3 aria-hidden="true" className="h-3.5 w-3.5" /> {formatDuration(stats.totalMinutes)}</span>
               {stats.hasAssessment ? <span className="flex items-center gap-1.5"><ClipboardCheck aria-hidden="true" className="h-3.5 w-3.5" /> Assessment</span> : null}

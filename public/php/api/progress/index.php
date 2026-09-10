@@ -19,6 +19,46 @@ $completed = array_key_exists('completed', $body) ? (bool)$body['completed'] : t
 if ($lessonSlug === '') jsonError('lessonSlug is required');
 
 $db = getDb();
+
+// Module 0 lessons belong to virtual parent courses and do not exist in the
+// imported Moodle lessons table. Persist them separately while enforcing the
+// same enrolment gate as the imported child courses.
+if (!empty($body['orientation'])) {
+    $courseSlug = trim($body['courseSlug'] ?? '');
+    $courseSlugs = $body['courseSlugs'] ?? [];
+    $allowedSuffixes = ['introduction', 'purpose', 'objectives', 'summary'];
+    $validLesson = false;
+    foreach ($allowedSuffixes as $suffix) {
+        if ($lessonSlug === $courseSlug . '-module-0-' . $suffix) $validLesson = true;
+    }
+    $courseSlugs = is_array($courseSlugs)
+        ? array_values(array_unique(array_filter($courseSlugs, fn($slug) => is_string($slug) && preg_match('/^[a-z0-9-]{2,120}$/', $slug))))
+        : [];
+    if (!preg_match('/^[a-z0-9-]{2,120}$/', $courseSlug) || !$validLesson || count($courseSlugs) === 0 || count($courseSlugs) > 30) {
+        jsonError('Invalid orientation progress request');
+    }
+
+    $placeholders = implode(',', array_fill(0, count($courseSlugs), '?'));
+    $enrolmentStmt = $db->prepare(
+        "SELECT COUNT(DISTINCT c.slug) FROM courses c
+         JOIN enrollments e ON e.course_id = c.id
+         WHERE e.user_id = ? AND e.status IN ('active', 'completed') AND c.slug IN ({$placeholders})"
+    );
+    $enrolmentStmt->execute(array_merge([$userId], $courseSlugs));
+    if ((int)$enrolmentStmt->fetchColumn() !== count($courseSlugs)) {
+        jsonError('An active course enrolment is required', 403);
+    }
+
+    $completedAt = $completed ? date('Y-m-d H:i:s') : null;
+    $db->prepare(
+        'INSERT INTO course_orientation_progress (id, user_id, course_slug, lesson_slug, completed, completed_at)
+         VALUES (?, ?, ?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE completed = VALUES(completed), completed_at = VALUES(completed_at), updated_at = NOW()'
+    )->execute([generateId(), $userId, $courseSlug, $lessonSlug, (int)$completed, $completedAt]);
+
+    jsonCreated(['lessonSlug' => $lessonSlug, 'completed' => $completed, 'orientation' => true]);
+}
+
 $lessonStmt = $db->prepare(
     'SELECT l.id, m.course_id
      FROM lessons l

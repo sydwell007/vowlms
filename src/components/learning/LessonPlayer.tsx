@@ -243,7 +243,16 @@ export function LessonPlayer({
       if (cancelled) return;
       try {
         const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
-        const done: string[] = progress[course.slug]?.completedLessons ?? [];
+        const groupedDone: string[] = progress[courseSlugForNav]?.completedLessons ?? [];
+        const legacyDone: string[] = progress[course.slug]?.completedLessons ?? [];
+        const done = [...new Set([...groupedDone, ...legacyDone])];
+        if (done.length !== groupedDone.length) {
+          progress[courseSlugForNav] = {
+            ...(progress[courseSlugForNav] ?? {}),
+            completedLessons: done,
+          };
+          localStorage.setItem("vowlms_progress", JSON.stringify(progress));
+        }
         setCompletedSlugs(done);
         setCompleted(done.includes(lesson.slug));
       } catch { /* ignore */ }
@@ -251,14 +260,14 @@ export function LessonPlayer({
     return () => {
       cancelled = true;
     };
-  }, [course.slug, lesson.slug]);
+  }, [course.slug, courseSlugForNav, lesson.slug]);
 
   const markComplete = useCallback(async () => {
     const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
-    if (!progress[course.slug]) progress[course.slug] = { completedLessons: [], assessmentPassed: false };
-    const done: string[] = progress[course.slug].completedLessons ?? [];
+    if (!progress[courseSlugForNav]) progress[courseSlugForNav] = { completedLessons: [], assessmentPassed: false };
+    const done: string[] = progress[courseSlugForNav].completedLessons ?? [];
     if (!done.includes(lesson.slug)) done.push(lesson.slug);
-    progress[course.slug].completedLessons = done;
+    progress[courseSlugForNav].completedLessons = done;
     localStorage.setItem("vowlms_progress", JSON.stringify(progress));
     setCompleted(true);
     setCompletedSlugs([...done]);
@@ -267,7 +276,7 @@ export function LessonPlayer({
     fetch("/api/progress", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lessonSlug: lesson.slug, courseSlug: course.slug }),
+      body: JSON.stringify({ lessonSlug: lesson.slug, courseSlug: course.slug, completed: true }),
     }).catch(() => {});
 
     if (!nextLesson) {
@@ -288,7 +297,7 @@ export function LessonPlayer({
     }
 
     setTimeout(() => router.push(`/lesson/${nextLesson.slug}`), 600);
-  }, [allModules, course.slug, lesson.slug, module, nextLesson, router]);
+  }, [allModules, course.slug, courseSlugForNav, lesson.slug, module, nextLesson, router]);
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f8fbfe]">
