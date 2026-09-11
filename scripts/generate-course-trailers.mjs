@@ -16,6 +16,16 @@
  * noise, so this intentionally ships without audio — see CourseTrailer.tsx's
  * existing optional background-music hook for sound).
  *
+ * Within each module, the specific lesson clip is chosen RANDOMLY from every
+ * real lesson in that module (not always "Lesson 1") — re-running this
+ * produces a different, still-genuine edit. Each `Lesson N` folder also
+ * contains a `*.tscproj` sibling directory of raw Camtasia production
+ * fragments (numbered segments used to *build* the lesson, e.g.
+ * `1_COMP-SAFE-01.mp4`) alongside the one real, polished, final assembled
+ * lesson video — this deliberately never descends into a `.tscproj`
+ * directory, so it only ever picks that real final video, never a raw
+ * fragment that might not even show the presenter on camera.
+ *
  * Usage:
  *   node scripts/generate-course-trailers.mjs [--source "<path>"] [--slug <course-slug>]
  *
@@ -31,7 +41,7 @@ const DEFAULT_SOURCE = "C:\\Users\\sydwe\\OneDrive\\Desktop\\GoalVow Lessons wit
 const OUTPUT_DIR = path.join(process.cwd(), "public", "videos", "course-trailers");
 const MAX_CLIPS = 6;
 const CLIP_START_S = 3; // skip likely title-card / lead-in seconds
-const CLIP_DURATION_S = 3.2;
+const CLIP_DURATION_S = 4; // ~4s of one presenter talking before the cut, per spec
 const XFADE_DURATION_S = 0.6;
 const OUTPUT_WIDTH = 1280;
 const OUTPUT_HEIGHT = 720;
@@ -121,6 +131,15 @@ function listDirs(p) {
   }
 }
 
+/**
+ * Finds the one real, final, polished lesson mp4 under `dir` — deliberately
+ * never descends into a `*.tscproj` directory (that's the raw Camtasia
+ * production bin: numbered fragment clips used to build the lesson, not
+ * something meant to stand alone as footage). Direct files in `dir` win
+ * immediately; only recurses into non-`.tscproj` subdirectories otherwise,
+ * covering both real layouts found in the source footage: the mp4 sitting
+ * directly in `Lesson N/`, or nested one level into `Lesson N/<title>/`.
+ */
 function findMp4Recursive(dir, depth = 0) {
   if (depth > 5) return null;
   let entries;
@@ -132,7 +151,7 @@ function findMp4Recursive(dir, depth = 0) {
   const mp4 = entries.find((e) => e.isFile() && e.name.toLowerCase().endsWith(".mp4"));
   if (mp4) return path.join(dir, mp4.name);
   for (const e of entries) {
-    if (e.isDirectory()) {
+    if (e.isDirectory() && !e.name.toLowerCase().endsWith(".tscproj")) {
       const found = findMp4Recursive(path.join(dir, e.name), depth + 1);
       if (found) return found;
     }
@@ -140,20 +159,22 @@ function findMp4Recursive(dir, depth = 0) {
   return null;
 }
 
-function findFirstMp4InModule(moduleDir) {
-  const lessonDirs = listDirs(moduleDir)
-    .map((name) => {
-      const m = name.match(/lesson\s*(\d+)/i);
-      return m ? { name, n: parseInt(m[1], 10) } : null;
-    })
-    .filter(Boolean)
-    .sort((a, b) => a.n - b.n);
-
+/** Every real lesson mp4 in a module, across every "Lesson N" folder it has. */
+function findAllLessonMp4sInModule(moduleDir) {
+  const lessonDirs = listDirs(moduleDir).filter((name) => /lesson\s*\d+/i.test(name));
+  const mp4s = [];
   for (const ld of lessonDirs) {
-    const mp4 = findMp4Recursive(path.join(moduleDir, ld.name));
-    if (mp4) return mp4;
+    const mp4 = findMp4Recursive(path.join(moduleDir, ld));
+    if (mp4) mp4s.push(mp4);
   }
-  return null;
+  return mp4s;
+}
+
+/** Picks one lesson's real video from a module at random — a different, still-genuine edit each run. */
+function pickRandomMp4InModule(moduleDir) {
+  const mp4s = findAllLessonMp4sInModule(moduleDir);
+  if (mp4s.length === 0) return null;
+  return mp4s[Math.floor(Math.random() * mp4s.length)];
 }
 
 function resolveClips(slug, moduleSlugs) {
@@ -177,7 +198,7 @@ function resolveClips(slug, moduleSlugs) {
       }
     }
     if (!best || bestScore < 0.25) return;
-    const mp4 = findFirstMp4InModule(path.join(courseFullPath, best));
+    const mp4 = pickRandomMp4InModule(path.join(courseFullPath, best));
     if (!mp4) return;
     clips.push({ order: idx + 1, moduleFolder: best, mp4 });
   });
