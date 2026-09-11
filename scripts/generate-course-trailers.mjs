@@ -40,9 +40,13 @@ import ffmpegPath from "ffmpeg-static";
 const DEFAULT_SOURCE = "C:\\Users\\sydwe\\OneDrive\\Desktop\\GoalVow Lessons with Audio";
 const OUTPUT_DIR = path.join(process.cwd(), "public", "videos", "course-trailers");
 const MAX_CLIPS = 6;
-const CLIP_START_S = 3; // skip likely title-card / lead-in seconds
+// The presenter is reliably on camera and talking by 11s into a real lesson
+// video (title card + lower-third intro animation run before that) — this is
+// confirmed by ear/eye against the real footage, not a guess.
+const CLIP_START_S = 11;
 const CLIP_DURATION_S = 4; // ~4s of one presenter talking before the cut, per spec
 const XFADE_DURATION_S = 0.6;
+const MIN_SOURCE_DURATION_S = CLIP_START_S + CLIP_DURATION_S;
 const OUTPUT_WIDTH = 1280;
 const OUTPUT_HEIGHT = 720;
 
@@ -159,13 +163,35 @@ function findMp4Recursive(dir, depth = 0) {
   return null;
 }
 
-/** Every real lesson mp4 in a module, across every "Lesson N" folder it has. */
+/**
+ * Real lesson videos run several minutes, so this is normally a no-op — but
+ * trimming `start=11s` out of something unexpectedly short would otherwise
+ * silently produce an empty/black segment and corrupt the crossfade, so
+ * every candidate is actually probed rather than assumed safe.
+ */
+function getDurationSeconds(mp4Path) {
+  try {
+    execFileSync(ffmpegPath, ["-i", mp4Path], { stdio: ["ignore", "ignore", "pipe"] });
+    return null; // unreachable — ffmpeg with no output always exits non-zero
+  } catch (error) {
+    const stderr = String(error.stderr ?? "");
+    const match = stderr.match(/Duration:\s*(\d+):(\d+):(\d+(?:\.\d+)?)/);
+    if (!match) return null;
+    const [, h, m, s] = match;
+    return Number(h) * 3600 + Number(m) * 60 + Number(s);
+  }
+}
+
+/** Every real lesson mp4 in a module, across every "Lesson N" folder it has, long enough to safely trim at CLIP_START_S. */
 function findAllLessonMp4sInModule(moduleDir) {
   const lessonDirs = listDirs(moduleDir).filter((name) => /lesson\s*\d+/i.test(name));
   const mp4s = [];
   for (const ld of lessonDirs) {
     const mp4 = findMp4Recursive(path.join(moduleDir, ld));
-    if (mp4) mp4s.push(mp4);
+    if (!mp4) continue;
+    const duration = getDurationSeconds(mp4);
+    if (duration !== null && duration < MIN_SOURCE_DURATION_S) continue;
+    mp4s.push(mp4);
   }
   return mp4s;
 }
