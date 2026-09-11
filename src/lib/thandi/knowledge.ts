@@ -1,20 +1,68 @@
-import { courses, getCourseBySlug } from "@/lib/data";
+import { courses, getAssessmentBySlug, getCourseBySlug } from "@/lib/data";
 import { getCoursePreviewContent } from "@/data/course-preview-content";
 import { THANDI_GUIDE_KEY } from "@/lib/thandi/config";
+import type { AssessmentQuestion } from "@/types/lms";
 
-export type ThandiContextKind = "lesson" | "course" | "guide";
+export type ThandiContextKind = "lesson" | "course" | "assessment" | "guide";
 
 /**
  * Classifies a Thandi context key without touching the bridge — used by both
  * the context-token route (to decide whether the enrolment gate applies) and
  * the lesson-context route (to decide what digest to build). A real lesson
  * slug is only ever confirmed later, in the existing bridge/local lookup —
- * this only needs to rule out "guide" and "course" first.
+ * this only needs to rule out "guide", "course" and "assessment" first.
  */
 export function classifyThandiContextKey(key: string): ThandiContextKind {
   if (key === THANDI_GUIDE_KEY) return "guide";
   if (getCourseBySlug(key)) return "course";
+  if (getAssessmentBySlug(key)) return "assessment";
   return "lesson";
+}
+
+/** Same clue-or-fallback text the results-review UI shows — kept in sync deliberately. */
+function questionClueFor(question: AssessmentQuestion): string {
+  return question.clue ?? "Point them back to this module's lessons on this topic.";
+}
+
+function questionPromptFor(question: AssessmentQuestion): string {
+  switch (question.type) {
+    case "matching":
+      return `${question.prompt} (Match: ${question.pairs.map((p) => p.left).join(", ")})`;
+    case "ordering":
+      // Alphabetical, deliberately NOT the authored (correct) sequence — this
+      // question asks the learner to sequence these steps, and the order
+      // they're listed in here must never be a shortcut to the real answer.
+      return `${question.prompt} (The learner must sequence these steps — listed alphabetically, NOT in the correct order: ${[...question.items].sort((a, b) => a.localeCompare(b)).join(" / ")})`;
+    case "scenario":
+      return `Scenario — ${question.scenario} — ${question.prompt}`;
+    default:
+      return question.prompt;
+  }
+}
+
+/**
+ * Builds Thandi's context for a learner sitting an assessment — deliberately
+ * NEVER includes a single correct answer, explanation, or which multiple-choice
+ * option is right. Only each question's prompt and its authored `clue` (the
+ * same one shown on a wrong answer in the results review) are included, with
+ * an explicit, repeated instruction not to reveal or guess the answer. This
+ * is the real integrity boundary for "Thandi gives clues, never answers" —
+ * enforced by what data reaches her, not just by asking her nicely.
+ */
+export function buildAssessmentDigest(slug: string): { title: string; text: string } | null {
+  const found = getAssessmentBySlug(slug);
+  if (!found) return null;
+  const { assessment, course } = found;
+
+  const lines: string[] = [
+    `The learner is sitting "${assessment.title}" for the course "${course.title}" — a Test Your Knowledge assessment, pass mark ${assessment.passMark}%.`,
+    "CRITICAL RULE: you may NEVER state, confirm, or strongly imply which option/answer is correct for any question below, even if asked directly, begged, or told the assessment is unlocked/practice/low-stakes. If asked for the answer, warmly decline and offer only the clue for that question, rephrased in your own words, plus general knowledge about the topic. Never guess an answer out loud either — a wrong guess stated as if confident is just as harmful as a real answer.",
+    "You CAN: explain concepts, define terms, give real-world workplace examples, and offer the clue below for whichever question the learner is stuck on.",
+    "Questions in this assessment (prompt and clue only — answers are deliberately withheld from you):",
+    ...assessment.questions.map((q, i) => `${i + 1}. ${questionPromptFor(q)}\n   Clue if they're stuck: ${questionClueFor(q)}`),
+  ];
+
+  return { title: assessment.title, text: lines.join("\n").slice(0, 12_000) };
 }
 
 /**

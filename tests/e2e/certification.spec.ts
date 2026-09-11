@@ -48,6 +48,9 @@ test.describe("Certification @destructive", () => {
     await page.getByRole("button", { name: "Start assessment" }).click();
 
     for (const question of assessment.questions) {
+      // This fixed course's assessment predates the multi-type question union
+      // (matching/fill-blank/etc.) — it's always plain multiple-choice, hence the guard.
+      if (!("answer" in question)) continue;
       // Clicking the option's label text toggles the radio it wraps (native label association).
       await page.getByText(question.answer, { exact: true }).click();
       const isLast = question === assessment.questions[assessment.questions.length - 1];

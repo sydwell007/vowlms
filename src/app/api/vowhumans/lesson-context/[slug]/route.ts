@@ -3,7 +3,7 @@ import { bridgeGet } from "@/lib/bridge";
 import { getLessonBySlug } from "@/lib/data";
 import { readVowHumansLessonContextLang, verifyVowHumansLessonContextToken } from "@/lib/vowhumans-context-token";
 import { THANDI_GUIDE_KEY } from "@/lib/thandi/config";
-import { buildCourseDigest, buildSiteDigest, classifyThandiContextKey } from "@/lib/thandi/knowledge";
+import { buildAssessmentDigest, buildCourseDigest, buildSiteDigest, classifyThandiContextKey } from "@/lib/thandi/knowledge";
 
 type ContextResource = {
   type: string;
@@ -93,6 +93,24 @@ export async function GET(
         course_title: digest.title,
         lesson_slug: slug,
         lesson_title: "Course guide",
+        module_title: digest.title,
+        lesson_text: langPreface + digest.text,
+        resource: null,
+      },
+      { headers: { "Cache-Control": "no-store, private" } },
+    );
+  }
+  if (kind === "assessment") {
+    const digest = buildAssessmentDigest(slug);
+    if (!digest) {
+      return NextResponse.json({ error: "Assessment not found" }, { status: 404 });
+    }
+    return NextResponse.json(
+      {
+        academy_name: "GoalVow Academy",
+        course_title: digest.title,
+        lesson_slug: slug,
+        lesson_title: "Assessment support — clues only",
         module_title: digest.title,
         lesson_text: langPreface + digest.text,
         resource: null,

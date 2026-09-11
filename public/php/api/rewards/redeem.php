@@ -22,12 +22,55 @@ $requestCatalog = [
     'data_bundle'              => 300,
     'electricity_token'        => 400,
     'mentorship_session'       => 250,
-    'assessment_retake_waiver' => 50,
     'vr_practice_credit'       => 100,
 ];
 
+// A pure software gate, not a real-world/admin fulfilment — unlike the
+// catalogue above, this must clear instantly (a learner sitting on the
+// results page waiting to retry cannot be told "reviewed within 24 hours").
+$instantCost = 50;
+
 $body = getJsonBody();
 $type = trim($body['redemptionType'] ?? '');
+
+if ($type === 'assessment_retake_waiver') {
+    try {
+        $db->beginTransaction();
+
+        $balStmt = $db->prepare('SELECT COALESCE(SUM(points),0) FROM reward_events WHERE user_id = ? FOR UPDATE');
+        $balStmt->execute([$userId]);
+        $balance = (int)$balStmt->fetchColumn();
+        if ($balance < $instantCost) {
+            $db->rollBack();
+            jsonError('Insufficient VOWR balance', 400);
+        }
+
+        $assessmentSlug = trim($body['metadata']['assessmentSlug'] ?? '');
+        $db->prepare(
+            'INSERT INTO reward_events (id, user_id, event, points, metadata) VALUES (?, ?, ?, ?, ?)'
+        )->execute([
+            generateId(), $userId, 'redemption:assessment_retake_waiver', -$instantCost,
+            $assessmentSlug ? json_encode(['assessmentSlug' => $assessmentSlug]) : null,
+        ]);
+
+        $db->commit();
+    } catch (Throwable $error) {
+        if ($db->inTransaction()) $db->rollBack();
+        error_log('VOWR assessment retry unlock failed: ' . $error->getMessage());
+        jsonError('Could not unlock a retry right now', 500);
+    }
+
+    $newBalStmt = $db->prepare('SELECT COALESCE(SUM(points),0) FROM reward_events WHERE user_id = ?');
+    $newBalStmt->execute([$userId]);
+
+    jsonCreated([
+        'status'         => 'completed',
+        'redemptionType' => 'assessment_retake_waiver',
+        'amount'         => $instantCost,
+        'balance'        => (int)$newBalStmt->fetchColumn(),
+        'message'        => "Retry unlocked — {$instantCost} VOWR spent.",
+    ]);
+}
 
 if ($type === 'donate_to_learner') {
     $recipientEmail = trim($body['recipientEmail'] ?? '');

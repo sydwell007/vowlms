@@ -5,6 +5,7 @@ import { THANDI_GUIDE_KEY } from "@/lib/thandi/config";
 
 const LESSON_PATH = /^\/lesson\/([a-z0-9-]+)/;
 const COURSE_PATH = /^\/courses\/([a-z0-9-]+)/;
+const ASSESSMENT_PATH = /^\/assessment\/([a-z0-9-]+)/;
 
 /**
  * Derives what Thandi should know about "the page the learner is currently
@@ -17,6 +18,9 @@ export function useThandiContextKey(): { key: string; label: string } {
 
   const lessonMatch = pathname.match(LESSON_PATH);
   if (lessonMatch) return { key: lessonMatch[1], label: "this lesson" };
+
+  const assessmentMatch = pathname.match(ASSESSMENT_PATH);
+  if (assessmentMatch) return { key: assessmentMatch[1], label: "this assessment" };
 
   const courseMatch = pathname.match(COURSE_PATH);
   if (courseMatch) return { key: courseMatch[1], label: "this course" };

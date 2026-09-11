@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { Lightbulb, Sparkles } from "lucide-react";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { CelebrationOverlay } from "@/components/learning/CelebrationOverlay";
-import type { Assessment, Course } from "@/types/lms";
+import { openThandiPanel } from "@/lib/thandi/panel-store";
+import { useWalletBalance } from "@/lib/rewards/useWalletBalance";
+import type { Assessment, AssessmentQuestion, Course } from "@/types/lms";
 
 type Props = {
   assessment: Assessment;
@@ -19,6 +22,256 @@ type Phase = "intro" | "quiz" | "results";
 type ServerResult = { score: number; passed: boolean; passMark: number };
 type CertificateState = "idle" | "pending" | "ready" | "incomplete" | "error";
 
+const RETRY_COST_VOWR = 50;
+
+// ── Shuffle helper — stable per question via useMemo, not re-rolled on every render ──
+function shuffled<T>(items: T[]): T[] {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+// ── Per-type scoring ──────────────────────────────────────────────────────────
+function isAnswerCorrect(question: AssessmentQuestion, rawAnswer: string | undefined): boolean {
+  if (!rawAnswer) return false;
+  switch (question.type) {
+    case "true-false":
+      return rawAnswer === question.answer;
+    case "fill-blank": {
+      const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, " ");
+      const accepted = [question.answer, ...(question.acceptableAnswers ?? [])].map(normalize);
+      return accepted.includes(normalize(rawAnswer));
+    }
+    case "matching": {
+      try {
+        const picked = JSON.parse(rawAnswer) as Record<string, string>;
+        return question.pairs.every((pair, i) => picked[String(i)] === pair.right);
+      } catch {
+        return false;
+      }
+    }
+    case "ordering": {
+      try {
+        const order = JSON.parse(rawAnswer) as string[];
+        return order.length === question.items.length && order.every((v, i) => v === question.items[i]);
+      } catch {
+        return false;
+      }
+    }
+    case "scenario":
+      return rawAnswer === question.answer;
+    case "multiple-choice":
+    default:
+      return "answer" in question && rawAnswer === question.answer;
+  }
+}
+
+function questionExplanation(question: AssessmentQuestion): string {
+  return question.explanation ?? "You've got this — that's the correct answer for this topic.";
+}
+function questionClue(question: AssessmentQuestion): string {
+  return question.clue ?? "Re-read this module's lessons on this topic, then give it another go.";
+}
+function questionCorrectSummary(question: AssessmentQuestion): string {
+  switch (question.type) {
+    case "matching":
+      return question.pairs.map((p) => `${p.left} → ${p.right}`).join("; ");
+    case "ordering":
+      return question.items.map((item, i) => `${i + 1}. ${item}`).join("  ");
+    case "true-false":
+      return question.answer;
+    case "fill-blank":
+      return question.answer;
+    case "scenario":
+    case "multiple-choice":
+    default:
+      return "answer" in question ? question.answer : "";
+  }
+}
+
+// ── Interactive inputs per question type ────────────────────────────────────
+
+function OptionList({ options, value, onChange, name }: { options: string[]; value: string | undefined; onChange: (v: string) => void; name: string }) {
+  return (
+    <div className="mt-6 grid gap-3">
+      {options.map((option) => {
+        const selected = value === option;
+        return (
+          <label
+            key={option}
+            className={`flex cursor-pointer items-center gap-4 rounded-xl border-2 p-4 transition ${selected ? "border-[#1166c8] bg-[#1166c8]/8" : "border-slate-200 bg-white hover:border-[#1166c8]/40 hover:bg-slate-50"}`}
+          >
+            <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition ${selected ? "border-[#1166c8] bg-[#1166c8]" : "border-slate-300"}`}>
+              {selected && <div className="h-2 w-2 rounded-full bg-white" />}
+            </div>
+            <input type="radio" name={name} value={option} checked={selected} onChange={() => onChange(option)} className="sr-only" />
+            <span className="text-sm font-medium text-ink">{option}</span>
+          </label>
+        );
+      })}
+    </div>
+  );
+}
+
+function TrueFalseInput({ value, onChange }: { value: string | undefined; onChange: (v: string) => void }) {
+  return (
+    <div className="mt-6 grid grid-cols-2 gap-4">
+      {(["True", "False"] as const).map((option) => {
+        const selected = value === option;
+        return (
+          <button
+            key={option}
+            type="button"
+            onClick={() => onChange(option)}
+            className={`rounded-xl border-2 py-8 text-lg font-bold transition ${selected ? (option === "True" ? "border-emerald-500 bg-emerald-50 text-emerald-700" : "border-red-400 bg-red-50 text-red-700") : "border-slate-200 bg-white text-ink hover:border-slate-300 hover:bg-slate-50"}`}
+          >
+            {option}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function FillBlankInput({ prompt, value, onChange }: { prompt: string; value: string | undefined; onChange: (v: string) => void }) {
+  const parts = prompt.split("_____");
+  return (
+    <div className="mt-6">
+      <p className="text-base leading-8 text-ink">
+        {parts[0]}
+        <input
+          type="text"
+          value={value ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="Type your answer"
+          autoComplete="off"
+          className="mx-1 inline-block w-48 rounded-md border-2 border-[#1166c8]/40 bg-[#1166c8]/5 px-3 py-1 text-center text-sm font-semibold text-ink outline-none focus:border-[#1166c8]"
+        />
+        {parts[1] ?? ""}
+      </p>
+    </div>
+  );
+}
+
+function MatchingInput({ question, value, onChange }: { question: Extract<AssessmentQuestion, { type: "matching" }>; value: string | undefined; onChange: (v: string) => void }) {
+  // Shuffled once per question, not re-rolled on every keystroke — question.pairs is
+  // static authored data for a given question.id, so that's the only real dependency.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const rightOptions = useMemo(() => shuffled(question.pairs.map((p) => p.right)), [question.id]);
+  const picked: Record<string, string> = useMemo(() => {
+    try {
+      return value ? (JSON.parse(value) as Record<string, string>) : {};
+    } catch {
+      return {};
+    }
+  }, [value]);
+
+  function selectFor(leftIndex: number, right: string) {
+    onChange(JSON.stringify({ ...picked, [String(leftIndex)]: right }));
+  }
+
+  return (
+    <div className="mt-6 grid gap-3">
+      {question.pairs.map((pair, i) => (
+        <div key={pair.left} className="flex flex-col gap-2 rounded-xl border-2 border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between">
+          <span className="text-sm font-semibold text-ink">{pair.left}</span>
+          <select
+            value={picked[String(i)] ?? ""}
+            onChange={(e) => selectFor(i, e.target.value)}
+            className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-ink outline-none focus:border-[#1166c8] sm:w-64"
+          >
+            <option value="" disabled>Match to…</option>
+            {rightOptions.map((r) => (
+              <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function OrderingInput({ question, value, onChange }: { question: Extract<AssessmentQuestion, { type: "ordering" }>; value: string | undefined; onChange: (v: string) => void }) {
+  // Same rationale as MatchingInput above — shuffled once per question.id, not on every render.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initial = useMemo(() => shuffled(question.items), [question.id]);
+  const order: string[] = useMemo(() => {
+    try {
+      return value ? (JSON.parse(value) as string[]) : initial;
+    } catch {
+      return initial;
+    }
+  }, [value, initial]);
+
+  useEffect(() => {
+    if (!value) onChange(JSON.stringify(initial));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function move(index: number, direction: -1 | 1) {
+    const next = [...order];
+    const target = index + direction;
+    if (target < 0 || target >= next.length) return;
+    [next[index], next[target]] = [next[target], next[index]];
+    onChange(JSON.stringify(next));
+  }
+
+  return (
+    <div className="mt-6 grid gap-2">
+      {order.map((item, i) => (
+        <div key={item} className="flex items-center gap-3 rounded-xl border-2 border-slate-200 bg-white p-3.5">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#1166c8]/10 text-xs font-bold text-[#1166c8]">{i + 1}</span>
+          <span className="flex-1 text-sm font-medium text-ink">{item}</span>
+          <div className="flex shrink-0 gap-1">
+            <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="rounded-md border border-slate-200 px-2 py-1 text-xs font-bold text-muted transition hover:bg-slate-50 disabled:opacity-30">↑</button>
+            <button type="button" onClick={() => move(i, 1)} disabled={i === order.length - 1} className="rounded-md border border-slate-200 px-2 py-1 text-xs font-bold text-muted transition hover:bg-slate-50 disabled:opacity-30">↓</button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function QuestionCard({ question, value, onChange }: { question: AssessmentQuestion; value: string | undefined; onChange: (v: string) => void }) {
+  const typeBadge: Record<string, string> = {
+    "multiple-choice": "Multiple choice",
+    "true-false": "True or False",
+    "fill-blank": "Fill in the blank",
+    matching: "Match the pairs",
+    scenario: "Workplace scenario",
+    ordering: "Put in order",
+  };
+  const badgeLabel = question.type ? typeBadge[question.type] : "Multiple choice";
+
+  return (
+    <fieldset>
+      {badgeLabel ? (
+        <span className="mb-3 inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-muted">
+          {badgeLabel}
+        </span>
+      ) : null}
+      {question.type === "scenario" ? (
+        <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
+          <p className="mb-1 text-xs font-bold uppercase tracking-wide text-amber-700">Scenario</p>
+          {question.scenario}
+        </div>
+      ) : null}
+      <legend className="text-xl font-semibold text-ink leading-8">{question.type === "fill-blank" ? question.prompt.split("_____")[0] + "…" : question.prompt}</legend>
+
+      {question.type === "true-false" && <TrueFalseInput value={value} onChange={onChange} />}
+      {question.type === "fill-blank" && <FillBlankInput prompt={question.prompt} value={value} onChange={onChange} />}
+      {question.type === "matching" && <MatchingInput question={question} value={value} onChange={onChange} />}
+      {question.type === "ordering" && <OrderingInput question={question} value={value} onChange={onChange} />}
+      {(question.type === "scenario" || question.type === "multiple-choice" || !question.type) && "options" in question && (
+        <OptionList options={question.options} value={value} onChange={onChange} name={question.id} />
+      )}
+    </fieldset>
+  );
+}
+
 export function AssessmentPlayer({ assessment, course, academyName, academyHref }: Props) {
   const [phase, setPhase] = useState<Phase>("intro");
   const [current, setCurrent] = useState(0);
@@ -27,18 +280,20 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
   const [serverResult, setServerResult] = useState<ServerResult | null>(null);
   const [certificateState, setCertificateState] = useState<CertificateState>("idle");
   const [showCelebration, setShowCelebration] = useState(false);
+  const [unlockingRetry, setUnlockingRetry] = useState(false);
 
+  const wallet = useWalletBalance();
   const questions = assessment.questions;
   const total = questions.length;
 
-  function selectAnswer(questionId: string, option: string) {
-    setAnswers((a) => ({ ...a, [questionId]: option }));
+  function selectAnswer(questionId: string, value: string) {
+    setAnswers((a) => ({ ...a, [questionId]: value }));
   }
 
   const calculateScore = useCallback(() => {
     let correct = 0;
     for (const q of questions) {
-      if (answers[q.id] === q.answer) correct++;
+      if (isAnswerCorrect(q, answers[q.id])) correct++;
     }
     return Math.round((correct / total) * 100);
   }, [answers, questions, total]);
@@ -52,7 +307,6 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
     const clientScore = calculateScore();
     const clientPassed = clientScore >= assessment.passMark;
 
-    // Persist attempt to localStorage — instant, offline-safe local record.
     const attempts = JSON.parse(localStorage.getItem("vowlms_assessments") ?? "{}");
     attempts[assessment.slug] = {
       slug: assessment.slug,
@@ -68,8 +322,6 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
     if (clientPassed) progress[course.slug].assessmentPassed = true;
     localStorage.setItem("vowlms_progress", JSON.stringify(progress));
 
-    // Sync the real attempt to the server — the score above is the instant local echo;
-    // this is the authoritative, storable record (assessment_attempts).
     let effectivePassed = clientPassed;
     try {
       const res = await fetch("/api/assessments/submit", {
@@ -89,10 +341,6 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
 
     if (!effectivePassed) return;
 
-    // Passing the assessment is what completes the course: mark its lesson done (advances
-    // enrolment progress toward 100%), then attempt certificate issuance. The backend re-checks
-    // eligibility itself (enrollments.progress >= 100) — a 400 here just means other lessons in
-    // the course are still incomplete, which is an expected, non-error state.
     setCertificateState("pending");
     try {
       await fetch("/api/progress", {
@@ -122,6 +370,44 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
     }
   }
 
+  function beginRetry() {
+    setPhase("intro");
+    setAnswers({});
+    setSubmitted(false);
+    setCurrent(0);
+    setServerResult(null);
+  }
+
+  // Retrying after a fail costs VOWR — a real, instant spend (not a pending
+  // admin-reviewed request), same catalogue item shown on /rewards
+  // ("Assessment retake waiver", 50 VOWR), just triggered from here too.
+  async function unlockRetry() {
+    if (wallet.status !== "ready" || wallet.balance < RETRY_COST_VOWR) {
+      toast(`You need ${RETRY_COST_VOWR} VOWR to unlock another attempt.`);
+      return;
+    }
+    setUnlockingRetry(true);
+    try {
+      const res = await fetch("/api/rewards/redeem", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ redemptionType: "assessment_retake_waiver", metadata: { assessmentSlug: assessment.slug } }),
+      });
+      const json = await res.json();
+      if (!json.ok) {
+        toast(json.error ?? "Could not unlock a retry right now.");
+        return;
+      }
+      toast(`🔓 Retry unlocked — ${RETRY_COST_VOWR} VOWR spent. Give it another go!`);
+      wallet.refresh();
+      beginRetry();
+    } catch {
+      toast("Could not unlock a retry right now.");
+    } finally {
+      setUnlockingRetry(false);
+    }
+  }
+
   const score = serverResult?.score ?? (submitted ? calculateScore() : 0);
   const passed = serverResult?.passed ?? score >= assessment.passMark;
   const answeredCount = Object.keys(answers).length;
@@ -136,9 +422,6 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
   useEffect(() => {
     if (certificateState !== "ready") return;
     toast.success("🎓 Certificate ready! Find it on your results page.");
-    // Passing this assessment was what completed the course (enrollments.progress hit 100%
-    // for the certificate to issue) — the same big moment as finishing a course's last plain
-    // lesson in LessonPlayer.tsx, just reached via the assessment gate instead.
     let cancelled = false;
     Promise.resolve().then(() => {
       if (!cancelled) setShowCelebration(true);
@@ -169,12 +452,14 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
                 <p className="mt-1 text-xs text-muted">Pass mark</p>
               </div>
               <div className="premium-card-soft rounded-xl p-4">
-                <p className="text-2xl font-semibold text-ink">20</p>
+                <p className="text-2xl font-semibold text-ink">~{Math.max(10, total * 2)}</p>
                 <p className="mt-1 text-xs text-muted">Minutes</p>
               </div>
             </div>
             <p className="mt-6 text-sm leading-6 text-muted">
-              Answer all questions, then submit to see your score. You can retake this assessment if you don&apos;t pass first time.
+              A mix of true/false, fill-in-the-blank, matching, and scenario questions. Score below{" "}
+              {assessment.passMark}% and a retry costs {RETRY_COST_VOWR} VOWR — so give it your best first shot.
+              Stuck? Thandi can give you a clue (never the answer).
             </p>
             <button
               onClick={() => setPhase("quiz")}
@@ -205,7 +490,7 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">{assessment.title}</p>
             <h2 className="mt-3 text-4xl font-bold text-ink">{score}%</h2>
             <p className={`mt-2 text-lg font-semibold ${passed ? "text-emerald-700" : "text-red-700"}`}>
-              {passed ? "Congratulations — you passed!" : "Not quite — try again"}
+              {passed ? "Congratulations — you passed!" : "Not quite — take a closer look below, then retry"}
             </p>
             <p className="mt-2 text-sm text-slate-600">Pass mark: {assessment.passMark}% · Your score: {score}%</p>
 
@@ -224,16 +509,33 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
                   ) : null}
                 </>
               ) : (
-                <>
-                  <button onClick={() => { setPhase("intro"); setAnswers({}); setSubmitted(false); setCurrent(0); }}
-                    className="rounded-lg bg-gold px-6 py-3 text-sm font-semibold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.25)] transition hover:bg-[#e8b830]">
-                    Retry assessment
-                  </button>
-                  <Link href={`/courses/${course.slug}`}
-                    className="rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:bg-slate-50">
-                    Review course
+                <div className="w-full rounded-xl border-2 border-dashed border-red-200 bg-white/60 p-5">
+                  <p className="text-sm font-semibold text-ink">Unlock another attempt</p>
+                  <p className="mt-1 text-xs leading-5 text-muted">
+                    Scoring below {assessment.passMark}% means a retry costs real VOWR — {RETRY_COST_VOWR} VOWR, spent instantly.
+                    {wallet.status === "ready" ? ` Your balance: ${wallet.balance} VOWR.` : ""}
+                  </p>
+                  <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:justify-center">
+                    <button
+                      onClick={unlockRetry}
+                      disabled={unlockingRetry || (wallet.status === "ready" && wallet.balance < RETRY_COST_VOWR)}
+                      className="rounded-lg bg-gold px-6 py-3 text-sm font-semibold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.25)] transition hover:bg-[#e8b830] disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {unlockingRetry ? "Unlocking…" : `🔓 Unlock retry — ${RETRY_COST_VOWR} VOWR`}
+                    </button>
+                    <Link href="/rewards" className="rounded-lg border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-ink transition hover:bg-slate-50">
+                      Earn more VOWR
+                    </Link>
+                  </div>
+                  {wallet.status === "ready" && wallet.balance < RETRY_COST_VOWR ? (
+                    <p className="mt-3 text-xs font-medium text-red-600">
+                      You need {RETRY_COST_VOWR - wallet.balance} more VOWR — complete a lesson or another course milestone to top up.
+                    </p>
+                  ) : null}
+                  <Link href={`/courses/${course.slug}`} className="mt-4 block text-xs font-semibold text-muted hover:text-ink transition">
+                    ← Review the course content first
                   </Link>
-                </>
+                </div>
               )}
             </div>
 
@@ -247,27 +549,28 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
             ) : null}
           </div>
 
-          {/* Answer review */}
+          {/* Answer review — every question, correct answers explained, wrong ones get a clue */}
           <div className="premium-card rounded-2xl p-6">
-            <h3 className="text-lg font-semibold text-ink mb-4">Answer review</h3>
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h3 className="text-lg font-semibold text-ink">Answer review</h3>
+              <span className="text-xs font-medium text-muted">Correct answers explained · clues for the rest</span>
+            </div>
             <div className="space-y-4">
               {questions.map((q, i) => {
-                const selected = answers[q.id];
-                const correct = selected === q.answer;
+                const correct = isAnswerCorrect(q, answers[q.id]);
                 return (
                   <div key={q.id} className={`rounded-xl border p-4 ${correct ? "border-emerald-200 bg-emerald-50" : "border-red-200 bg-red-50"}`}>
-                    <p className="text-sm font-semibold text-ink">{i + 1}. {q.prompt}</p>
-                    <div className="mt-3 grid gap-2">
-                      {q.options.map((opt) => {
-                        const isCorrect = opt === q.answer;
-                        const isSelected = opt === selected;
-                        return (
-                          <div key={opt} className={`rounded-lg px-3 py-2 text-sm font-medium ${isCorrect ? "bg-emerald-500 text-white" : isSelected && !isCorrect ? "bg-red-500 text-white" : "bg-white/60 text-slate-600"}`}>
-                            {isCorrect ? "✓ " : isSelected && !isCorrect ? "✗ " : ""}{opt}
-                          </div>
-                        );
-                      })}
-                    </div>
+                    <p className="text-sm font-semibold text-ink">{i + 1}. {q.type === "fill-blank" ? q.prompt.replace("_____", "▁▁▁▁▁") : q.prompt}</p>
+                    {correct ? (
+                      <p className="mt-2 text-sm leading-6 text-emerald-800">
+                        <span className="font-semibold">✓ Correct — {questionCorrectSummary(q)}.</span>{" "}
+                        {questionExplanation(q)}
+                      </p>
+                    ) : (
+                      <p className="mt-2 text-sm leading-6 text-red-800">
+                        <span className="font-semibold">✗ Not quite.</span> Clue: {questionClue(q)}
+                      </p>
+                    )}
                   </div>
                 );
               })}
@@ -307,40 +610,23 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
       <section className="mx-auto w-full max-w-3xl px-5 py-8 sm:px-6 lg:px-8">
         <Breadcrumb items={breadcrumbItems} />
 
-        {/* Progress header */}
         <div className="mt-6 mb-6">
           <ProgressBar value={progress} label={`Question ${current + 1} of ${total}`} />
           <p className="mt-2 text-right text-xs text-muted">{answeredCount}/{total} answered</p>
         </div>
 
         <div className="premium-card rounded-2xl p-8">
-          <fieldset>
-            <legend className="text-xl font-semibold text-ink leading-8">{question.prompt}</legend>
-            <div className="mt-6 grid gap-3">
-              {question.options.map((option) => {
-                const selected = answers[question.id] === option;
-                return (
-                  <label
-                    key={option}
-                    className={`flex cursor-pointer items-center gap-4 rounded-xl border-2 p-4 transition ${selected ? "border-[#1166c8] bg-[#1166c8]/8" : "border-slate-200 bg-white hover:border-[#1166c8]/40 hover:bg-slate-50"}`}
-                  >
-                    <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition ${selected ? "border-[#1166c8] bg-[#1166c8]" : "border-slate-300"}`}>
-                      {selected && <div className="h-2 w-2 rounded-full bg-white" />}
-                    </div>
-                    <input
-                      type="radio"
-                      name={question.id}
-                      value={option}
-                      checked={selected}
-                      onChange={() => selectAnswer(question.id, option)}
-                      className="sr-only"
-                    />
-                    <span className="text-sm font-medium text-ink">{option}</span>
-                  </label>
-                );
-              })}
-            </div>
-          </fieldset>
+          <QuestionCard question={question} value={answers[question.id]} onChange={(v) => selectAnswer(question.id, v)} />
+
+          <button
+            type="button"
+            onClick={openThandiPanel}
+            className="mt-6 inline-flex items-center gap-2 rounded-lg border border-[#4aa3ff]/30 bg-[#4aa3ff]/5 px-4 py-2.5 text-xs font-semibold text-[#1166c8] transition hover:bg-[#4aa3ff]/10"
+          >
+            <Lightbulb aria-hidden="true" className="h-4 w-4" />
+            Stuck? Ask Thandi for a clue
+            <Sparkles aria-hidden="true" className="h-3 w-3 text-[#7c6bf5]" />
+          </button>
 
           <div className="mt-8 flex items-center justify-between gap-4">
             <button
@@ -376,7 +662,6 @@ export function AssessmentPlayer({ assessment, course, academyName, academyHref 
           )}
         </div>
 
-        {/* Question navigator */}
         <div className="mt-4 flex flex-wrap gap-2">
           {questions.map((q, i) => {
             const answered = Boolean(answers[q.id]);

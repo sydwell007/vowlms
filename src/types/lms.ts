@@ -66,12 +66,91 @@ export type CourseModule = {
   outcome?: string;
 };
 
-export type AssessmentQuestion = {
+/**
+ * Question type union. `type` is OPTIONAL on the multiple-choice variant
+ * specifically so every pre-existing question object across every
+ * not-yet-updated course (auto-generated from the Moodle migration, no
+ * `type` field ever written) keeps type-checking and rendering exactly as
+ * before — an absent `type` always means multiple-choice. Every other
+ * variant requires its own `type` as the real discriminant.
+ *
+ * `explanation` (shown on a correct answer) and `clue` (shown on a wrong
+ * one, and fed to Thandi as the only hint she's allowed to give — see
+ * `src/lib/thandi/knowledge.ts`) are optional for the same backward-compat
+ * reason; the review UI falls back to generic copy when either is absent.
+ */
+export type MultipleChoiceQuestion = {
   id: string;
+  type?: "multiple-choice";
   prompt: string;
   options: string[];
   answer: string;
+  explanation?: string;
+  clue?: string;
 };
+
+export type TrueFalseQuestion = {
+  id: string;
+  type: "true-false";
+  prompt: string;
+  answer: "True" | "False";
+  explanation?: string;
+  clue?: string;
+};
+
+export type FillBlankQuestion = {
+  id: string;
+  type: "fill-blank";
+  /** Contains a literal "_____" marking the blank. */
+  prompt: string;
+  answer: string;
+  /** Case-insensitive alternate spellings/synonyms also accepted as correct. */
+  acceptableAnswers?: string[];
+  explanation?: string;
+  clue?: string;
+};
+
+export type MatchingPair = { left: string; right: string };
+
+export type MatchingQuestion = {
+  id: string;
+  type: "matching";
+  prompt: string;
+  /** `right` values are shuffled for display; `left` order is the display order. */
+  pairs: MatchingPair[];
+  explanation?: string;
+  clue?: string;
+};
+
+/** A short real-workplace scenario followed by a "what should you do" multiple choice. */
+export type ScenarioQuestion = {
+  id: string;
+  type: "scenario";
+  scenario: string;
+  prompt: string;
+  options: string[];
+  answer: string;
+  explanation?: string;
+  clue?: string;
+};
+
+/** Arrange steps/items into the one correct order. `items` is authored in the correct order. */
+export type OrderingQuestion = {
+  id: string;
+  type: "ordering";
+  prompt: string;
+  items: string[];
+  explanation?: string;
+  clue?: string;
+};
+
+export type AssessmentQuestion =
+  | MultipleChoiceQuestion
+  | TrueFalseQuestion
+  | FillBlankQuestion
+  | MatchingQuestion
+  | ScenarioQuestion
+  | OrderingQuestion;
 
 export type Assessment = {
   slug: string;

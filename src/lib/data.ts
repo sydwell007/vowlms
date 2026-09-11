@@ -11,6 +11,7 @@ import { skillPathways } from "@/data/skill-pathways";
 import { getOpportunityPathways } from "@/data/opportunity-pathways";
 import { getCoursePreviewContent } from "@/data/course-preview-content";
 import { buildModuleZero } from "@/data/course-module-zero";
+import { MODULE_ASSESSMENTS } from "@/data/module-assessments";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { isLearnerVisibleUpskillingCourse } from "@/lib/upskilling-visibility";
 import { getCourseStats } from "@/lib/course-content";
@@ -90,11 +91,27 @@ function buildParentCourse(grouping: typeof allGroupings[number]): Course {
     totalRewards += child.rewards ?? 0;
   });
 
-  // Collect assessments and VR practices from all child courses
-  const assessments = grouping.moduleSlugOrder
-    .map((s) => rawCourseMap.get(s))
-    .filter(Boolean)
-    .flatMap((c) => c!.assessments);
+  // Real "Test Your Knowledge" assessments (src/data/module-assessments/),
+  // looked up by each module's real assessment-lesson slug — replaces the
+  // Moodle migration's auto-generated placeholder assessments, which are
+  // generic filler wired to a lesson slug that doesn't exist in any of
+  // these modules (see module-assessments/index.ts for the full story).
+  // Falls back to the raw placeholder only for a module not yet authored,
+  // so nothing silently disappears while content is still being filled in.
+  const assessments = modules.flatMap((m) =>
+    m.lessons
+      .filter((l) => l.type === "assessment")
+      .map((l) => MODULE_ASSESSMENTS[l.slug])
+      .filter((a): a is NonNullable<typeof a> => Boolean(a)),
+  );
+  if (assessments.length === 0) {
+    assessments.push(
+      ...grouping.moduleSlugOrder
+        .map((s) => rawCourseMap.get(s))
+        .filter(Boolean)
+        .flatMap((c) => c!.assessments),
+    );
+  }
 
   const vrPractices = grouping.moduleSlugOrder
     .map((s) => rawCourseMap.get(s))
