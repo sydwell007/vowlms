@@ -24,14 +24,18 @@ const CLIP_CAP_MS = 5500;
  * Cinematic, auto-playing "course trailer" with three tiers, best-available first:
  *
  * 1. A pre-rendered `/videos/course-trailers/{slug}.mp4` — real lesson footage
- *    for this course, cross-faded together by `scripts/generate-course-trailers.mjs`
- *    from the actual GoalVow lesson MP4s. Silent by design (crossfading unrelated
- *    lesson voiceovers reads as noise, not narration) — the mute button instead
- *    controls an optional background theme track layered underneath.
+ *    for this course, stitched together by `scripts/generate-course-trailers.mjs`
+ *    from the actual GoalVow lesson MP4s, each clip carrying its own real
+ *    presenter audio (crossfaded between clips along with the video). Always
+ *    starts muted — autoplay-with-sound is blocked by browsers anyway, and a
+ *    learner opts in to hear the real voice rather than it playing unprompted.
  * 2. If that file doesn't exist for a course, live per-lesson video fetched from
- *    the bridge (`/api/courses/{slug}/trailer-clips`) — real footage, real audio.
+ *    the bridge (`/api/courses/{slug}/trailer-clips`) — real footage, real audio,
+ *    same mute/unmute behaviour.
  * 3. If neither is available, a Ken-Burns slideshow of the course's real module
- *    images — always available, since every course has module artwork.
+ *    images — always available, since every course has module artwork. This is
+ *    the only tier with no voice of its own, so it's the only one where the
+ *    mute button controls an optional background theme track instead.
  *
  * The optional background track fails silently if no file has been dropped at
  * that path yet, so the trailer never claims a soundtrack it doesn't have.
@@ -107,10 +111,12 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
     });
   }, [activeIndex, hasRealClips]);
 
-  // The pre-rendered trailer and the image slideshow both ship with no
-  // narration of their own, so both use the same optional background track;
-  // only the live-bridge tier has its own real speech to toggle instead.
-  const usesBackgroundMusic = !hasRealClips;
+  // The pre-rendered trailer now carries each clip's real presenter audio
+  // (see generate-course-trailers.mjs) and the live-bridge tier always has
+  // its own real speech — both just toggle their own <video>'s `muted`
+  // state directly. Only the final fallback tier (a silent image slideshow)
+  // has no voice of its own, so only it uses the optional background track.
+  const usesBackgroundMusic = showSlideshow;
 
   function toggleSound() {
     if (!usesBackgroundMusic) {
@@ -130,7 +136,11 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
   }
 
   const soundControlAvailable = !usesBackgroundMusic || musicAvailable;
-  const soundControlReady = usesBackgroundMusic ? true : clipsChecked;
+  // The pre-rendered trailer (real audio) and the live-clip tier are both
+  // ready to offer sound immediately/once loaded; only the slideshow tier
+  // needs to wait until we've confirmed there's no live-clip audio either,
+  // so the control doesn't flash before that's settled.
+  const soundControlReady = !staticTrailerFailed || hasRealClips || clipsChecked;
 
   return (
     <section className="relative isolate overflow-hidden rounded-2xl text-white shadow-[0_28px_64px_rgba(6,17,31,0.32)]">
@@ -151,7 +161,10 @@ export function CourseTrailer({ course, academyCategory, academyName }: Props) {
             src={`/videos/course-trailers/${course.slug}.mp4`}
             autoPlay
             loop
-            muted
+            // Starts muted — autoplay-with-sound is blocked by browsers
+            // anyway, and a learner should choose to hear the real presenter
+            // voice baked into this file, not have it play unexpectedly.
+            muted={muted}
             playsInline
             onError={() => setStaticTrailerFailed(true)}
             className="absolute inset-0 h-full w-full object-cover"

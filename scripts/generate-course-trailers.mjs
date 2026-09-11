@@ -11,10 +11,11 @@
  * For each of the 20 Upskilling courses this picks up to MAX_CLIPS real
  * lesson clips (one per module, evenly sampled across the course's real
  * module order if there are more modules than MAX_CLIPS), trims a short,
- * consistent moment from each, and cross-fades them together into one
- * silent MP4 (crossfading unrelated lesson voiceovers would just sound like
- * noise, so this intentionally ships without audio — see CourseTrailer.tsx's
- * existing optional background-music hook for sound).
+ * consistent moment from each, and stitches them together into one MP4 —
+ * now WITH each clip's real presenter audio, crossfaded (`acrossfade`)
+ * between clips in step with the video's own fade-to-black transitions.
+ * CourseTrailer.tsx always starts this muted (a learner opts in to hear it),
+ * so the real voices never play without the learner explicitly choosing to.
  *
  * Within each module, the specific lesson clip is chosen RANDOMLY from every
  * real lesson in that module (not always "Lesson 1") — re-running this
@@ -293,6 +294,36 @@ function buildFilterGraph(clipCount) {
   return { filter: [...perClipFilters, ...xfadeParts].join(";"), outLabel: prevLabel };
 }
 
+/**
+ * The real presenter's voice, mirroring the video graph above one-for-one —
+ * same per-clip trim window (including the first-clip exception), same
+ * clip-to-clip crossfade duration, just `acrossfade` instead of `xfade`
+ * since these are unrelated voices from different lessons cutting between
+ * each other, not one continuous take. Ships muted by default in
+ * CourseTrailer.tsx — this only ever plays if a learner chooses to unmute.
+ */
+function buildAudioFilterGraph(clipCount) {
+  const perClipFilters = [];
+  for (let i = 0; i < clipCount; i++) {
+    const start = i === 0 ? FIRST_CLIP_START_S : CLIP_START_S;
+    perClipFilters.push(`[${i}:a]atrim=start=${start}:duration=${CLIP_DURATION_S},asetpts=PTS-STARTPTS[a${i}]`);
+  }
+
+  if (clipCount === 1) {
+    return { filter: perClipFilters.join(";"), outLabel: "a0" };
+  }
+
+  let prevLabel = "a0";
+  const acrossfadeParts = [];
+  for (let i = 1; i < clipCount; i++) {
+    const outLabel = i === clipCount - 1 ? "aout" : `ax${i}`;
+    acrossfadeParts.push(`[${prevLabel}][a${i}]acrossfade=d=${XFADE_DURATION_S}:c1=tri:c2=tri[${outLabel}]`);
+    prevLabel = outLabel;
+  }
+
+  return { filter: [...perClipFilters, ...acrossfadeParts].join(";"), outLabel: prevLabel };
+}
+
 function generateTrailer(slug, clips) {
   if (clips.length === 0) {
     console.warn(`[${slug}] no clips resolved — skipping`);
@@ -300,23 +331,29 @@ function generateTrailer(slug, clips) {
   }
 
   const sampled = sample(clips, MAX_CLIPS);
-  const { filter, outLabel } = buildFilterGraph(sampled.length);
+  const { filter: videoFilter, outLabel: videoOutLabel } = buildFilterGraph(sampled.length);
+  const { filter: audioFilter, outLabel: audioOutLabel } = buildAudioFilterGraph(sampled.length);
   const outputPath = path.join(OUTPUT_DIR, `${slug}.mp4`);
 
   const cmdArgs = [
     "-y",
     ...sampled.flatMap((c) => ["-i", c.mp4]),
     "-filter_complex",
-    filter,
+    `${videoFilter};${audioFilter}`,
     "-map",
-    `[${outLabel}]`,
-    "-an",
+    `[${videoOutLabel}]`,
+    "-map",
+    `[${audioOutLabel}]`,
     "-c:v",
     "libx264",
     "-crf",
     "26",
     "-preset",
     "medium",
+    "-c:a",
+    "aac",
+    "-b:a",
+    "128k",
     "-movflags",
     "+faststart",
     outputPath,
