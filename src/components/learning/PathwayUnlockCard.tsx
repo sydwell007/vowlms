@@ -142,15 +142,15 @@ export function PathwayUnlockCard({ pathwayTitle, courses, accentColor = ACCENT 
   const founding = pricing?.items.some((i) => i.foundingActive) ?? false;
 
   return (
-    <div className="premium-card overflow-hidden rounded-xl" style={{ borderColor: `${accentColor}33` }}>
-      <div className="p-6" style={{ backgroundColor: `${accentColor}0d` }}>
-        <div className="flex items-center gap-2">
-          <Layers aria-hidden="true" className="h-4 w-4" style={{ color: accentColor }} />
-          <p className="text-xs font-semibold uppercase tracking-[0.12em]" style={{ color: accentColor }}>
-            Buy this Career Path — {paidSlugs.length} courses bundled
-          </p>
-        </div>
-        <p className="mt-1.5 max-w-xl text-sm leading-6 text-muted">
+    <div className="overflow-hidden rounded-xl border-2 bg-white shadow-[0_18px_40px_rgba(6,17,31,0.14)]" style={{ borderColor: accentColor }}>
+      <div className="flex items-center gap-2 px-6 py-3" style={{ backgroundColor: accentColor }}>
+        <Layers aria-hidden="true" className="h-4 w-4 text-white" />
+        <p className="text-xs font-bold uppercase tracking-[0.12em] text-white">
+          Buy this Career Path — {paidSlugs.length} courses bundled
+        </p>
+      </div>
+      <div className="p-6">
+        <p className="max-w-xl text-sm font-medium leading-6 text-ink">
           Unlock every module in all {paidSlugs.length} courses in the {pathwayTitle} pathway at once, with an extra bundle
           discount on top of each course&apos;s own price.
         </p>

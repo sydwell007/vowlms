@@ -15,6 +15,7 @@ import {
   Glasses,
   GraduationCap,
   Home,
+  Lock,
   MessageSquare,
   Play,
   type LucideIcon,
@@ -22,8 +23,10 @@ import {
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import type { AcademyCategory, Lesson, Course, CourseModule } from "@/types/lms";
 import { CelebrationOverlay } from "@/components/learning/CelebrationOverlay";
+import { LessonUnlockPanel } from "@/components/learning/LessonUnlockPanel";
 import { PdfReader } from "@/components/learning/PdfReader";
 import { VowHumanPresenter } from "@/components/learning/VowHumanPresenter";
+import { useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
 import type { VowHumanPlacement } from "@/types/lms";
 
 export type LessonResource = {
@@ -172,16 +175,21 @@ export function LessonPlayer({
   const [videoError, setVideoError] = useState(false);
   const [videoReloadKey, setVideoReloadKey] = useState(0);
   const [showCelebration, setShowCelebration] = useState(false);
-  const [expandedModules, setExpandedModules] = useState<Set<number>>(
-    () => new Set([module.order]),
-  );
+  const [expandedModule, setExpandedModule] = useState<number | null>(module.order);
   const activeLessonRef = useRef<HTMLAnchorElement | null>(null);
   const sidebarScrollRef = useRef<HTMLDivElement | null>(null);
   const sidebarHeaderRef = useRef<HTMLDivElement | null>(null);
+  const unlockPanelRef = useRef<HTMLDivElement | null>(null);
 
   const assessment = course.assessments.find((a) => a.lessonSlug === lesson.slug);
   const vrPractice = course.vrPractices.find((v) => v.lessonSlug === lesson.slug);
   const accentColor = getAcademyAccentColor(academyCategory);
+  const unlock = useCourseUnlockPurchase(courseSlugForNav, allModules);
+  const showLockedModules = unlock.isPaidCourse && unlock.state !== "unlocked" && unlock.state !== "loading";
+
+  function scrollToUnlockPanel() {
+    unlockPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 
   const totalLessonsInCourse = useMemo(
     () => allModules.reduce((sum, m) => sum + m.lessons.length, 0),
@@ -264,12 +272,7 @@ export function LessonPlayer({
   }, [currentLessonSlug]);
 
   function toggleModule(moduleOrder: number) {
-    setExpandedModules((current) => {
-      const next = new Set(current);
-      if (next.has(moduleOrder)) next.delete(moduleOrder);
-      else next.add(moduleOrder);
-      return next;
-    });
+    setExpandedModule((current) => (current === moduleOrder ? null : moduleOrder));
   }
 
   function presenterAt(placement: VowHumanPlacement) {
@@ -412,8 +415,9 @@ export function LessonPlayer({
             <nav className="flex-1 space-y-2 p-3" aria-label="Course curriculum">
               {allModules.map((m) => {
                 const doneInModule = m.lessons.filter((l) => completedSlugs.includes(l.slug)).length;
-                const isExpanded = expandedModules.has(m.order);
+                const isExpanded = expandedModule === m.order;
                 const isCurrentModule = m.order === module.order;
+                const isLocked = showLockedModules && m.isFree === false;
                 const moduleProgress = m.lessons.length > 0
                   ? Math.round((doneInModule / m.lessons.length) * 100)
                   : 0;
@@ -421,7 +425,13 @@ export function LessonPlayer({
                 return (
                 <div
                   key={`${m.order}-${m.title}`}
-                  className={`overflow-hidden rounded-lg border transition-colors ${isCurrentModule ? "border-[#1166c8]/25 bg-[#f7fbff]" : "border-transparent bg-white"}`}
+                  className={`overflow-hidden rounded-lg border transition-colors ${
+                    isLocked
+                      ? "border-amber-200 bg-amber-50/60"
+                      : isCurrentModule
+                        ? "border-[#1166c8]/25 bg-[#f7fbff]"
+                        : "border-transparent bg-white"
+                  }`}
                 >
                   <button
                     type="button"
@@ -436,7 +446,11 @@ export function LessonPlayer({
                           <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
                             {allModules.length > 1 ? `Module ${m.order}` : "Course lessons"}
                           </span>
-                          {isCurrentModule ? (
+                          {isLocked ? (
+                            <span className="flex items-center gap-1 rounded-full bg-amber-500 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-white">
+                              <Lock aria-hidden="true" className="h-2.5 w-2.5" /> Locked
+                            </span>
+                          ) : isCurrentModule ? (
                             <span className="rounded-full bg-[#1166c8]/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-[#1166c8]">
                               Current
                             </span>
@@ -447,20 +461,33 @@ export function LessonPlayer({
                         </span>
                       </span>
                       <span className="flex shrink-0 items-center gap-2 pt-0.5">
-                        <span className="text-[10px] font-semibold text-muted">{doneInModule}/{m.lessons.length}</span>
+                        {!isLocked ? (
+                          <span className="text-[10px] font-semibold text-muted">{doneInModule}/{m.lessons.length}</span>
+                        ) : null}
                         <ChevronDown
                           aria-hidden="true"
                           className={`h-4 w-4 text-muted transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
                         />
                       </span>
                     </span>
-                    <span className="mt-2 block h-1 overflow-hidden rounded-full bg-slate-100">
-                      <span
-                        className="block h-full rounded-full bg-emerald-500 transition-[width] duration-300"
-                        style={{ width: `${moduleProgress}%` }}
-                      />
-                    </span>
+                    {isLocked ? null : (
+                      <span className="mt-2 block h-1 overflow-hidden rounded-full bg-slate-100">
+                        <span
+                          className="block h-full rounded-full bg-emerald-500 transition-[width] duration-300"
+                          style={{ width: `${moduleProgress}%` }}
+                        />
+                      </span>
+                    )}
                   </button>
+                  {isLocked ? (
+                    <button
+                      type="button"
+                      onClick={scrollToUnlockPanel}
+                      className="-mt-1 flex w-full items-center gap-1 px-3 pb-2.5 text-[11px] font-bold text-amber-700 underline underline-offset-2 hover:text-amber-800"
+                    >
+                      Unlock to access →
+                    </button>
+                  ) : null}
                   <div
                     id={modulePanelId}
                     aria-hidden={!isExpanded}
@@ -472,6 +499,27 @@ export function LessonPlayer({
                     {m.lessons.map((l) => {
                       const isCurrent = l.slug === currentLessonSlug;
                       const isDone = completedSlugs.includes(l.slug);
+
+                      if (isLocked) {
+                        return (
+                          <button
+                            key={l.slug}
+                            type="button"
+                            onClick={() => {
+                              toast("Unlock the full course to access this lesson.");
+                              scrollToUnlockPanel();
+                            }}
+                            className="flex w-full items-center gap-3 rounded-md px-2.5 py-2.5 text-left text-sm text-muted/70 transition hover:bg-amber-100/50"
+                          >
+                            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                              <Lock aria-hidden="true" className="h-3 w-3" />
+                            </span>
+                            <span className="flex-1 truncate">{l.title}</span>
+                            <span className="shrink-0 text-[10px] text-muted/70">{l.durationMinutes}m</span>
+                          </button>
+                        );
+                      }
+
                       return (
                         <Link
                           key={l.slug}
@@ -503,6 +551,7 @@ export function LessonPlayer({
                 </div>
                 );
               })}
+              <LessonUnlockPanel ref={unlockPanelRef} unlock={unlock} accentColor={accentColor} />
             </nav>
           </div>
         </aside>
