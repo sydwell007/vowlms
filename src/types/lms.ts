@@ -64,6 +64,8 @@ export type CourseModule = {
   description?: string;
   /** Optional real copy from `modules.outcome` — falls back to an auto-generated "you'll be able to" line when absent. */
   outcome?: string;
+  /** Free-first-module pricing model: true for every module by default; false once a course has real unlock pricing configured for modules after the first. */
+  isFree?: boolean;
 };
 
 /**

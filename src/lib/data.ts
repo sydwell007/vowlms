@@ -12,6 +12,7 @@ import { getOpportunityPathways } from "@/data/opportunity-pathways";
 import { getCoursePreviewContent } from "@/data/course-preview-content";
 import { buildModuleZero } from "@/data/course-module-zero";
 import { MODULE_ASSESSMENTS } from "@/data/module-assessments";
+import { isPaidUpskillingCourse } from "@/data/priced-upskilling-courses";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { isLearnerVisibleUpskillingCourse } from "@/lib/upskilling-visibility";
 import { getCourseStats } from "@/lib/course-content";
@@ -75,6 +76,8 @@ function buildParentCourse(grouping: typeof allGroupings[number]): Course {
   });
   if (moduleZero) modules.push(moduleZero);
 
+  const isPaidCourse = isPaidUpskillingCourse(grouping.slug);
+
   grouping.moduleSlugOrder.forEach((childSlug, idx) => {
     const child = rawCourseMap.get(childSlug);
     if (!child) return;
@@ -86,6 +89,10 @@ function buildParentCourse(grouping: typeof allGroupings[number]): Course {
       title: cleanModuleTitle(child.title),
       order: idx + 1,
       lessons: allLessons,
+      // Free-first-module model: Module 1 (idx 0) is always free; every
+      // module after it is free too UNLESS this course has real unlock
+      // pricing configured (public/sql/021_course_unlock_pricing.sql).
+      isFree: idx === 0 || !isPaidCourse,
     });
 
     totalRewards += child.rewards ?? 0;
@@ -303,6 +310,25 @@ export function getAssessmentBySlug(slug: string) {
 export function getEnrollableCourseSlugs(courseSlug: string): string[] {
   const grouping = allGroupings.find((g) => g.slug === courseSlug);
   return grouping ? grouping.moduleSlugOrder : [courseSlug];
+}
+
+/**
+ * What a learner's *free* "Enrol" click actually grants: every real child
+ * slug for a fully-free course (today's behaviour, unchanged), but only the
+ * first (Module 1) for a course with real unlock pricing configured — the
+ * rest is granted separately, only after a real purchase (see
+ * `/api/courses/[slug]/unlock-price` and the two purchase routes).
+ */
+export function getFreeEnrollableCourseSlugs(courseSlug: string): string[] {
+  const all = getEnrollableCourseSlugs(courseSlug);
+  if (!isPaidUpskillingCourse(courseSlug)) return all;
+  return all.slice(0, 1);
+}
+
+/** Real child course slugs a paid unlock purchase grants — every module after the free first one. */
+export function getPaidUnlockCourseSlugs(courseSlug: string): string[] {
+  if (!isPaidUpskillingCourse(courseSlug)) return [];
+  return getEnrollableCourseSlugs(courseSlug).slice(1);
 }
 
 /** Reverse lookup: which grouped parent slug (if any) a real child course slug belongs to. */

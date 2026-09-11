@@ -13,6 +13,7 @@ import {
   GraduationCap,
   LayoutGrid,
   List,
+  Lock,
   Milestone,
   Play,
   type LucideIcon,
@@ -109,9 +110,11 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug 
           const panelId = `module-panel-${moduleItem.order}`;
           const moduleImageSrc = courseSlug ? getModuleImageSrc(courseSlug, moduleItem.order) : null;
 
+          const isLocked = moduleItem.isFree === false;
           const statChips = (
             <>
               {moduleItem.order === 0 ? <span className="flex items-center gap-1.5 font-semibold" style={{ color: accentColor }}><Compass aria-hidden="true" className="h-3.5 w-3.5" /> Start here</span> : null}
+              {isLocked ? <span className="flex items-center gap-1.5 font-semibold text-amber-700"><Lock aria-hidden="true" className="h-3.5 w-3.5" /> Unlock to access</span> : null}
               <span className="flex items-center gap-1.5"><BookOpen aria-hidden="true" className="h-3.5 w-3.5" /> {stats.lessonCount} lesson{stats.lessonCount === 1 ? "" : "s"}</span>
               <span className="flex items-center gap-1.5"><Clock3 aria-hidden="true" className="h-3.5 w-3.5" /> {formatDuration(stats.totalMinutes)}</span>
               {stats.hasAssessment ? <span className="flex items-center gap-1.5"><ClipboardCheck aria-hidden="true" className="h-3.5 w-3.5" /> Assessment</span> : null}
@@ -151,11 +154,16 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug 
                     )}
                     <span className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/75 via-black/15 to-transparent transition-opacity duration-300 group-hover:from-black/85" />
                     <span
-                      className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] shadow-sm"
+                      className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] shadow-sm"
                       style={{ color: accentColor }}
                     >
                       Module {moduleItem.order}
                     </span>
+                    {isLocked ? (
+                      <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-amber-500/95 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+                        <Lock aria-hidden="true" className="h-3 w-3" /> Locked
+                      </span>
+                    ) : null}
                     <span className="absolute inset-x-0 bottom-0 p-4">
                       <span className="line-clamp-2 text-base font-semibold leading-tight text-white sm:text-lg">
                         {moduleItem.title}
@@ -207,8 +215,13 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug 
 
                   <div className="flex min-w-0 flex-1 items-start gap-3 p-5 sm:gap-5 sm:p-6">
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>
+                      <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>
                         Module {moduleItem.order}
+                        {isLocked ? (
+                          <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-800">
+                            <Lock aria-hidden="true" className="h-2.5 w-2.5" /> Locked
+                          </span>
+                        ) : null}
                       </p>
                       <h3 className="mt-1 text-lg font-semibold text-ink sm:text-xl">{moduleItem.title}</h3>
                       <p className="mt-2 text-sm leading-6 text-muted">{description}</p>
@@ -253,7 +266,9 @@ export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug 
                       })}
                     </div>
                     <p className="mt-4 text-xs text-muted">
-                      Enrol to unlock these lessons and start learning.
+                      {isLocked
+                        ? "Unlock the full course to access these lessons."
+                        : "Enrol to unlock these lessons and start learning."}
                     </p>
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import { badRequest, created, ok, serverError, unauthorized } from "@/lib/api/responses";
 import { bridgeGet, bridgePost, BridgeError, isBridgeConfigured } from "@/lib/bridge";
-import { getEnrollableCourseSlugs, getParentGroupSlug } from "@/lib/data";
+import { getFreeEnrollableCourseSlugs, getParentGroupSlug } from "@/lib/data";
 
 type BridgeEnrollment = {
   courseSlug?: string;
@@ -55,7 +55,10 @@ export async function POST(request: Request) {
 
   // Grouped "parent" courses (e.g. "business-ethics") don't exist as a real `courses`
   // row — enrol in each real child course slug that backs the parent instead.
-  const targetSlugs = getEnrollableCourseSlugs(payload.courseSlug);
+  // For a course with real unlock pricing (public/sql/021_...), a free
+  // "Enrol" only ever grants Module 1 — the rest is unlocked separately, only
+  // after a real purchase (see /api/courses/[slug]/unlock-price).
+  const targetSlugs = getFreeEnrollableCourseSlugs(payload.courseSlug);
 
   try {
     let lastResult: unknown = null;

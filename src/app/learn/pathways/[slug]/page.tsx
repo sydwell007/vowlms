@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Section } from "@/components/ui/Section";
 import { PathwayCourseList } from "@/components/learning/PathwayCourseList";
+import { PathwayUnlockCard } from "@/components/learning/PathwayUnlockCard";
 import { getSkillPathwayBySlug } from "@/lib/data";
 import { getPathwayStats, formatDuration } from "@/lib/course-content";
 import { getServerRole } from "@/lib/auth/getServerRole";
@@ -86,6 +87,9 @@ export default async function SkillPathwayPage({ params }: { params: Promise<{ s
         <PathwayCourseList
           courses={courses.map((c) => ({ slug: c.slug, title: c.title, level: c.level, duration: c.duration, price: c.price }))}
         />
+        <div className="mt-8">
+          <PathwayUnlockCard pathwayTitle={pathway.title} courses={courses} />
+        </div>
       </Section>
 
       <Section title="Take this to your CV">

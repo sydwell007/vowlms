@@ -9,6 +9,7 @@
 ob_start();
 require_once __DIR__ . '/../../config/env.php';
 require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../../lib/course_unlock_pricing.php';
 ob_end_clean();
 
 header('Content-Type: text/plain; charset=utf-8');
@@ -165,6 +166,30 @@ try {
                 50,
                 json_encode(['course_id' => $payment['course_id'], 'source' => 'payment']),
             ]);
+        }
+
+        // Course-unlock purchase (course-unlock-payfast-create.php) — the
+        // single enrollment above only covered the anchor child course; grant
+        // every real remaining module across every purchased course/bundle.
+        $unlockParentSlugsRaw = $payment['unlock_parent_slugs'] ?? null;
+        if ($unlockParentSlugsRaw) {
+            $unlockParentSlugs = json_decode($unlockParentSlugsRaw, true);
+            if (is_array($unlockParentSlugs) && count($unlockParentSlugs) > 0) {
+                $childCourseIds = getCourseUnlockChildIds($db, $unlockParentSlugs);
+                $unlockEnrol = $db->prepare(
+                    'INSERT IGNORE INTO enrollments (id, user_id, course_id, status, progress) VALUES (?, ?, ?, "active", 0)'
+                );
+                foreach ($childCourseIds as $childCourseId) {
+                    $unlockEnrol->execute([generateId(), $payment['user_id'], $childCourseId]);
+                }
+
+                // A single-course (non-bundle) purchase counts against that
+                // course's founding-learner cutoff, same as the VOWR path.
+                if (count($unlockParentSlugs) === 1) {
+                    $db->prepare('UPDATE course_unlock_founding_counter SET redeemed_count = redeemed_count + 1 WHERE parent_slug = ?')
+                        ->execute([$unlockParentSlugs[0]]);
+                }
+            }
         }
     } elseif ($paymentStatus === 'CANCELLED') {
         $db->prepare(

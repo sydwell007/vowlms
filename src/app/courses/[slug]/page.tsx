@@ -16,6 +16,7 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { CourseExperience } from "@/components/courses/CourseExperience";
 import { CourseRatingBadge } from "@/components/courses/CourseRatingBadge";
+import { CourseUnlockCard } from "@/components/courses/CourseUnlockCard";
 import { EnrollButton } from "@/components/courses/EnrollButton";
 import { getAcademyBySlug, getAcademyHref, getCourseBySlug, isCourseVisible } from "@/lib/data";
 import { formatCurrency } from "@/lib/format";
@@ -245,6 +246,7 @@ export default async function CourseDetailPage({
                 </div>
               </div>
             </div>
+            <CourseUnlockCard course={course} accentColor={accentColor} />
           </aside>
         </div>
       </section>
