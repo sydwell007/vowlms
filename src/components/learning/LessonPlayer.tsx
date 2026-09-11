@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,10 +8,15 @@ import { toast } from "sonner";
 import {
   Award,
   BarChart3,
+  Check,
+  ChevronDown,
   ClipboardList,
+  FileCheck2,
+  Glasses,
   GraduationCap,
   Home,
   MessageSquare,
+  Play,
   type LucideIcon,
 } from "lucide-react";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
@@ -167,6 +172,12 @@ export function LessonPlayer({
   const [videoError, setVideoError] = useState(false);
   const [videoReloadKey, setVideoReloadKey] = useState(0);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [expandedModules, setExpandedModules] = useState<Set<number>>(
+    () => new Set([module.order]),
+  );
+  const activeLessonRef = useRef<HTMLAnchorElement | null>(null);
+  const sidebarScrollRef = useRef<HTMLDivElement | null>(null);
+  const sidebarHeaderRef = useRef<HTMLDivElement | null>(null);
 
   const assessment = course.assessments.find((a) => a.lessonSlug === lesson.slug);
   const vrPractice = course.vrPractices.find((v) => v.lessonSlug === lesson.slug);
@@ -224,6 +235,42 @@ export function LessonPlayer({
   const audioResources = useMemo(() => resources.filter((r) => r.type === "audio"), [resources]);
   const otherResources = useMemo(() => resources.filter((r) => r.type === "other" || r.type === "image"), [resources]);
   const selectedPdf = activePdf ?? pdfResources[0] ?? null;
+
+  useEffect(() => {
+    const container = sidebarScrollRef.current;
+    const activeLesson = activeLessonRef.current;
+    if (!container || !activeLesson) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const containerRect = container.getBoundingClientRect();
+      const activeRect = activeLesson.getBoundingClientRect();
+      const visibleTop = sidebarHeaderRef.current?.getBoundingClientRect().bottom ?? containerRect.top;
+      const padding = 12;
+
+      if (activeRect.top < visibleTop + padding) {
+        container.scrollTo({
+          top: container.scrollTop + activeRect.top - visibleTop - padding,
+          behavior: "smooth",
+        });
+      } else if (activeRect.bottom > containerRect.bottom - padding) {
+        container.scrollTo({
+          top: container.scrollTop + activeRect.bottom - containerRect.bottom + padding,
+          behavior: "smooth",
+        });
+      }
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [currentLessonSlug]);
+
+  function toggleModule(moduleOrder: number) {
+    setExpandedModules((current) => {
+      const next = new Set(current);
+      if (next.has(moduleOrder)) next.delete(moduleOrder);
+      else next.add(moduleOrder);
+      return next;
+    });
+  }
 
   function presenterAt(placement: VowHumanPlacement) {
     if (!lesson.vowHuman?.enabled || lesson.vowHuman.placement !== placement) return null;
@@ -328,8 +375,8 @@ export function LessonPlayer({
       <div className="flex flex-1">
         {/* Sidebar */}
         <aside className={`fixed inset-y-0 left-0 z-20 w-72 transform bg-white shadow-2xl transition-transform duration-200 lg:relative lg:translate-x-0 lg:shadow-none lg:border-r lg:border-slate-200 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
-          <div className="flex h-full flex-col overflow-y-auto">
-            <div className="border-b border-slate-100 p-4">
+          <div ref={sidebarScrollRef} className="flex h-full flex-col overflow-y-auto">
+            <div ref={sidebarHeaderRef} className="sticky top-0 z-10 border-b border-slate-100 bg-white p-4">
               <div className="flex items-center gap-3">
                 <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg">
                   <Image src={moduleImageSrc} alt="" fill sizes="36px" className="object-cover" />
@@ -362,37 +409,97 @@ export function LessonPlayer({
                 </div>
               </div>
             </div>
-            <nav className="flex-1 p-3 space-y-4">
+            <nav className="flex-1 space-y-2 p-3" aria-label="Course curriculum">
               {allModules.map((m) => {
                 const doneInModule = m.lessons.filter((l) => completedSlugs.includes(l.slug)).length;
+                const isExpanded = expandedModules.has(m.order);
+                const isCurrentModule = m.order === module.order;
+                const moduleProgress = m.lessons.length > 0
+                  ? Math.round((doneInModule / m.lessons.length) * 100)
+                  : 0;
+                const modulePanelId = `lesson-sidebar-module-${m.order}`;
                 return (
-                <div key={m.title}>
-                  {allModules.length > 1 ? (
-                    <p className="flex items-center justify-between px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-                      <span>Module {m.order}: {m.title}</span>
-                      <span className="shrink-0 normal-case tracking-normal text-muted/80">{doneInModule}/{m.lessons.length}</span>
-                    </p>
-                  ) : null}
-                  <div className="mt-1 space-y-0.5">
+                <div
+                  key={`${m.order}-${m.title}`}
+                  className={`overflow-hidden rounded-lg border transition-colors ${isCurrentModule ? "border-[#1166c8]/25 bg-[#f7fbff]" : "border-transparent bg-white"}`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggleModule(m.order)}
+                    aria-expanded={isExpanded}
+                    aria-controls={modulePanelId}
+                    className="group w-full px-3 py-3 text-left transition hover:bg-slate-50/80"
+                  >
+                    <span className="flex items-start justify-between gap-3">
+                      <span className="min-w-0 flex-1">
+                        <span className="flex flex-wrap items-center gap-2">
+                          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
+                            {allModules.length > 1 ? `Module ${m.order}` : "Course lessons"}
+                          </span>
+                          {isCurrentModule ? (
+                            <span className="rounded-full bg-[#1166c8]/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.1em] text-[#1166c8]">
+                              Current
+                            </span>
+                          ) : null}
+                        </span>
+                        <span className="mt-1 block text-xs font-semibold uppercase leading-4 tracking-[0.1em] text-ink">
+                          {m.title}
+                        </span>
+                      </span>
+                      <span className="flex shrink-0 items-center gap-2 pt-0.5">
+                        <span className="text-[10px] font-semibold text-muted">{doneInModule}/{m.lessons.length}</span>
+                        <ChevronDown
+                          aria-hidden="true"
+                          className={`h-4 w-4 text-muted transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+                        />
+                      </span>
+                    </span>
+                    <span className="mt-2 block h-1 overflow-hidden rounded-full bg-slate-100">
+                      <span
+                        className="block h-full rounded-full bg-emerald-500 transition-[width] duration-300"
+                        style={{ width: `${moduleProgress}%` }}
+                      />
+                    </span>
+                  </button>
+                  <div
+                    id={modulePanelId}
+                    aria-hidden={!isExpanded}
+                    inert={!isExpanded}
+                    className={`grid transition-[grid-template-rows] duration-300 ease-out ${isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="space-y-0.5 border-t border-slate-100 px-1.5 pb-2 pt-1.5">
                     {m.lessons.map((l) => {
                       const isCurrent = l.slug === currentLessonSlug;
                       const isDone = completedSlugs.includes(l.slug);
                       return (
                         <Link
                           key={l.slug}
+                          ref={isCurrent ? activeLessonRef : undefined}
                           href={`/lesson/${l.slug}`}
+                          aria-current={isCurrent ? "page" : undefined}
                           onClick={() => setSidebarOpen(false)}
-                          className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition ${isCurrent ? "bg-[#06111f] text-white font-semibold" : "text-ink hover:bg-slate-50"}`}
+                          className={`flex items-center gap-3 rounded-md px-2.5 py-2.5 text-sm transition ${isCurrent ? "bg-[#06111f] font-semibold text-white shadow-sm" : "text-ink hover:bg-white hover:shadow-sm"}`}
                         >
-                          <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] ${isDone ? "bg-emerald-500 text-white" : isCurrent ? "bg-white/20 text-white" : "bg-slate-100 text-muted"}`}>
-                            {isDone ? "✓" : l.type === "assessment" ? "📝" : l.type === "vr-practice" ? "🥽" : "▸"}
+                          <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${isDone ? "bg-emerald-500 text-white" : isCurrent ? "bg-white/20 text-white" : "bg-slate-100 text-muted"}`}>
+                            {isDone ? (
+                              <Check aria-hidden="true" className="h-3 w-3" />
+                            ) : l.type === "assessment" ? (
+                              <FileCheck2 aria-hidden="true" className="h-3 w-3" />
+                            ) : l.type === "vr-practice" ? (
+                              <Glasses aria-hidden="true" className="h-3 w-3" />
+                            ) : (
+                              <Play aria-hidden="true" className="h-3 w-3" />
+                            )}
                           </span>
                           <span className="flex-1 truncate">{l.title}</span>
-                          <span className={`text-[10px] shrink-0 ${isCurrent ? "text-white/60" : "text-muted"}`}>{l.durationMinutes}m</span>
+                          <span className={`shrink-0 text-[10px] ${isCurrent ? "text-white/60" : "text-muted"}`}>{l.durationMinutes}m</span>
                         </Link>
                       );
-                    })}
-                  </div>
+                          })}
+                        </div>
+                      </div>
+                    </div>
                 </div>
                 );
               })}

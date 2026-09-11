@@ -345,6 +345,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
     const currentIndex = allLessons.findIndex((moduleLesson) => moduleLesson.slug === slug);
     const academy = getAcademyBySlug(course.academySlug);
     return <LessonPlayer
+      key={`${course.slug}-${courseModule.order}`}
       lesson={lesson}
       course={course}
       module={courseModule}
@@ -388,6 +389,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
 
       return (
         <LessonPlayer
+          key={`${bridgeProps.resolvedCourseSlug}-${bridgeProps.module.order}`}
           lesson={bridgeProps.lesson}
           course={bridgeProps.course}
           module={bridgeProps.module}
@@ -420,6 +422,7 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
 
   return (
     <LessonPlayer
+      key={`${course.slug}-${courseModule.order}`}
       lesson={lesson}
       course={course}
       module={courseModule}
