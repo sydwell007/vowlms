@@ -377,7 +377,7 @@ export function LessonPlayer({
 
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className={`fixed inset-y-0 left-0 z-20 w-72 transform bg-white shadow-2xl transition-transform duration-200 lg:relative lg:translate-x-0 lg:shadow-none lg:border-r lg:border-slate-200 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <aside className={`fixed inset-y-0 left-0 z-40 w-72 transform bg-white shadow-2xl transition-transform duration-200 lg:relative lg:translate-x-0 lg:z-auto lg:shadow-none lg:border-r lg:border-slate-200 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
           <div ref={sidebarScrollRef} className="flex h-full flex-col overflow-y-auto">
             <div ref={sidebarHeaderRef} className="sticky top-0 z-10 border-b border-slate-100 bg-white p-4">
               <div className="flex items-center gap-3">
@@ -557,7 +557,7 @@ export function LessonPlayer({
         </aside>
 
         {sidebarOpen && (
-          <div className="fixed inset-0 z-10 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
+          <div className="fixed inset-0 z-30 bg-black/50 lg:hidden" onClick={() => setSidebarOpen(false)} />
         )}
 
         {/* Main content */}

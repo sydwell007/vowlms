@@ -37,7 +37,11 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
             <Flame aria-hidden="true" className="h-3 w-3" /> Founding Learner price
           </p>
         ) : null}
-        <p className="text-lg font-bold text-ink">{pricing ? formatCurrency(pricing.totalZar) : "..."}</p>
+        {pricing ? (
+          <p className="text-lg font-bold text-ink">{formatCurrency(pricing.totalZar)}</p>
+        ) : (
+          <div className="h-6 w-24 animate-pulse rounded bg-slate-200" aria-hidden="true" />
+        )}
         <p className="mt-0.5 text-xs font-medium text-ink/70">Unlocks every remaining module + certificate</p>
 
         <button
@@ -47,7 +51,7 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
           className="mt-3 w-full rounded-lg px-4 py-2 text-center text-xs font-bold text-[#06111f] transition hover:bg-[#e8b830] disabled:cursor-wait disabled:opacity-60"
           style={{ backgroundColor: "#f5c542" }}
         >
-          {paying === "cash" ? "Redirecting..." : "Pay via PayFast"}
+          {paying === "cash" ? "Redirecting..." : pricing ? "Pay via PayFast" : "Loading price…"}
         </button>
         <button
           type="button"
@@ -57,7 +61,7 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
           style={{ borderColor: accentColor, color: accentColor }}
         >
           <Coins aria-hidden="true" className="h-3.5 w-3.5" />
-          {paying === "vowr" ? "Unlocking..." : `${pricing?.vowrPrice ?? "..."} VOWR`}
+          {paying === "vowr" ? "Unlocking..." : pricing ? `${pricing.vowrPrice} VOWR` : "Loading price…"}
         </button>
       </div>
     </div>
