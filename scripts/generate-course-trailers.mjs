@@ -26,6 +26,13 @@
  * directory, so it only ever picks that real final video, never a raw
  * fragment that might not even show the presenter on camera.
  *
+ * Every clip starts CLIP_START_S into its source lesson video (past the
+ * title-card/intro animation, where the presenter is reliably talking on
+ * camera) — EXCEPT the trailer's very first clip, which opens at the true
+ * beginning of its lesson instead, so the trailer leads with the course's
+ * real introduction. Clips fade to black then fade in from black between
+ * each other (`xfade=fadeblack`), not a direct crossfade blend.
+ *
  * Usage:
  *   node scripts/generate-course-trailers.mjs [--source "<path>"] [--slug <course-slug>]
  *
@@ -44,6 +51,11 @@ const MAX_CLIPS = 6;
 // video (title card + lower-third intro animation run before that) — this is
 // confirmed by ear/eye against the real footage, not a guess.
 const CLIP_START_S = 11;
+// The trailer's very first clip opens at the true beginning of its lesson —
+// the course's real introduction — rather than 11s in like every other clip.
+// A tiny epsilon, not a literal 0, so it never grabs a pure-black frame 1 of
+// the source video's own fade-in.
+const FIRST_CLIP_START_S = 0.2;
 const CLIP_DURATION_S = 4; // ~4s of one presenter talking before the cut, per spec
 const XFADE_DURATION_S = 0.6;
 const MIN_SOURCE_DURATION_S = CLIP_START_S + CLIP_DURATION_S;
@@ -244,8 +256,12 @@ function sample(list, max) {
 function buildFilterGraph(clipCount) {
   const perClipFilters = [];
   for (let i = 0; i < clipCount; i++) {
+    // Only the very first clip of a trailer opens at the true start of its
+    // lesson (the course's real introduction) — every other clip still
+    // starts at CLIP_START_S, past the title-card/intro animation.
+    const start = i === 0 ? FIRST_CLIP_START_S : CLIP_START_S;
     perClipFilters.push(
-      `[${i}:v]trim=start=${CLIP_START_S}:duration=${CLIP_DURATION_S},setpts=PTS-STARTPTS,` +
+      `[${i}:v]trim=start=${start}:duration=${CLIP_DURATION_S},setpts=PTS-STARTPTS,` +
         `scale=${OUTPUT_WIDTH}:${OUTPUT_HEIGHT}:force_original_aspect_ratio=decrease,` +
         `pad=${OUTPUT_WIDTH}:${OUTPUT_HEIGHT}:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1,fps=30[v${i}]`,
     );
@@ -255,6 +271,12 @@ function buildFilterGraph(clipCount) {
     return { filter: perClipFilters.join(";"), outLabel: "v0" };
   }
 
+  // "fadeblack" — the outgoing clip fades to black, then the incoming clip
+  // fades in from black, rather than the two blending directly into each
+  // other. The overlap-window bookkeeping below is unchanged by that choice:
+  // fadeblack still consumes the same XFADE_DURATION_S overlap as a plain
+  // crossfade, it just renders through black within that window instead of
+  // blending the two frames together.
   let cum = CLIP_DURATION_S;
   let prevLabel = "v0";
   const xfadeParts = [];
@@ -262,7 +284,7 @@ function buildFilterGraph(clipCount) {
     const offset = Math.max(0, cum - XFADE_DURATION_S);
     const outLabel = i === clipCount - 1 ? "vout" : `vx${i}`;
     xfadeParts.push(
-      `[${prevLabel}][v${i}]xfade=transition=fade:duration=${XFADE_DURATION_S}:offset=${offset.toFixed(2)}[${outLabel}]`,
+      `[${prevLabel}][v${i}]xfade=transition=fadeblack:duration=${XFADE_DURATION_S}:offset=${offset.toFixed(2)}[${outLabel}]`,
     );
     cum = cum + CLIP_DURATION_S - XFADE_DURATION_S;
     prevLabel = outLabel;
