@@ -33,7 +33,16 @@ async function answerAll(page: import("@playwright/test").Page, answers: string[
   }
 }
 
+// "improving-your-mental-health" is one of the ~300 ungrouped raw Upskilling
+// courses (not one of the 20 complete parent courses) — it's admin-only now
+// (see src/lib/academy-launch.ts / upskilling-visibility.ts), so a real
+// learner account can no longer enrol in or reach it directly. Same root
+// cause already documented and skipped in certification.spec.ts. Needs
+// either an admin-role test session or a short 2-3-lesson course among the
+// 20 real ones before these can run again.
 test.describe("Assessments @destructive", () => {
+  test.skip(true, "improving-your-mental-health is admin-only until Upskilling gets a short course, or this test runs as admin.");
+
   test("a passing score shows the pass state and a next-step CTA", async ({ page }) => {
     await signUpTestUser(page, "assess-pass");
     await page.goto(`/assessment/${ASSESSMENT_SLUG}`);

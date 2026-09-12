@@ -102,7 +102,13 @@ export function EnrollButton({ course }: Props) {
 
   async function handleEnroll() {
     if (enrolled) {
-      router.push(firstLessonHref(course));
+      // A full navigation, not router.push — the first lesson right after a
+      // fresh enrol is exactly the route Next.js is most likely to have
+      // prefetched/cached while the learner was still unenrolled (e.g. via
+      // the hero's own "Start first lesson" link), and a stale cached RSC
+      // payload here would incorrectly bounce a newly-enrolled learner back
+      // to "enrolment required". A hard navigation always re-checks fresh.
+      window.location.href = firstLessonHref(course);
       return;
     }
 
@@ -151,7 +157,9 @@ export function EnrollButton({ course }: Props) {
         description: "Your first lesson is ready.",
         action: {
           label: "Start",
-          onClick: () => router.push(firstLessonHref(course)),
+          onClick: () => {
+            window.location.href = firstLessonHref(course);
+          },
         },
       });
     } catch (error) {

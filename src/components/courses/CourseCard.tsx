@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Award, BookOpen, Clock3, MoveRight } from "lucide-react";
+import { Award, BookOpen, Clock3, Lock, MoveRight } from "lucide-react";
 import { CourseEnrollmentCount } from "@/components/courses/CourseEnrollmentCount";
 import { CourseRatingBadge } from "@/components/courses/CourseRatingBadge";
 import { ComingSoonOverlay } from "@/components/ui/ComingSoonOverlay";
@@ -9,6 +9,7 @@ import { formatCourseDurationWeeks } from "@/lib/course-content";
 import { getComingSoonInfo } from "@/lib/academy-launch";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { getCourseVisual, visualAssets } from "@/lib/visual-assets";
+import { isPaidUpskillingCourse, UPSKILLING_FOUNDING_PRICE_TEASER_ZAR } from "@/data/priced-upskilling-courses";
 import type { CourseSummary, Role } from "@/types/lms";
 
 type Props = {
@@ -23,6 +24,7 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
   const accent = getAcademyAccentColor(course.academyCategory);
   const courseVisual = getCourseVisual(course, course.academyCategory);
   const isList = layout === "list";
+  const isPaidCourse = isPaidUpskillingCourse(course.slug);
 
   return (
     <ComingSoonOverlay info={comingSoon}>
@@ -51,9 +53,14 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
             <span className="absolute right-4 top-4 rounded-md bg-gold/95 px-2.5 py-1 text-xs font-semibold text-[#06111f] shadow-sm">
               Admin preview
             </span>
+          ) : isPaidCourse ? (
+            <span className="absolute right-4 top-4 flex items-center gap-1 rounded-md bg-gold/95 px-2.5 py-1 text-xs font-semibold text-[#06111f] shadow-sm">
+              <Lock aria-hidden="true" className="h-3 w-3" />
+              From {formatCurrency(UPSKILLING_FOUNDING_PRICE_TEASER_ZAR)}
+            </span>
           ) : null}
           <span className="absolute bottom-4 left-4 rounded-md bg-[#061725]/90 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
-            {formatCurrency(course.price)}
+            {isPaidCourse ? "Module 1 free" : formatCurrency(course.price)}
           </span>
         </Link>
 

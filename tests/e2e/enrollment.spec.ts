@@ -50,8 +50,10 @@ test.describe("Course enrollment & delivery @destructive", () => {
     await expect(page.locator("main, article").first()).not.toBeEmpty();
     const firstLessonUrl = page.url();
 
-    // Real, clickable breadcrumb trail — a learner always knows where they are.
-    await expect(page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", { name: "Academies" })).toBeVisible();
+    // The lesson player deliberately trades the full site breadcrumb for a
+    // minimal "back to course" link while learning — a learner still always
+    // knows where they are, just via a simpler control.
+    await expect(page.getByRole("link", { name: "← Business Ethics" })).toBeVisible();
 
     // "Mark complete" advances to the next lesson and updates the "N/M · X%" progress readout.
     const progressText = page.getByText(/^\d+\/\d+ · \d+%$/);

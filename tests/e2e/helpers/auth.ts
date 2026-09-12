@@ -30,6 +30,8 @@ export async function signIn(page: Page, { email, password }: TestCredentials) {
 }
 
 export async function signOut(page: Page) {
-  await page.getByRole("button", { name: "Sign out" }).click();
+  // "Sign out" lives inside the header's avatar dropdown menu — open it first.
+  await page.locator('[aria-controls="desktop-account-menu"]').click();
+  await page.getByRole("menuitem", { name: "Sign out" }).click();
   await page.waitForURL("**/auth/signin", { timeout: 10_000 });
 }

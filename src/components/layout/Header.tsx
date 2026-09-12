@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
@@ -86,7 +86,6 @@ function resolveItem(item: NavigationItem, role?: string): NavigationItem {
 
 export function Header() {
   const pathname = usePathname();
-  const router = useRouter();
   const session = useSession();
   const desktopNavRef = useRef<HTMLElement>(null);
   const accountMenuRef = useRef<HTMLDivElement>(null);
@@ -136,8 +135,12 @@ export function Header() {
   async function handleLogout() {
     clearSessionCache();
     await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/auth/signin");
-    router.refresh();
+    // A full navigation, not router.push — push() followed immediately by
+    // refresh() can have the refresh interrupt the pending transition,
+    // leaving the old (still-authenticated) page content on screen even
+    // though the header itself has already re-rendered as signed out. A
+    // hard redirect guarantees signing out always actually leaves the page.
+    window.location.href = "/auth/signin";
   }
 
   function closeAllMenus() {
