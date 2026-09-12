@@ -19,7 +19,7 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
   { unlock, accentColor },
   ref,
 ) {
-  const { isPaidCourse, state, pricing, paying, canAffordVowr, payWithCash, payWithVowr } = unlock;
+  const { isPaidCourse, state, pricing, pricingUnavailable, paying, canAffordVowr, payWithCash, payWithVowr } = unlock;
 
   if (!isPaidCourse || state !== "free-only") return null;
 
@@ -39,6 +39,8 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
         ) : null}
         {pricing ? (
           <p className="text-lg font-bold text-ink">{formatCurrency(pricing.totalZar)}</p>
+        ) : pricingUnavailable ? (
+          <p className="text-xs font-semibold text-red-700">Pricing unavailable — try again shortly</p>
         ) : (
           <div className="h-6 w-24 animate-pulse rounded bg-slate-200" aria-hidden="true" />
         )}
@@ -51,7 +53,7 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
           className="mt-3 w-full rounded-lg px-4 py-2 text-center text-xs font-bold text-[#06111f] transition hover:bg-[#e8b830] disabled:cursor-wait disabled:opacity-60"
           style={{ backgroundColor: "#f5c542" }}
         >
-          {paying === "cash" ? "Redirecting..." : pricing ? "Pay via PayFast" : "Loading price…"}
+          {paying === "cash" ? "Redirecting..." : pricing ? "Pay via PayFast" : pricingUnavailable ? "Unavailable" : "Loading price…"}
         </button>
         <button
           type="button"
@@ -61,7 +63,7 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
           style={{ borderColor: accentColor, color: accentColor }}
         >
           <Coins aria-hidden="true" className="h-3.5 w-3.5" />
-          {paying === "vowr" ? "Unlocking..." : pricing ? `${pricing.vowrPrice} VOWR` : "Loading price…"}
+          {paying === "vowr" ? "Unlocking..." : pricing ? `${pricing.vowrPrice} VOWR` : pricingUnavailable ? "Unavailable" : "Loading price…"}
         </button>
       </div>
     </div>

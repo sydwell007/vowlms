@@ -62,6 +62,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
 
   const [state, setState] = useState<UnlockState>("loading");
   const [pricing, setPricing] = useState<UnlockPriceResponse | null>(null);
+  const [pricingUnavailable, setPricingUnavailable] = useState(false);
   const [paying, setPaying] = useState<"cash" | "vowr" | null>(null);
   const wallet = useWalletBalance(session.status === "authenticated");
 
@@ -91,13 +92,32 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
   useEffect(() => {
     if (!isPaidCourse) return;
     const controller = new AbortController();
-    fetch(`/api/courses/unlock-price?slugs=${encodeURIComponent(parentSlug)}`, { signal: controller.signal })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((payload) => {
-        if (payload?.ok) setPricing(payload.data as UnlockPriceResponse);
-      })
-      .catch(() => undefined);
-    return () => controller.abort();
+    let cancelled = false;
+    let attempt = 0;
+
+    async function loadPricing() {
+      while (!cancelled && attempt < 3) {
+        try {
+          const res = await fetch(`/api/courses/unlock-price?slugs=${encodeURIComponent(parentSlug)}`, { signal: controller.signal });
+          const payload = await res.json().catch(() => null);
+          if (res.ok && payload?.ok) {
+            if (!cancelled) setPricing(payload.data as UnlockPriceResponse);
+            return;
+          }
+        } catch {
+          // retry below unless aborted
+        }
+        attempt += 1;
+        if (attempt < 3 && !cancelled) await new Promise((r) => setTimeout(r, 1200 * attempt));
+      }
+      if (!cancelled) setPricingUnavailable(true);
+    }
+
+    loadPricing();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
   }, [parentSlug, isPaidCourse]);
 
   const vowrBalance = wallet.status === "ready" ? wallet.balance : null;
@@ -151,6 +171,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     totalModules,
     state,
     pricing,
+    pricingUnavailable,
     paying,
     vowrBalance,
     canAffordVowr,

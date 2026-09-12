@@ -1,6 +1,6 @@
 "use client";
 
-import { Coins, Crown, Flame, Lock, ShieldCheck, Sparkles } from "lucide-react";
+import { Coins, Crown, Flame, Lock, ShieldCheck, Sparkles, TriangleAlert } from "lucide-react";
 import type { Course } from "@/types/lms";
 import { useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
 import { formatCurrency } from "@/lib/format";
@@ -13,6 +13,7 @@ export function CourseUnlockCard({ course, accentColor }: Props) {
     totalModules,
     state,
     pricing,
+    pricingUnavailable,
     paying,
     vowrBalance,
     canAffordVowr,
@@ -60,6 +61,11 @@ export function CourseUnlockCard({ course, accentColor }: Props) {
               <p className="text-sm font-semibold text-muted line-through">{formatCurrency(priceHeadline.standardPriceZar)}</p>
             ) : null}
           </div>
+        ) : pricingUnavailable ? (
+          <p className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-red-700">
+            <TriangleAlert aria-hidden="true" className="h-4 w-4 shrink-0" />
+            Pricing is temporarily unavailable. Please try again shortly.
+          </p>
         ) : (
           <div className="mt-4 h-8 w-32 animate-pulse rounded bg-slate-200" aria-hidden="true" />
         )}
@@ -72,7 +78,7 @@ export function CourseUnlockCard({ course, accentColor }: Props) {
           className="mt-4 w-full rounded-xl px-6 py-3 text-center text-sm font-semibold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)] transition hover:bg-[#e8b830] disabled:cursor-wait disabled:opacity-60"
           style={{ backgroundColor: "#f5c542" }}
         >
-          {paying === "cash" ? "Redirecting to PayFast..." : `Pay ${pricing ? formatCurrency(pricing.totalZar) : ""} via PayFast`}
+          {paying === "cash" ? "Redirecting to PayFast..." : pricing ? `Pay ${formatCurrency(pricing.totalZar)} via PayFast` : pricingUnavailable ? "Unavailable — try again" : "Loading price…"}
         </button>
 
         <div className="my-3 flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.1em] text-muted">
@@ -87,7 +93,7 @@ export function CourseUnlockCard({ course, accentColor }: Props) {
           style={{ borderColor: accentColor, color: accentColor }}
         >
           <Coins aria-hidden="true" className="h-4 w-4" />
-          {paying === "vowr" ? "Unlocking..." : `Unlock with ${pricing?.vowrPrice ?? "..."} VOWR`}
+          {paying === "vowr" ? "Unlocking..." : pricing ? `Unlock with ${pricing.vowrPrice} VOWR` : pricingUnavailable ? "Unavailable — try again" : "Loading price…"}
         </button>
 
         {pricing ? (
