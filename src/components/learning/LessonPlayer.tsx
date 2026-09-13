@@ -298,7 +298,13 @@ export function LessonPlayer({
         const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
         const groupedDone: string[] = progress[courseSlugForNav]?.completedLessons ?? [];
         const legacyDone: string[] = progress[course.slug]?.completedLessons ?? [];
-        const done = [...new Set([...groupedDone, ...legacyDone])];
+        // Filter out slugs for lessons that no longer exist (e.g. the fake
+        // per-module "Certificate of Completion" lessons removed from every
+        // course) — otherwise a browser that completed one of those before
+        // the fix ships forever shows an inflated ">100%" progress bar, since
+        // the numerator still counts a slug the denominator no longer does.
+        const validSlugs = new Set(allModules.flatMap((m) => m.lessons.map((l) => l.slug)));
+        const done = [...new Set([...groupedDone, ...legacyDone])].filter((slug) => validSlugs.has(slug));
         if (done.length !== groupedDone.length) {
           progress[courseSlugForNav] = {
             ...(progress[courseSlugForNav] ?? {}),
@@ -313,7 +319,7 @@ export function LessonPlayer({
     return () => {
       cancelled = true;
     };
-  }, [course.slug, courseSlugForNav, lesson.slug]);
+  }, [allModules, course.slug, courseSlugForNav, lesson.slug]);
 
   const markComplete = useCallback(async () => {
     const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
