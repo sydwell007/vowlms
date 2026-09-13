@@ -7,6 +7,7 @@ import type { CourseModule } from "@/types/lms";
 import { useSession } from "@/lib/auth/useSession";
 import { useWalletBalance } from "@/lib/rewards/useWalletBalance";
 import { invalidateCourseEnrollmentCounts } from "@/lib/course-enrollment-counts-client";
+import { getCachedUnlockState, setCachedUnlockState, subscribeUnlockState } from "@/lib/courses/unlockStateStore";
 
 export type UnlockPriceResponse = {
   items: { parentSlug: string; standardPriceZar: number; priceZar: number; foundingActive: boolean; foundingSlotsLeft: number }[];
@@ -58,35 +59,68 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
   const router = useRouter();
   const session = useSession();
   const isPaidCourse = modules.some((m) => m.isFree === false);
-  const totalModules = modules.length;
+  // Module 0 (order 0) is synthetic native-content orientation, not a real
+  // Moodle-migrated child course — it never gets its own `enrollments` row,
+  // so it must be excluded here. Counting it would make "every real module
+  // enrolled" mathematically unreachable, permanently stuck on "free-only"
+  // even for an account that has genuinely paid for everything.
+  const totalModules = modules.filter((m) => m.order > 0).length;
 
-  const [state, setState] = useState<UnlockState>("loading");
+  const [state, setState] = useState<UnlockState>(() => getCachedUnlockState(parentSlug)?.state ?? "loading");
   const [pricing, setPricing] = useState<UnlockPriceResponse | null>(null);
   const [pricingUnavailable, setPricingUnavailable] = useState(false);
   const [paying, setPaying] = useState<"cash" | "vowr" | null>(null);
   const wallet = useWalletBalance(session.status === "authenticated");
 
+  // Stay in sync with any OTHER mounted card/panel for the same course —
+  // e.g. a VOWR unlock completed on the course page must be reflected
+  // immediately on the lesson page's own unlock panel, not just after its
+  // own (possibly stale) network fetch catches up.
+  useEffect(() => {
+    return subscribeUnlockState(parentSlug, (entry) => setState(entry.state));
+  }, [parentSlug]);
+
   useEffect(() => {
     if (!isPaidCourse) return;
     if (session.status !== "authenticated") return;
 
+    // Already known-unlocked from the shared cache (this session already
+    // completed a real purchase) — trust it outright rather than re-asking a
+    // backend that can occasionally still read stale for a few seconds.
+    if (getCachedUnlockState(parentSlug)?.state === "unlocked") return;
+
     const controller = new AbortController();
-    fetch("/api/enrollments", { cache: "no-store", credentials: "same-origin", signal: controller.signal })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((payload) => {
-        const enrollments = (payload?.data ?? []) as Enrollment[];
+    let cancelled = false;
+
+    async function checkEnrollment() {
+      const delays = [0, 700, 1200];
+      for (const delayMs of delays) {
+        if (delayMs > 0) await new Promise((resolve) => setTimeout(resolve, delayMs));
+        if (cancelled) return;
+
+        const res = await fetch("/api/enrollments", { cache: "no-store", credentials: "same-origin", signal: controller.signal }).catch(() => null);
+        const payload = res?.ok ? await res.json().catch(() => null) : null;
+        if (!payload) continue;
+
+        const enrollments = (payload.data ?? []) as Enrollment[];
         const enrolledCount = enrollments.filter(
           (item) =>
             ((item.courseSlug ?? item.course_slug) === parentSlug || item.groupSlug === parentSlug) &&
             item.status !== "cancelled",
         ).length;
-        if (enrolledCount === 0) setState("not-enrolled");
-        else if (enrolledCount >= totalModules) setState("unlocked");
-        else setState("free-only");
-      })
-      .catch(() => undefined);
 
-    return () => controller.abort();
+        const next: UnlockState = enrolledCount === 0 ? "not-enrolled" : enrolledCount >= totalModules ? "unlocked" : "free-only";
+        if (cancelled) return;
+        setCachedUnlockState(parentSlug, { state: next, totalModules });
+        if (next === "unlocked") return;
+      }
+    }
+
+    checkEnrollment();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
   }, [parentSlug, isPaidCourse, session.status, totalModules]);
 
   useEffect(() => {
@@ -125,6 +159,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
   const savingsZar = pricing ? pricing.items.reduce((sum, i) => sum + (i.standardPriceZar - i.priceZar), 0) : 0;
 
   async function payWithCash() {
+    if (state === "unlocked") return;
     setPaying("cash");
     try {
       const res = await fetch("/api/payments/course-unlock-create", {
@@ -143,6 +178,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
   }
 
   async function payWithVowr() {
+    if (state === "unlocked") return;
     setPaying("vowr");
     try {
       const res = await fetch("/api/courses/unlock-with-vowr", {
@@ -153,7 +189,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
       });
       const payload = await res.json();
       if (!res.ok || !payload.ok) throw new Error(payload.error ?? "VOWR unlock failed.");
-      setState("unlocked");
+      setCachedUnlockState(parentSlug, { state: "unlocked", totalModules });
       invalidateCourseEnrollmentCounts(parentSlug);
       wallet.refresh();
       toast.success(`Course fully unlocked with ${pricing?.vowrPrice ?? ""} VOWR!`, {

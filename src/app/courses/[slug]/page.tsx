@@ -5,23 +5,20 @@ import { notFound } from "next/navigation";
 import {
   Award,
   BadgeCheck,
-  CalendarClock,
   ClipboardCheck,
-  Download,
   Glasses,
   MessageCircle,
-  Smartphone,
 } from "lucide-react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
+import { CourseEnrolCard } from "@/components/courses/CourseEnrolCard";
 import { CourseExperience } from "@/components/courses/CourseExperience";
 import { CourseRatingBadge } from "@/components/courses/CourseRatingBadge";
-import { CourseUnlockCard } from "@/components/courses/CourseUnlockCard";
 import { EnrollButton } from "@/components/courses/EnrollButton";
 import { getAcademyBySlug, getAcademyHref, getCourseBySlug, isCourseVisible } from "@/lib/data";
 import { formatCurrency } from "@/lib/format";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
-import { formatCourseDurationWeeks, formatDuration, getCourseStats } from "@/lib/course-content";
+import { formatDuration, getCourseStats } from "@/lib/course-content";
 import { getServerRole } from "@/lib/auth/getServerRole";
 import { getCourseVisual } from "@/lib/visual-assets";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -137,14 +134,6 @@ export default async function CourseDetailPage({
     { Icon: Award, text: `${course.rewards} VOWR` },
     ...(stats.hasVRPractice ? [{ Icon: Glasses, text: "VR practice included" }] : []),
   ];
-  // Enrol card only lists what isn't already stated in the hero badges above or the
-  // Modules/Lessons/Total time/Level stat bar below.
-  const cardFeatures = [
-    { Icon: Smartphone, text: "Mobile and PWA access" },
-    { Icon: Download, text: "Offline lesson content" },
-    { Icon: CalendarClock, text: "Learn at your own pace" },
-  ];
-
   return (
     <main>
       <JsonLd data={[courseSchema, breadcrumbSchema]} />
@@ -223,30 +212,7 @@ export default async function CourseDetailPage({
           {/* Enrol card floats over the seam between the banner and the white section
               below — deliberately image-free so it never competes with the hero photo. */}
           <aside className="lg:sticky lg:top-24 lg:translate-y-16">
-            <div className="premium-card overflow-hidden rounded-xl text-ink shadow-[0_28px_64px_rgba(6,17,31,0.32)]">
-              <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${accentColor}, ${accentColor}00)` }} />
-              <div className="p-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>Enrol now</p>
-                <p className="mt-3 text-4xl font-bold text-ink">{formatCurrency(course.price)}</p>
-                {course.price > 0 ? <p className="mt-1 text-xs text-muted">One-time payment through PayFast</p> : null}
-                <div className="mt-5"><EnrollButton course={course} /></div>
-
-                <div className="mt-5 space-y-2.5 text-sm">
-                  {cardFeatures.map(({ Icon, text }) => (
-                    <div key={text} className="flex items-center gap-2.5 text-muted">
-                      <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />
-                      <span>{text}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-6 border-t border-slate-100 pt-4">
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-muted">Duration</p>
-                  <p className="text-sm font-semibold text-ink">{formatCourseDurationWeeks(stats.totalMinutes)}</p>
-                </div>
-              </div>
-            </div>
-            <CourseUnlockCard course={course} accentColor={accentColor} />
+            <CourseEnrolCard course={course} accentColor={accentColor} totalMinutes={stats.totalMinutes} />
           </aside>
         </div>
       </section>

@@ -37,6 +37,20 @@ if (count($childCourseIds) === 0) jsonError('No unlockable modules found for the
 try {
     $db->beginTransaction();
 
+    // Reject a repeat purchase of something the learner already fully owns —
+    // guards against double-charging VOWR if a stale client UI (e.g. a
+    // second unlock card that hasn't refreshed yet) lets them click "Unlock"
+    // again after an earlier purchase already succeeded.
+    $ownedPlaceholders = implode(',', array_fill(0, count($childCourseIds), '?'));
+    $ownedStmt = $db->prepare(
+        "SELECT COUNT(*) FROM enrollments WHERE user_id = ? AND course_id IN ($ownedPlaceholders) AND status IN ('active','completed')"
+    );
+    $ownedStmt->execute([$userId, ...$childCourseIds]);
+    if ((int)$ownedStmt->fetchColumn() >= count($childCourseIds)) {
+        $db->rollBack();
+        jsonError('You already have full access to this course', 409);
+    }
+
     $balStmt = $db->prepare('SELECT COALESCE(SUM(points),0) FROM reward_events WHERE user_id = ? FOR UPDATE');
     $balStmt->execute([$userId]);
     $balance = (int)$balStmt->fetchColumn();

@@ -35,6 +35,19 @@ $totalZar = $pricing['totalZar'];
 
 $childCourseIds = getCourseUnlockChildIds($db, $realSlugs);
 if (count($childCourseIds) === 0) jsonError('No unlockable modules found for these courses', 404);
+
+// Reject starting a new paid checkout for something the learner already
+// fully owns — guards against a stale client UI (e.g. a second unlock card
+// that hasn't refreshed yet) sending them to PayFast to pay for it again.
+$ownedPlaceholders = implode(',', array_fill(0, count($childCourseIds), '?'));
+$ownedStmt = $db->prepare(
+    "SELECT COUNT(*) FROM enrollments WHERE user_id = ? AND course_id IN ($ownedPlaceholders) AND status IN ('active','completed')"
+);
+$ownedStmt->execute([$userId, ...$childCourseIds]);
+if ((int)$ownedStmt->fetchColumn() >= count($childCourseIds)) {
+    jsonError('You already have full access to this course', 409);
+}
+
 // A representative child course to satisfy payments.course_id's NOT NULL FK —
 // the real fan-out on success uses unlock_parent_slugs (all real children of
 // every requested slug), not just this one row.
