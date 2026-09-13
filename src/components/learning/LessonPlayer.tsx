@@ -22,11 +22,13 @@ import {
 } from "lucide-react";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import type { AcademyCategory, Lesson, Course, CourseModule } from "@/types/lms";
-import { CelebrationOverlay } from "@/components/learning/CelebrationOverlay";
+import { CelebrationOverlay, type CelebrationCertificateState } from "@/components/learning/CelebrationOverlay";
+import { CertificateStatusCard } from "@/components/learning/CertificateStatusCard";
 import { LessonUnlockPanel } from "@/components/learning/LessonUnlockPanel";
 import { PdfReader } from "@/components/learning/PdfReader";
 import { VowHumanPresenter } from "@/components/learning/VowHumanPresenter";
 import { useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
+import { getCertificateIssuePayload } from "@/lib/certificates/eligibility";
 import type { VowHumanPlacement } from "@/types/lms";
 
 export type LessonResource = {
@@ -175,6 +177,7 @@ export function LessonPlayer({
   const [videoError, setVideoError] = useState(false);
   const [videoReloadKey, setVideoReloadKey] = useState(0);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [certificateState, setCertificateState] = useState<CelebrationCertificateState>("none");
   const [expandedModule, setExpandedModule] = useState<number | null>(module.order);
   const activeLessonRef = useRef<HTMLAnchorElement | null>(null);
   const sidebarScrollRef = useRef<HTMLDivElement | null>(null);
@@ -322,16 +325,42 @@ export function LessonPlayer({
     setCompleted(true);
     setCompletedSlugs([...done]);
 
-    // Sync to bridge in background
-    fetch("/api/progress", {
+    const progressReq = fetch("/api/progress", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ lessonSlug: lesson.slug, courseSlug: course.slug, completed: true }),
-    }).catch(() => {});
+    }).catch(() => null);
 
     if (!nextLesson) {
       // Last lesson of the whole course — the big moment, not a quiet button flip.
       setShowCelebration(true);
+
+      const issuePayload = getCertificateIssuePayload(courseSlugForNav);
+      if (!issuePayload) {
+        setCertificateState("none");
+        return;
+      }
+
+      // Awaited (unlike the fire-and-forget sync above) so the celebration
+      // modal reflects whether a certificate was actually issued, not just a
+      // hopeful "it's on its way" regardless of real eligibility — matching
+      // AssessmentPlayer.tsx's certificateState pattern.
+      setCertificateState("pending");
+      await progressReq;
+      try {
+        const certRes = await fetch("/api/certificates/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ courseSlug: courseSlugForNav }),
+        });
+        const certJson = await certRes.json().catch(() => null);
+        if (certRes.ok && certJson?.ok) setCertificateState("ready");
+        else if (certRes.status === 400) setCertificateState("incomplete");
+        else setCertificateState("error");
+      } catch {
+        setCertificateState("error");
+      }
       return;
     }
 
@@ -551,6 +580,7 @@ export function LessonPlayer({
                 </div>
                 );
               })}
+              <CertificateStatusCard courseSlug={courseSlugForNav} accentColor={accentColor} />
               <LessonUnlockPanel ref={unlockPanelRef} unlock={unlock} accentColor={accentColor} />
             </nav>
           </div>
@@ -849,6 +879,7 @@ export function LessonPlayer({
         <CelebrationOverlay
           courseTitle={course.title}
           courseSlug={courseSlugForNav}
+          certificateState={certificateState}
           onClose={() => setShowCelebration(false)}
         />
       ) : null}

@@ -282,22 +282,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-3-employee-ethics-business-ethics-certificate-of-completion",
-          title: "Business Ethics Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers business ethics certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -464,16 +448,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-business-ethics-fundamentals-business-ethics-certificate-of-completion",
-          title: "Business Ethics Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers business ethics certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -653,22 +627,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-2-leadership-on-ethics-business-ethics-certificate-of-completion",
-          title: "Business Ethics Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers business ethics certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -834,16 +792,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-workplace-health-amp-safety-compliance-certificate-of-completion",
-          title: "Compliance Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers compliance certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -1011,16 +959,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-workplace-violence-compliance-certificate-of-completion",
-          title: "Compliance Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers compliance certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -1266,22 +1204,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 4",
-        order: 4,
-        lessons: [
-        {
-          slug: "module-2-inclusive-communication-organization-s-culture-certificate-of-completion",
-          title: "Organization's Culture Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers organization's culture certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -1459,22 +1381,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-3-culture-competence-organization-s-culture-certificate-of-completion",
-          title: "Organization's Culture Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers organization's culture certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -1620,16 +1526,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-inclusion-and-respect-organization-s-culture-certificate-of-completion",
-          title: "Organization's Culture Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers organization's culture certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -1777,16 +1673,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-stress-fundamentals-stress-management-wellness-certificate-of-completion",
-          title: "Stress Management Wellness Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers stress management wellness certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -1944,16 +1830,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-stress-and-work-performance-stress-management-wellness-certificate-of-completion",
-          title: "Stress Management Wellness Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers stress management wellness certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -2147,16 +2023,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-strategies-to-relieve-stress-stress-management-wellness-certificate-of-completion",
-          title: "Stress Management Wellness Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers stress management wellness certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -2314,16 +2180,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-online-security-fundamentals-online-security-certificate-of-completion",
-          title: "Online Security Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers online security certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -2481,16 +2337,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-how-to-protect-your-data-online-security-certificate-of-completion",
-          title: "Online Security Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers online security certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -2648,16 +2494,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-social-engineering-online-security-certificate-of-completion",
-          title: "Online Security Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers online security certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -2825,16 +2661,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-dealing-with-emotions-health-and-wellness-certificate-of-completion",
-          title: "Health and Wellness Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers health and wellness certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -2992,16 +2818,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-exercise-health-and-wellness-certificate-of-completion",
-          title: "Health and Wellness Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers health and wellness certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -3169,16 +2985,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-forming-healthy-habits-health-and-wellness-certificate-of-completion",
-          title: "Health and Wellness Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers health and wellness certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -3346,16 +3152,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-mental-health-awareness-health-and-wellness-certificate-of-completion",
-          title: "Health and Wellness Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers health and wellness certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -3549,16 +3345,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-positive-psychology-fundamentals-health-and-wellness-certificate-of-completion",
-          title: "Health and Wellness Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers health and wellness certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -3738,22 +3524,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-3-positive-psychology-in-the-workplace-health-and-wellness-certificate-of-completion",
-          title: "Health and Wellness Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers health and wellness certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -3919,16 +3689,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-diversity-inclusion-and-belonging-human-resource-certificate-of-completion",
-          title: "Human Resource Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers human resource certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -4108,22 +3868,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-1-hr-fundamentals-human-resource-certificate-of-completion",
-          title: "Human Resource Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers human resource certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -4301,22 +4045,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-3-interviewing-human-resource-certificate-of-completion",
-          title: "Human Resource Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers human resource certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -4472,16 +4200,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-8-retirement-planning-human-resource-certificate-of-completion",
-          title: "Human Resource Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers human resource certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -4685,16 +4403,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-7-anti-harassment-and-discrimination-human-resource-certificate-of-completion",
-          title: "Human Resource Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers human resource certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -4852,16 +4560,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-talent-management-human-resource-certificate-of-completion",
-          title: "Human Resource Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers human resource certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -5009,16 +4707,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-unconscious-bias-human-resource-certificate-of-completion",
-          title: "Human Resource Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers human resource certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -5186,16 +4874,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-workplace-well-being-human-resource-certificate-of-completion",
-          title: "Human Resource Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers human resource certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -5363,16 +5041,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-brand-identity-and-strategy-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -5566,16 +5234,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-content-marketing-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -5743,16 +5401,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-customer-and-marketing-research-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -5966,16 +5614,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-9-email-marketing-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -6169,16 +5807,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-marketing-fundamentals-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -6336,16 +5964,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-11-marketing-analytics-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -6513,16 +6131,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-10-paid-advertising-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -6726,16 +6334,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-product-marketing-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -6939,16 +6537,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-7-search-engine-optimization-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -7172,16 +6760,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-8-social-media-marketing-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -7319,16 +6897,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-website-marketing-marketing-certificate-of-completion",
-          title: "Marketing Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers marketing certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -7486,16 +7054,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-closing-the-deal-sales-certificate-of-completion",
-          title: "Sales Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers sales certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -7689,16 +7247,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-sales-fundamentals-sales-fundamentals-certificate-of-completion",
-          title: "Sales Fundamentals Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers sales fundamentals certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -7846,16 +7394,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-7-handling-objections-sales-certificate-of-completion",
-          title: "Sales Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers sales certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -8089,16 +7627,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-sales-leadership-and-management-sales-certificate-of-completion",
-          title: "Sales Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers sales certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -8312,16 +7840,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-presenting-your-solution-sales-certificate-of-completion",
-          title: "Sales Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers sales certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -8489,16 +8007,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-8-prospecting-sales-certificate-of-completion",
-          title: "Sales Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers sales certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -8666,16 +8174,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-sales-psychology-sales-certificate-of-completion",
-          title: "Sales Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers sales certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -8869,16 +8367,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-building-relationships-sales-certificate-of-completion",
-          title: "Sales Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers sales certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -9026,16 +8514,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-8-project-change-management-project-management-certificate-of-completion",
-          title: "Project Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers project management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -9193,16 +8671,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-project-communication-project-management-certificate-of-completion",
-          title: "Project Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers project management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -9360,16 +8828,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-project-frameworks-project-management-certificate-of-completion",
-          title: "Project Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers project management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -9537,16 +8995,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-project-management-fundamentals-project-management-certificate-of-completion",
-          title: "Project Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers project management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -9694,16 +9142,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-7-project-improvement-project-management-certificate-of-completion",
-          title: "Project Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers project management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -9871,16 +9309,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-project-scheduling-project-management-certificate-of-completion",
-          title: "Project Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers project management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -10048,16 +9476,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-project-reporting-project-management-certificate-of-completion",
-          title: "Project Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers project management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -10225,16 +9643,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-project-scope-management-project-management-certificate-of-completion",
-          title: "Project Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers project management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -10414,22 +9822,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-4-customer-communication-channels-customer-service-certificate-of-completion",
-          title: "Customer Service Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers customer service certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -10607,22 +9999,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-3-customer-communication-basics-customer-service-certificate-of-completion",
-          title: "Customer Service Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers customer service certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -10768,16 +10144,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-culture-sensitivity-customer-service-certificate-of-completion",
-          title: "Customer Service Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers customer service certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -10957,22 +10323,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-7-difficult-situations-customer-service-certificate-of-completion",
-          title: "Customer Service Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers customer service certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -11108,16 +10458,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-customer-service-fundamentals-customer-service-certificate-of-completion",
-          title: "Customer Service Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers customer service certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -11275,16 +10615,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-customer-service-skills-customer-service-certificate-of-completion",
-          title: "Customer Service Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers customer service certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -11478,16 +10808,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-team-management-customer-service-certificate-of-completion",
-          title: "Customer Service Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers customer service certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -11655,16 +10975,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-assessing-your-strengths-and-skills-career-management-certificate-of-completion",
-          title: "Career Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers career management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -11868,16 +11178,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-driving-your-career-career-management-certificate-of-completion",
-          title: "Career Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers career management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -12057,22 +11357,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-3-finding-a-new-job-career-management-certificate-of-completion",
-          title: "Career Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers career management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -12218,16 +11502,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-mentoring-in-the-workplace-career-management-certificate-of-completion",
-          title: "Career Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers career management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -12385,16 +11659,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-networking-career-management-certificate-of-completion",
-          title: "Career Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers career management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -12598,16 +11862,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-new-professional-career-management-certificate-of-completion",
-          title: "Career Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers career management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -12801,16 +12055,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-9-overcoming-challenges-career-management-certificate-of-completion",
-          title: "Career Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers career management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -12958,16 +12202,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-7-professional-etiquette-career-management-certificate-of-completion",
-          title: "Career Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers career management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -13115,16 +12349,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-8-working-relationships-career-management-certificate-of-completion",
-          title: "Career Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers career management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -13282,16 +12506,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-change-management-fundamentals-change-management-certificate-of-completion",
-          title: "Change Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers change management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -13449,16 +12663,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-change-management-models-change-management-certificate-of-completion",
-          title: "Change Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers change management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -13596,16 +12800,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-communicating-change-change-management-certificate-of-completion",
-          title: "Change Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers change management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -13743,16 +12937,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-leading-through-change-change-management-certificate-of-completion",
-          title: "Change Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers change management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -13900,16 +13084,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-managing-change-in-time-of-crisis-change-management-certificate-of-completion",
-          title: "Change Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers change management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -14067,16 +13241,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-the-change-management-process-change-management-certificate-of-completion",
-          title: "Change Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers change management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -14270,16 +13434,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-8-communicating-in-difficult-situations-communication-certificate-of-completion",
-          title: "Communication Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers communication certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -14437,16 +13591,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-empathy-communication-certificate-of-completion",
-          title: "Communication Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers communication certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -14604,16 +13748,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-communication-fundamentals-communication-fundamentals-certificate-of-completion",
-          title: "Communication Fundamentals Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers communication fundamentals certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -14781,16 +13915,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-meetings-meetings-certificate-of-completion",
-          title: "Meetings Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers meetings certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -14948,16 +14072,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-negotiation-and-persuasion-communication-certificate-of-completion",
-          title: "Communication Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers communication certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -15161,16 +14275,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-presentations-communication-certificate-of-completion",
-          title: "Communication Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers communication certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -15350,22 +14454,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-3-verbal-communication-communication-certificate-of-completion",
-          title: "Communication Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers communication certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -15543,22 +14631,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-7-writing-well-communication-certificate-of-completion",
-          title: "Communication Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers communication certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -15714,16 +14786,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-crisis-management-leadership-certificate-of-completion",
-          title: "Leadership Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers leadership certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -15891,16 +14953,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-emotional-intelligence-leadership-certificate-of-completion",
-          title: "Leadership Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers leadership certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -16048,16 +15100,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-leadership-fundamentals-leadership-certificate-of-completion",
-          title: "Leadership Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers leadership certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -16225,16 +15267,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-leadership-styles-leadership-certificate-of-completion",
-          title: "Leadership Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers leadership certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -16372,16 +15404,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-building-career-resilience-resilience-certificate-of-completion",
-          title: "Resilience Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers resilience certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -16539,16 +15561,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-emotional-and-physical-resilience-resilience-certificate-of-completion",
-          title: "Resilience Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers resilience certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -16686,16 +15698,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-leadership-and-resilience-resilience-certificate-of-completion",
-          title: "Resilience Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers resilience certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -16833,16 +15835,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-resilience-fundamentals-resilience-certificate-of-completion",
-          title: "Resilience Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers resilience certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -17022,22 +16014,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-5-thriving-through-challenges-resilience-certificate-of-completion",
-          title: "Resilience Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers resilience certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -17193,16 +16169,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-problem-solving-fundamentals-problem-solving-certificate-of-completion",
-          title: "Problem Solving Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers problem solving certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -17360,16 +16326,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-steps-to-problem-solving-problem-solving-certificate-of-completion",
-          title: "Problem Solving Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers problem solving certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -17517,16 +16473,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-problem-solving-in-the-workplace-problem-solving-certificate-of-completion",
-          title: "Problem Solving Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers problem solving certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -17674,16 +16620,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-advanced-problem-solving-problem-solving-certificate-of-completion",
-          title: "Problem Solving Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers problem solving certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -17841,16 +16777,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-concentration-time-management-certificate-of-completion",
-          title: "Time Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers time management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -17998,16 +16924,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-time-management-fundamentals-time-management-certificate-of-completion",
-          title: "Time Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers time management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -18145,16 +17061,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-prioritization-time-management-certificate-of-completion",
-          title: "Time Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers time management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -18292,16 +17198,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-scheduling-time-management-certificate-of-completion",
-          title: "Time Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers time management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -18459,16 +17355,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-overcoming-time-challenges-time-management-certificate-of-completion",
-          title: "Time Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers time management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -18616,16 +17502,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-goal-setting-time-management-certificate-of-completion",
-          title: "Time Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers time management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -18783,16 +17659,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-5-delegating-tasks-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -18972,22 +17838,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "module-3-developing-your-team-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -19143,16 +17993,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-team-management-fundamentals-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -19310,16 +18150,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-11-letting-an-employee-go-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -19477,16 +18307,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-7-managing-remote-teams-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -19644,16 +18464,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-6-motivating-your-team-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -19801,16 +18611,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-new-manager-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -20014,16 +18814,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-9-performance-management-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -20191,16 +18981,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-10-resolving-conflict-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -20368,16 +19148,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-4-team-culture-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -20545,16 +19315,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-8-team-dynamics-team-management-certificate-of-completion",
-          title: "Team Management Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers team management certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -20692,16 +19452,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-3-critical-thinking-and-information-literacy-critical-thinking-certificate-of-completion",
-          title: "Critical Thinking Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers critical thinking certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -20859,16 +19609,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-1-critical-thinking-fundamentals-critical-thinking-certificate-of-completion",
-          title: "Critical Thinking Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers critical thinking certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -21016,16 +19756,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "module-2-thinking-in-the-workplace-critical-thinking-certificate-of-completion",
-          title: "Critical Thinking Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers critical thinking certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -21183,16 +19913,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "working-with-word-objects-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -21330,16 +20050,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 20,
         },
-        {
-          slug: "managing-word-edits-and-document-layouts-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -21477,16 +20187,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "introduction-to-excel-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -21624,16 +20324,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-worksheets-and-workbooks-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -21771,16 +20461,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "formatting-cells-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -21928,16 +20608,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "introducing-the-powerpoint-fundamentals-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -22095,16 +20765,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-content-on-slides-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -22242,16 +20902,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "getting-started-with-outlook-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -22389,16 +21039,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "introduction-to-databases-and-microsoft-access-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -22566,16 +21206,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-word-documents-and-options-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -22713,16 +21343,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 20,
         },
-        {
-          slug: "inserting-and-managing-word-tables-and-lists-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -22880,16 +21500,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-word-references-and-finalizing-word-documents-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -23027,16 +21637,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "updating-word-settings-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -23164,16 +21764,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 20,
         },
-        {
-          slug: "modifying-and-creating-document-style-and-templates-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -23321,16 +21911,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 20,
         },
-        {
-          slug: "creating-reusable-content-and-custom-design-elements-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -23478,16 +22058,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "creating-reference-tables-and-restricting-editing-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -23615,16 +22185,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-document-content-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -23752,16 +22312,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "creating-and-managing-macros-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -23899,16 +22449,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-customer-lists-and-creating-mailings-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -24056,16 +22596,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-tables-and-range-data-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -24223,16 +22753,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "using-formulas-and-functions-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -24390,16 +22910,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "getting-and-transforming-data-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -24579,22 +23089,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 3",
-        order: 3,
-        lessons: [
-        {
-          slug: "visualizing-data-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -24730,16 +23224,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "preparing-to-print-and-checking-for-issues-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -24887,16 +23371,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-and-formatting-data-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -25054,16 +23528,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "using-advanced-formulas-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -25211,16 +23675,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "validating-and-auditing-data-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -25368,16 +23822,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "analyzing-data-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -25535,16 +23979,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "using-simple-macros-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -25712,16 +24146,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "using-microsoft-pivottables-and-microsoft-pivotcharts-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       },
       {
@@ -25865,16 +24289,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "collaborating-with-other-people-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -26032,16 +24446,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "adding-visuals-to-presentations-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -26199,16 +24603,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "working-with-advanced-visuals-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -26366,16 +24760,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "organizing-and-printing-presentations-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -26543,16 +24927,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "configuring-slideshows-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -26720,16 +25094,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-slide-masters-and-presentation-settings-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -26867,16 +25231,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "composing-and-managing-email-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -27044,16 +25398,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "organizing-email-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -27181,16 +25525,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "automating-messages-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -27348,16 +25682,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-calendars-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -27505,16 +25829,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "creating-and-managing-contacts-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -27652,16 +25966,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "managing-tasks-and-notes-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -27799,16 +26103,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "adding-and-editing-data-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -27946,16 +26240,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "designing-and-setting-up-data-structure-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -28083,16 +26367,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "asking-questions-of-data-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -28220,16 +26494,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "understanding-reporting-basics-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -28357,16 +26621,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "defining-database-relationships-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -28494,16 +26748,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "asking-deeper-questions-of-data-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -28641,16 +26885,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 14,
         },
-        {
-          slug: "presenting-complex-data-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -28818,16 +27052,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "career-management-strategies-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       },
       {
@@ -29168,16 +27392,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "sales-techniques-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -29325,16 +27539,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "customer-service-excellence-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -29492,16 +27696,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "project-management-basics-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -30100,16 +28294,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "cybersecurity-basics-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -30267,16 +28451,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "effective-communication-skills-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -30404,16 +28578,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "building-resilience-in-the-workplace-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -30551,16 +28715,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "time-management-amp-prioritization-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -30674,22 +28828,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 2",
-        order: 2,
-        lessons: [
-        {
-          slug: "problem-solving-techniques-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -30789,16 +28927,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "critical-thinking-strategies-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -30992,16 +29120,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "marketing-fundamentals-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -37672,22 +35790,6 @@ export const courses: Course[] = [
         }
         ],
       },
-      {
-        title: "Applied Practice 2",
-        order: 2,
-        lessons: [
-        {
-          slug: "leadership-development-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
-        ],
-      }
     ],
     assessments: [
     {
@@ -37879,16 +35981,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "team-management-strategies-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -38026,16 +36118,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "leading-through-change-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -38173,16 +36255,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "employee-mental-health-amp-wellness-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],
@@ -38284,16 +36356,6 @@ export const courses: Course[] = [
           hasVRPractice: false,
           durationMinutes: 8,
         },
-        {
-          slug: "stress-management-techniques-certificate-of-completion",
-          title: "Certificate of Completion",
-          type: "text" as const,
-          content: "This lesson covers certificate of completion. Work through the provided materials and complete any activities before proceeding.",
-          videoUrl: "https://video.vowlms.co.za/placeholder",
-          hasAssessment: false,
-          hasVRPractice: false,
-          durationMinutes: 8,
-        }
         ],
       }
     ],

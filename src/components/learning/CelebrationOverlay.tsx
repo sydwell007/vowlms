@@ -21,13 +21,26 @@ function useConfetti(count: number): ConfettiPiece[] {
   );
 }
 
+export type CelebrationCertificateState = "none" | "pending" | "ready" | "incomplete" | "error";
+
+const CERTIFICATE_COPY: Record<CelebrationCertificateState, string> = {
+  none: "",
+  pending: " Checking your certificate…",
+  ready: " Your certificate is ready — find it on your results page.",
+  incomplete: " Finish every remaining assessment to unlock your certificate.",
+  error: " We couldn't confirm your certificate right now — check back on your results page shortly.",
+};
+
 export function CelebrationOverlay({
   courseTitle,
   courseSlug,
+  certificateState = "none",
   onClose,
 }: {
   courseTitle: string;
   courseSlug: string;
+  /** "none" for courses with no certificate at all — omits certificate copy entirely. */
+  certificateState?: CelebrationCertificateState;
   onClose: () => void;
 }) {
   const confetti = useConfetti(18);
@@ -68,8 +81,8 @@ export function CelebrationOverlay({
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gold/15 text-3xl">🎉</div>
         <h2 id="celebration-heading" className="mt-5 text-2xl font-semibold">Course complete!</h2>
         <p className="mt-3 text-sm leading-6 text-white/72">
-          You&apos;ve finished every lesson in <span className="font-semibold text-white">{courseTitle}</span>. Your
-          certificate is on its way.
+          You&apos;ve finished every lesson in <span className="font-semibold text-white">{courseTitle}</span>.
+          {CERTIFICATE_COPY[certificateState]}
         </p>
 
         <div className="mt-7 flex flex-col gap-3">

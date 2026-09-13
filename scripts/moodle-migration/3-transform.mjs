@@ -109,9 +109,13 @@ function buildLessonsFromSections(sections, courseSlug) {
   for (const section of sections) {
     const titleLower = section.title.toLowerCase();
 
-    // Skip meta sections
+    // Skip meta sections — including per-module "Certificate of Completion"
+    // sections, which are placeholder Moodle sections with no real content
+    // (they'd otherwise become a fake lesson rendering "Content is being
+    // loaded"). The one real certificate is issued once per whole course via
+    // the actual certificate-generation flow, not as a per-module lesson.
     if (
-      /welcome|announcements|meet and greet|rate this course|module preview|course module/i.test(
+      /welcome|announcements|meet and greet|rate this course|module preview|course module|certificate of completion|compliance certificate/i.test(
         titleLower
       )
     ) {

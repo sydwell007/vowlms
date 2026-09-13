@@ -5,6 +5,8 @@ import { ButtonLink } from "@/components/ui/ButtonLink";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { getCourseStats } from "@/lib/course-content";
+import { allGroupings } from "@/data/course-groupings";
+import { isCertificateCourse } from "@/lib/certificates/catalogue";
 import type { Course } from "@/types/lms";
 
 type EnrolledCourse = {
@@ -14,34 +16,61 @@ type EnrolledCourse = {
   status?: string;
 };
 
-type CertificateState = "checking" | "ready" | "not-yet" | "unknown";
+type AssessmentAttempt = { course_slug?: string; passed?: number | boolean; score?: number; attempted_at?: string };
+
+type CertificateState = "checking" | "ready" | "not-yet" | "unknown" | "none";
 
 function totalLessonCount(course: Course) {
   return getCourseStats(course).lessonCount;
 }
 
-function readLocalAssessmentScore(course: Course): number | null {
-  const assessmentSlug = course.assessments[0]?.slug;
-  if (!assessmentSlug) return null;
-  try {
-    const attempts = JSON.parse(localStorage.getItem("vowlms_assessments") ?? "{}");
-    const attempt = attempts[assessmentSlug];
-    return typeof attempt?.score === "number" ? attempt.score : null;
-  } catch {
-    return null;
+/**
+ * A course's assessments live on its real child courses, joined here by
+ * child-course slug (assessment_attempts has no assessment slug of its own —
+ * see public/php/api/assessments/history.php) — never localStorage, which
+ * only ever reflected whatever device last took the assessment, not the
+ * learner's real synced account state.
+ */
+async function fetchPassedAssessmentCount(course: Course): Promise<{ passed: number; total: number } | null> {
+  const grouping = allGroupings.find((g) => g.slug === course.slug);
+  const childSlugs = new Set(grouping?.moduleSlugOrder ?? [course.slug]);
+  const total = course.assessments.length;
+  if (total === 0) return null;
+
+  const res = await fetch("/api/assessments/history", { cache: "no-store", credentials: "same-origin" });
+  if (!res.ok) return null;
+  const payload = await res.json();
+  const attempts = (payload?.data?.attempts ?? []) as AssessmentAttempt[];
+
+  // Keep only the most recent attempt per child course, since a retake
+  // shouldn't be double-counted against `total`.
+  const latestByChildCourse = new Map<string, AssessmentAttempt>();
+  for (const attempt of attempts) {
+    if (!attempt.course_slug || !childSlugs.has(attempt.course_slug)) continue;
+    const existing = latestByChildCourse.get(attempt.course_slug);
+    if (!existing || (attempt.attempted_at ?? "") > (existing.attempted_at ?? "")) {
+      latestByChildCourse.set(attempt.course_slug, attempt);
+    }
   }
+
+  const passed = [...latestByChildCourse.values()].filter((a) => a.passed === 1 || a.passed === true).length;
+  return { passed, total };
 }
 
 export function ResultsPageClient({ course }: { course: Course }) {
   const [progress, setProgress] = useState<number | null>(null);
   const [certificateState, setCertificateState] = useState<CertificateState>("checking");
-  const [assessmentScore, setAssessmentScore] = useState<number | null>(null);
+  const [assessmentSummary, setAssessmentSummary] = useState<{ passed: number; total: number } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    Promise.resolve().then(() => {
-      if (!cancelled) setAssessmentScore(readLocalAssessmentScore(course));
-    });
+    fetchPassedAssessmentCount(course)
+      .then((result) => {
+        if (!cancelled) setAssessmentSummary(result);
+      })
+      .catch(() => {
+        if (!cancelled) setAssessmentSummary(null);
+      });
 
     const controller = new AbortController();
 
@@ -54,13 +83,22 @@ export function ResultsPageClient({ course }: { course: Course }) {
       })
       .catch(() => setProgress(null));
 
-    fetch(`/api/certificates/generate?courseSlug=${encodeURIComponent(course.slug)}`, {
-      cache: "no-store",
-      credentials: "same-origin",
-      signal: controller.signal,
-    })
-      .then((res) => setCertificateState(res.ok ? "ready" : res.status === 404 ? "not-yet" : "unknown"))
-      .catch(() => setCertificateState("unknown"));
+    Promise.resolve().then(() => {
+      if (cancelled) return;
+      if (!isCertificateCourse(course.slug)) {
+        // No certificate exists for this course at all — never claim one is
+        // coming, unlike the generic "not-yet" state below.
+        setCertificateState("none");
+        return;
+      }
+      fetch(`/api/certificates/generate?courseSlug=${encodeURIComponent(course.slug)}`, {
+        cache: "no-store",
+        credentials: "same-origin",
+        signal: controller.signal,
+      })
+        .then((res) => setCertificateState(res.ok ? "ready" : res.status === 404 ? "not-yet" : "unknown"))
+        .catch(() => setCertificateState("unknown"));
+    });
 
     return () => {
       cancelled = true;
@@ -77,7 +115,7 @@ export function ResultsPageClient({ course }: { course: Course }) {
         <div className="premium-card rounded-xl p-6">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#1166c8]">Results</p>
           <h1 className="mt-4 text-balance text-3xl font-semibold sm:text-5xl">{course.title}</h1>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <MetricCard
               label="Lessons"
               value={done !== null ? `${done}/${total}` : "—"}
@@ -85,14 +123,9 @@ export function ResultsPageClient({ course }: { course: Course }) {
             />
             <MetricCard
               label="Assessment"
-              value={assessmentScore !== null ? `${assessmentScore}%` : "—"}
-              detail={assessmentScore !== null ? "Your last attempt on this device" : "Not yet taken on this device"}
+              value={assessmentSummary ? `${assessmentSummary.passed}/${assessmentSummary.total}` : "—"}
+              detail={assessmentSummary ? "Synced from your account" : "Not yet taken"}
             />
-            {course.vrPractices[0] ? (
-              <MetricCard label="VR practice" value="Preview" detail="Guided practice — not yet scored live" />
-            ) : (
-              <MetricCard label="VR practice" value="—" detail="Not offered for this course" />
-            )}
             <MetricCard label="Rewards" value={`${course.rewards}`} detail="VOWR available for this course" />
           </div>
           <div className="mt-8">
@@ -107,7 +140,7 @@ export function ResultsPageClient({ course }: { course: Course }) {
               <span className="inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-muted">
                 Checking certificate status…
               </span>
-            ) : (
+            ) : certificateState === "none" ? null : (
               <ButtonLink href={`/courses/${course.slug}`} variant="ink">
                 Complete this course to unlock your certificate
               </ButtonLink>
