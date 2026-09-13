@@ -273,7 +273,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-employee-ethics-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -441,7 +441,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-business-ethics-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -618,7 +618,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-leadership-on-ethics-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -785,7 +785,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-workplace-health-amp-safety-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -952,7 +952,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-workplace-violence-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -1195,7 +1195,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-inclusive-communication-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -1372,7 +1372,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-culture-competence-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -1519,7 +1519,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-inclusion-and-respect-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -1666,7 +1666,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-stress-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -1823,7 +1823,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-stress-and-work-performance-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -2016,7 +2016,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-strategies-to-relieve-stress-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -2173,7 +2173,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-online-security-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -2330,7 +2330,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-how-to-protect-your-data-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -2487,7 +2487,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-social-engineering-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -2654,7 +2654,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-dealing-with-emotions-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -2811,7 +2811,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-exercise-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -2978,7 +2978,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-forming-healthy-habits-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -3145,7 +3145,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-mental-health-awareness-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -3338,7 +3338,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-positive-psychology-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -3515,7 +3515,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-positive-psychology-in-the-workplace-rate-this-module",
           title: "Rate this Module ",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module . Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -3682,7 +3682,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-diversity-inclusion-and-belonging-rate-this-module",
           title: "Rate this Module ",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module . Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -3859,7 +3859,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-hr-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -4036,7 +4036,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-interviewing-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -4193,7 +4193,7 @@ export const courses: Course[] = [
         {
           slug: "module-8-retirement-planning-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -4396,7 +4396,7 @@ export const courses: Course[] = [
         {
           slug: "module-7-anti-harassment-and-discrimination-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -4553,7 +4553,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-talent-management-rate-this-module",
           title: "Rate this Module ",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module . Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -4700,7 +4700,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-unconscious-bias-rate-this-module",
           title: "Rate this Module ",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module . Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -4867,7 +4867,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-workplace-well-being-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -5034,7 +5034,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-brand-identity-and-strategy-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -5227,7 +5227,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-content-marketing-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -5394,7 +5394,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-customer-and-marketing-research-rate-this-module",
           title: "Rate this Module ",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module . Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -5607,7 +5607,7 @@ export const courses: Course[] = [
         {
           slug: "module-9-email-marketing-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -5800,7 +5800,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-marketing-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -5957,7 +5957,7 @@ export const courses: Course[] = [
         {
           slug: "module-11-marketing-analytics-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -6124,7 +6124,7 @@ export const courses: Course[] = [
         {
           slug: "module-10-paid-advertising-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -6327,7 +6327,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-product-marketing-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -6530,7 +6530,7 @@ export const courses: Course[] = [
         {
           slug: "module-7-search-engine-optimization-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -6753,7 +6753,7 @@ export const courses: Course[] = [
         {
           slug: "module-8-social-media-marketing-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -6890,7 +6890,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-website-marketing-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -7047,7 +7047,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-closing-the-deal-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -7240,7 +7240,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-sales-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -7387,7 +7387,7 @@ export const courses: Course[] = [
         {
           slug: "module-7-handling-objections-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -7620,7 +7620,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-sales-leadership-and-management-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -7833,7 +7833,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-presenting-your-solution-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -8000,7 +8000,7 @@ export const courses: Course[] = [
         {
           slug: "module-8-prospecting-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -8167,7 +8167,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-sales-psychology-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -8360,7 +8360,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-building-relationships-rate-this-module",
           title: "Rate this Module ",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module . Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -8507,7 +8507,7 @@ export const courses: Course[] = [
         {
           slug: "module-8-project-change-management-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -8664,7 +8664,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-project-communication-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -8821,7 +8821,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-project-frameworks-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -8988,7 +8988,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-project-management-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -9135,7 +9135,7 @@ export const courses: Course[] = [
         {
           slug: "module-7-project-improvement-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -9302,7 +9302,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-project-scheduling-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -9469,7 +9469,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-project-reporting-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -9636,7 +9636,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-project-scope-management-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -9813,7 +9813,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-customer-communication-channels-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -9990,7 +9990,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-customer-communication-basics-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -10137,7 +10137,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-culture-sensitivity-rate-this-module",
           title: "Rate this Module ",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module . Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -10314,7 +10314,7 @@ export const courses: Course[] = [
         {
           slug: "module-7-difficult-situations-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -10451,7 +10451,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-customer-service-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -10608,7 +10608,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-customer-service-skills-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -10801,7 +10801,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-team-management-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -10968,7 +10968,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-assessing-your-strengths-and-skills-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -11171,7 +11171,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-driving-your-career-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -11348,7 +11348,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-finding-a-new-job-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -11495,7 +11495,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-mentoring-in-the-workplace-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -11652,7 +11652,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-networking-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -11855,7 +11855,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-new-professional-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -12048,7 +12048,7 @@ export const courses: Course[] = [
         {
           slug: "module-9-overcoming-challenges-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -12195,7 +12195,7 @@ export const courses: Course[] = [
         {
           slug: "module-7-professional-etiquette-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -12342,7 +12342,7 @@ export const courses: Course[] = [
         {
           slug: "module-8-working-relationships-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -12499,7 +12499,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-change-management-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -12656,7 +12656,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-change-management-models-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -12793,7 +12793,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-communicating-change-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -12930,7 +12930,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-leading-through-change-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -13077,7 +13077,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-managing-change-in-time-of-crisis-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -13234,7 +13234,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-the-change-management-process-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -13427,7 +13427,7 @@ export const courses: Course[] = [
         {
           slug: "module-8-communicating-in-difficult-situations-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -13584,7 +13584,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-empathy-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -13741,7 +13741,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-communication-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -13908,7 +13908,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-meetings-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -14065,7 +14065,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-negotiation-and-persuasion-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -14268,7 +14268,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-presentations-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -14445,7 +14445,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-verbal-communication-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -14622,7 +14622,7 @@ export const courses: Course[] = [
         {
           slug: "module-7-writing-well-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -14779,7 +14779,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-crisis-management-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -14946,7 +14946,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-emotional-intelligence-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -15093,7 +15093,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-leadership-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -15260,7 +15260,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-leadership-styles-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -15397,7 +15397,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-building-career-resilience-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -15554,7 +15554,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-emotional-and-physical-resilience-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -15691,7 +15691,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-leadership-and-resilience-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -15828,7 +15828,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-resilience-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -16005,7 +16005,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-thriving-through-challenges-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -16162,7 +16162,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-problem-solving-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -16319,7 +16319,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-steps-to-problem-solving-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -16466,7 +16466,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-problem-solving-in-the-workplace-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -16613,7 +16613,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-advanced-problem-solving-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -16770,7 +16770,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-concentration-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -16917,7 +16917,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-time-management-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -17054,7 +17054,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-prioritization-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -17191,7 +17191,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-scheduling-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -17348,7 +17348,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-overcoming-time-challenges-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -17495,7 +17495,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-goal-setting-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -17652,7 +17652,7 @@ export const courses: Course[] = [
         {
           slug: "module-5-delegating-tasks-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -17829,7 +17829,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-developing-your-team-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -17986,7 +17986,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-team-management-fundamentals-rate-this-module",
           title: "Rate this Module ",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module . Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -18143,7 +18143,7 @@ export const courses: Course[] = [
         {
           slug: "module-11-letting-an-employee-go-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -18300,7 +18300,7 @@ export const courses: Course[] = [
         {
           slug: "module-7-managing-remote-teams-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -18457,7 +18457,7 @@ export const courses: Course[] = [
         {
           slug: "module-6-motivating-your-team-rate-this-module",
           title: "Rate this Module ",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module . Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -18604,7 +18604,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-new-manager-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -18807,7 +18807,7 @@ export const courses: Course[] = [
         {
           slug: "module-9-performance-management-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -18974,7 +18974,7 @@ export const courses: Course[] = [
         {
           slug: "module-10-resolving-conflict-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -19141,7 +19141,7 @@ export const courses: Course[] = [
         {
           slug: "module-4-team-culture-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -19308,7 +19308,7 @@ export const courses: Course[] = [
         {
           slug: "module-8-team-dynamics-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -19445,7 +19445,7 @@ export const courses: Course[] = [
         {
           slug: "module-3-critical-thinking-and-information-literacy-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -19602,7 +19602,7 @@ export const courses: Course[] = [
         {
           slug: "module-1-critical-thinking-fundamentals-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -19749,7 +19749,7 @@ export const courses: Course[] = [
         {
           slug: "module-2-thinking-in-the-workplace-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -19906,7 +19906,7 @@ export const courses: Course[] = [
         {
           slug: "working-with-word-objects-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -20180,7 +20180,7 @@ export const courses: Course[] = [
         {
           slug: "introduction-to-excel-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -20317,7 +20317,7 @@ export const courses: Course[] = [
         {
           slug: "managing-worksheets-and-workbooks-survey-survey-rate-this-module",
           title: "Survey: Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -20454,7 +20454,7 @@ export const courses: Course[] = [
         {
           slug: "formatting-cells-survey-survey-rate-this-module",
           title: "Survey: Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -20601,7 +20601,7 @@ export const courses: Course[] = [
         {
           slug: "introducing-the-powerpoint-fundamentals-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -20758,7 +20758,7 @@ export const courses: Course[] = [
         {
           slug: "managing-content-on-slides-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -20895,7 +20895,7 @@ export const courses: Course[] = [
         {
           slug: "getting-started-with-outlook-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -21032,7 +21032,7 @@ export const courses: Course[] = [
         {
           slug: "introduction-to-databases-and-microsoft-access-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -21199,7 +21199,7 @@ export const courses: Course[] = [
         {
           slug: "managing-word-documents-and-options-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -21493,7 +21493,7 @@ export const courses: Course[] = [
         {
           slug: "managing-word-references-and-finalizing-word-documents-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -21630,7 +21630,7 @@ export const courses: Course[] = [
         {
           slug: "updating-word-settings-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -22051,7 +22051,7 @@ export const courses: Course[] = [
         {
           slug: "creating-reference-tables-and-restricting-editing-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -22178,7 +22178,7 @@ export const courses: Course[] = [
         {
           slug: "managing-document-content-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -22305,7 +22305,7 @@ export const courses: Course[] = [
         {
           slug: "creating-and-managing-macros-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -22442,7 +22442,7 @@ export const courses: Course[] = [
         {
           slug: "managing-customer-lists-and-creating-mailings-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -22589,7 +22589,7 @@ export const courses: Course[] = [
         {
           slug: "managing-tables-and-range-data-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -22746,7 +22746,7 @@ export const courses: Course[] = [
         {
           slug: "using-formulas-and-functions-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -22903,7 +22903,7 @@ export const courses: Course[] = [
         {
           slug: "getting-and-transforming-data-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -23080,7 +23080,7 @@ export const courses: Course[] = [
         {
           slug: "visualizing-data-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -23217,7 +23217,7 @@ export const courses: Course[] = [
         {
           slug: "preparing-to-print-and-checking-for-issues-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -23364,7 +23364,7 @@ export const courses: Course[] = [
         {
           slug: "managing-and-formatting-data-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -23521,7 +23521,7 @@ export const courses: Course[] = [
         {
           slug: "using-advanced-formulas-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -23668,7 +23668,7 @@ export const courses: Course[] = [
         {
           slug: "validating-and-auditing-data-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -23815,7 +23815,7 @@ export const courses: Course[] = [
         {
           slug: "analyzing-data-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -23972,7 +23972,7 @@ export const courses: Course[] = [
         {
           slug: "using-simple-macros-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -24139,7 +24139,7 @@ export const courses: Course[] = [
         {
           slug: "using-microsoft-pivottables-and-microsoft-pivotcharts-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -24282,7 +24282,7 @@ export const courses: Course[] = [
         {
           slug: "collaborating-with-other-people-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -24439,7 +24439,7 @@ export const courses: Course[] = [
         {
           slug: "adding-visuals-to-presentations-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -24596,7 +24596,7 @@ export const courses: Course[] = [
         {
           slug: "working-with-advanced-visuals-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -24753,7 +24753,7 @@ export const courses: Course[] = [
         {
           slug: "organizing-and-printing-presentations-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -24920,7 +24920,7 @@ export const courses: Course[] = [
         {
           slug: "configuring-slideshows-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -25087,7 +25087,7 @@ export const courses: Course[] = [
         {
           slug: "managing-slide-masters-and-presentation-settings-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -25224,7 +25224,7 @@ export const courses: Course[] = [
         {
           slug: "composing-and-managing-email-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -25391,7 +25391,7 @@ export const courses: Course[] = [
         {
           slug: "organizing-email-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -25518,7 +25518,7 @@ export const courses: Course[] = [
         {
           slug: "automating-messages-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -25675,7 +25675,7 @@ export const courses: Course[] = [
         {
           slug: "managing-calendars-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -25822,7 +25822,7 @@ export const courses: Course[] = [
         {
           slug: "creating-and-managing-contacts-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -25959,7 +25959,7 @@ export const courses: Course[] = [
         {
           slug: "managing-tasks-and-notes-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -26096,7 +26096,7 @@ export const courses: Course[] = [
         {
           slug: "adding-and-editing-data-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -26233,7 +26233,7 @@ export const courses: Course[] = [
         {
           slug: "designing-and-setting-up-data-structure-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -26360,7 +26360,7 @@ export const courses: Course[] = [
         {
           slug: "asking-questions-of-data-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -26487,7 +26487,7 @@ export const courses: Course[] = [
         {
           slug: "understanding-reporting-basics-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -26614,7 +26614,7 @@ export const courses: Course[] = [
         {
           slug: "defining-database-relationships-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -26741,7 +26741,7 @@ export const courses: Course[] = [
         {
           slug: "asking-deeper-questions-of-data-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -26878,7 +26878,7 @@ export const courses: Course[] = [
         {
           slug: "presenting-complex-data-survey-rate-this-module",
           title: "Survey: Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers survey: rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -50206,7 +50206,7 @@ export const courses: Course[] = [
         {
           slug: "making-polenta-bites-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -55570,7 +55570,7 @@ export const courses: Course[] = [
         {
           slug: "making-cheddar-quiche-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -55929,7 +55929,7 @@ export const courses: Course[] = [
         {
           slug: "making-sausage-omelette-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -56106,7 +56106,7 @@ export const courses: Course[] = [
         {
           slug: "making-mushroom-omelette-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -56465,7 +56465,7 @@ export const courses: Course[] = [
         {
           slug: "making-vegetable-omelette-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -57097,7 +57097,7 @@ export const courses: Course[] = [
         {
           slug: "making-healthy-salmon-omelette-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -57274,7 +57274,7 @@ export const courses: Course[] = [
         {
           slug: "making-three-ingredient-omelets-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -57451,7 +57451,7 @@ export const courses: Course[] = [
         {
           slug: "making-seafood-egg-scramble-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,
@@ -58174,7 +58174,7 @@ export const courses: Course[] = [
         {
           slug: "making-broccoli-omelette-rate-this-module",
           title: "Rate this Module",
-          type: "text" as const,
+          type: "survey" as const,
           content: "This lesson covers rate this module. Work through the provided materials and complete any activities before proceeding.",
           videoUrl: "https://video.vowlms.co.za/placeholder",
           hasAssessment: false,

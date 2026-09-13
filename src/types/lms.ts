@@ -9,7 +9,7 @@ export type AcademyCategory =
   | "business-school"
   | "university-online";
 
-export type LessonType = "text" | "video" | "assessment" | "vr-practice";
+export type LessonType = "text" | "video" | "assessment" | "vr-practice" | "survey";
 
 export type VowHumanRole = "presenter" | "mentor" | "tutor" | "field-expert";
 

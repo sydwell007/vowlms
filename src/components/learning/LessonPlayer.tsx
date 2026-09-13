@@ -18,6 +18,7 @@ import {
   Lock,
   MessageSquare,
   Play,
+  Star,
   type LucideIcon,
 } from "lucide-react";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
@@ -25,6 +26,7 @@ import type { AcademyCategory, Lesson, Course, CourseModule } from "@/types/lms"
 import { CelebrationOverlay, type CelebrationCertificateState } from "@/components/learning/CelebrationOverlay";
 import { CertificateStatusCard } from "@/components/learning/CertificateStatusCard";
 import { LessonUnlockPanel } from "@/components/learning/LessonUnlockPanel";
+import { ModuleSurveyForm } from "@/components/learning/ModuleSurveyForm";
 import { PdfReader } from "@/components/learning/PdfReader";
 import { VowHumanPresenter } from "@/components/learning/VowHumanPresenter";
 import { useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
@@ -187,6 +189,25 @@ export function LessonPlayer({
   const assessment = course.assessments.find((a) => a.lessonSlug === lesson.slug);
   const vrPractice = course.vrPractices.find((v) => v.lessonSlug === lesson.slug);
   const accentColor = getAcademyAccentColor(academyCategory);
+
+  /**
+   * An assessment-type "lesson" is really just a pointer to a real
+   * /assessment/{slug} page — the lesson wrapper only ever showed a single
+   * "Take Assessment" button with no content of its own, so every link that
+   * would otherwise land on it (sidebar, prev/next, post-completion
+   * auto-navigate) goes straight to the real assessment instead of forcing
+   * a second click through an empty middle page.
+   */
+  const lessonHref = useCallback(
+    (l: Lesson): string => {
+      if (l.type === "assessment") {
+        const match = course.assessments.find((a) => a.lessonSlug === l.slug);
+        if (match) return `/assessment/${match.slug}`;
+      }
+      return `/lesson/${l.slug}`;
+    },
+    [course.assessments],
+  );
   const unlock = useCourseUnlockPurchase(courseSlugForNav, allModules);
   const showLockedModules = unlock.isPaidCourse && unlock.state !== "unlocked" && unlock.state !== "loading";
 
@@ -401,8 +422,8 @@ export function LessonPlayer({
       );
     }
 
-    setTimeout(() => router.push(`/lesson/${nextLesson.slug}`), 600);
-  }, [allModules, course.slug, courseSlugForNav, lesson.slug, module, nextLesson, router]);
+    setTimeout(() => router.push(lessonHref(nextLesson)), 600);
+  }, [allModules, course.slug, courseSlugForNav, lesson.slug, lessonHref, module, nextLesson, router]);
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f8fbfe]">
@@ -579,7 +600,7 @@ export function LessonPlayer({
                         <Link
                           key={l.slug}
                           ref={isCurrent ? activeLessonRef : undefined}
-                          href={`/lesson/${l.slug}`}
+                          href={lessonHref(l)}
                           aria-current={isCurrent ? "page" : undefined}
                           onClick={() => setSidebarOpen(false)}
                           className={`flex items-center gap-3 rounded-md px-2.5 py-2.5 text-sm transition ${isCurrent ? "bg-[#06111f] font-semibold text-white shadow-sm" : "text-ink hover:bg-white hover:shadow-sm"}`}
@@ -591,6 +612,8 @@ export function LessonPlayer({
                               <FileCheck2 aria-hidden="true" className="h-3 w-3" />
                             ) : l.type === "vr-practice" ? (
                               <Glasses aria-hidden="true" className="h-3 w-3" />
+                            ) : l.type === "survey" ? (
+                              <Star aria-hidden="true" className="h-3 w-3" />
                             ) : (
                               <Play aria-hidden="true" className="h-3 w-3" />
                             )}
@@ -664,7 +687,7 @@ export function LessonPlayer({
             <h1 className="text-balance text-3xl font-semibold text-ink sm:text-4xl">{lesson.title}</h1>
             <div className="mt-3 flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-[#1166c8]/10 px-3 py-1 text-xs font-semibold text-[#1166c8]">
-                {lesson.type === "vr-practice" ? "🥽 VR Practice" : lesson.type === "assessment" ? "📝 Assessment" : "▸ Lesson"}
+                {lesson.type === "vr-practice" ? "🥽 VR Practice" : lesson.type === "assessment" ? "📝 Assessment" : lesson.type === "survey" ? "⭐ Survey" : "▸ Lesson"}
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-muted">
                 ⏱ {lesson.durationMinutes} min
@@ -760,7 +783,7 @@ export function LessonPlayer({
             )}
 
             {/* ── TEXT / HTML CONTENT ──────────────────────────────────── */}
-            {hasContent && (
+            {hasContent && lesson.type !== "survey" && (
               <div className="mt-8">
                 <div className="premium-card rounded-xl p-6">
                   <h2 className="text-lg font-semibold text-ink mb-4">📖 Lesson content</h2>
@@ -844,6 +867,23 @@ export function LessonPlayer({
               </>
             )}
 
+            {lesson.type === "survey" && (
+              <ModuleSurveyForm
+                lessonSlug={lesson.slug}
+                alreadyCompleted={completed}
+                onSubmitted={() => {
+                  setCompleted(true);
+                  setCompletedSlugs((prev) => (prev.includes(lesson.slug) ? prev : [...prev, lesson.slug]));
+                  const progress = JSON.parse(localStorage.getItem("vowlms_progress") ?? "{}");
+                  const done: string[] = progress[courseSlugForNav]?.completedLessons ?? [];
+                  if (!done.includes(lesson.slug)) done.push(lesson.slug);
+                  progress[courseSlugForNav] = { ...(progress[courseSlugForNav] ?? {}), completedLessons: done };
+                  localStorage.setItem("vowlms_progress", JSON.stringify(progress));
+                  if (!nextLesson) setShowCelebration(true);
+                }}
+              />
+            )}
+
             {/* ── ACTIONS ──────────────────────────────────────────────── */}
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex gap-3">
@@ -861,12 +901,14 @@ export function LessonPlayer({
                 )}
               </div>
 
-              <button
-                onClick={markComplete}
-                className={`rounded-lg px-5 py-2.5 text-sm font-semibold transition ${completed ? "bg-emerald-500 text-white cursor-default" : "bg-gold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.25)] hover:bg-[#e8b830]"}`}
-              >
-                {completed ? "✓ Completed" : "Mark complete →"}
-              </button>
+              {lesson.type !== "survey" && (
+                <button
+                  onClick={markComplete}
+                  className={`rounded-lg px-5 py-2.5 text-sm font-semibold transition ${completed ? "bg-emerald-500 text-white cursor-default" : "bg-gold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.25)] hover:bg-[#e8b830]"}`}
+                >
+                  {completed ? "✓ Completed" : "Mark complete →"}
+                </button>
+              )}
             </div>
 
             {/* ── PREV / NEXT ──────────────────────────────────────────── */}
@@ -875,14 +917,14 @@ export function LessonPlayer({
             </div>
             <div className="grid grid-cols-2 gap-4">
               {prevLesson ? (
-                <Link href={`/lesson/${prevLesson.slug}`}
+                <Link href={lessonHref(prevLesson)}
                   className="premium-card rounded-xl p-4 text-left transition hover:border-[#1166c8]/20">
                   <p className="text-xs font-semibold text-muted">← Previous</p>
                   <p className="mt-1 text-sm font-semibold text-ink truncate">{prevLesson.title}</p>
                 </Link>
               ) : <div />}
               {nextLesson ? (
-                <Link href={`/lesson/${nextLesson.slug}`}
+                <Link href={lessonHref(nextLesson)}
                   className="premium-card rounded-xl p-4 text-right transition hover:border-[#1166c8]/20">
                   <p className="text-xs font-semibold text-muted">Next →</p>
                   <p className="mt-1 text-sm font-semibold text-ink truncate">{nextLesson.title}</p>
