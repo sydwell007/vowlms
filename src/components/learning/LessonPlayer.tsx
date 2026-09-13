@@ -335,7 +335,27 @@ export function LessonPlayer({
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ lessonSlug: lesson.slug, courseSlug: course.slug, completed: true }),
-    }).catch(() => null);
+    })
+      .then((res) => {
+        // Local state above already shows this lesson as done regardless —
+        // that's still correct UX (never make a learner re-watch content
+        // just because of a transient network blip). But silently
+        // swallowing every failure here (as this used to) means a real,
+        // non-transient failure (e.g. no active enrollment recorded for
+        // this course yet) leaves the server permanently unaware a lesson
+        // was completed, with nothing ever telling the learner their
+        // progress didn't actually save — exactly what caused a real
+        // account to sit at genuine 0% server-side progress on a module
+        // its own device showed as 100% complete.
+        if (!res.ok) {
+          toast.error("Couldn't save your progress for this lesson — please revisit it once you're back online.");
+        }
+        return res;
+      })
+      .catch(() => {
+        toast.error("Couldn't save your progress for this lesson — please revisit it once you're back online.");
+        return null;
+      });
 
     if (!nextLesson) {
       // Last lesson of the whole course — the big moment, not a quiet button flip.

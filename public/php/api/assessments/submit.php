@@ -4,60 +4,12 @@ require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/response.php';
+require_once __DIR__ . '/../../lib/assessment_scoring.php';
 ob_end_clean();
 
 setCors();
 requireBridgeKey();
 requireMethod('POST');
-
-/**
- * Mirrors AssessmentPlayer.tsx's isAnswerCorrect() exactly — matching/ordering
- * answers arrive as JSON-encoded strings (the same shape the client submits),
- * fill-blank accepts any of `acceptableAnswers` too. Before this, every
- * question type was scored with plain `===`, which silently failed every
- * matching/ordering question (no `answer` field to match against) and
- * ignored acceptableAnswers on fill-blank.
- */
-function isAssessmentAnswerCorrect(array $question, ?string $submitted): bool {
-    if ($submitted === null || $submitted === '') return false;
-    $type = $question['type'] ?? 'multiple-choice';
-
-    switch ($type) {
-        case 'fill-blank':
-            $normalize = fn(string $s) => preg_replace('/\s+/', ' ', strtolower(trim($s)));
-            $accepted = array_map($normalize, array_filter(array_merge(
-                [$question['answer'] ?? ''],
-                $question['acceptableAnswers'] ?? []
-            )));
-            return in_array($normalize($submitted), $accepted, true);
-
-        case 'matching': {
-            $picked = json_decode($submitted, true);
-            $pairs = $question['pairs'] ?? null;
-            if (!is_array($picked) || !is_array($pairs)) return false;
-            foreach ($pairs as $i => $pair) {
-                if (($picked[(string)$i] ?? null) !== ($pair['right'] ?? null)) return false;
-            }
-            return true;
-        }
-
-        case 'ordering': {
-            $order = json_decode($submitted, true);
-            $items = $question['items'] ?? null;
-            if (!is_array($order) || !is_array($items) || count($order) !== count($items)) return false;
-            foreach ($order as $i => $value) {
-                if ($value !== $items[$i]) return false;
-            }
-            return true;
-        }
-
-        case 'true-false':
-        case 'scenario':
-        case 'multiple-choice':
-        default:
-            return array_key_exists('answer', $question) && $submitted === $question['answer'];
-    }
-}
 
 $payload = requireAuth();
 $userId = $payload['sub'];
@@ -80,15 +32,7 @@ if (!is_array($questions) || count($questions) === 0) {
 }
 
 $passMark = min(100, max(0, (int)$assessment['pass_mark']));
-$correct = 0;
-foreach ($questions as $question) {
-    $questionId = $question['id'] ?? '';
-    $submitted = $answers[$questionId] ?? null;
-    if (is_string($submitted) && isAssessmentAnswerCorrect($question, $submitted)) $correct++;
-}
-
-$total = count($questions);
-$score = min(100, max(0, (int)round(($correct / $total) * 100)));
+['correct' => $correct, 'total' => $total, 'score' => $score] = scoreAssessmentAnswers($questions, $answers);
 $passed = $score >= $passMark;
 
 try {
