@@ -23,7 +23,13 @@ export function ModuleSurveyForm({ lessonSlug, alreadyCompleted, onSubmitted }: 
   const [liked, setLiked] = useState("");
   const [improve, setImprove] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(alreadyCompleted);
+  // `alreadyCompleted` starts false and flips true asynchronously (the
+  // parent reads it from localStorage after mount) — reading it fresh every
+  // render, rather than only capturing it once via useState's initial
+  // value, is what makes a page reload correctly show the thank-you state
+  // immediately instead of an empty form.
+  const [justSubmitted, setJustSubmitted] = useState(false);
+  const submitted = alreadyCompleted || justSubmitted;
 
   async function handleSubmit() {
     if (rating < 1) {
@@ -40,7 +46,7 @@ export function ModuleSurveyForm({ lessonSlug, alreadyCompleted, onSubmitted }: 
       });
       const json = await res.json().catch(() => null);
       if (!res.ok || !json?.ok) throw new Error(json?.error ?? "Could not submit your feedback.");
-      setSubmitted(true);
+      setJustSubmitted(true);
       toast.success("Thanks for your feedback!");
       onSubmitted();
     } catch (error) {
