@@ -10,19 +10,18 @@ import type { Course } from "@/types/lms";
 type Props = { course: Course; accentColor: string };
 
 /**
- * One combined, deliberately compact enrol + unlock card. Free Module 1 is
- * always the one obvious action — the paid "unlock everything" pitch folds
- * into the same card as a short secondary section (a one-line teaser before
- * enrolling, real Pay/VOWR buttons once enrolled, a short success line once
- * unlocked), never longer than a couple of short sentences so the card never
- * outgrows the hero banner it sits over.
+ * One combined enrol + unlock card. Free Module 1 is always the one obvious
+ * primary action, and the full unlock pricing/Pay/VOWR section renders right
+ * below it immediately — a learner never has to enrol first to see or act on
+ * the price, since course-unlock-payfast-create.php / unlock-with-vowr.php
+ * both create the enrollment rows themselves as part of granting access.
+ * Swaps to a short success line once the course is actually unlocked.
  */
 export function CourseEnrolCard({ course, accentColor }: Props) {
   const unlock = useCourseUnlockPurchase(course.slug, course.modules);
   const { isPaidCourse, totalModules, state, pricing, pricingUnavailable, savingsZar } = unlock;
 
   const priceHeadline = pricing?.items[0] ?? null;
-  const showUnlockSection = isPaidCourse && (state === "free-only" || state === "unlocked");
   const remainingModules = Math.max(totalModules - 1, 1);
 
   return (
@@ -39,18 +38,7 @@ export function CourseEnrolCard({ course, accentColor }: Props) {
 
       {isPaidCourse ? (
         <div className="border-t-2" style={{ borderColor: `${accentColor}22` }}>
-          {!showUnlockSection ? (
-            <div className="px-5 py-4" style={{ backgroundColor: `${accentColor}0a` }}>
-              <p className="text-sm leading-5 text-ink">
-                Then unlock the rest{pricing ? (
-                  <>
-                    {" "}for <span className="font-bold">{formatCurrency(pricing.totalZar)}</span> or{" "}
-                    <span className="font-bold">{pricing.vowrPrice} VOWR</span>
-                  </>
-                ) : null}.
-              </p>
-            </div>
-          ) : state === "unlocked" ? (
+          {state === "unlocked" ? (
             <div className="flex items-center gap-2.5 px-5 py-4" style={{ backgroundColor: `${accentColor}0d` }}>
               <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-white" style={{ backgroundColor: accentColor }}>
                 <Check aria-hidden="true" className="h-3.5 w-3.5" />

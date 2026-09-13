@@ -24,19 +24,28 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
 
   if (!isPaidCourse || state !== "free-only") return null;
 
+  const priceHeadline = pricing?.items[0] ?? null;
+
   return (
-    <div ref={ref} className="m-3 overflow-hidden rounded-xl border-2 bg-white shadow-[0_10px_28px_rgba(6,17,31,0.12)]" style={{ borderColor: accentColor }}>
-      <div className="flex items-center gap-1.5 px-3.5 py-2" style={{ backgroundColor: accentColor }}>
-        <Lock aria-hidden="true" className="h-3.5 w-3.5 text-white" />
-        <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-white">Unlock the full course</p>
-      </div>
+    <div ref={ref} className="m-3 overflow-hidden rounded-xl bg-white shadow-[0_10px_28px_rgba(6,17,31,0.12)]">
+      <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${accentColor}, ${accentColor}00)` }} />
       <div className="p-3.5">
+        <div className="flex items-center gap-1.5">
+          <Lock aria-hidden="true" className="h-3.5 w-3.5" style={{ color: accentColor }} />
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: accentColor }}>Unlock the full course</p>
+        </div>
+
         {pricing ? (
-          <p className="text-lg font-bold text-ink">{formatCurrency(pricing.totalZar)}</p>
+          <div className="mt-2 flex items-baseline gap-2">
+            <p className="text-lg font-bold text-ink">{formatCurrency(pricing.totalZar)}</p>
+            {priceHeadline && priceHeadline.standardPriceZar > priceHeadline.priceZar ? (
+              <p className="text-xs font-semibold text-muted line-through">{formatCurrency(priceHeadline.standardPriceZar)}</p>
+            ) : null}
+          </div>
         ) : pricingUnavailable ? (
-          <p className="text-xs font-semibold text-red-700">Pricing unavailable — try again shortly</p>
+          <p className="mt-2 text-xs font-semibold text-red-700">Pricing unavailable — try again shortly</p>
         ) : (
-          <div className="h-6 w-24 animate-pulse rounded bg-slate-200" aria-hidden="true" />
+          <div className="mt-2 h-6 w-24 animate-pulse rounded bg-slate-200" aria-hidden="true" />
         )}
         <p className="mt-0.5 text-xs font-medium text-ink/70">Unlocks every remaining module + certificate</p>
 
