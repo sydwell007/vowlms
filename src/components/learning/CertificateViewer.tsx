@@ -14,6 +14,11 @@ export function CertificateViewer({ course, academyName, learnerName, completion
   const [emailing, setEmailing] = useState(false);
   const [notice, setNotice] = useState("");
   const templateSrc = getCertificateTemplateSrc(course.slug);
+  // Printed on the certificate artwork only — the full ID (e.g.
+  // VOWLMS-WORKPLACEC-2026-FBF59EF3) still backs real verification lookups
+  // everywhere else (verify-certificate, email, the certificates overview
+  // list); only the short trailing code is shown on the certificate itself.
+  const shortCertificateId = certificateId.split("-").pop() || certificateId;
 
   async function downloadPDF() {
     setDownloading(true); setNotice("");
@@ -25,9 +30,9 @@ export function CertificateViewer({ course, academyName, learnerName, completion
         const dataUrl = await new Promise<string>((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(String(reader.result)); reader.onerror = reject; reader.readAsDataURL(image); });
         doc.addImage(dataUrl, "PNG", 0, 0, 297, 210);
         doc.setTextColor(31, 35, 120); doc.setFont("helvetica", "normal"); doc.setFontSize(17);
-        doc.text(learnerName.toUpperCase(), 148.5, 82, { align: "center", maxWidth: 190 });
+        doc.text(learnerName.toUpperCase(), 148.5, 99, { align: "center", maxWidth: 190 });
         doc.setTextColor(75, 75, 75); doc.setFontSize(7);
-        doc.text(`Achieved: ${completionDate}   |   Authentication: ${certificateId}`, 148.5, 193, { align: "center" });
+        doc.text(`Achieved: ${completionDate}   |   Authentication: ${shortCertificateId}`, 148.5, 193, { align: "center" });
       } else {
         doc.setFillColor(6, 17, 31); doc.rect(0, 0, 297, 210, "F"); doc.setTextColor(245, 197, 66); doc.setFontSize(24); doc.text("Certificate of Completion", 148.5, 50, { align: "center" }); doc.setTextColor(255, 255, 255); doc.setFontSize(26); doc.text(learnerName, 148.5, 95, { align: "center" }); doc.setFontSize(18); doc.text(course.title, 148.5, 120, { align: "center" }); doc.setFontSize(10); doc.text(`Achieved: ${completionDate} | ${certificateId}`, 148.5, 175, { align: "center" });
       }
@@ -59,8 +64,8 @@ export function CertificateViewer({ course, academyName, learnerName, completion
       <section className="overflow-hidden rounded-lg border border-slate-200 bg-white p-2 shadow-[0_20px_50px_rgba(6,17,31,0.12)]">
         <div className="relative aspect-[1.414/1] overflow-hidden bg-white">
           {templateSrc ? <Image src={templateSrc} alt={`${course.title} certificate`} fill priority sizes="(min-width: 1024px) 1100px, 100vw" className="object-contain" /> : null}
-          <p className="absolute left-[12%] right-[12%] top-[37%] text-center text-xl font-medium tracking-[0.1em] text-[#202176] sm:text-3xl">{learnerName.toUpperCase()}</p>
-          <p className="absolute bottom-[5.5%] left-[24%] right-[24%] text-center text-[7px] font-medium tracking-wide text-slate-600 sm:text-xs">Achieved {completionDate}  |  Authentication {certificateId}</p>
+          <p className="absolute left-[12%] right-[12%] top-[45%] text-center text-xl font-medium tracking-[0.1em] text-[#202176] sm:text-3xl">{learnerName.toUpperCase()}</p>
+          <p className="absolute bottom-[5.5%] left-[24%] right-[24%] text-center text-[7px] font-medium tracking-wide text-slate-600 sm:text-xs">Achieved {completionDate}  |  Authentication {shortCertificateId}</p>
         </div>
       </section>
       <div className="mt-5 flex flex-col gap-3 sm:flex-row">
