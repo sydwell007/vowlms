@@ -21,16 +21,40 @@ export function CertificateStatusCard({ courseSlug, accentColor }: { courseSlug:
   const [status, setStatus] = useState<Status>("loading");
 
   useEffect(() => {
-    if (!issuePayload) return;
+    const payload = getCertificateIssuePayload(courseSlug);
+    if (!payload) return;
     let cancelled = false;
 
     (async () => {
       try {
-        const res = await fetch(`/api/certificates/generate?courseSlug=${encodeURIComponent(issuePayload.courseSlug)}`);
+        const res = await fetch(`/api/certificates/generate?courseSlug=${encodeURIComponent(payload.courseSlug)}`);
         if (cancelled) return;
-        if (res.ok) setStatus("issued");
-        else if (res.status === 404) setStatus("locked");
-        else setStatus("unavailable");
+        if (res.ok) {
+          setStatus("issued");
+          return;
+        }
+        if (res.status !== 404) {
+          setStatus("unavailable");
+          return;
+        }
+
+        // Not yet issued — but "not yet issued" and "not yet eligible" are
+        // different things. A learner can be genuinely eligible right now
+        // (every real requirement met) without a certificate ever having
+        // been generated for them — e.g. their enrollment progress was
+        // computed against an older, larger lesson count before the fake
+        // per-module lessons were removed, or they finished everything
+        // before this card's own generation-attempt logic existed. Rather
+        // than just reporting "locked" from a stale read, try to claim it —
+        // the real gate (progress/orientation/assessments) is enforced
+        // server-side regardless, so this is safe to attempt unconditionally.
+        const genRes = await fetch("/api/certificates/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          body: JSON.stringify({ courseSlug: payload.courseSlug }),
+        });
+        if (!cancelled) setStatus(genRes.ok ? "issued" : "locked");
       } catch {
         if (!cancelled) setStatus("unavailable");
       }
@@ -39,7 +63,7 @@ export function CertificateStatusCard({ courseSlug, accentColor }: { courseSlug:
     return () => {
       cancelled = true;
     };
-  }, [issuePayload]);
+  }, [courseSlug]);
 
   if (!issuePayload) return null;
 
