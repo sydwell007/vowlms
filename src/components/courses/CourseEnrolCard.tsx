@@ -1,7 +1,8 @@
 "use client";
 
-import { Check, Coins, Lock, TriangleAlert } from "lucide-react";
+import { Check, Lock, ShieldCheck, Sparkles, TriangleAlert } from "lucide-react";
 import { EnrollButton } from "@/components/courses/EnrollButton";
+import { PaymentGatewaySection } from "@/components/courses/PaymentGatewaySection";
 import { useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
 import { formatCurrency } from "@/lib/format";
 import type { Course } from "@/types/lms";
@@ -18,18 +19,7 @@ type Props = { course: Course; accentColor: string };
  */
 export function CourseEnrolCard({ course, accentColor }: Props) {
   const unlock = useCourseUnlockPurchase(course.slug, course.modules);
-  const {
-    isPaidCourse,
-    totalModules,
-    state,
-    pricing,
-    pricingUnavailable,
-    paying,
-    vowrBalance,
-    canAffordVowr,
-    payWithCash,
-    payWithVowr,
-  } = unlock;
+  const { isPaidCourse, totalModules, state, pricing, pricingUnavailable, savingsZar } = unlock;
 
   const priceHeadline = pricing?.items[0] ?? null;
   const showUnlockSection = isPaidCourse && (state === "free-only" || state === "unlocked");
@@ -94,35 +84,23 @@ export function CourseEnrolCard({ course, accentColor }: Props) {
               ) : (
                 <div className="mt-2.5 h-7 w-32 animate-pulse rounded bg-slate-200" aria-hidden="true" />
               )}
+              {savingsZar > 0 ? <p className="mt-1 text-xs font-bold text-emerald-700">You save {formatCurrency(savingsZar)}</p> : null}
 
-              <button
-                type="button"
-                onClick={payWithCash}
-                disabled={paying !== null || !pricing}
-                className="mt-3 w-full rounded-lg px-6 py-2.5 text-center text-sm font-semibold text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)] transition hover:bg-[#e8b830] disabled:cursor-wait disabled:opacity-60"
-                style={{ backgroundColor: "#f5c542" }}
-              >
-                {paying === "cash" ? "Redirecting to PayFast..." : pricing ? `Pay ${formatCurrency(pricing.totalZar)} via PayFast` : pricingUnavailable ? "Unavailable — try again" : "Loading price…"}
-              </button>
-
-              <div className="my-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.1em] text-muted">
-                <span className="h-px flex-1 bg-slate-200" /> or <span className="h-px flex-1 bg-slate-200" />
+              <div className="mt-3">
+                <PaymentGatewaySection unlock={unlock} accentColor={accentColor} />
               </div>
 
-              <button
-                type="button"
-                onClick={payWithVowr}
-                disabled={paying !== null || !pricing || !canAffordVowr}
-                className="flex w-full items-center justify-center gap-2 rounded-lg border-2 px-6 py-2.5 text-center text-sm font-bold transition disabled:cursor-not-allowed disabled:opacity-50"
-                style={{ borderColor: accentColor, color: accentColor }}
-              >
-                <Coins aria-hidden="true" className="h-4 w-4" />
-                {paying === "vowr" ? "Unlocking..." : pricing ? `Unlock with ${pricing.vowrPrice} VOWR` : pricingUnavailable ? "Unavailable — try again" : "Loading price…"}
-              </button>
-
-              {pricing && vowrBalance !== null && !canAffordVowr ? (
-                <p className="mt-1.5 text-xs font-medium text-ink/70">Need {Math.max(0, pricing.vowrPrice - vowrBalance)} more VOWR.</p>
+              {pricing ? (
+                <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-ink/70">
+                  <Sparkles aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-amber-500" />
+                  Save {pricing.vowrDiscountPercent}% paying with VOWR
+                </p>
               ) : null}
+
+              <p className="mt-3 flex items-center gap-1.5 text-xs font-medium text-ink/70">
+                <ShieldCheck aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+                Secure checkout. Certificate issued the moment you complete the final assessment.
+              </p>
             </div>
           )}
         </div>

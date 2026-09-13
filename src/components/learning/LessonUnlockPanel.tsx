@@ -1,7 +1,8 @@
 "use client";
 
 import { forwardRef } from "react";
-import { Coins, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
+import { PaymentGatewaySection } from "@/components/courses/PaymentGatewaySection";
 import { formatCurrency } from "@/lib/format";
 import type { useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
 
@@ -19,7 +20,7 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
   { unlock, accentColor },
   ref,
 ) {
-  const { isPaidCourse, state, pricing, pricingUnavailable, paying, canAffordVowr, payWithCash, payWithVowr } = unlock;
+  const { isPaidCourse, state, pricing, pricingUnavailable } = unlock;
 
   if (!isPaidCourse || state !== "free-only") return null;
 
@@ -39,25 +40,9 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
         )}
         <p className="mt-0.5 text-xs font-medium text-ink/70">Unlocks every remaining module + certificate</p>
 
-        <button
-          type="button"
-          onClick={payWithCash}
-          disabled={paying !== null || !pricing}
-          className="mt-3 w-full rounded-lg px-4 py-2 text-center text-xs font-bold text-[#06111f] transition hover:bg-[#e8b830] disabled:cursor-wait disabled:opacity-60"
-          style={{ backgroundColor: "#f5c542" }}
-        >
-          {paying === "cash" ? "Redirecting..." : pricing ? "Pay via PayFast" : pricingUnavailable ? "Unavailable" : "Loading price…"}
-        </button>
-        <button
-          type="button"
-          onClick={payWithVowr}
-          disabled={paying !== null || !pricing || !canAffordVowr}
-          className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg border-2 px-4 py-2 text-center text-xs font-bold transition disabled:cursor-not-allowed disabled:opacity-50"
-          style={{ borderColor: accentColor, color: accentColor }}
-        >
-          <Coins aria-hidden="true" className="h-3.5 w-3.5" />
-          {paying === "vowr" ? "Unlocking..." : pricing ? `${pricing.vowrPrice} VOWR` : pricingUnavailable ? "Unavailable" : "Loading price…"}
-        </button>
+        <div className="mt-3">
+          <PaymentGatewaySection unlock={unlock} accentColor={accentColor} compact />
+        </div>
       </div>
     </div>
   );

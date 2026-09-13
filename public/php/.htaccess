@@ -31,6 +31,7 @@ RewriteRule ^courses/enrollment-counts/?$ api/course-enrollment-counts/index.php
 RewriteRule ^courses/review-summaries/?$ api/course-reviews/summaries.php [L,QSA]
 RewriteRule ^courses/unlock-price/?$   api/courses/unlock-price.php [L,QSA]
 RewriteRule ^courses/unlock-with-vowr/?$ api/courses/unlock-with-vowr.php [L,QSA]
+RewriteRule ^courses/unlock-price-international/?$ api/courses/unlock-price-international.php [L,QSA]
 RewriteRule ^courses/([^/]+)/reviews/?$ api/course-reviews/index.php?slug=$1 [L,QSA]
 RewriteRule ^courses/([^/]+)/?$       api/courses/index.php?slug=$1 [L,QSA]
 
@@ -76,6 +77,11 @@ RewriteRule ^user/avatar/?$           api/user/avatar.php [L,QSA]
 RewriteRule ^payments/payfast-create/?$ api/payments/payfast-create.php [L,QSA]
 RewriteRule ^payments/payfast-notify/?$ api/payments/payfast-notify.php [L,QSA]
 RewriteRule ^payments/course-unlock-payfast-create/?$ api/payments/course-unlock-payfast-create.php [L,QSA]
+RewriteRule ^payments/paystack-verify-transaction/?$ api/payments/paystack-verify-transaction.php [L,QSA]
+RewriteRule ^payments/paystack-webhook/?$ api/payments/paystack-webhook.php [L,QSA]
+RewriteRule ^payments/paypal-create-order/?$ api/payments/paypal-create-order.php [L,QSA]
+RewriteRule ^payments/paypal-capture-order/?$ api/payments/paypal-capture-order.php [L,QSA]
+RewriteRule ^payments/paypal-webhook/?$ api/payments/paypal-webhook.php [L,QSA]
 
 # ── Ecosystem / GoalVow platform ─────────────────────────────────────────────
 RewriteRule ^ecosystem-services/?$    api/ecosystem-services.php [L,QSA]

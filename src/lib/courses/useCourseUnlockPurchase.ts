@@ -25,6 +25,18 @@ type Enrollment = { courseSlug?: string; course_slug?: string; groupSlug?: strin
 
 export type UnlockState = "loading" | "not-enrolled" | "free-only" | "unlocked";
 
+export type InternationalGateway = "payfast" | "paystack" | "paypal";
+
+type InternationalPriceResponse = {
+  zar: UnlockPriceResponse;
+  gateway: InternationalGateway;
+  currency: string;
+  countryCode: string;
+  amountCharged: number | null;
+  exchangeRate: number | null;
+  conversionAvailable: boolean;
+};
+
 function submitPayment(router: ReturnType<typeof useRouter>, data: PaymentData) {
   if (!data.formAction || !data.formFields) {
     if (data.redirectUrl) router.push(data.redirectUrl);
@@ -43,6 +55,30 @@ function submitPayment(router: ReturnType<typeof useRouter>, data: PaymentData) 
   }
   document.body.appendChild(form);
   form.submit();
+}
+
+const loadedScripts = new Set<string>();
+function loadScriptOnce(src: string): Promise<void> {
+  if (loadedScripts.has(src)) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.onload = () => {
+      loadedScripts.add(src);
+      resolve();
+    };
+    script.onerror = () => reject(new Error(`Failed to load ${src}`));
+    document.body.appendChild(script);
+  });
+}
+
+declare global {
+  interface Window {
+    PaystackPop?: {
+      setup(config: Record<string, unknown>): { openIframe(): void };
+    };
+  }
 }
 
 /**
@@ -69,7 +105,12 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
   const [state, setState] = useState<UnlockState>(() => getCachedUnlockState(parentSlug)?.state ?? "loading");
   const [pricing, setPricing] = useState<UnlockPriceResponse | null>(null);
   const [pricingUnavailable, setPricingUnavailable] = useState(false);
-  const [paying, setPaying] = useState<"cash" | "vowr" | null>(null);
+  const [paying, setPaying] = useState<"cash" | "vowr" | "paystack" | "paypal" | null>(null);
+  const [gateway, setGateway] = useState<InternationalGateway | null>(null);
+  const [gatewayOverride, setGatewayOverride] = useState<InternationalGateway | null>(null);
+  const [currency, setCurrency] = useState("ZAR");
+  const [amountCharged, setAmountCharged] = useState<number | null>(null);
+  const [conversionAvailable, setConversionAvailable] = useState(true);
   const wallet = useWalletBalance(session.status === "authenticated");
 
   // Stay in sync with any OTHER mounted card/panel for the same course —
@@ -130,12 +171,21 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     let attempt = 0;
 
     async function loadPricing() {
+      if (!cancelled) setPricingUnavailable(false);
       while (!cancelled && attempt < 3) {
         try {
-          const res = await fetch(`/api/courses/unlock-price?slugs=${encodeURIComponent(parentSlug)}`, { signal: controller.signal });
+          const url = `/api/courses/unlock-price-international?slugs=${encodeURIComponent(parentSlug)}${gatewayOverride ? `&gateway=${gatewayOverride}` : ""}`;
+          const res = await fetch(url, { signal: controller.signal });
           const payload = await res.json().catch(() => null);
           if (res.ok && payload?.ok) {
-            if (!cancelled) setPricing(payload.data as UnlockPriceResponse);
+            const data = payload.data as InternationalPriceResponse;
+            if (!cancelled) {
+              setPricing(data.zar);
+              setGateway(data.gateway);
+              setCurrency(data.currency);
+              setAmountCharged(data.amountCharged);
+              setConversionAvailable(data.conversionAvailable);
+            }
             return;
           }
         } catch {
@@ -152,7 +202,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
       cancelled = true;
       controller.abort();
     };
-  }, [parentSlug, isPaidCourse]);
+  }, [parentSlug, isPaidCourse, gatewayOverride]);
 
   const vowrBalance = wallet.status === "ready" ? wallet.balance : null;
   const canAffordVowr = pricing !== null && vowrBalance !== null && vowrBalance >= pricing.vowrPrice;
@@ -202,6 +252,96 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     }
   }
 
+  async function payWithPaystack() {
+    if (state === "unlocked") return;
+    if (amountCharged === null || !conversionAvailable) {
+      toast.error("Pricing is temporarily unavailable. Please try again shortly.");
+      return;
+    }
+    setPaying("paystack");
+    try {
+      await loadScriptOnce("https://js.paystack.co/v1/inline.js");
+      const configRes = await fetch("/api/payments/gateway-config");
+      const configPayload = await configRes.json();
+      const publicKey = configPayload?.data?.paystackPublicKey;
+      if (!publicKey) throw new Error("Paystack is not configured.");
+      if (!window.PaystackPop) throw new Error("Paystack could not be loaded.");
+
+      const email = session.status === "authenticated" ? session.user.email : "";
+      const userId = session.status === "authenticated" ? session.user.id : "";
+
+      const handler = window.PaystackPop.setup({
+        key: publicKey,
+        email,
+        amount: Math.round(amountCharged * 100),
+        currency,
+        metadata: { user_id: userId, parent_slugs: [parentSlug] },
+        callback: (response: { reference: string }) => {
+          void verifyPaystackReference(response.reference);
+        },
+        onClose: () => setPaying((current) => (current === "paystack" ? null : current)),
+      });
+      handler.openIframe();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Please try again.");
+      setPaying(null);
+    }
+  }
+
+  async function verifyPaystackReference(reference: string) {
+    try {
+      const res = await fetch("/api/payments/paystack-verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ reference, parentSlugs: [parentSlug] }),
+      });
+      const payload = await res.json();
+      if (!res.ok || !payload.ok) throw new Error(payload.error ?? "Payment verification failed.");
+      setCachedUnlockState(parentSlug, { state: "unlocked", totalModules });
+      invalidateCourseEnrollmentCounts(parentSlug);
+      toast.success("Course fully unlocked!", { description: "Every module is now open." });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Please try again.");
+    } finally {
+      setPaying(null);
+    }
+  }
+
+  async function createPayPalOrder(): Promise<string> {
+    const res = await fetch("/api/payments/paypal-create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({ parentSlugs: [parentSlug] }),
+    });
+    const payload = await res.json();
+    if (!res.ok || !payload.ok) throw new Error(payload.error ?? "Could not start PayPal checkout.");
+    return payload.data.orderId as string;
+  }
+
+  async function capturePayPalOrder(orderId: string) {
+    if (state === "unlocked") return;
+    setPaying("paypal");
+    try {
+      const res = await fetch("/api/payments/paypal-capture", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ orderId, parentSlugs: [parentSlug] }),
+      });
+      const payload = await res.json();
+      if (!res.ok || !payload.ok) throw new Error(payload.error ?? "PayPal payment could not be confirmed.");
+      setCachedUnlockState(parentSlug, { state: "unlocked", totalModules });
+      invalidateCourseEnrollmentCounts(parentSlug);
+      toast.success("Course fully unlocked!", { description: "Every module is now open." });
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Please try again.");
+    } finally {
+      setPaying(null);
+    }
+  }
+
   return {
     isPaidCourse,
     totalModules,
@@ -212,7 +352,16 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     vowrBalance,
     canAffordVowr,
     savingsZar,
+    gateway: gatewayOverride ?? gateway,
+    detectedGateway: gateway,
+    setGatewayOverride,
+    currency,
+    amountCharged,
+    conversionAvailable,
     payWithCash,
     payWithVowr,
+    payWithPaystack,
+    createPayPalOrder,
+    capturePayPalOrder,
   };
 }
