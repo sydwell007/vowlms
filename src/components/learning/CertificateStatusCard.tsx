@@ -6,6 +6,7 @@ import { Award, Lock } from "lucide-react";
 import { getCertificateIssuePayload } from "@/lib/certificates/eligibility";
 
 type Status = "loading" | "issued" | "locked" | "unavailable";
+type Progress = { percent: number; doneItems: number; totalItems: number };
 
 /**
  * The one real "Certificate of Completion" — rendered once per course,
@@ -19,6 +20,26 @@ type Status = "loading" | "issued" | "locked" | "unavailable";
 export function CertificateStatusCard({ courseSlug, accentColor }: { courseSlug: string; accentColor: string }) {
   const issuePayload = getCertificateIssuePayload(courseSlug);
   const [status, setStatus] = useState<Status>("loading");
+  const [progress, setProgress] = useState<Progress | null>(null);
+
+  useEffect(() => {
+    const payload = getCertificateIssuePayload(courseSlug);
+    if (!payload) return;
+    let cancelled = false;
+
+    fetch(`/api/certificates/progress?courseSlug=${encodeURIComponent(payload.courseSlug)}`)
+      .then(async (res) => (res.ok ? ((await res.json())?.data as Progress) : null))
+      .then((data) => {
+        if (!cancelled && data) setProgress(data);
+      })
+      .catch(() => {
+        /* the status check below still covers the important "can I get my certificate" answer */
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [courseSlug]);
 
   useEffect(() => {
     const payload = getCertificateIssuePayload(courseSlug);
@@ -81,6 +102,29 @@ export function CertificateStatusCard({ courseSlug, accentColor }: { courseSlug:
             Certificate of completion
           </p>
         </div>
+
+        {progress ? (
+          <div className="mt-2.5">
+            <div className="flex items-center justify-between text-[10px] font-semibold text-ink/60">
+              <span>Attainment progress</span>
+              <span>{status === "issued" ? 100 : progress.percent}%</span>
+            </div>
+            <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+              <div
+                className="h-full rounded-full transition-[width] duration-500"
+                style={{
+                  width: `${status === "issued" ? 100 : progress.percent}%`,
+                  backgroundColor: status === "issued" ? "#22c55e" : accentColor,
+                }}
+              />
+            </div>
+            {status !== "issued" ? (
+              <p className="mt-1 text-[10px] text-ink/50">
+                {progress.doneItems}/{progress.totalItems} requirements complete — the certificate is issued the moment this reaches 100%.
+              </p>
+            ) : null}
+          </div>
+        ) : null}
 
         {status === "loading" ? (
           <div className="mt-2 h-4 w-40 animate-pulse rounded bg-slate-200" aria-hidden="true" />
