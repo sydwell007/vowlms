@@ -29,7 +29,12 @@ $parentSlugs = is_array($body['parentSlugs'] ?? null) ? $body['parentSlugs'] : [
 if ($orderId === '') jsonError('orderId is required');
 if (count($parentSlugs) === 0) jsonError('parentSlugs is required');
 
-$pricing = computeInternationalUnlockPrice($db, $parentSlugs, 'DEFAULT', 'paypal');
+try {
+    $pricing = computeInternationalUnlockPrice($db, $parentSlugs, 'DEFAULT', 'paypal');
+} catch (Throwable $error) {
+    error_log('computeInternationalUnlockPrice failed: ' . $error->getMessage());
+    jsonError('Pricing is temporarily unavailable, please try again shortly', 503);
+}
 if ($pricing === null) jsonError('None of the requested courses have unlock pricing configured', 404);
 
 $realSlugs = array_column($pricing['zar']['items'], 'parentSlug');

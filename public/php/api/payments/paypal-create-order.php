@@ -31,7 +31,12 @@ if (count($parentSlugs) === 0) jsonError('parentSlugs is required');
 // resolved against PayPal's own configured currency — never the
 // country-based auto-detected gateway (which could differ if the learner
 // manually chose PayPal via "Other payment options").
-$pricing = computeInternationalUnlockPrice($db, $parentSlugs, 'DEFAULT', 'paypal');
+try {
+    $pricing = computeInternationalUnlockPrice($db, $parentSlugs, 'DEFAULT', 'paypal');
+} catch (Throwable $error) {
+    error_log('computeInternationalUnlockPrice failed: ' . $error->getMessage());
+    jsonError('Pricing is temporarily unavailable, please try again shortly', 503);
+}
 if ($pricing === null) jsonError('None of the requested courses have unlock pricing configured', 404);
 if (!$pricing['conversionAvailable']) jsonError('Pricing is temporarily unavailable, please try again shortly', 503);
 

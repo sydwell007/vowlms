@@ -16,6 +16,7 @@ const GATEWAY_LABEL: Record<InternationalGateway, string> = {
   payfast: "PayFast",
   paystack: "Paystack",
   paypal: "PayPal",
+  lemonsqueezy: "Lemon Squeezy",
 };
 
 declare global {
@@ -72,25 +73,29 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
     payWithPaystack,
     createPayPalOrder,
     capturePayPalOrder,
+    payWithLemonSqueezy,
     setGatewayOverride,
   } = unlock;
 
   const [showOtherOptions, setShowOtherOptions] = useState(false);
+  const [paypalStatus, setPaypalStatus] = useState<"loading" | "ready" | "unavailable">("loading");
   const paypalContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (gateway !== "paypal" || amountCharged === null || !paypalContainerRef.current) return;
+    if (gateway !== "paypal" || amountCharged === null) return;
     let cancelled = false;
-    const container = paypalContainerRef.current;
 
     (async () => {
+      setPaypalStatus("loading");
       try {
         const configRes = await fetch("/api/payments/gateway-config");
         const configPayload = await configRes.json();
         const clientId = configPayload?.data?.paypalClientId;
-        if (!clientId || cancelled) return;
+        if (!clientId) throw new Error("PayPal is not configured yet");
+        if (cancelled) return;
 
         await loadPaypalSdk(clientId, currency);
+        const container = paypalContainerRef.current;
         if (cancelled || !window.paypal || !container) return;
 
         container.innerHTML = "";
@@ -103,9 +108,12 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
             },
           })
           .render(container);
+        if (!cancelled) setPaypalStatus("ready");
       } catch {
-        // PayPal not configured / SDK failed to load — button slot stays
-        // empty; the "Other payment options" fallback below still works.
+        // PayPal not configured / SDK failed to load — the card falls back
+        // to a disabled placeholder in the same slot rather than leaving a
+        // silent empty gap; "Other payment options" still works normally.
+        if (!cancelled) setPaypalStatus("unavailable");
       }
     })();
 
@@ -116,17 +124,25 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
 
   const buttonClass = `w-full rounded-${compact ? "lg" : "xl"} px-6 ${compact ? "py-2.5" : "py-3"} text-center text-sm font-${compact ? "bold" : "semibold"} text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)] transition hover:bg-[#e8b830] disabled:cursor-wait disabled:opacity-60`;
 
-  const primaryButtonLabel = pricingUnavailable
+  // A successful pricing response with conversionAvailable:false (no fresh
+  // cached FX rate yet — e.g. the exchange-rate cron hasn't run) is a
+  // distinct failure from pricingUnavailable (which means the fetch itself
+  // never succeeded), but both mean the same thing to a learner: this
+  // gateway can't be charged right now. Treated identically here so the
+  // button never gets stuck on "Loading price…" forever.
+  const priceUnavailable = pricingUnavailable || (pricing !== null && !conversionAvailable);
+
+  const primaryButtonLabel = priceUnavailable
     ? "Unavailable — try again"
-    : !pricing || amountCharged === null || !conversionAvailable
+    : !pricing || amountCharged === null
       ? "Loading price…"
-      : paying === "cash" || paying === "paystack"
+      : paying === "cash" || paying === "paystack" || paying === "lemonsqueezy"
         ? "Redirecting…"
         : `Pay ${formatMoney(amountCharged, currency)} via ${gateway ? GATEWAY_LABEL[gateway] : ""}`;
 
   return (
     <div>
-      {pricingUnavailable ? (
+      {priceUnavailable ? (
         <button type="button" disabled className={`${buttonClass} cursor-not-allowed opacity-60`} style={{ backgroundColor: "#f5c542" }}>
           {primaryButtonLabel}
         </button>
@@ -138,8 +154,21 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
         <button type="button" onClick={payWithPaystack} disabled={paying !== null || !pricing} className={buttonClass} style={{ backgroundColor: "#f5c542" }}>
           {primaryButtonLabel}
         </button>
+      ) : gateway === "lemonsqueezy" ? (
+        <button type="button" onClick={payWithLemonSqueezy} disabled={paying !== null || !pricing} className={buttonClass} style={{ backgroundColor: "#f5c542" }}>
+          {primaryButtonLabel}
+        </button>
+      ) : gateway === "paypal" && paypalStatus === "unavailable" ? (
+        <button type="button" disabled className={`${buttonClass} cursor-not-allowed opacity-60`} style={{ backgroundColor: "#f5c542" }}>
+          PayPal unavailable — try another option below
+        </button>
       ) : gateway === "paypal" ? (
-        <div ref={paypalContainerRef} className={compact ? "min-h-[38px]" : "min-h-[45px]"} />
+        <>
+          <div ref={paypalContainerRef} className={paypalStatus === "loading" ? "hidden" : compact ? "min-h-[38px]" : "min-h-[45px]"} />
+          {paypalStatus === "loading" ? (
+            <div className={`${compact ? "h-9" : "h-11"} w-full animate-pulse rounded-lg bg-slate-200`} aria-hidden="true" />
+          ) : null}
+        </>
       ) : (
         <div className={`h-${compact ? "9" : "11"} w-full animate-pulse rounded-lg bg-slate-200`} aria-hidden="true" />
       )}
@@ -174,7 +203,7 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
 
       {showOtherOptions ? (
         <div className="mt-2 flex flex-wrap gap-2">
-          {(["payfast", "paystack", "paypal"] as const)
+          {(["payfast", "paystack", "paypal", "lemonsqueezy"] as const)
             .filter((g) => g !== gateway)
             .map((g) => (
               <button

@@ -1,6 +1,6 @@
 -- =============================================================================
 -- VowLMS — Schema Patch 022
--- International course-unlock payments (Paystack, PayPal) — a separate table
+-- International course-unlock payments (Paystack, PayPal, Lemon Squeezy) — a separate table
 -- from the existing PayFast-specific `payments` table (which has
 -- payfast_payment_id/payfast_ref columns baked in), so this is purely
 -- additive and cannot affect the existing PayFast reconciliation logic at
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `international_payments` (
   `course_id`               VARCHAR(36)   NOT NULL,
   `module_id`               VARCHAR(36)   NULL,
   `unlock_parent_slugs`     JSON          NULL,
-  `gateway`                 ENUM('paystack','paypal') NOT NULL,
+  `gateway`                 ENUM('paystack','paypal','lemonsqueezy') NOT NULL,
   `external_transaction_id` VARCHAR(191)  NULL,
   `amount_zar`              DECIMAL(10,2) NOT NULL,
   `amount_charged`          DECIMAL(10,2) NOT NULL,

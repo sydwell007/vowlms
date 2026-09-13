@@ -14,6 +14,7 @@
 ob_start();
 require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/response.php';
 require_once __DIR__ . '/../../lib/international_pricing.php';
 ob_end_clean();
@@ -39,7 +40,12 @@ $countryCode = trim($_GET['country'] ?? 'DEFAULT');
 // auto-detected country's.
 $gatewayOverride = trim($_GET['gateway'] ?? '') ?: null;
 
-$result = computeInternationalUnlockPrice($db, $slugs, $countryCode, $gatewayOverride);
+try {
+    $result = computeInternationalUnlockPrice($db, $slugs, $countryCode, $gatewayOverride);
+} catch (Throwable $error) {
+    error_log('computeInternationalUnlockPrice failed: ' . $error->getMessage());
+    jsonError('Pricing is temporarily unavailable, please try again shortly', 503);
+}
 if ($result === null) jsonError('None of the requested courses have unlock pricing configured', 404);
 
 jsonOk($result);

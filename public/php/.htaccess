@@ -82,6 +82,8 @@ RewriteRule ^payments/paystack-webhook/?$ api/payments/paystack-webhook.php [L,Q
 RewriteRule ^payments/paypal-create-order/?$ api/payments/paypal-create-order.php [L,QSA]
 RewriteRule ^payments/paypal-capture-order/?$ api/payments/paypal-capture-order.php [L,QSA]
 RewriteRule ^payments/paypal-webhook/?$ api/payments/paypal-webhook.php [L,QSA]
+RewriteRule ^payments/lemonsqueezy-create-checkout/?$ api/payments/lemonsqueezy-create-checkout.php [L,QSA]
+RewriteRule ^payments/lemonsqueezy-webhook/?$ api/payments/lemonsqueezy-webhook.php [L,QSA]
 
 # ── Ecosystem / GoalVow platform ─────────────────────────────────────────────
 RewriteRule ^ecosystem-services/?$    api/ecosystem-services.php [L,QSA]

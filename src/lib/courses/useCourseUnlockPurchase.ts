@@ -25,7 +25,7 @@ type Enrollment = { courseSlug?: string; course_slug?: string; groupSlug?: strin
 
 export type UnlockState = "loading" | "not-enrolled" | "free-only" | "unlocked";
 
-export type InternationalGateway = "payfast" | "paystack" | "paypal";
+export type InternationalGateway = "payfast" | "paystack" | "paypal" | "lemonsqueezy";
 
 type InternationalPriceResponse = {
   zar: UnlockPriceResponse;
@@ -105,7 +105,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
   const [state, setState] = useState<UnlockState>(() => getCachedUnlockState(parentSlug)?.state ?? "loading");
   const [pricing, setPricing] = useState<UnlockPriceResponse | null>(null);
   const [pricingUnavailable, setPricingUnavailable] = useState(false);
-  const [paying, setPaying] = useState<"cash" | "vowr" | "paystack" | "paypal" | null>(null);
+  const [paying, setPaying] = useState<"cash" | "vowr" | "paystack" | "paypal" | "lemonsqueezy" | null>(null);
   const [gateway, setGateway] = useState<InternationalGateway | null>(null);
   const [gatewayOverride, setGatewayOverride] = useState<InternationalGateway | null>(null);
   const [currency, setCurrency] = useState("ZAR");
@@ -342,6 +342,34 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     }
   }
 
+  /**
+   * Lemon Squeezy has no popup/inline SDK — it's a full redirect to its own
+   * hosted checkout and back, same shape as PayFast's form-POST redirect.
+   * Actual unlocking happens server-side in lemonsqueezy-webhook.php once
+   * Lemon Squeezy confirms payment; the learner lands back on this same
+   * course page (redirect_url set at checkout-creation time), where the
+   * existing enrollment-status polling picks up the unlock the same way it
+   * already tolerates PayFast's own async ITN delay.
+   */
+  async function payWithLemonSqueezy() {
+    if (state === "unlocked") return;
+    setPaying("lemonsqueezy");
+    try {
+      const res = await fetch("/api/payments/lemonsqueezy-create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ parentSlugs: [parentSlug] }),
+      });
+      const payload = await res.json();
+      if (!res.ok || !payload.ok) throw new Error(payload.error ?? "Could not start Lemon Squeezy checkout.");
+      window.location.href = payload.data.checkoutUrl as string;
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Please try again.");
+      setPaying(null);
+    }
+  }
+
   return {
     isPaidCourse,
     totalModules,
@@ -363,5 +391,6 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     payWithPaystack,
     createPayPalOrder,
     capturePayPalOrder,
+    payWithLemonSqueezy,
   };
 }

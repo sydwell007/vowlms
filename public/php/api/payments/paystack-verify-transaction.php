@@ -38,7 +38,12 @@ if ($secretKey === '') jsonError('Paystack is not configured', 503);
 // expected charge is always recomputed against Paystack's own configured
 // currency — never the country-based auto-detected gateway, which could
 // differ from what was actually shown/charged if they did override it.
-$pricing = computeInternationalUnlockPrice($db, $parentSlugs, 'DEFAULT', 'paystack');
+try {
+    $pricing = computeInternationalUnlockPrice($db, $parentSlugs, 'DEFAULT', 'paystack');
+} catch (Throwable $error) {
+    error_log('computeInternationalUnlockPrice failed: ' . $error->getMessage());
+    jsonError('Pricing is temporarily unavailable, please try again shortly', 503);
+}
 if ($pricing === null) jsonError('None of the requested courses have unlock pricing configured', 404);
 if (!$pricing['conversionAvailable']) jsonError('Pricing is temporarily unavailable, please try again shortly', 503);
 

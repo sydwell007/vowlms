@@ -16,8 +16,8 @@
 -- =============================================================================
 
 CREATE TABLE IF NOT EXISTS `gateway_config` (
-  `country_code` VARCHAR(2)  NOT NULL COMMENT 'ISO 3166-1 alpha-2, matching x-vercel-ip-country. DEFAULT row is the fallback for every unlisted country.',
-  `gateway`      ENUM('payfast','paystack','paypal') NOT NULL,
+  `country_code` VARCHAR(10) NOT NULL COMMENT 'ISO 3166-1 alpha-2, matching x-vercel-ip-country, or the literal string DEFAULT for the fallback row.',
+  `gateway`      ENUM('payfast','paystack','paypal','lemonsqueezy') NOT NULL,
   `currency`     VARCHAR(3)  NOT NULL COMMENT 'What the learner is charged in for this country.',
   `enabled`      TINYINT(1)  NOT NULL DEFAULT 1,
   `updated_at`   TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -32,6 +32,21 @@ INSERT IGNORE INTO `gateway_config` (`country_code`, `gateway`, `currency`) VALU
   ('CI', 'paystack', 'USD'),
   ('RW', 'paystack', 'USD'),
   ('EG', 'paystack', 'USD'),
+  -- EU (27 members) + UK — routed to Lemon Squeezy, a merchant-of-record
+  -- gateway that calculates, collects, and remits EU/UK VAT itself, so
+  -- VowLMS never has to register for VAT in any of these jurisdictions.
+  -- Lemon Squeezy always settles in USD regardless of buyer country, hence
+  -- 'USD' here too — see lemonsqueezy_client.php.
+  ('AT', 'lemonsqueezy', 'USD'), ('BE', 'lemonsqueezy', 'USD'), ('BG', 'lemonsqueezy', 'USD'),
+  ('HR', 'lemonsqueezy', 'USD'), ('CY', 'lemonsqueezy', 'USD'), ('CZ', 'lemonsqueezy', 'USD'),
+  ('DK', 'lemonsqueezy', 'USD'), ('EE', 'lemonsqueezy', 'USD'), ('FI', 'lemonsqueezy', 'USD'),
+  ('FR', 'lemonsqueezy', 'USD'), ('DE', 'lemonsqueezy', 'USD'), ('GR', 'lemonsqueezy', 'USD'),
+  ('HU', 'lemonsqueezy', 'USD'), ('IE', 'lemonsqueezy', 'USD'), ('IT', 'lemonsqueezy', 'USD'),
+  ('LV', 'lemonsqueezy', 'USD'), ('LT', 'lemonsqueezy', 'USD'), ('LU', 'lemonsqueezy', 'USD'),
+  ('MT', 'lemonsqueezy', 'USD'), ('NL', 'lemonsqueezy', 'USD'), ('PL', 'lemonsqueezy', 'USD'),
+  ('PT', 'lemonsqueezy', 'USD'), ('RO', 'lemonsqueezy', 'USD'), ('SK', 'lemonsqueezy', 'USD'),
+  ('SI', 'lemonsqueezy', 'USD'), ('ES', 'lemonsqueezy', 'USD'), ('SE', 'lemonsqueezy', 'USD'),
+  ('GB', 'lemonsqueezy', 'USD'),
   ('DEFAULT', 'paypal', 'USD');
 
 -- ── Cached exchange rates — Step 2 requires never calling the FX API on

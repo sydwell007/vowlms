@@ -5,7 +5,7 @@ import type { BridgeUnlockPriceResponse } from "@/app/api/courses/unlock-price/r
 
 type InternationalPriceResponse = {
   zar: BridgeUnlockPriceResponse;
-  gateway: "payfast" | "paystack" | "paypal";
+  gateway: "payfast" | "paystack" | "paypal" | "lemonsqueezy";
   currency: string;
   countryCode: string;
   amountCharged: number | null;
@@ -20,8 +20,14 @@ type InternationalPriceResponse = {
  * client-supplied param, so this can't be used to spoof a cheaper region.
  */
 export async function GET(request: Request) {
-  const slugs = new URL(request.url).searchParams.get("slugs") ?? "";
+  const searchParams = new URL(request.url).searchParams;
+  const slugs = searchParams.get("slugs") ?? "";
   if (!slugs.trim()) return badRequest("slugs is required");
+
+  // Set only when a learner explicitly picked a gateway via "Other payment
+  // options" rather than their auto-detected one — must be forwarded to the
+  // bridge, or a manual override silently has no effect at all.
+  const gatewayOverride = searchParams.get("gateway");
 
   const country = await getLearnerCountry();
 
@@ -37,10 +43,12 @@ export async function GET(request: Request) {
     } satisfies InternationalPriceResponse);
   }
 
+  const gatewayParam = gatewayOverride ? `&gateway=${encodeURIComponent(gatewayOverride)}` : "";
+
   try {
     return ok(
       await bridgeGet<InternationalPriceResponse>(
-        `/courses/unlock-price-international?slugs=${encodeURIComponent(slugs)}&country=${encodeURIComponent(country)}`,
+        `/courses/unlock-price-international?slugs=${encodeURIComponent(slugs)}&country=${encodeURIComponent(country)}${gatewayParam}`,
         { noAuth: true },
       ),
     );
