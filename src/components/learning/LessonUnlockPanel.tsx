@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
-import { Coins, Flame, Lock } from "lucide-react";
+import { Coins, Lock } from "lucide-react";
 import { formatCurrency } from "@/lib/format";
 import type { useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
 
@@ -23,8 +23,6 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
 
   if (!isPaidCourse || state !== "free-only") return null;
 
-  const founding = pricing?.items[0]?.foundingActive ?? false;
-
   return (
     <div ref={ref} className="m-3 overflow-hidden rounded-xl border-2 bg-white shadow-[0_10px_28px_rgba(6,17,31,0.12)]" style={{ borderColor: accentColor }}>
       <div className="flex items-center gap-1.5 px-3.5 py-2" style={{ backgroundColor: accentColor }}>
@@ -32,11 +30,6 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
         <p className="text-[11px] font-bold uppercase tracking-[0.1em] text-white">Unlock the full course</p>
       </div>
       <div className="p-3.5">
-        {founding ? (
-          <p className="mb-2 flex items-center gap-1 text-[10px] font-bold uppercase tracking-[0.06em] text-amber-700">
-            <Flame aria-hidden="true" className="h-3 w-3" /> Founding Learner price
-          </p>
-        ) : null}
         {pricing ? (
           <p className="text-lg font-bold text-ink">{formatCurrency(pricing.totalZar)}</p>
         ) : pricingUnavailable ? (

@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   Award,
   BadgeCheck,
-  ClipboardCheck,
+  CalendarClock,
   Glasses,
-  MessageCircle,
 } from "lucide-react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
@@ -18,7 +16,7 @@ import { EnrollButton } from "@/components/courses/EnrollButton";
 import { getAcademyBySlug, getAcademyHref, getCourseBySlug, isCourseVisible } from "@/lib/data";
 import { formatCurrency } from "@/lib/format";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
-import { formatDuration, getCourseStats } from "@/lib/course-content";
+import { formatCourseDurationWeeks, getCourseStats } from "@/lib/course-content";
 import { getServerRole } from "@/lib/auth/getServerRole";
 import { getCourseVisual } from "@/lib/visual-assets";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -86,8 +84,6 @@ export default async function CourseDetailPage({
 
   const accentColor = getAcademyAccentColor(academy?.category);
   const firstLesson = course.modules[0]?.lessons[0];
-  const assessment = course.assessments[0];
-  const practice = course.vrPractices[0];
   const stats = getCourseStats(course);
   const courseVisual = getCourseVisual(course, academy?.category ?? "upskilling");
   const canonicalUrl = `${siteConfig.url}/courses/${course.slug}`;
@@ -132,6 +128,7 @@ export default async function CourseDetailPage({
   const heroBadges = [
     { Icon: BadgeCheck, text: "Certificate included" },
     { Icon: Award, text: `${course.rewards} VOWR` },
+    { Icon: CalendarClock, text: "Learn at your own pace" },
     ...(stats.hasVRPractice ? [{ Icon: Glasses, text: "VR practice included" }] : []),
   ];
   return (
@@ -185,34 +182,13 @@ export default async function CourseDetailPage({
               ))}
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              {firstLesson ? <ButtonLink href={`/lesson/${firstLesson.slug}`} prefetch={false}>Start first lesson</ButtonLink> : null}
-              {assessment ? <ButtonLink href={`/assessment/${assessment.slug}`} variant="secondary" prefetch={false}>Take assessment</ButtonLink> : null}
-              {practice ? <ButtonLink href={`/vr-practice/${practice.slug}`} variant="secondary" prefetch={false}>Open VR practice</ButtonLink> : null}
-            </div>
-
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Link
-                href={`/courses/${slug}/discussion`}
-                prefetch={false}
-                className="flex items-center gap-2 rounded-md border border-white/20 bg-white/8 px-4 py-2 text-sm font-medium text-white/80 transition hover:bg-white/12 hover:text-white"
-              >
-                <MessageCircle aria-hidden="true" className="h-4 w-4" /> Discussion
-              </Link>
-              <Link
-                href={`/courses/${slug}/assignments`}
-                prefetch={false}
-                className="flex items-center gap-2 rounded-md border border-white/20 bg-white/8 px-4 py-2 text-sm font-medium text-white/80 transition hover:bg-white/12 hover:text-white"
-              >
-                <ClipboardCheck aria-hidden="true" className="h-4 w-4" /> Assignments
-              </Link>
-            </div>
           </div>
 
-          {/* Enrol card floats over the seam between the banner and the white section
-              below — deliberately image-free so it never competes with the hero photo. */}
-          <aside className="lg:sticky lg:top-24 lg:translate-y-16">
-            <CourseEnrolCard course={course} accentColor={accentColor} totalMinutes={stats.totalMinutes} />
+          {/* Enrol card sits within the hero's own height — no fixed downward
+              offset, since the card's height varies by enrolment state and a
+              fixed push would make a taller state spill past the banner. */}
+          <aside className="lg:sticky lg:top-24">
+            <CourseEnrolCard course={course} accentColor={accentColor} />
           </aside>
         </div>
       </section>
@@ -222,7 +198,7 @@ export default async function CourseDetailPage({
           {[
             { label: "Modules", value: String(stats.moduleCount) },
             { label: "Lessons", value: String(stats.lessonCount) },
-            { label: "Total time", value: formatDuration(stats.totalMinutes) },
+            { label: "Duration", value: formatCourseDurationWeeks(stats.totalMinutes) },
             { label: "Level", value: course.level },
           ].map(({ label, value }) => (
             <div key={label}>
