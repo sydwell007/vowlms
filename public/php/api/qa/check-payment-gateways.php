@@ -103,6 +103,37 @@ step($report, 'paypal_live_auth_check', function () use ($paypalClientLibFound) 
     $token = getPaypalAccessToken(); // throws on failure — we never return the token itself
     return ['tokenObtained' => $token !== '', 'tokenLength' => strlen($token)];
 });
+step($report, 'paypal_real_order_attempt', function () use ($paypalClientLibFound) {
+    if (!$paypalClientLibFound) throw new RuntimeException('lib/paypal_client.php is missing on this server');
+    // Mirrors paypal-create-order.php's real request shape exactly, including
+    // application_context — creating an order never charges anyone; nothing
+    // happens until a real buyer approves AND a separate capture call is
+    // made. This checks the live API mechanics independent of whether the
+    // deployed endpoint file itself is current.
+    $result = paypalRequest('POST', '/v2/checkout/orders', [
+        'intent' => 'CAPTURE',
+        'purchase_units' => [[
+            'description' => 'QA diagnostic order — safe to ignore, never captured',
+            'amount' => ['currency_code' => 'USD', 'value' => '18.50'],
+        ]],
+        'application_context' => [
+            'return_url' => 'https://vowlms.vercel.app/courses/qa-diagnostic?paypalReturn=1',
+            'cancel_url' => 'https://vowlms.vercel.app/courses/qa-diagnostic?payment=cancelled',
+            'shipping_preference' => 'NO_SHIPPING',
+            'user_action' => 'PAY_NOW',
+        ],
+    ], generateId());
+    $approveUrl = null;
+    foreach ($result['data']['links'] ?? [] as $link) {
+        if (($link['rel'] ?? '') === 'approve') { $approveUrl = $link['href']; break; }
+    }
+    return [
+        'httpStatus' => $result['status'],
+        'orderId' => $result['data']['id'] ?? null,
+        'approveUrl' => $approveUrl,
+        'rawErrorDetails' => $result['data']['details'] ?? ($result['data']['message'] ?? null),
+    ];
+});
 
 // ── Lemon Squeezy ─────────────────────────────────────────────────────────
 step($report, 'lemonsqueezy_env', function () {
