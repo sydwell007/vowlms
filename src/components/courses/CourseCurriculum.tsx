@@ -41,18 +41,22 @@ const LESSON_ICON: Record<string, LucideIcon> = {
 };
 
 export function CourseCurriculum({ modules, accentColor = "#1166c8", courseSlug }: Props) {
+  // Module 1 open by default (the real starting point of the course) —
+  // falls back to whichever module is actually first if a course is ever
+  // numbered unusually and has no order === 1.
+  const defaultOrder = modules.some((m) => m.order === 1) ? 1 : modules[0]?.order;
   const [expanded, setExpanded] = useState<Set<number>>(
-    new Set(modules.filter((moduleItem) => moduleItem.order === 0).map((moduleItem) => moduleItem.order)),
+    defaultOrder !== undefined ? new Set([defaultOrder]) : new Set(),
   );
   const [view, setView] = useState<"list" | "tiles">("list");
   const allOpen = expanded.size === modules.length;
 
+  // A single-open accordion: opening any module always closes every other
+  // one, regardless of what was open before (including after "Expand all").
   function toggle(order: number) {
     setExpanded((prev) => {
-      const next = new Set(prev);
-      if (next.has(order)) next.delete(order);
-      else next.add(order);
-      return next;
+      const isOnlyOpen = prev.size === 1 && prev.has(order);
+      return isOnlyOpen ? new Set() : new Set([order]);
     });
   }
 
