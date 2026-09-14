@@ -1,4 +1,4 @@
-const CACHE_NAME = "vowlms-shell-v2";
+const CACHE_NAME = "vowlms-shell-v3";
 const OFFLINE_URL = "/offline";
 const CORE_ASSETS = ["/", "/offline", "/academies", "/courses", "/manifest.webmanifest"];
 
@@ -31,7 +31,13 @@ self.addEventListener("fetch", (event) => {
     url.pathname.startsWith("/assessment/") ||
     url.pathname.startsWith("/profile") ||
     url.pathname.startsWith("/certificates") ||
-    url.pathname.startsWith("/results/")
+    url.pathname.startsWith("/results/") ||
+    // Individual course detail pages carry live pricing, unlock/enrollment
+    // state, and the payment forms themselves (CSP form-action included) —
+    // never safe to serve a stale cached copy of. The bare /courses
+    // catalogue listing (no trailing slug) is unaffected and stays
+    // cacheable as part of the offline app shell.
+    url.pathname.startsWith("/courses/")
   ) {
     return;
   }
