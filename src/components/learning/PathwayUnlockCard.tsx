@@ -9,6 +9,7 @@ import { useSession } from "@/lib/auth/useSession";
 import { useWalletBalance } from "@/lib/rewards/useWalletBalance";
 import { formatCurrency } from "@/lib/format";
 import { invalidateCourseEnrollmentCounts } from "@/lib/course-enrollment-counts-client";
+import { redirectToPayment } from "@/lib/payments/redirectToPayment";
 
 type Props = { pathwayTitle: string; courses: Course[]; accentColor?: string };
 
@@ -22,7 +23,6 @@ type UnlockPriceResponse = {
   vowrPrice: number;
 };
 
-type PaymentData = { formAction?: string; formFields?: Record<string, string | number>; redirectUrl?: string };
 
 const ACCENT = "#1166c8";
 
@@ -66,26 +66,6 @@ export function PathwayUnlockCard({ pathwayTitle, courses, accentColor = ACCENT 
     );
   }
 
-  function submitPayment(data: PaymentData) {
-    if (!data.formAction || !data.formFields) {
-      if (data.redirectUrl) router.push(data.redirectUrl);
-      else toast.error("Payment is not available for this pathway yet.");
-      return;
-    }
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = data.formAction;
-    for (const [name, value] of Object.entries(data.formFields)) {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = name;
-      input.value = String(value);
-      form.appendChild(input);
-    }
-    document.body.appendChild(form);
-    form.submit();
-  }
-
   async function requireSignedIn() {
     const res = await fetch("/api/auth/me", { cache: "no-store", credentials: "same-origin" });
     if (res.ok) return true;
@@ -107,7 +87,7 @@ export function PathwayUnlockCard({ pathwayTitle, courses, accentColor = ACCENT 
       });
       const payload = await res.json();
       if (!res.ok || !payload.ok) throw new Error(payload.error ?? "Payment could not be started.");
-      submitPayment(payload.data as PaymentData);
+      redirectToPayment(payload.data);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Please try again.");
       setPaying(null);

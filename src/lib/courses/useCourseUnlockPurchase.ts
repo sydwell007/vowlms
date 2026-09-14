@@ -8,6 +8,7 @@ import { useSession } from "@/lib/auth/useSession";
 import { useWalletBalance } from "@/lib/rewards/useWalletBalance";
 import { invalidateCourseEnrollmentCounts } from "@/lib/course-enrollment-counts-client";
 import { getCachedUnlockState, setCachedUnlockState, subscribeUnlockState } from "@/lib/courses/unlockStateStore";
+import { redirectToPayment } from "@/lib/payments/redirectToPayment";
 
 export type UnlockPriceResponse = {
   items: { parentSlug: string; standardPriceZar: number; priceZar: number; foundingActive: boolean; foundingSlotsLeft: number }[];
@@ -18,8 +19,6 @@ export type UnlockPriceResponse = {
   vowrDiscountPercent: number;
   vowrPrice: number;
 };
-
-type PaymentData = { formAction?: string; formFields?: Record<string, string | number>; redirectUrl?: string };
 
 export type VowrReservation = {
   reservationId: string;
@@ -49,26 +48,6 @@ type InternationalPriceResponse = {
   exchangeRate: number | null;
   conversionAvailable: boolean;
 };
-
-function submitPayment(router: ReturnType<typeof useRouter>, data: PaymentData) {
-  if (!data.formAction || !data.formFields) {
-    if (data.redirectUrl) router.push(data.redirectUrl);
-    else toast.error("Payment is not available for this course yet.");
-    return;
-  }
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = data.formAction;
-  for (const [name, value] of Object.entries(data.formFields)) {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = name;
-    input.value = String(value);
-    form.appendChild(input);
-  }
-  document.body.appendChild(form);
-  form.submit();
-}
 
 const loadedScripts = new Set<string>();
 function loadScriptOnce(src: string): Promise<void> {
@@ -235,7 +214,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
       });
       const payload = await res.json();
       if (!res.ok || !payload.ok) throw new Error(payload.error ?? "Payment could not be started.");
-      submitPayment(router, payload.data as PaymentData);
+      redirectToPayment(payload.data);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Please try again.");
       setPaying(null);

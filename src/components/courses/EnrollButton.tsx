@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import type { Course } from "@/types/lms";
 import { useSession } from "@/lib/auth/useSession";
 import { invalidateCourseEnrollmentCounts } from "@/lib/course-enrollment-counts-client";
+import { redirectToPayment } from "@/lib/payments/redirectToPayment";
 
 type Props = { course: Course };
 
@@ -14,12 +15,6 @@ type Enrollment = {
   course_slug?: string;
   groupSlug?: string | null;
   status?: string;
-};
-
-type PaymentData = {
-  formAction?: string;
-  formFields?: Record<string, string | number>;
-  redirectUrl?: string;
 };
 
 function firstLessonHref(course: Course) {
@@ -77,29 +72,6 @@ export function EnrollButton({ course }: Props) {
     return false;
   }
 
-  function submitPayment(data: PaymentData) {
-    if (!data.formAction || !data.formFields) {
-      if (data.redirectUrl) router.push(data.redirectUrl);
-      else toast.error("Payment is not available for this course yet.");
-      return;
-    }
-
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = data.formAction;
-
-    for (const [name, value] of Object.entries(data.formFields)) {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = name;
-      input.value = String(value);
-      form.appendChild(input);
-    }
-
-    document.body.appendChild(form);
-    form.submit();
-  }
-
   async function handleEnroll() {
     if (enrolled) {
       // A full navigation, not router.push — the first lesson right after a
@@ -130,7 +102,7 @@ export function EnrollButton({ course }: Props) {
           throw new Error(payment.error ?? "Payment could not be started.");
         }
 
-        submitPayment(payment.data as PaymentData);
+        redirectToPayment(payment.data);
         return;
       }
 
