@@ -400,16 +400,33 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     }
   }
 
-  async function createPayPalOrder(): Promise<string> {
-    const res = await fetch("/api/payments/paypal-create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "same-origin",
-      body: JSON.stringify({ parentSlugs: [parentSlug] }),
-    });
-    const payload = await res.json();
-    if (!res.ok || !payload.ok) throw new Error(payload.error ?? "Could not start PayPal checkout.");
-    return payload.data.orderId as string;
+  /**
+   * A plain full-page redirect to PayPal's own hosted approve page —
+   * deliberately not the JS SDK's popup Buttons() flow, which opened two
+   * separate windows (an internal about:blank bridge popup plus PayPal's
+   * real login popup) and could tear the whole flow down if the blank one
+   * was closed first. This matches PayFast/Lemon Squeezy's own redirect
+   * pattern exactly. PayPal redirects back to `return_url` (set server-side
+   * in paypal-create-order.php) with its own `?token={orderId}` appended —
+   * the effect below picks that up and completes the capture automatically.
+   */
+  async function payWithPaypal() {
+    if (state === "unlocked") return;
+    setPaying("paypal");
+    try {
+      const res = await fetch("/api/payments/paypal-create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ parentSlugs: [parentSlug] }),
+      });
+      const payload = await res.json();
+      if (!res.ok || !payload.ok || !payload.data?.approveUrl) throw new Error(payload.error ?? "Could not start PayPal checkout.");
+      window.location.href = payload.data.approveUrl as string;
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Please try again.");
+      setPaying(null);
+    }
   }
 
   async function capturePayPalOrder(orderId: string) {
@@ -462,6 +479,36 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     }
   }
 
+  // Picks up the return from PayPal's hosted approve page (`?paypalReturn=1
+  // &token={orderId}&PayerID=...`, appended by PayPal itself on top of the
+  // return_url set in paypal-create-order.php) and finishes the purchase
+  // automatically, the same way Lemon Squeezy's redirect-back relies on
+  // this component being mounted again on return — except PayPal's capture
+  // step is a direct client call rather than only a webhook, so this fires
+  // it immediately instead of waiting on enrollment polling to catch up.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get("paypalReturn") !== "1") return;
+    const orderId = url.searchParams.get("token");
+    if (!orderId) return;
+
+    url.searchParams.delete("paypalReturn");
+    url.searchParams.delete("token");
+    url.searchParams.delete("PayerID");
+    router.replace(`${url.pathname}${url.search}`, { scroll: false });
+
+    // Deferred a tick so capturePayPalOrder's own setPaying(...) call isn't
+    // fired synchronously from within this effect's body.
+    void Promise.resolve().then(() => capturePayPalOrder(orderId));
+    // Only ever run once, right after mount, off the URL this page loaded
+    // with — capturePayPalOrder/router are stable enough in practice and
+    // re-running this on their identity changing would risk a duplicate
+    // capture attempt (harmless server-side since it's idempotent, but
+    // pointless).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return {
     isPaidCourse,
     totalModules,
@@ -485,7 +532,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     payWithCash,
     payWithVowr,
     payWithPaystack,
-    createPayPalOrder,
+    payWithPaypal,
     capturePayPalOrder,
     payWithLemonSqueezy,
   };

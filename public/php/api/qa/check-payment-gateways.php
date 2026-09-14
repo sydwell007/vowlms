@@ -80,7 +80,11 @@ step($report, 'paystack_live_auth_check', function () {
     return [
         'httpStatus' => $result['status'],
         'providerMessage' => $result['data']['message'] ?? null,
-        'keyLooksValid' => $result['status'] === 404,
+        // Paystack returns 400 "Transaction reference not found" for a
+        // valid key with a made-up reference, and 401 "Invalid key" for a
+        // bad key — 404 never actually occurs here, that was a wrong
+        // assumption in an earlier version of this script.
+        'keyLooksValid' => $result['status'] === 400,
     ];
 });
 
@@ -114,10 +118,18 @@ step($report, 'lemonsqueezy_store_check', function () use ($lemonsqueezyClientLi
     $storeId = env('LEMONSQUEEZY_STORE_ID', '');
     if ($storeId === '') throw new RuntimeException('LEMONSQUEEZY_STORE_ID not configured');
     $result = lemonSqueezyRequest('GET', '/stores/' . $storeId);
+    $attrs = $result['data']['data']['attributes'] ?? [];
     return [
         'httpStatus' => $result['status'],
-        'storeName' => $result['data']['data']['attributes']['name'] ?? null,
+        'storeName' => $attrs['name'] ?? null,
         'storeFound' => $result['status'] === 200,
+        // A checkout created against a test-mode store 404s on the normal
+        // hosted checkout domain unless opened in the right mode — a very
+        // plausible explanation for a real "404 Page Not Found" on a
+        // freshly-created checkout URL.
+        'testMode' => $attrs['test_mode'] ?? null,
+        'domain' => $attrs['domain'] ?? null,
+        'url' => $attrs['url'] ?? null,
     ];
 });
 step($report, 'lemonsqueezy_variant_check', function () use ($lemonsqueezyClientLibFound) {
@@ -131,6 +143,38 @@ step($report, 'lemonsqueezy_variant_check', function () use ($lemonsqueezyClient
         'variantPriceCents' => $result['data']['data']['attributes']['price'] ?? null,
         'isPayWhatYouWant' => $result['data']['data']['attributes']['pay_what_you_want'] ?? null,
         'variantFound' => $result['status'] === 200,
+    ];
+});
+step($report, 'lemonsqueezy_real_checkout_attempt', function () use ($lemonsqueezyClientLibFound) {
+    if (!$lemonsqueezyClientLibFound) throw new RuntimeException('lib/lemonsqueezy_client.php is missing on this server');
+    $storeId = env('LEMONSQUEEZY_STORE_ID', '');
+    $variantId = env('LEMONSQUEEZY_VARIANT_ID', '');
+    // Exactly mirrors lemonsqueezy-create-checkout.php's real request shape
+    // (custom_price in cents, same relationships) — creating a checkout
+    // object never charges anyone; nothing happens until a real buyer
+    // completes it. This is the only way to see Lemon Squeezy's own
+    // diagnosis of why the resulting URL 404s.
+    $result = lemonSqueezyRequest('POST', '/checkouts', [
+        'data' => [
+            'type' => 'checkouts',
+            'attributes' => [
+                'custom_price' => 1850,
+                'checkout_data' => ['email' => 'qa-diagnostic@goalvow.com'],
+                'product_options' => ['name' => 'QA diagnostic checkout — safe to ignore/expire'],
+            ],
+            'relationships' => [
+                'store' => ['data' => ['type' => 'stores', 'id' => (string)$storeId]],
+                'variant' => ['data' => ['type' => 'variants', 'id' => (string)$variantId]],
+            ],
+        ],
+    ]);
+    $attrs = $result['data']['data']['attributes'] ?? null;
+    return [
+        'httpStatus' => $result['status'],
+        'checkoutUrl' => $attrs['url'] ?? null,
+        'checkoutTestMode' => $attrs['test_mode'] ?? null,
+        'checkoutExpiresAt' => $attrs['expires_at'] ?? null,
+        'rawErrors' => $result['data']['errors'] ?? null,
     ];
 });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { ChevronDown, Coins } from "lucide-react";
 import type { InternationalGateway, useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
 import { formatMoney } from "@/lib/format";
@@ -20,31 +20,6 @@ const GATEWAY_LABEL: Record<InternationalGateway, string> = {
   lemonsqueezy: "Lemon Squeezy",
 };
 
-declare global {
-  interface Window {
-    paypal?: {
-      Buttons(config: Record<string, unknown>): { render(container: HTMLElement): void };
-    };
-  }
-}
-
-const loadedPaypalCurrencies = new Set<string>();
-function loadPaypalSdk(clientId: string, currency: string): Promise<void> {
-  const key = `${clientId}:${currency}`;
-  if (loadedPaypalCurrencies.has(key) && window.paypal) return Promise.resolve();
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(clientId)}&currency=${encodeURIComponent(currency)}`;
-    script.async = true;
-    script.onload = () => {
-      loadedPaypalCurrencies.add(key);
-      resolve();
-    };
-    script.onerror = () => reject(new Error("Failed to load PayPal"));
-    document.body.appendChild(script);
-  });
-}
-
 /**
  * The one adaptive "Pay Now" slot — same size/position regardless of which
  * gateway a learner's country routed them to, plus the VOWR toggle and an
@@ -52,11 +27,15 @@ function loadPaypalSdk(clientId: string, currency: string): Promise<void> {
  * Shared by CourseEnrolCard (course page) and LessonUnlockPanel (lesson
  * sidebar) so all three checkout flows only ever live in one place.
  *
- * PayPal is the one unavoidable exception to "identical button element": its
- * SDK requires rendering its own branded button into a container rather than
- * being triggered from an arbitrary click — a real PayPal platform
- * requirement, not a design choice here. It still occupies the exact same
- * slot, size, and position as the PayFast/Paystack buttons.
+ * Every gateway here — including PayPal — is a plain button that triggers a
+ * full-page redirect to the provider's own hosted checkout, then redirects
+ * back. PayPal's JS SDK popup (Buttons()) was tried first but opened two
+ * separate windows (an internal about:blank bridge popup plus PayPal's real
+ * login popup) that could tear each other down depending on the browser's
+ * third-party-cookie handling — the redirect flow PayPal itself recommends
+ * as the fallback doesn't have that failure mode, and it's what
+ * PayFast/Lemon Squeezy already do, so all four gateways now behave
+ * identically from this component's point of view.
  */
 export function PaymentGatewaySection({ unlock, accentColor, compact = false }: Props) {
   const {
@@ -73,56 +52,12 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
     payWithCash,
     payWithVowr,
     payWithPaystack,
-    createPayPalOrder,
-    capturePayPalOrder,
+    payWithPaypal,
     payWithLemonSqueezy,
     setGatewayOverride,
   } = unlock;
 
   const [showOtherOptions, setShowOtherOptions] = useState(false);
-  const [paypalStatus, setPaypalStatus] = useState<"loading" | "ready" | "unavailable">("loading");
-  const paypalContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (gateway !== "paypal" || amountCharged === null) return;
-    let cancelled = false;
-
-    (async () => {
-      setPaypalStatus("loading");
-      try {
-        const configRes = await fetch("/api/payments/gateway-config");
-        const configPayload = await configRes.json();
-        const clientId = configPayload?.data?.paypalClientId;
-        if (!clientId) throw new Error("PayPal is not configured yet");
-        if (cancelled) return;
-
-        await loadPaypalSdk(clientId, currency);
-        const container = paypalContainerRef.current;
-        if (cancelled || !window.paypal || !container) return;
-
-        container.innerHTML = "";
-        window.paypal
-          .Buttons({
-            style: { layout: "horizontal", height: compact ? 38 : 45, tagline: false, label: "pay" },
-            createOrder: () => createPayPalOrder(),
-            onApprove: async (data: { orderID: string }) => {
-              await capturePayPalOrder(data.orderID);
-            },
-          })
-          .render(container);
-        if (!cancelled) setPaypalStatus("ready");
-      } catch {
-        // PayPal not configured / SDK failed to load — the card falls back
-        // to a disabled placeholder in the same slot rather than leaving a
-        // silent empty gap; "Other payment options" still works normally.
-        if (!cancelled) setPaypalStatus("unavailable");
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [gateway, currency, amountCharged, compact, createPayPalOrder, capturePayPalOrder]);
 
   const buttonClass = `w-full rounded-${compact ? "lg" : "xl"} px-6 ${compact ? "py-2.5" : "py-3"} text-center text-sm font-${compact ? "bold" : "semibold"} text-[#06111f] shadow-[0_10px_24px_rgba(245,197,66,0.3)] transition hover:bg-[#e8b830] disabled:cursor-wait disabled:opacity-60`;
 
@@ -147,7 +82,7 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
     ? "Unavailable — try again"
     : !pricing || displayAmountCharged === null
       ? "Loading price…"
-      : paying === "cash" || paying === "paystack" || paying === "lemonsqueezy"
+      : paying === "cash" || paying === "paystack" || paying === "lemonsqueezy" || paying === "paypal"
         ? "Redirecting…"
         : `Pay ${formatMoney(displayAmountCharged, currency)} via ${gateway ? GATEWAY_LABEL[gateway] : ""}`;
 
@@ -171,17 +106,10 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
         <button type="button" onClick={payWithLemonSqueezy} disabled={paying !== null || !pricing} className={buttonClass} style={{ backgroundColor: "#f5c542" }}>
           {primaryButtonLabel}
         </button>
-      ) : gateway === "paypal" && paypalStatus === "unavailable" ? (
-        <button type="button" disabled className={`${buttonClass} cursor-not-allowed opacity-60`} style={{ backgroundColor: "#f5c542" }}>
-          PayPal unavailable — try another option below
-        </button>
       ) : gateway === "paypal" ? (
-        <>
-          <div ref={paypalContainerRef} className={paypalStatus === "loading" ? "hidden" : compact ? "min-h-[38px]" : "min-h-[45px]"} />
-          {paypalStatus === "loading" ? (
-            <div className={`${compact ? "h-9" : "h-11"} w-full animate-pulse rounded-lg bg-slate-200`} aria-hidden="true" />
-          ) : null}
-        </>
+        <button type="button" onClick={payWithPaypal} disabled={paying !== null || !pricing} className={buttonClass} style={{ backgroundColor: "#f5c542" }}>
+          {primaryButtonLabel}
+        </button>
       ) : (
         <div className={`h-${compact ? "9" : "11"} w-full animate-pulse rounded-lg bg-slate-200`} aria-hidden="true" />
       )}
