@@ -31,6 +31,8 @@ RewriteRule ^courses/enrollment-counts/?$ api/course-enrollment-counts/index.php
 RewriteRule ^courses/review-summaries/?$ api/course-reviews/summaries.php [L,QSA]
 RewriteRule ^courses/unlock-price/?$   api/courses/unlock-price.php [L,QSA]
 RewriteRule ^courses/unlock-with-vowr/?$ api/courses/unlock-with-vowr.php [L,QSA]
+RewriteRule ^courses/unlock-reserve-vowr/?$ api/courses/unlock-reserve-vowr.php [L,QSA]
+RewriteRule ^courses/unlock-cancel-vowr-reservation/?$ api/courses/unlock-cancel-vowr-reservation.php [L,QSA]
 RewriteRule ^courses/unlock-price-international/?$ api/courses/unlock-price-international.php [L,QSA]
 RewriteRule ^courses/([^/]+)/reviews/?$ api/course-reviews/index.php?slug=$1 [L,QSA]
 RewriteRule ^courses/([^/]+)/?$       api/courses/index.php?slug=$1 [L,QSA]

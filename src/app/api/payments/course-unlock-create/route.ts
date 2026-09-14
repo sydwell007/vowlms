@@ -24,6 +24,10 @@ export async function POST(request: Request) {
     return created(
       await bridgePost("/payments/course-unlock-payfast-create", {
         parentSlugs: payload.parentSlugs,
+        // Set after a successful /api/courses/unlock-reserve-vowr call for a
+        // hybrid partial-VOWR purchase — the bridge charges the reservation's
+        // own remainder, not the full price, when this is present.
+        reservationId: typeof payload.reservationId === "string" ? payload.reservationId : undefined,
         returnUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/dashboard/learner`,
         cancelUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/pricing`,
         notifyUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/api/payments/payfast/notify`,

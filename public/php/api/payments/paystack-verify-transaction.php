@@ -13,6 +13,7 @@ require_once __DIR__ . '/../../config/env.php';
 require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/response.php';
 require_once __DIR__ . '/../../lib/international_pricing.php';
+require_once __DIR__ . '/../../lib/vowr_config.php';
 ob_end_clean();
 
 setCors();
@@ -26,9 +27,29 @@ $db = getDb();
 $body = getJsonBody();
 $reference = trim($body['reference'] ?? '');
 $parentSlugs = is_array($body['parentSlugs'] ?? null) ? $body['parentSlugs'] : [];
+// Optional: set after a successful unlock-reserve-vowr.php call for a hybrid
+// partial-VOWR purchase — when present, the expected charge is the
+// reservation's own cash_amount_zar (converted to this gateway's currency),
+// never the full course price.
+$reservationId = trim($body['reservationId'] ?? '');
 
 if ($reference === '') jsonError('reference is required');
 if (count($parentSlugs) === 0) jsonError('parentSlugs is required');
+
+$reservation = null;
+if ($reservationId !== '') {
+    $reservationStmt = $db->prepare(
+        "SELECT * FROM course_unlock_vowr_reservations
+         WHERE id = ? AND user_id = ? AND status = 'reserved' AND expires_at > NOW() LIMIT 1"
+    );
+    $reservationStmt->execute([$reservationId, $userId]);
+    $reservation = $reservationStmt->fetch();
+    if (!$reservation) jsonError('This VOWR reservation has expired or is no longer valid — please redo your redemption selection', 410);
+    $reservedSlugs = json_decode($reservation['parent_slugs'], true) ?: [];
+    if (array_diff($parentSlugs, $reservedSlugs) !== []) {
+        jsonError('This VOWR reservation does not match the requested course', 400);
+    }
+}
 
 $secretKey = env('PAYSTACK_SECRET_KEY', '');
 if ($secretKey === '') jsonError('Paystack is not configured', 503);
@@ -47,11 +68,28 @@ try {
 if ($pricing === null) jsonError('None of the requested courses have unlock pricing configured', 404);
 if (!$pricing['conversionAvailable']) jsonError('Pricing is temporarily unavailable, please try again shortly', 503);
 
+// A hybrid partial-VOWR purchase only owes the reservation's own
+// server-computed remainder — convert THAT ZAR figure (not the full course
+// price) to whatever currency this gateway actually charges in.
+if ($reservation !== null) {
+    if ($pricing['gateway'] === 'payfast') {
+        $pricing['amountCharged'] = (float)$reservation['cash_amount_zar'];
+        $pricing['currency'] = 'ZAR';
+        $pricing['exchangeRate'] = 1.0;
+    } else {
+        $converted = convertZarAmount($db, (float)$reservation['cash_amount_zar'], $pricing['currency']);
+        if ($converted === null) jsonError('Pricing is temporarily unavailable, please try again shortly', 503);
+        $pricing['amountCharged'] = $converted['amount'];
+        $pricing['exchangeRate'] = $converted['rate'];
+    }
+}
+
 $realSlugs = array_column($pricing['zar']['items'], 'parentSlug');
 $childCourseIds = getCourseUnlockChildIds($db, $realSlugs);
 if (count($childCourseIds) === 0) jsonError('No unlockable modules found for these courses', 404);
 
 if (alreadyOwnsAllCourses($db, $userId, $childCourseIds)) {
+    if ($reservation !== null) releaseVowrReservation($db, $reservation['id'], 'released');
     jsonError('You already have full access to this course', 409);
 }
 
@@ -74,6 +112,9 @@ if ($verifyResponse === false || $verifyStatus !== 200) {
 $verifyData = json_decode($verifyResponse, true);
 $txn = $verifyData['data'] ?? null;
 if (!$txn || ($txn['status'] ?? '') !== 'success') {
+    // The cash leg definitively failed — free the reserved VOWR immediately
+    // rather than making the learner wait out the reservation TTL.
+    if ($reservation !== null) releaseVowrReservation($db, $reservation['id'], 'released');
     jsonError('Payment was not successful', 400);
 }
 
@@ -111,13 +152,18 @@ try {
     } else {
         $db->prepare(
             'INSERT INTO international_payments
-             (id, user_id, course_id, unlock_parent_slugs, gateway, external_transaction_id, amount_zar, amount_charged, currency_charged, exchange_rate_used, status, metadata)
-             VALUES (?, ?, ?, ?, "paystack", ?, ?, ?, ?, ?, "completed", ?)'
+             (id, user_id, course_id, unlock_parent_slugs, vowr_reservation_id, gateway, external_transaction_id, amount_zar, amount_charged, currency_charged, exchange_rate_used, status, metadata)
+             VALUES (?, ?, ?, ?, ?, "paystack", ?, ?, ?, ?, ?, "completed", ?)'
         )->execute([
             generateId(), $userId, $childCourseIds[0], json_encode($realSlugs),
+            $reservation !== null ? $reservation['id'] : null,
             $reference, $pricing['zar']['totalZar'], $pricing['amountCharged'], $pricing['currency'], $pricing['exchangeRate'],
             json_encode(['isBundle' => $pricing['zar']['isBundle'], 'unlockedModules' => $enrolledCount]),
         ]);
+    }
+
+    if ($reservation !== null) {
+        commitVowrReservation($db, $reservation['id'], $userId, $reference);
     }
 
     $db->commit();
@@ -133,4 +179,5 @@ jsonCreated([
     'amountCharged' => $pricing['amountCharged'],
     'currency' => $pricing['currency'],
     'unlockedModules' => $enrolledCount,
+    'vowrRedeemed' => $reservation !== null ? (int)$reservation['vowr_amount'] : 0,
 ]);

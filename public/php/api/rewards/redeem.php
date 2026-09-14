@@ -17,18 +17,21 @@ $db      = getDb();
 // Fixed, server-owned VOWR cost per catalogue item. The client never supplies
 // a cost — it only picks a type. These items require real-world or admin
 // fulfilment and are recorded as a pending request, not an instant transaction.
+// Values are ×100 vs. their original figures to match the 2026-09-14 VOWR
+// rescale (100 VOWR = R1, was ~1 VOWR = R1) — see
+// public/sql/032_vowr_valuation_rescale.sql and public/php/lib/vowr_config.php.
 $requestCatalog = [
-    'course_credit'            => 500,
-    'data_bundle'              => 300,
-    'electricity_token'        => 400,
-    'mentorship_session'       => 250,
-    'vr_practice_credit'       => 100,
+    'course_credit'            => 50000,
+    'data_bundle'              => 30000,
+    'electricity_token'        => 40000,
+    'mentorship_session'       => 25000,
+    'vr_practice_credit'       => 10000,
 ];
 
 // A pure software gate, not a real-world/admin fulfilment — unlike the
 // catalogue above, this must clear instantly (a learner sitting on the
 // results page waiting to retry cannot be told "reviewed within 24 hours").
-$instantCost = 50;
+$instantCost = 5000;
 
 $body = getJsonBody();
 $type = trim($body['redemptionType'] ?? '');
@@ -77,7 +80,7 @@ if ($type === 'donate_to_learner') {
     $amount         = (int)($body['amount'] ?? 0);
 
     if ($recipientEmail === '') jsonError('recipientEmail is required');
-    if ($amount < 10) jsonError('Minimum donation is 10 VOWR');
+    if ($amount < 1000) jsonError('Minimum donation is 1,000 VOWR');
 
     $recipientStmt = $db->prepare(
         "SELECT id, name FROM users WHERE email = ? AND role = 'learner' LIMIT 1"

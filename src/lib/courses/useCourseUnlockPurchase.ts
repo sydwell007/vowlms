@@ -21,6 +21,19 @@ export type UnlockPriceResponse = {
 
 type PaymentData = { formAction?: string; formFields?: Record<string, string | number>; redirectUrl?: string };
 
+export type VowrReservation = {
+  reservationId: string;
+  parentSlugs: string[];
+  totalZar: number;
+  vowrAmount: number;
+  vowrValueZar: number;
+  cashAmountZar: number;
+  maxVowr: number;
+  maxPercent: number;
+  expiresInMinutes: number;
+  balance: number;
+};
+
 type Enrollment = { courseSlug?: string; course_slug?: string; groupSlug?: string | null; status?: string };
 
 export type UnlockState = "loading" | "not-enrolled" | "free-only" | "unlocked";
@@ -111,6 +124,8 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
   const [currency, setCurrency] = useState("ZAR");
   const [amountCharged, setAmountCharged] = useState<number | null>(null);
   const [conversionAvailable, setConversionAvailable] = useState(true);
+  const [reservation, setReservation] = useState<VowrReservation | null>(null);
+  const [reserving, setReserving] = useState(false);
   const wallet = useWalletBalance(session.status === "authenticated");
 
   // Stay in sync with any OTHER mounted card/panel for the same course —
@@ -216,7 +231,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
-        body: JSON.stringify({ parentSlugs: [parentSlug] }),
+        body: JSON.stringify({ parentSlugs: [parentSlug], reservationId: reservation?.reservationId }),
       });
       const payload = await res.json();
       if (!res.ok || !payload.ok) throw new Error(payload.error ?? "Payment could not be started.");
@@ -224,6 +239,57 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Please try again.");
       setPaying(null);
+    }
+  }
+
+  /**
+   * Reserves part of the learner's real VOWR balance against this course's
+   * price (max 12% by default, less for larger bundles — see
+   * public/php/lib/vowr_config.php) and returns the exact remaining cash
+   * amount to charge. Debits the VOWR immediately (server-side, real
+   * balance check) so it can't be spent twice while the matching cash
+   * payment is in flight; call cancelReservation() to give it back before
+   * paying, or just let the checkout complete via payWithCash/payWithPaystack
+   * which now automatically charge the reservation's remainder instead of
+   * the full price.
+   */
+  async function reserveVowr(vowrAmount: number, forGateway: InternationalGateway): Promise<VowrReservation | null> {
+    setReserving(true);
+    try {
+      const res = await fetch("/api/courses/unlock-reserve-vowr", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ parentSlugs: [parentSlug], vowrAmount, gateway: forGateway }),
+      });
+      const payload = await res.json();
+      if (!res.ok || !payload.ok) throw new Error(payload.error ?? "Could not reserve VOWR for this purchase.");
+      const data = payload.data as VowrReservation;
+      setReservation(data);
+      wallet.refresh();
+      return data;
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Please try again.");
+      return null;
+    } finally {
+      setReserving(false);
+    }
+  }
+
+  /** Gives back a reservation's held VOWR before its cash leg is paid — the checkout UI's "Remove VOWR" action. */
+  async function cancelReservation() {
+    if (!reservation) return;
+    const reservationId = reservation.reservationId;
+    setReservation(null);
+    try {
+      await fetch("/api/courses/unlock-cancel-vowr-reservation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ reservationId }),
+      });
+    } finally {
+      wallet.refresh();
     }
   }
 
@@ -270,12 +336,24 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
       const email = session.status === "authenticated" ? session.user.email : "";
       const userId = session.status === "authenticated" ? session.user.id : "";
 
+      // A hybrid partial-VOWR reservation only owes its own cash remainder —
+      // estimate that remainder in this gateway's currency using the same
+      // ZAR→currency ratio already shown for the full price (both come from
+      // the same cached exchange rate, stable for hours); the bridge
+      // re-verifies the real converted amount server-side at capture time
+      // regardless, so this is a display/charge estimate, never the source
+      // of truth for what's actually granted.
+      const displayAmount =
+        reservation && pricing && pricing.totalZar > 0
+          ? Math.round(((reservation.cashAmountZar / pricing.totalZar) * amountCharged) * 100) / 100
+          : amountCharged;
+
       const handler = window.PaystackPop.setup({
         key: publicKey,
         email,
-        amount: Math.round(amountCharged * 100),
+        amount: Math.round(displayAmount * 100),
         currency,
-        metadata: { user_id: userId, parent_slugs: [parentSlug] },
+        metadata: { user_id: userId, parent_slugs: [parentSlug], reservation_id: reservation?.reservationId },
         callback: (response: { reference: string }) => {
           void verifyPaystackReference(response.reference);
         },
@@ -289,20 +367,34 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
   }
 
   async function verifyPaystackReference(reference: string) {
+    const reservationId = reservation?.reservationId;
     try {
       const res = await fetch("/api/payments/paystack-verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "same-origin",
-        body: JSON.stringify({ reference, parentSlugs: [parentSlug] }),
+        body: JSON.stringify({ reference, parentSlugs: [parentSlug], reservationId }),
       });
       const payload = await res.json();
       if (!res.ok || !payload.ok) throw new Error(payload.error ?? "Payment verification failed.");
       setCachedUnlockState(parentSlug, { state: "unlocked", totalModules });
       invalidateCourseEnrollmentCounts(parentSlug);
-      toast.success("Course fully unlocked!", { description: "Every module is now open." });
+      setReservation(null);
+      wallet.refresh();
+      const vowrRedeemed = (payload.data?.vowrRedeemed as number) || 0;
+      toast.success("Course fully unlocked!", {
+        description: vowrRedeemed > 0 ? `${vowrRedeemed} VOWR redeemed, plus your card payment.` : "Every module is now open.",
+      });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Please try again.");
+      // A verification failure almost always means the bridge already
+      // released the reservation server-side (see paystack-verify-
+      // transaction.php's failure branch) — clear it here too so the
+      // checkout UI doesn't keep showing VOWR as held against a dead attempt.
+      if (reservationId) {
+        setReservation(null);
+        wallet.refresh();
+      }
     } finally {
       setPaying(null);
     }
@@ -386,6 +478,10 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     currency,
     amountCharged,
     conversionAvailable,
+    reservation,
+    reserving,
+    reserveVowr,
+    cancelReservation,
     payWithCash,
     payWithVowr,
     payWithPaystack,

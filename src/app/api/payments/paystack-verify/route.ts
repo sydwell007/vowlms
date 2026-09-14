@@ -21,6 +21,7 @@ export async function POST(request: Request) {
         reference: payload.reference,
         parentSlugs: payload.parentSlugs,
         country,
+        reservationId: typeof payload.reservationId === "string" ? payload.reservationId : undefined,
       }),
     );
   } catch (e) {

@@ -24,6 +24,11 @@ $payload = requireAuth();
 $userId  = $payload['sub'];
 $body    = getJsonBody();
 $parentSlugs = is_array($body['parentSlugs'] ?? null) ? $body['parentSlugs'] : [];
+// Optional: set by the hybrid partial-VOWR checkout after a successful call
+// to unlock-reserve-vowr.php — when present, this is a "pay the remainder"
+// checkout, not a full-price one, and the amount charged is the
+// reservation's own server-computed cash_amount_zar, never totalZar.
+$reservationId = trim($body['reservationId'] ?? '');
 if (count($parentSlugs) === 0) jsonError('parentSlugs is required');
 
 $db = getDb();
@@ -32,6 +37,17 @@ $pricing = computeCourseUnlockPrice($db, $parentSlugs);
 if ($pricing === null) jsonError('None of the requested courses have unlock pricing configured', 404);
 $realSlugs = array_column($pricing['items'], 'parentSlug');
 $totalZar = $pricing['totalZar'];
+
+if ($reservationId !== '') {
+    $reservationStmt = $db->prepare(
+        "SELECT * FROM course_unlock_vowr_reservations
+         WHERE id = ? AND user_id = ? AND status = 'reserved' AND expires_at > NOW() LIMIT 1"
+    );
+    $reservationStmt->execute([$reservationId, $userId]);
+    $reservation = $reservationStmt->fetch();
+    if (!$reservation) jsonError('This VOWR reservation has expired or is no longer valid — please redo your redemption selection', 410);
+    $totalZar = (float)$reservation['cash_amount_zar'];
+}
 
 $childCourseIds = getCourseUnlockChildIds($db, $realSlugs);
 if (count($childCourseIds) === 0) jsonError('No unlockable modules found for these courses', 404);
@@ -71,9 +87,9 @@ if ($merchantId === '' || $merchantKey === '') {
 
 $paymentId = generateId();
 $db->prepare(
-    'INSERT INTO payments (id, user_id, course_id, unlock_parent_slugs, amount, status, payfast_payment_id)
-     VALUES (?, ?, ?, ?, ?, "pending", NULL)'
-)->execute([$paymentId, $userId, $anchorCourseId, json_encode($realSlugs), $totalZar]);
+    'INSERT INTO payments (id, user_id, course_id, unlock_parent_slugs, vowr_reservation_id, amount, status, payfast_payment_id)
+     VALUES (?, ?, ?, ?, ?, ?, "pending", NULL)'
+)->execute([$paymentId, $userId, $anchorCourseId, json_encode($realSlugs), $reservationId !== '' ? $reservationId : null, $totalZar]);
 
 $pfHost = $sandbox ? 'sandbox.payfast.co.za' : 'www.payfast.co.za';
 $notifyUrl = $apiBase !== ''

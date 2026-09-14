@@ -10,6 +10,7 @@ ob_start();
 require_once __DIR__ . '/../../config/env.php';
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../lib/course_unlock_pricing.php';
+require_once __DIR__ . '/../../lib/vowr_config.php';
 ob_end_clean();
 
 header('Content-Type: text/plain; charset=utf-8');
@@ -191,16 +192,30 @@ try {
                 }
             }
         }
+
+        // A hybrid partial-VOWR purchase reserved its VOWR portion up front
+        // (unlock-reserve-vowr.php) — now that the remaining cash amount has
+        // genuinely cleared, permanently commit that reservation (no further
+        // ledger effect; the debit already happened at reservation time).
+        if (!empty($payment['vowr_reservation_id'])) {
+            commitVowrReservation($db, $payment['vowr_reservation_id'], $payment['user_id'], $pfPaymentId);
+        }
     } elseif ($paymentStatus === 'CANCELLED') {
         $db->prepare(
             'UPDATE payments SET status = "cancelled", payfast_payment_id = ?, itn_data = ?, updated_at = NOW()
              WHERE id = ? AND status = "pending"'
         )->execute([$pfPaymentId, $itnData, $paymentId]);
+        if (!empty($payment['vowr_reservation_id'])) {
+            releaseVowrReservation($db, $payment['vowr_reservation_id'], 'released');
+        }
     } elseif ($paymentStatus === 'FAILED') {
         $db->prepare(
             'UPDATE payments SET status = "failed", payfast_payment_id = ?, itn_data = ?, updated_at = NOW()
              WHERE id = ? AND status = "pending"'
         )->execute([$pfPaymentId, $itnData, $paymentId]);
+        if (!empty($payment['vowr_reservation_id'])) {
+            releaseVowrReservation($db, $payment['vowr_reservation_id'], 'released');
+        }
     } else {
         $db->rollBack();
         finishText('unhandled-status', 400);

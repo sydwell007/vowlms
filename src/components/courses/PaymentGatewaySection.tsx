@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Coins } from "lucide-react";
 import type { InternationalGateway, useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
 import { formatMoney } from "@/lib/format";
+import { VowrRedemptionSlider } from "@/components/courses/VowrRedemptionSlider";
 
 type Props = {
   unlock: ReturnType<typeof useCourseUnlockPurchase>;
@@ -68,6 +69,7 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
     currency,
     amountCharged,
     conversionAvailable,
+    reservation,
     payWithCash,
     payWithVowr,
     payWithPaystack,
@@ -132,16 +134,27 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
   // button never gets stuck on "Loading price…" forever.
   const priceUnavailable = pricingUnavailable || (pricing !== null && !conversionAvailable);
 
+  // A hybrid partial-VOWR reservation only owes its own cash remainder — see
+  // the identical estimate in useCourseUnlockPurchase.ts's payWithPaystack
+  // (both derive from the same cached ZAR→currency ratio; the bridge
+  // re-verifies the real converted amount server-side regardless).
+  const displayAmountCharged =
+    reservation && pricing && amountCharged !== null && pricing.totalZar > 0
+      ? Math.round(((reservation.cashAmountZar / pricing.totalZar) * amountCharged) * 100) / 100
+      : amountCharged;
+
   const primaryButtonLabel = priceUnavailable
     ? "Unavailable — try again"
-    : !pricing || amountCharged === null
+    : !pricing || displayAmountCharged === null
       ? "Loading price…"
       : paying === "cash" || paying === "paystack" || paying === "lemonsqueezy"
         ? "Redirecting…"
-        : `Pay ${formatMoney(amountCharged, currency)} via ${gateway ? GATEWAY_LABEL[gateway] : ""}`;
+        : `Pay ${formatMoney(displayAmountCharged, currency)} via ${gateway ? GATEWAY_LABEL[gateway] : ""}`;
 
   return (
     <div>
+      <VowrRedemptionSlider unlock={unlock} accentColor={accentColor} compact={compact} />
+
       {priceUnavailable ? (
         <button type="button" disabled className={`${buttonClass} cursor-not-allowed opacity-60`} style={{ backgroundColor: "#f5c542" }}>
           {primaryButtonLabel}
