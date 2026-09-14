@@ -3,7 +3,14 @@ import type { NextConfig } from "next";
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
-  "form-action 'self' https://sandbox.payfast.co.za https://www.payfast.co.za",
+  // PayFast's own /eng/process endpoint redirects through its load-balanced
+  // hostnames (w1w/w2w) before landing on the actual payment page — CSP's
+  // form-action is enforced against every hop of a redirect chain, not just
+  // the initial submission target, so all of PayFast's real hostnames need
+  // to be listed here or the browser silently blocks the whole checkout
+  // partway through. Same hostname set payfast-notify.php's own
+  // validPayfastSource() already recognizes as legitimate PayFast infra.
+  "form-action 'self' https://sandbox.payfast.co.za https://www.payfast.co.za https://w1w.payfast.co.za https://w2w.payfast.co.za",
   "frame-ancestors 'self'",
   "object-src 'none'",
   "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://js.paystack.co https://www.paypal.com https://www.paypalobjects.com",
