@@ -39,10 +39,14 @@ export function isPaidUpskillingCourse(slug: string): boolean {
  * Display-only "starting from" teaser for catalogue/course cards — NOT the
  * authoritative price (that's always `/api/courses/unlock-price`, computed
  * live server-side from `course_unlock_pricing`). This exists purely so a
- * card can say "from R209" without an extra live fetch per card in a grid of
- * 20+ courses. Keep in sync with the founding price seeded in
+ * card can say "from R299" without an extra live fetch per card in a grid of
+ * 20+ courses. Keep in sync with `price_zar` in
  * `public/sql/021_course_unlock_pricing.sql` — if that ever changes, update
  * this too. A stale few-Rand mismatch here is a cosmetic teaser issue, not a
  * billing one, since checkout always re-fetches the real price.
+ *
+ * The founding-learner launch discount (R299 → R209) was retired
+ * 2026-09-14 (`public/sql/034_disable_founding_discount.sql`) — every
+ * course now always prices at its standard rate.
  */
-export const UPSKILLING_FOUNDING_PRICE_TEASER_ZAR = 209;
+export const UPSKILLING_PRICE_TEASER_ZAR = 299;

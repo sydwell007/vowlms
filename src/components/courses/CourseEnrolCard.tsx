@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Lock, ShieldCheck, Sparkles, TriangleAlert } from "lucide-react";
+import { Check, Lock, ShieldCheck, TriangleAlert } from "lucide-react";
 import { EnrollButton } from "@/components/courses/EnrollButton";
 import { PaymentGatewaySection } from "@/components/courses/PaymentGatewaySection";
 import { useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
@@ -77,13 +77,6 @@ export function CourseEnrolCard({ course, accentColor }: Props) {
               <div className="mt-3">
                 <PaymentGatewaySection unlock={unlock} accentColor={accentColor} />
               </div>
-
-              {pricing ? (
-                <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-ink/70">
-                  <Sparkles aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-amber-500" />
-                  Save {pricing.vowrDiscountPercent}% paying with VOWR
-                </p>
-              ) : null}
 
               <p className="mt-3 flex items-center gap-1.5 text-xs font-medium text-ink/70">
                 <ShieldCheck aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />

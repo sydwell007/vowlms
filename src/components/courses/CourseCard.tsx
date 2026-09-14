@@ -9,7 +9,7 @@ import { formatCourseDurationWeeks } from "@/lib/course-content";
 import { getComingSoonInfo } from "@/lib/academy-launch";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { getCourseVisual, visualAssets } from "@/lib/visual-assets";
-import { isPaidUpskillingCourse, UPSKILLING_FOUNDING_PRICE_TEASER_ZAR } from "@/data/priced-upskilling-courses";
+import { isPaidUpskillingCourse, UPSKILLING_PRICE_TEASER_ZAR } from "@/data/priced-upskilling-courses";
 import type { CourseSummary, Role } from "@/types/lms";
 
 type Props = {
@@ -56,7 +56,7 @@ export function CourseCard({ course, layout = "grid", priority = false, role = n
           ) : isPaidCourse ? (
             <span className="absolute right-4 top-4 flex items-center gap-1 rounded-md bg-gold/95 px-2.5 py-1 text-xs font-semibold text-[#06111f] shadow-sm">
               <Lock aria-hidden="true" className="h-3 w-3" />
-              From {formatCurrency(UPSKILLING_FOUNDING_PRICE_TEASER_ZAR)}
+              From {formatCurrency(UPSKILLING_PRICE_TEASER_ZAR)}
             </span>
           ) : null}
           <span className="absolute bottom-4 left-4 rounded-md bg-[#061725]/90 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
