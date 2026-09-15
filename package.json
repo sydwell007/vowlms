@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.16.0",
+    "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.0.0",
     "date-fns": "^4.4.0",
     "fuse.js": "^7.4.2",
@@ -48,7 +49,8 @@
     "react-pdf": "^10.4.1",
     "sonner": "^2.0.7",
     "three": "^0.175.0",
-    "tsx": "^4.22.4"
+    "tsx": "^4.22.4",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",

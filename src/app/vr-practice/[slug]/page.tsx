@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
-import { VRStudio } from "@/components/vr/VRStudio";
+import { VrSkillsPracticeExperience } from "@/components/vr-skills/VrSkillsPracticeExperience";
 import { getAcademyBySlug, getAcademyHref, getEnrollableCourseSlugs, getVRPracticeBySlug } from "@/lib/data";
 import { BridgeError } from "@/lib/bridge";
 import { hasActiveCourseEnrollment } from "@/lib/course-access";
@@ -52,14 +52,14 @@ export default async function VRPracticePage({ params }: { params: Promise<{ slu
           <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-gold">{course.title}</p>
           <h1 className="mt-4 max-w-5xl text-balance text-4xl font-semibold sm:text-6xl">{practice.title}</h1>
           <p className="mt-5 max-w-3xl text-base leading-7 text-white/70">
-            Complete this five-stage module capstone in desktop 3D or a compatible WebXR environment. Every decision becomes skills evidence.
+            Choose Legacy, Adaptive, or Immersive practice in desktop 3D or a compatible WebXR environment. Every decision becomes skills evidence.
           </p>
         </div>
       </section>
 
       <section className="py-6 md:py-10">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
-          <VRStudio practice={practice} courseSlug={course.slug} />
+          <VrSkillsPracticeExperience practice={practice} courseSlug={course.slug} />
           <div className="mt-6 flex flex-wrap gap-3">
             <ButtonLink href={`/courses/${course.slug}`} variant="secondary">
               <ArrowLeft aria-hidden="true" className="h-4 w-4" />
