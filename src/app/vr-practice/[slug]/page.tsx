@@ -16,7 +16,10 @@ export default async function VRPracticePage({ params }: { params: Promise<{ slu
 
   const { practice, course } = result;
   try {
-    if (!await hasActiveCourseEnrollment(getEnrollableCourseSlugs(course.slug))) {
+    const requiredCourseSlugs = practice.sourceCourseSlug
+      ? [practice.sourceCourseSlug]
+      : getEnrollableCourseSlugs(course.slug);
+    if (!await hasActiveCourseEnrollment(requiredCourseSlugs)) {
       redirect(`/courses/${course.slug}?enrolment=required`);
     }
   } catch (error) {
@@ -42,15 +45,15 @@ export default async function VRPracticePage({ params }: { params: Promise<{ slu
             ]}
           />
           <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-gold">{course.title}</p>
-          <h1 className="mt-4 text-balance text-4xl font-semibold sm:text-6xl">VR Practice</h1>
+          <h1 className="mt-4 max-w-5xl text-balance text-4xl font-semibold sm:text-6xl">{practice.title}</h1>
           <p className="mt-5 max-w-3xl text-base leading-7 text-white/70">
-            WebXR-ready practice area for future immersive simulations, facilitator scoring, and headset-based learning hubs.
+            Complete this five-stage module capstone in desktop 3D or a compatible WebXR environment. Every decision becomes skills evidence.
           </p>
           <div className="mt-8">
-            <VRStudio practice={practice} />
+            <VRStudio practice={practice} courseSlug={course.slug} />
           </div>
           <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href={`/lesson/${practice.lessonSlug}`} variant="secondary">
+            <ButtonLink href={`/courses/${course.slug}`} variant="secondary">
               ← Back to course
             </ButtonLink>
             <ButtonLink href={`/results/${course.slug}`}>

@@ -204,9 +204,13 @@ export function LessonPlayer({
         const match = course.assessments.find((a) => a.lessonSlug === l.slug);
         if (match) return `/assessment/${match.slug}`;
       }
+      if (l.type === "vr-practice") {
+        const match = course.vrPractices.find((practice) => practice.lessonSlug === l.slug);
+        if (match) return `/vr-practice/${match.slug}`;
+      }
       return `/lesson/${l.slug}`;
     },
-    [course.assessments],
+    [course.assessments, course.vrPractices],
   );
   const unlock = useCourseUnlockPurchase(courseSlugForNav, allModules);
   const showLockedModules = unlock.isPaidCourse && unlock.state !== "unlocked" && unlock.state !== "loading";

@@ -169,6 +169,63 @@ export type VRPractice = {
   scenario: string;
   skillsPracticed: string[];
   scorePlaceholder: number;
+  id?: string;
+  academySlug?: string;
+  courseSlug?: string;
+  courseTitle?: string;
+  sourceCourseSlug?: string;
+  moduleOrder?: number;
+  moduleTitle?: string;
+  assessmentLessonSlug?: string;
+  role?: string;
+  environment?: string;
+  environmentLabel?: string;
+  signatureMechanic?: string;
+  briefing?: string;
+  objectives?: string[];
+  lessonTopics?: string[];
+  tasks?: VRPracticeTask[];
+  hotspots?: VRPracticeHotspot[];
+  estimatedMinutes?: number;
+  passMark?: number;
+  difficulty?: "guided" | "applied" | "advanced";
+  status?: "draft" | "studio-ready" | "approved" | "deployed";
+  version?: string;
+  deployment?: VRPracticeDeployment;
+};
+
+export type VRPracticeTask = {
+  id: string;
+  order: number;
+  stage: string;
+  title: string;
+  instruction: string;
+  theoryReference: string;
+  actionPrompt: string;
+  options: string[];
+  correctOption: string;
+  successFeedback: string;
+  retryFeedback: string;
+  evidencePrompt: string;
+  hotspotId: string;
+  hotspotLabel: string;
+};
+
+export type VRPracticeHotspot = {
+  id: string;
+  label: string;
+  concept: string;
+  position: number[];
+  shape: "console" | "table" | "screen" | "pod" | "wall";
+  color: string;
+};
+
+export type VRPracticeDeployment = {
+  target: string;
+  placement: "after-module-assessment";
+  route: string;
+  completionCallback: string;
+  eventName: string;
 };
 
 /**

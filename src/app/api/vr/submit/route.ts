@@ -8,6 +8,10 @@ export async function POST(request: Request) {
   if (!payload || typeof payload.practiceSlug !== "string") {
     return badRequest("practiceSlug is required");
   }
+  const score = Number(payload.score);
+  if (!Number.isFinite(score) || score < 0 || score > 100) {
+    return badRequest("score must be between 0 and 100");
+  }
 
   if (!isBridgeConfigured()) {
     const result = getVRPracticeBySlug(payload.practiceSlug);
@@ -15,8 +19,9 @@ export async function POST(request: Request) {
     return created({
       vrAttemptId: `vr-${Date.now()}`,
       practiceSlug: payload.practiceSlug,
-      score: result.practice.scorePlaceholder,
-      mode: "webxr-dev",
+      score: Math.round(score),
+      passed: score >= (result.practice.passMark ?? 70),
+      mode: payload.mode === "headset" ? "webxr" : "desktop-3d",
     });
   }
 
@@ -24,7 +29,7 @@ export async function POST(request: Request) {
     return created(
       await bridgePost("/vr/submit", {
         practiceSlug: payload.practiceSlug,
-        score: payload.score ?? null,
+        score: Math.round(score),
         feedback: payload.feedback ?? null,
       }),
     );

@@ -325,14 +325,18 @@ export default async function LessonPage({ params }: { params: Promise<{ slug: s
   const { slug } = await params;
   const staticResult = getLessonBySlug(slug);
 
-  // Module 0 is native VowLMS orientation content rather than a Moodle row.
-  // Serve it from the grouped course model while enforcing the same enrolment
-  // gate as the imported learning modules.
-  if (staticResult?.module.order === 0) {
+  // Module 0 and generated VR capstones are native VowLMS content rather than
+  // Moodle rows. Serve them from the grouped model instead of asking the bridge
+  // for a slug it does not own.
+  if (staticResult && (staticResult.module.order === 0 || staticResult.lesson.type === "vr-practice")) {
     const { lesson, course, module: courseModule } = staticResult;
     if (isBridgeConfigured()) {
       try {
-        const hasAccess = await hasActiveCourseEnrollment(getEnrollableCourseSlugs(course.slug));
+        const practice = course.vrPractices.find((item) => item.lessonSlug === lesson.slug);
+        const requiredCourseSlugs = practice?.sourceCourseSlug
+          ? [practice.sourceCourseSlug]
+          : getEnrollableCourseSlugs(course.slug);
+        const hasAccess = await hasActiveCourseEnrollment(requiredCourseSlugs);
         if (!hasAccess) redirect(`/courses/${course.slug}?enrolment=required`);
       } catch (error) {
         if (error instanceof BridgeError && error.status === 401) {

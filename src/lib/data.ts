@@ -13,6 +13,11 @@ import { getCoursePreviewContent } from "@/data/course-preview-content";
 import { buildModuleZero } from "@/data/course-module-zero";
 import { MODULE_ASSESSMENTS } from "@/data/module-assessments";
 import { isPaidUpskillingCourse } from "@/data/priced-upskilling-courses";
+import {
+  getUpskillingModulePractice,
+  insertPracticeAfterAssessment,
+  upskillingModulePractices,
+} from "@/data/vr/upskilling-practices";
 import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { isLearnerVisibleUpskillingCourse } from "@/lib/upskilling-visibility";
 import { getCourseStats } from "@/lib/course-content";
@@ -84,11 +89,15 @@ function buildParentCourse(grouping: typeof allGroupings[number]): Course {
 
     // Flatten all lessons from every internal section of the child course
     const allLessons = child.modules.flatMap((m) => m.lessons);
+    const practice = getUpskillingModulePractice(grouping.slug, idx + 1);
+    const moduleLessons = practice
+      ? insertPracticeAfterAssessment(allLessons, practice)
+      : allLessons;
 
     modules.push({
       title: cleanModuleTitle(child.title),
       order: idx + 1,
-      lessons: allLessons,
+      lessons: moduleLessons,
       // Free-first-module model: Module 1 (idx 0) is always free; every
       // module after it is free too UNLESS this course has real unlock
       // pricing configured (public/sql/021_course_unlock_pricing.sql).
@@ -120,10 +129,9 @@ function buildParentCourse(grouping: typeof allGroupings[number]): Course {
     );
   }
 
-  const vrPractices = grouping.moduleSlugOrder
-    .map((s) => rawCourseMap.get(s))
-    .filter(Boolean)
-    .flatMap((c) => c!.vrPractices);
+  const vrPractices = upskillingModulePractices.filter(
+    (practice) => practice.courseSlug === grouping.slug,
+  );
 
   return {
     slug: grouping.slug,
