@@ -17,7 +17,8 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { VRPractice, VRPracticeHotspot } from "@/types/lms";
 
 type Props = {
@@ -161,6 +162,8 @@ function PracticeScene({
 function PracticeTour({ practiceSlug }: { practiceSlug: string }) {
   const [step, setStep] = useState<number | null>(null);
   const [box, setBox] = useState<{ left: number; top: number; width: number; height: number } | null>(null);
+  const [cardHeight, setCardHeight] = useState(260);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (localStorage.getItem(`vowlms:vr-tour:${practiceSlug}:v1`) !== "complete") setStep(0);
@@ -172,9 +175,45 @@ function PracticeTour({ practiceSlug }: { practiceSlug: string }) {
       const rect = document.querySelector(TOUR_STEPS[step].selector)?.getBoundingClientRect();
       setBox(rect ? { left: rect.left, top: rect.top, width: rect.width, height: rect.height } : null);
     };
-    update();
+    const target = document.querySelector<HTMLElement>(TOUR_STEPS[step].selector);
+    const targetRect = target?.getBoundingClientRect();
+    if (targetRect) {
+      const safeTop = window.innerWidth >= 768 ? 132 : 80;
+      const safeBottom = window.innerHeight - 16;
+      if (targetRect.top < safeTop || targetRect.bottom > safeBottom) {
+        const availableHeight = safeBottom - safeTop;
+        const desiredTop = targetRect.height >= availableHeight
+          ? safeTop
+          : safeTop + (availableHeight - targetRect.height) / 2;
+        const root = document.documentElement;
+        const previousScrollBehavior = root.style.scrollBehavior;
+        root.style.scrollBehavior = "auto";
+        window.scrollTo({
+          top: Math.max(0, window.scrollY + targetRect.top - desiredTop),
+          behavior: "auto",
+        });
+        root.style.scrollBehavior = previousScrollBehavior;
+      }
+    }
+    const frame = window.requestAnimationFrame(update);
     window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    window.addEventListener("scroll", update, { passive: true });
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update);
+    };
+  }, [step]);
+
+  useEffect(() => {
+    if (step === null || !cardRef.current) return;
+
+    const card = cardRef.current;
+    const updateHeight = () => setCardHeight(card.getBoundingClientRect().height);
+    const observer = new ResizeObserver(updateHeight);
+    updateHeight();
+    observer.observe(card);
+    return () => observer.disconnect();
   }, [step]);
 
   function close() {
@@ -182,19 +221,58 @@ function PracticeTour({ practiceSlug }: { practiceSlug: string }) {
     setStep(null);
   }
 
-  if (step === null) return null;
+  if (step === null || typeof document === "undefined") return null;
   const item = TOUR_STEPS[step];
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+  const cardWidth = Math.min(380, viewportWidth - 32);
+  const gap = 18;
+  const focusBox = box && viewportWidth < 640
+    ? { ...box, height: Math.min(box.height, 72) }
+    : box;
+  const centeredLeft = focusBox
+    ? Math.min(Math.max(16, focusBox.left + focusBox.width / 2 - cardWidth / 2), viewportWidth - cardWidth - 16)
+    : Math.max(16, (viewportWidth - cardWidth) / 2);
+  let cardLeft = centeredLeft;
+  let cardTop = Math.max(16, viewportHeight - cardHeight - 16);
 
-  return (
+  if (focusBox) {
+    const boxBottom = focusBox.top + focusBox.height;
+    const boxRight = focusBox.left + focusBox.width;
+    if (focusBox.top >= cardHeight + gap + 16) {
+      cardTop = focusBox.top - cardHeight - gap;
+    } else if (viewportHeight - boxBottom >= cardHeight + gap + 16) {
+      cardTop = boxBottom + gap;
+    } else if (viewportWidth - boxRight >= cardWidth + gap + 16) {
+      cardLeft = boxRight + gap;
+      cardTop = Math.min(Math.max(16, focusBox.top), viewportHeight - cardHeight - 16);
+    } else if (focusBox.left >= cardWidth + gap + 16) {
+      cardLeft = focusBox.left - cardWidth - gap;
+      cardTop = Math.min(Math.max(16, focusBox.top), viewportHeight - cardHeight - 16);
+    }
+  }
+
+  return createPortal(
     <div className="fixed inset-0 z-[100]" role="dialog" aria-modal="true" aria-label="Simulation guide tour">
       <div className="absolute inset-0 bg-[#020817]/74" />
-      {box ? (
+      {focusBox ? (
         <div
+          data-vr-tour-spotlight="true"
           className="pointer-events-none fixed rounded-xl ring-4 ring-[#5eead4] ring-offset-4 ring-offset-[#020817]/60"
-          style={box}
+          style={{
+            left: Math.max(8, focusBox.left - 4),
+            top: Math.max(8, focusBox.top - 4),
+            width: Math.min(viewportWidth - 16, focusBox.width + 8),
+            height: Math.min(viewportHeight - 16, focusBox.height + 8),
+          }}
         />
       ) : null}
-      <div className="fixed inset-x-4 bottom-5 mx-auto max-w-lg rounded-xl border border-white/15 bg-[#071526] p-5 text-white shadow-2xl sm:bottom-8 sm:p-6">
+      <div
+        ref={cardRef}
+        data-vr-tour-card="true"
+        className="fixed max-h-[calc(100vh-32px)] overflow-y-auto rounded-xl border border-white/15 bg-[#071526] p-5 text-white shadow-2xl sm:p-6"
+        style={{ left: cardLeft, top: cardTop, width: cardWidth }}
+      >
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#5eead4]">{item.label}</p>
@@ -217,7 +295,8 @@ function PracticeTour({ practiceSlug }: { practiceSlug: string }) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 

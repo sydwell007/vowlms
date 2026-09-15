@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { VRStudio } from "@/components/vr/VRStudio";
@@ -15,25 +16,29 @@ export default async function VRPracticePage({ params }: { params: Promise<{ slu
   }
 
   const { practice, course } = result;
-  try {
-    const requiredCourseSlugs = practice.sourceCourseSlug
-      ? [practice.sourceCourseSlug]
-      : getEnrollableCourseSlugs(course.slug);
-    if (!await hasActiveCourseEnrollment(requiredCourseSlugs)) {
-      redirect(`/courses/${course.slug}?enrolment=required`);
+  const localPreview = process.env.NODE_ENV === "development" && process.env.VOWLMS_VR_PREVIEW === "1";
+
+  if (!localPreview) {
+    try {
+      const requiredCourseSlugs = practice.sourceCourseSlug
+        ? [practice.sourceCourseSlug]
+        : getEnrollableCourseSlugs(course.slug);
+      if (!await hasActiveCourseEnrollment(requiredCourseSlugs)) {
+        redirect(`/courses/${course.slug}?enrolment=required`);
+      }
+    } catch (error) {
+      if (error instanceof BridgeError && error.status === 401) {
+        redirect(`/auth/signin?returnTo=${encodeURIComponent(`/vr-practice/${slug}`)}`);
+      }
+      throw error;
     }
-  } catch (error) {
-    if (error instanceof BridgeError && error.status === 401) {
-      redirect(`/auth/signin?returnTo=${encodeURIComponent(`/vr-practice/${slug}`)}`);
-    }
-    throw error;
   }
 
   const academy = getAcademyBySlug(course.academySlug);
 
   return (
-    <main>
-      <section className="visual-hero hero-learning py-12 text-white md:py-16">
+    <main className="bg-[#edf3f1]">
+      <section className="visual-hero hero-learning py-10 text-white md:py-12">
         <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
           <Breadcrumb
             tone="dark"
@@ -49,12 +54,16 @@ export default async function VRPracticePage({ params }: { params: Promise<{ slu
           <p className="mt-5 max-w-3xl text-base leading-7 text-white/70">
             Complete this five-stage module capstone in desktop 3D or a compatible WebXR environment. Every decision becomes skills evidence.
           </p>
-          <div className="mt-8">
-            <VRStudio practice={practice} courseSlug={course.slug} />
-          </div>
-          <div className="mt-8 flex flex-wrap gap-3">
+        </div>
+      </section>
+
+      <section className="py-6 md:py-10">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-6 lg:px-8">
+          <VRStudio practice={practice} courseSlug={course.slug} />
+          <div className="mt-6 flex flex-wrap gap-3">
             <ButtonLink href={`/courses/${course.slug}`} variant="secondary">
-              ← Back to course
+              <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+              Back to course
             </ButtonLink>
             <ButtonLink href={`/results/${course.slug}`}>
               Continue to results
