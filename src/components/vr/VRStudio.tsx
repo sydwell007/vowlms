@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { CanvasTexture, LinearFilter, SRGBColorSpace } from "three";
 import type { VRPractice, VRPracticeHotspot } from "@/types/lms";
 
 type Props = {
@@ -55,12 +56,14 @@ const TOUR_STEPS = [
 
 function HotspotObject({
   hotspot,
+  stationNumber,
   active,
   selected,
   complete,
   onSelect,
 }: {
   hotspot: VRPracticeHotspot;
+  stationNumber: number;
   active: boolean;
   selected: boolean;
   complete: boolean;
@@ -108,7 +111,89 @@ function HotspotObject({
         <sphereGeometry args={[active ? 0.14 : 0.08, 18, 18]} />
         <meshBasicMaterial color={complete ? "#86efac" : active ? "#ffffff" : "#94a3b8"} />
       </mesh>
+      <StationLabel
+        stationNumber={stationNumber}
+        label={hotspot.label}
+        positionY={dimensions[1] / 2 + 0.66}
+        active={active}
+        complete={complete}
+        onSelect={() => onSelect(hotspot.id)}
+      />
     </group>
+  );
+}
+
+function StationLabel({
+  stationNumber,
+  label,
+  positionY,
+  active,
+  complete,
+  onSelect,
+}: {
+  stationNumber: number;
+  label: string;
+  positionY: number;
+  active: boolean;
+  complete: boolean;
+  onSelect: () => void;
+}) {
+  const texture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 1024;
+    canvas.height = 256;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    const background = complete ? "#047857" : active ? "#087f74" : "#071526";
+    context.fillStyle = background;
+    context.beginPath();
+    context.roundRect(8, 8, 1008, 240, 42);
+    context.fill();
+    context.strokeStyle = complete ? "#86efac" : active ? "#5eead4" : "#94a3b8";
+    context.lineWidth = active ? 12 : 7;
+    context.stroke();
+
+    const [stage = "Station", ...detailParts] = label.split(" ");
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillStyle = complete ? "#d1fae5" : "#ffffff";
+    context.font = "700 64px Arial";
+    context.fillText(`STATION ${stationNumber}  |  ${stage.toUpperCase()}`, 512, active ? 86 : 128);
+
+    if (active) {
+      let detail = detailParts.join(" ") || label;
+      context.font = "600 46px Arial";
+      while (context.measureText(detail).width > 900 && detail.length > 12) detail = `${detail.slice(0, -4).trim()}...`;
+      context.fillStyle = "#ccfbf1";
+      context.fillText(detail, 512, 170);
+    }
+
+    const nextTexture = new CanvasTexture(canvas);
+    nextTexture.colorSpace = SRGBColorSpace;
+    nextTexture.minFilter = LinearFilter;
+    nextTexture.needsUpdate = true;
+    return nextTexture;
+  }, [active, complete, label, stationNumber]);
+
+  useEffect(() => () => texture?.dispose(), [texture]);
+
+  if (!texture) return null;
+
+  return (
+    <sprite
+      position={[0, positionY, 0]}
+      scale={active ? [3.25, 0.81, 1] : [1.7, 0.43, 1]}
+      onClick={(event) => {
+        event.stopPropagation();
+        onSelect();
+      }}
+      onPointerEnter={() => { document.body.style.cursor = "pointer"; }}
+      onPointerLeave={() => { document.body.style.cursor = "default"; }}
+    >
+      <spriteMaterial map={texture} transparent depthTest={false} />
+    </sprite>
   );
 }
 
@@ -144,10 +229,11 @@ function PracticeScene({
         <boxGeometry args={[0.25, 4.4, 9]} />
         <meshStandardMaterial color="#b9c7c4" />
       </mesh>
-      {hotspots.map((hotspot) => (
+      {hotspots.map((hotspot, index) => (
         <HotspotObject
           key={hotspot.id}
           hotspot={hotspot}
+          stationNumber={index + 1}
           active={hotspot.id === activeId}
           selected={hotspot.id === selectedId}
           complete={completedIds.has(hotspot.id)}
@@ -166,7 +252,9 @@ function PracticeTour({ practiceSlug }: { practiceSlug: string }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (localStorage.getItem(`vowlms:vr-tour:${practiceSlug}:v1`) !== "complete") setStep(0);
+    if (localStorage.getItem(`vowlms:vr-tour:${practiceSlug}:v1`) === "complete") return;
+    const frame = window.requestAnimationFrame(() => setStep(0));
+    return () => window.cancelAnimationFrame(frame);
   }, [practiceSlug]);
 
   useEffect(() => {
@@ -301,11 +389,12 @@ function PracticeTour({ practiceSlug }: { practiceSlug: string }) {
 }
 
 export function VRStudio({ practice, courseSlug }: Props) {
-  const tasks = practice.tasks ?? [];
-  const hotspots = practice.hotspots ?? [];
+  const tasks = useMemo(() => practice.tasks ?? [], [practice.tasks]);
+  const hotspots = useMemo(() => practice.hotspots ?? [], [practice.hotspots]);
   const [taskIndex, setTaskIndex] = useState(0);
   const [selectedHotspotId, setSelectedHotspotId] = useState<string | null>(null);
   const [stationFound, setStationFound] = useState(false);
+  const [actionPanelOpen, setActionPanelOpen] = useState(false);
   const [completedTaskIds, setCompletedTaskIds] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [mistakes, setMistakes] = useState(0);
@@ -330,6 +419,13 @@ export function VRStudio({ practice, courseSlug }: Props) {
     xr?.isSessionSupported("immersive-vr").then(setHeadsetReady).catch(() => setHeadsetReady(false));
   }, []);
 
+  useEffect(() => {
+    if (!actionPanelOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = previousOverflow; };
+  }, [actionPanelOpen]);
+
   function selectHotspot(id: string) {
     if (!task || taskComplete) return;
     setSelectedHotspotId(id);
@@ -338,7 +434,8 @@ export function VRStudio({ practice, courseSlug }: Props) {
       return;
     }
     setStationFound(true);
-    setFeedback("Station found. Complete the practical decision in the Action Console below.");
+    setActionPanelOpen(true);
+    setFeedback(null);
   }
 
   function chooseAction(option: string) {
@@ -357,6 +454,7 @@ export function VRStudio({ practice, courseSlug }: Props) {
     setTaskIndex((value) => value + 1);
     setSelectedHotspotId(null);
     setStationFound(false);
+    setActionPanelOpen(false);
     setFeedback(null);
   }
 
@@ -364,6 +462,7 @@ export function VRStudio({ practice, courseSlug }: Props) {
     setTaskIndex(0);
     setSelectedHotspotId(null);
     setStationFound(false);
+    setActionPanelOpen(false);
     setCompletedTaskIds([]);
     setFeedback(null);
     setMistakes(0);
@@ -421,7 +520,7 @@ export function VRStudio({ practice, courseSlug }: Props) {
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-white/10 bg-[#050b1a] text-white shadow-[0_30px_90px_rgba(2,8,23,0.35)]">
+    <div data-vr-studio="true" className="overflow-hidden rounded-xl border border-white/10 bg-[#050b1a] text-white shadow-[0_30px_90px_rgba(2,8,23,0.35)]">
       <header className="border-b border-white/10 bg-[#0b1427] px-5 py-5 sm:px-6" data-vr-tour="briefing">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
           <div className="max-w-4xl">
@@ -450,23 +549,83 @@ export function VRStudio({ practice, courseSlug }: Props) {
         {helpOpen ? <p className="mt-4 rounded-lg border border-[#5eead4]/25 bg-[#5eead4]/8 px-4 py-3 text-sm leading-6 text-white/78">Follow the active task. Find its named station, select it, and then complete the action below. Selecting an object never completes a task by itself.</p> : null}
       </header>
 
-      <div className="grid min-h-[610px] xl:grid-cols-[minmax(0,1fr)_390px]">
-        <section className="relative min-h-[440px] border-b border-white/10 xl:border-b-0 xl:border-r" data-vr-tour="room">
-          <PracticeScene hotspots={hotspots} activeId={task.hotspotId} selectedId={selectedHotspotId} completedIds={completedHotspotIds} onSelect={selectHotspot} />
-          <div className="pointer-events-none absolute left-4 top-4 rounded-lg border border-white/15 bg-[#071526]/90 px-4 py-3 shadow-xl backdrop-blur">
-            <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.13em] text-[#99f6e4]"><LocateFixed aria-hidden="true" className="h-4 w-4" /> Find now</p>
-            <p className="mt-1 max-w-xs text-sm font-semibold">{task.hotspotLabel}</p>
+      <div className="grid xl:grid-cols-[minmax(0,1fr)_390px]">
+        <section className="min-w-0 border-b border-white/10 xl:border-b-0 xl:border-r" data-vr-tour="room">
+          <div className="border-b border-white/10 bg-[#071526] px-4 py-3">
+            <p className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.13em] text-[#99f6e4]"><LocateFixed aria-hidden="true" className="h-4 w-4" /> Step 1: Find and select</p>
+            <p className="mt-1 text-sm font-semibold">Click the labelled <span className="text-[#99f6e4]">{task.hotspotLabel}</span> station.</p>
+            <p className="mt-1 text-xs text-white/58">Then complete the decision that opens on screen.</p>
           </div>
-          <div className="absolute inset-x-4 bottom-4 grid grid-cols-5 gap-2">
+          <div className="relative h-[440px] sm:h-[520px]">
+            <PracticeScene hotspots={hotspots} activeId={task.hotspotId} selectedId={selectedHotspotId} completedIds={completedHotspotIds} onSelect={selectHotspot} />
+            {feedback && !stationFound ? (
+              <div role="status" className="absolute inset-x-3 bottom-3 rounded-lg border border-amber-300/35 bg-[#231c0a]/95 px-4 py-3 text-sm font-semibold text-amber-100 shadow-xl sm:inset-x-auto sm:bottom-4 sm:left-4 sm:max-w-lg">
+                {feedback}
+              </div>
+            ) : null}
+
+            {stationFound && actionPanelOpen && typeof document !== "undefined" ? createPortal(
+              <div className="fixed inset-0 z-[90] grid place-items-center bg-[#020817]/82 p-3 text-white backdrop-blur-sm sm:p-6" role="dialog" aria-modal="true" aria-label={`Action for ${task.hotspotLabel}`}>
+                <div className="max-h-[calc(100vh-1.5rem)] w-full max-w-3xl overflow-y-auto rounded-xl border border-[#5eead4]/45 bg-[#071526] p-4 shadow-2xl sm:max-h-[calc(100vh-3rem)] sm:p-6">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.15em] text-[#5eead4]">Station {taskIndex + 1} found</p>
+                      <h3 className="mt-1 text-xl font-semibold sm:text-2xl">Step 2: Complete the action</h3>
+                    </div>
+                    {!taskComplete ? (
+                      <button type="button" onClick={() => setActionPanelOpen(false)} aria-label="Close decision panel" className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-white/10 hover:bg-white/20">
+                        <X aria-hidden="true" className="h-4 w-4" />
+                      </button>
+                    ) : null}
+                  </div>
+                  <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.045] p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.13em] text-white/50">Evidence station</p>
+                    <p className="mt-1 font-semibold text-white">{task.hotspotLabel}</p>
+                    <p className="mt-2 text-sm leading-6 text-white/60"><span className="font-semibold text-white/85">Theory to apply:</span> {task.theoryReference}</p>
+                  </div>
+                  <p className="mt-5 text-base font-semibold leading-7 text-white sm:text-lg">{task.actionPrompt}</p>
+                  <div className="mt-4 grid gap-3">
+                    {task.options.map((option, optionIndex) => (
+                      <button key={option} type="button" disabled={taskComplete} onClick={() => chooseAction(option)} className={`flex min-h-14 items-start gap-3 rounded-lg border p-3 text-left text-sm font-semibold leading-6 transition sm:p-4 ${taskComplete && option === task.correctOption ? "border-emerald-300 bg-emerald-400/15 text-emerald-100" : "border-white/12 bg-white/[0.045] text-white/80 hover:border-[#5eead4]/70 hover:bg-[#5eead4]/10 disabled:opacity-45"}`}>
+                        <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-white/10 text-xs text-[#99f6e4]">{String.fromCharCode(65 + optionIndex)}</span>
+                        <span>{option}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {feedback ? (
+                    <div aria-live="polite" className={`mt-4 rounded-lg border px-4 py-3 text-sm font-semibold leading-6 ${taskComplete ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-100" : "border-amber-300/30 bg-amber-300/10 text-amber-100"}`}>
+                      {feedback}
+                    </div>
+                  ) : null}
+                  {taskComplete ? (
+                    <div className="mt-4 flex justify-end">
+                      {!finished ? (
+                        <button type="button" onClick={nextTask} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#5eead4] px-5 text-sm font-bold text-[#06111f]">Continue to station {taskIndex + 2} <ArrowRight aria-hidden="true" className="h-4 w-4" /></button>
+                      ) : (
+                        <button type="button" onClick={() => setActionPanelOpen(false)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-[#5eead4] px-5 text-sm font-bold text-[#06111f]">Review final score <ArrowRight aria-hidden="true" className="h-4 w-4" /></button>
+                      )}
+                    </div>
+                  ) : null}
+                </div>
+              </div>,
+              document.body,
+            ) : null}
+          </div>
+
+          <div className="border-t border-white/10 bg-[#071020] p-3">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.13em] text-white/48">Labelled station map</p>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
             {hotspots.map((hotspot, index) => {
               const complete = completedHotspotIds.has(hotspot.id);
               const active = hotspot.id === task.hotspotId;
               return (
-                <button key={hotspot.id} type="button" onClick={() => selectHotspot(hotspot.id)} aria-label={`Select ${hotspot.label}`} className={`min-h-12 rounded-lg border px-2 text-[10px] font-bold leading-tight backdrop-blur transition sm:text-xs ${complete ? "border-emerald-300/40 bg-emerald-500/85" : active ? "border-[#5eead4] bg-[#087f74]/92" : "border-white/15 bg-[#071526]/82 text-white/58 hover:text-white"}`}>
-                  {complete ? <Check aria-hidden="true" className="mx-auto h-4 w-4" /> : index + 1}
+                <button key={hotspot.id} type="button" onClick={() => selectHotspot(hotspot.id)} aria-label={`Select station ${index + 1}: ${hotspot.label}`} className={`min-h-16 rounded-lg border px-2 py-2 text-left text-[10px] font-bold leading-tight transition sm:text-xs ${complete ? "border-emerald-300/40 bg-emerald-500/20 text-emerald-100" : active ? "border-[#5eead4] bg-[#087f74]/92 text-white" : "border-white/15 bg-white/[0.04] text-white/58 hover:text-white"}`}>
+                  <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.08em] text-[#99f6e4]">{complete ? <Check aria-hidden="true" className="h-3.5 w-3.5" /> : <span>{index + 1}</span>} Station</span>
+                  <span className="mt-1 block line-clamp-2">{hotspot.label}</span>
                 </button>
               );
             })}
+            </div>
           </div>
         </section>
 
@@ -504,12 +663,9 @@ export function VRStudio({ practice, courseSlug }: Props) {
             <h3 className="mt-1 text-lg font-semibold">{stationFound ? task.actionPrompt : `Find ${task.hotspotLabel} to unlock the action`}</h3>
             <p className="mt-2 text-sm leading-6 text-white/58"><span className="font-semibold text-white/82">Theory reference:</span> {task.theoryReference}</p>
             {stationFound ? (
-              <div className="mt-4 grid gap-3 lg:grid-cols-3">
-                {task.options.map((option) => (
-                  <button key={option} type="button" disabled={taskComplete} onClick={() => chooseAction(option)} className={`min-h-24 rounded-lg border p-4 text-left text-sm font-semibold leading-6 transition ${taskComplete && option === task.correctOption ? "border-emerald-300 bg-emerald-400/15 text-emerald-100" : "border-white/12 bg-white/[0.045] text-white/76 hover:border-[#5eead4]/60 hover:bg-[#5eead4]/10 disabled:opacity-45"}`}>
-                    {option}
-                  </button>
-                ))}
+              <div className="mt-4 flex flex-col gap-3 rounded-lg border border-[#5eead4]/25 bg-[#5eead4]/8 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm leading-6 text-white/70">The station is identified. Open the decision panel and choose the action that best applies the theory.</p>
+                <button type="button" onClick={() => setActionPanelOpen(true)} className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-[#5eead4] px-4 text-sm font-bold text-[#06111f]">{taskComplete ? "Review decision" : "Open decision"} <ArrowRight aria-hidden="true" className="h-4 w-4" /></button>
               </div>
             ) : (
               <div className="mt-4 rounded-lg border border-dashed border-white/15 bg-white/[0.025] px-4 py-4 text-sm text-white/45">The task remains in progress. Selecting the correct 3D station reveals the decision you must perform.</div>
