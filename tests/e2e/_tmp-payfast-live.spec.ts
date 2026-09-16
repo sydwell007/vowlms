@@ -8,6 +8,14 @@ test.describe("PayFast live checkout diagnostic @destructive", () => {
       if (msg.type() === "error") consoleErrors.push(msg.text());
     });
 
+    // Test the hypothesis that Google Tag Manager's enhanced-measurement
+    // form tracking is intercepting the submission and is the real source
+    // of the CSP conflict — block gtm.js/analytics entirely and see if the
+    // real PayFast redirect then succeeds.
+    await page.route("**/googletagmanager.com/**", (route) => route.abort());
+    await page.route("**/google-analytics.com/**", (route) => route.abort());
+    await page.route("**/analytics.google.com/**", (route) => route.abort());
+
     await signUpTestUser(page, "payfastqa");
     await page.goto("/courses/business-ethics");
     await page.waitForLoadState("networkidle");
