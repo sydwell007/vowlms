@@ -46,16 +46,24 @@ export function ModeGuideTour({ mode, manifestId, version }: { mode: Exclude<Sim
   }, [storageKey]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) return undefined;
     const update = () => {
       const target = visibleTarget(step.selector);
       if (!target) return;
-      target.scrollIntoView({ block: "nearest", behavior: "smooth" });
-      window.setTimeout(() => setRect(target.getBoundingClientRect()), 180);
+      setRect(target.getBoundingClientRect());
     };
+    // Re-measure on every scroll tick (capture so nested scroll containers are caught too)
+    // instead of a single fixed-delay snapshot: on a long host page the smooth scroll below
+    // can still be animating well past any fixed delay, which otherwise freezes the spotlight
+    // at a stale, "out of phase" position instead of tracking the target to its resting place.
+    visibleTarget(step.selector)?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     update();
     window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
   }, [open, step.selector]);
 
   const popoverStyle = useMemo(() => {
