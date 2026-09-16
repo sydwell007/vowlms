@@ -74,6 +74,11 @@ declare global {
       Setup(config: { eventHandler: (event: { event: string }) => void }): void;
       Url: { Open(url: string): void; Close?: () => void };
     };
+    // lemon.js only auto-creates window.LemonSqueezy on the browser's own
+    // `load` event, which has already fired long before we lazily inject
+    // this script on click — createLemonSqueezy() must be called explicitly
+    // instead of relying on that listener.
+    createLemonSqueezy?: () => void;
   }
 }
 
@@ -501,6 +506,12 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
       const checkoutUrl = payload.data.checkoutUrl as string;
 
       await loadScriptOnce("https://assets.lemonsqueezy.com/lemon.js");
+      // Their SDK only wires itself up automatically via a `load` event
+      // listener registered at script-parse time — since we're injecting
+      // it well after the page's own load event already fired, that
+      // listener never runs, so window.LemonSqueezy is never created
+      // unless we call their init function ourselves.
+      if (!window.LemonSqueezy) window.createLemonSqueezy?.();
       if (!window.LemonSqueezy) throw new Error("Lemon Squeezy could not be loaded.");
 
       window.LemonSqueezy.Setup({
