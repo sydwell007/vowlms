@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
-import { Lock } from "lucide-react";
+import { Loader2, Lock } from "lucide-react";
 import { PaymentGatewaySection } from "@/components/courses/PaymentGatewaySection";
 import { formatCurrency } from "@/lib/format";
 import type { useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
@@ -20,11 +20,23 @@ export const LessonUnlockPanel = forwardRef<HTMLDivElement, Props>(function Less
   { unlock, accentColor },
   ref,
 ) {
-  const { isPaidCourse, state, pricing, pricingUnavailable } = unlock;
+  const { isPaidCourse, state, confirmingPayment, pricing, pricingUnavailable } = unlock;
 
-  if (!isPaidCourse || state !== "free-only") return null;
+  if (!isPaidCourse || (state !== "free-only" && !confirmingPayment)) return null;
 
   const priceHeadline = pricing?.items[0] ?? null;
+
+  if (confirmingPayment) {
+    return (
+      <div ref={ref} className="m-3 overflow-hidden rounded-xl bg-white shadow-[0_10px_28px_rgba(6,17,31,0.12)]">
+        <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${accentColor}, ${accentColor}00)` }} />
+        <div className="flex items-center gap-2 p-3.5">
+          <Loader2 aria-hidden="true" className="h-4 w-4 shrink-0 animate-spin" style={{ color: accentColor }} />
+          <p className="text-xs font-bold" style={{ color: accentColor }}>Confirming your payment…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={ref} className="m-3 overflow-hidden rounded-xl bg-white shadow-[0_10px_28px_rgba(6,17,31,0.12)]">

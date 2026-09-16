@@ -19,7 +19,7 @@ type Props = { course: Course; accentColor: string };
  */
 export function CourseEnrolCard({ course, accentColor }: Props) {
   const unlock = useCourseUnlockPurchase(course.slug, course.modules);
-  const { isPaidCourse, totalModules, state, pricing, pricingUnavailable, savingsZar } = unlock;
+  const { isPaidCourse, totalModules, state, confirmingPayment, pricing, pricingUnavailable, savingsZar } = unlock;
 
   const priceHeadline = pricing?.items[0] ?? null;
   const remainingModules = Math.max(totalModules - 1, 1);
@@ -44,6 +44,11 @@ export function CourseEnrolCard({ course, accentColor }: Props) {
                 <Check aria-hidden="true" className="h-3.5 w-3.5" />
               </span>
               <p className="text-sm font-bold" style={{ color: accentColor }}>Full course unlocked</p>
+            </div>
+          ) : confirmingPayment ? (
+            <div className="flex items-center gap-2.5 px-5 py-4" style={{ backgroundColor: `${accentColor}0d` }}>
+              <div className="h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-slate-200" style={{ borderTopColor: accentColor }} aria-hidden="true" />
+              <p className="text-sm font-bold" style={{ color: accentColor }}>Confirming your payment…</p>
             </div>
           ) : (
             <div className="p-5">

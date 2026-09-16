@@ -13,13 +13,17 @@ const contentSecurityPolicy = [
   "form-action 'self' https://sandbox.payfast.co.za https://www.payfast.co.za https://w1w.payfast.co.za https://w2w.payfast.co.za",
   "frame-ancestors 'self'",
   "object-src 'none'",
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://js.paystack.co https://www.paypal.com https://www.paypalobjects.com",
+  // assets.lemonsqueezy.com is lemon.js, the SDK powering the Lemon Squeezy
+  // overlay checkout — its own controlled embed, not a raw iframe attempt
+  // (unlike PayFast, which explicitly blocks all embedding via
+  // X-Frame-Options: DENY, confirmed directly against their live checkout).
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://js.paystack.co https://www.paypal.com https://www.paypalobjects.com https://assets.lemonsqueezy.com",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
   "img-src 'self' data: blob: https://api.goalvow.com https://*.google-analytics.com https://www.googletagmanager.com https://www.paypalobjects.com",
   "media-src 'self' blob: https://api.goalvow.com https://goalvow.com",
-  "connect-src 'self' https://api.goalvow.com https://vowhumans.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://api.paystack.co https://www.paypal.com https://www.sandbox.paypal.com",
-  "frame-src 'self' https://vowhumans.com https://www.youtube.com https://www.youtube-nocookie.com https://js.paystack.co https://checkout.paystack.com https://www.paypal.com https://www.sandbox.paypal.com",
+  "connect-src 'self' https://api.goalvow.com https://vowhumans.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://api.paystack.co https://www.paypal.com https://www.sandbox.paypal.com https://*.lemonsqueezy.com",
+  "frame-src 'self' https://vowhumans.com https://www.youtube.com https://www.youtube-nocookie.com https://js.paystack.co https://checkout.paystack.com https://www.paypal.com https://www.sandbox.paypal.com https://*.lemonsqueezy.com",
   "worker-src 'self' blob:",
   "upgrade-insecure-requests",
 ].join("; ");

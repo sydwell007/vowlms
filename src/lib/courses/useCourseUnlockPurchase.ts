@@ -70,6 +70,10 @@ declare global {
     PaystackPop?: {
       setup(config: Record<string, unknown>): { openIframe(): void };
     };
+    LemonSqueezy?: {
+      Setup(config: { eventHandler: (event: { event: string }) => void }): void;
+      Url: { Open(url: string): void; Close?: () => void };
+    };
   }
 }
 
@@ -105,6 +109,12 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
   const [conversionAvailable, setConversionAvailable] = useState(true);
   const [reservation, setReservation] = useState<VowrReservation | null>(null);
   const [reserving, setReserving] = useState(false);
+  // True only for the extended poll right after landing back from PayFast/
+  // Lemon Squeezy's hosted checkout (?payment=success) — lets the UI show a
+  // neutral "confirming your payment" state instead of flashing the full
+  // pay-again card while the webhook that actually grants access is still
+  // in flight.
+  const [confirmingPayment, setConfirmingPayment] = useState(false);
   const wallet = useWalletBalance(session.status === "authenticated");
 
   // Stay in sync with any OTHER mounted card/panel for the same course —
@@ -127,8 +137,25 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     const controller = new AbortController();
     let cancelled = false;
 
+    // A learner landing back here with ?payment=success just came straight
+    // from PayFast/Lemon Squeezy's hosted checkout — the actual grant is a
+    // webhook (PayFast's ITN, Lemon Squeezy's webhook) that can genuinely
+    // take several seconds to arrive server-side, well past the short
+    // window below that's tuned for an ordinary page load. Give it much
+    // longer here specifically, and keep the UI on "loading" (never a
+    // misleading "still locked") for that whole window rather than only the
+    // normal quick check — cleared from the URL once handled so a refresh
+    // doesn't keep re-triggering the long poll.
+    const returningFromPayment = typeof window !== "undefined" && new URL(window.location.href).searchParams.get("payment") === "success";
+    if (returningFromPayment) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("payment");
+      router.replace(`${url.pathname}${url.search}`, { scroll: false });
+    }
+
     async function checkEnrollment() {
-      const delays = [0, 700, 1200];
+      if (returningFromPayment) await Promise.resolve().then(() => setConfirmingPayment(true));
+      const delays = returningFromPayment ? [0, 1500, 2500, 3500, 4500, 5500, 6500] : [0, 700, 1200];
       for (const delayMs of delays) {
         if (delayMs > 0) await new Promise((resolve) => setTimeout(resolve, delayMs));
         if (cancelled) return;
@@ -146,9 +173,27 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
 
         const next: UnlockState = enrolledCount === 0 ? "not-enrolled" : enrolledCount >= totalModules ? "unlocked" : "free-only";
         if (cancelled) return;
-        setCachedUnlockState(parentSlug, { state: next, totalModules });
-        if (next === "unlocked") return;
+
+        if (next === "unlocked") {
+          setCachedUnlockState(parentSlug, { state: next, totalModules });
+          invalidateCourseEnrollmentCounts(parentSlug);
+          if (returningFromPayment) {
+            setConfirmingPayment(false);
+            toast.success("Payment confirmed!", { description: "Every module is now open." });
+          }
+          return;
+        }
+
+        // Mid-poll after a payment return: don't write a "still locked"
+        // state that would flash on screen while the webhook is still in
+        // flight — only the final attempt's result is allowed through.
+        const isLastAttempt = delayMs === delays[delays.length - 1];
+        if (!returningFromPayment || isLastAttempt) setCachedUnlockState(parentSlug, { state: next, totalModules });
       }
+      // Falls through here both when every attempt's fetch failed outright
+      // and when the last attempt succeeded but still wasn't "unlocked" —
+      // either way the extended window is over, so stop showing "confirming".
+      if (returningFromPayment) setConfirmingPayment(false);
     }
 
     checkEnrollment();
@@ -156,7 +201,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
       cancelled = true;
       controller.abort();
     };
-  }, [parentSlug, isPaidCourse, session.status, totalModules]);
+  }, [parentSlug, isPaidCourse, session.status, totalModules, router]);
 
   useEffect(() => {
     if (!isPaidCourse) return;
@@ -431,13 +476,15 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
   }
 
   /**
-   * Lemon Squeezy has no popup/inline SDK — it's a full redirect to its own
-   * hosted checkout and back, same shape as PayFast's form-POST redirect.
-   * Actual unlocking happens server-side in lemonsqueezy-webhook.php once
-   * Lemon Squeezy confirms payment; the learner lands back on this same
-   * course page (redirect_url set at checkout-creation time), where the
-   * existing enrollment-status polling picks up the unlock the same way it
-   * already tolerates PayFast's own async ITN delay.
+   * Lemon Squeezy's own overlay SDK (lemon.js) opens their checkout as an
+   * in-page modal instead of a full redirect — unlike PayFast, Lemon
+   * Squeezy explicitly supports and controls this embed themselves (it's
+   * their own iframe, not a raw third-party embed attempt), so the VowLMS
+   * header/page stay visible behind it. Actual unlocking still happens
+   * server-side in lemonsqueezy-webhook.php once Lemon Squeezy confirms
+   * payment — the Checkout.Success event here is just a UX signal to poll
+   * for that shortly after, the same tolerance-for-async-confirmation
+   * pattern PayFast's ITN already relies on.
    */
   async function payWithLemonSqueezy() {
     if (state === "unlocked") return;
@@ -451,11 +498,50 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
       });
       const payload = await res.json();
       if (!res.ok || !payload.ok) throw new Error(payload.error ?? "Could not start Lemon Squeezy checkout.");
-      window.location.href = payload.data.checkoutUrl as string;
+      const checkoutUrl = payload.data.checkoutUrl as string;
+
+      await loadScriptOnce("https://assets.lemonsqueezy.com/lemon.js");
+      if (!window.LemonSqueezy) throw new Error("Lemon Squeezy could not be loaded.");
+
+      window.LemonSqueezy.Setup({
+        eventHandler: (event) => {
+          if (event.event !== "Checkout.Success") return;
+          toast.success("Payment received!", { description: "Confirming your unlock…" });
+          void pollForUnlockAfterOverlayCheckout();
+        },
+      });
+      window.LemonSqueezy.Url.Open(checkoutUrl);
+      setPaying(null);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Please try again.");
       setPaying(null);
     }
+  }
+
+  /** Same tolerance window as the free-only enrollment check above, reused after an in-overlay Lemon Squeezy success signal. */
+  async function pollForUnlockAfterOverlayCheckout() {
+    setConfirmingPayment(true);
+    const delays = [1000, 2000, 3000, 4000];
+    for (const delayMs of delays) {
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+      const res = await fetch("/api/enrollments", { cache: "no-store", credentials: "same-origin" }).catch(() => null);
+      const payload = res?.ok ? await res.json().catch(() => null) : null;
+      if (!payload) continue;
+
+      const enrollments = (payload.data ?? []) as Enrollment[];
+      const enrolledCount = enrollments.filter(
+        (item) => ((item.courseSlug ?? item.course_slug) === parentSlug || item.groupSlug === parentSlug) && item.status !== "cancelled",
+      ).length;
+
+      if (enrolledCount >= totalModules) {
+        setCachedUnlockState(parentSlug, { state: "unlocked", totalModules });
+        invalidateCourseEnrollmentCounts(parentSlug);
+        setConfirmingPayment(false);
+        toast.success("Course fully unlocked!", { description: "Every module is now open." });
+        return;
+      }
+    }
+    setConfirmingPayment(false);
   }
 
   // Picks up the return from PayPal's hosted approve page (`?paypalReturn=1
@@ -492,6 +578,7 @@ export function useCourseUnlockPurchase(parentSlug: string, modules: CourseModul
     isPaidCourse,
     totalModules,
     state,
+    confirmingPayment,
     pricing,
     pricingUnavailable,
     paying,
