@@ -20,6 +20,16 @@ const GATEWAY_LABEL: Record<InternationalGateway, string> = {
   lemonsqueezy: "Lemon Squeezy",
 };
 
+// Temporarily hidden from "Other payment options" — the Lemon Squeezy store
+// itself is stuck in Test Mode until its business/banking activation is
+// completed in their dashboard (their own requirement, not something code
+// can work around), so every real checkout there 404s. gateway_routing.php
+// no longer routes any country here either (see
+// public/sql/036_disable_lemonsqueezy_routing.sql) — this flag is purely a
+// defense-in-depth UI-level backstop. Flip back to true once activation is
+// confirmed done.
+const LEMONSQUEEZY_ENABLED = false;
+
 /**
  * The one adaptive "Pay Now" slot — same size/position regardless of which
  * gateway a learner's country routed them to, plus the VOWR toggle and an
@@ -126,7 +136,7 @@ export function PaymentGatewaySection({ unlock, accentColor, compact = false }: 
       {showOtherOptions ? (
         <div className="mt-2 grid grid-cols-2 gap-2">
           {(["payfast", "paystack", "paypal", "lemonsqueezy"] as const)
-            .filter((g) => g !== gateway)
+            .filter((g) => g !== gateway && (g !== "lemonsqueezy" || LEMONSQUEEZY_ENABLED))
             .map((g) => (
               <button
                 key={g}
