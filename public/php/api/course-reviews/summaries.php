@@ -8,14 +8,14 @@
 // "Rate this course" review (course_evaluations) AND the per-module
 // "Rate this Module" survey (module_survey_responses, joined up via
 // lessons -> modules.course_id — the same join surveys/submit.php and
-// surveys/summary.php already use). A learner who leaves both a course
-// review and several module surveys must not get counted (or weighted)
-// several times over — the inner subquery first collapses every rating a
-// single user left for a single course (their course review, plus every
-// module survey rating for that course) into ONE combined per-user rating,
-// and only THEN averages across users. total_reviews is therefore "how
-// many learners rated this course", not "how many individual rating rows
-// exist" — consistent with what a review count normally means to a reader.
+// surveys/summary.php already use). Per explicit user decision
+// 2026-09-16: each individual module rating counts exactly the same as a
+// course rating — a learner who rates 3 modules at 4 stars each and never
+// leaves a separate course review contributes three real 4-star ratings to
+// the course's average, not one averaged-down vote. total_reviews is
+// therefore "how many individual ratings exist" (course reviews + module
+// survey ratings combined), matching the "(N)" shown next to the star
+// score.
 ob_start();
 require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/db.php';
@@ -30,22 +30,18 @@ requireMethod('GET');
 $db = getDb();
 $stmt = $db->query(
     'SELECT c.slug,
-            ROUND(AVG(ur.combined_rating), 2) AS average_rating,
-            COUNT(ur.combined_rating) AS total_reviews
+            ROUND(AVG(all_ratings.rating), 2) AS average_rating,
+            COUNT(all_ratings.rating) AS total_reviews
      FROM courses c
      LEFT JOIN (
-         SELECT course_id, user_id, AVG(rating) AS combined_rating
-         FROM (
-             SELECT ce.course_id AS course_id, ce.user_id AS user_id, ce.rating AS rating
-             FROM course_evaluations ce
-             UNION ALL
-             SELECT m.course_id AS course_id, sr.user_id AS user_id, sr.rating AS rating
-             FROM module_survey_responses sr
-             JOIN lessons l ON l.id = sr.lesson_id
-             JOIN modules m ON m.id = l.module_id
-         ) all_ratings
-         GROUP BY course_id, user_id
-     ) ur ON ur.course_id = c.id
+         SELECT ce.course_id AS course_id, ce.rating AS rating
+         FROM course_evaluations ce
+         UNION ALL
+         SELECT m.course_id AS course_id, sr.rating AS rating
+         FROM module_survey_responses sr
+         JOIN lessons l ON l.id = sr.lesson_id
+         JOIN modules m ON m.id = l.module_id
+     ) all_ratings ON all_ratings.course_id = c.id
      WHERE c.status = "published"
      GROUP BY c.id, c.slug'
 );
