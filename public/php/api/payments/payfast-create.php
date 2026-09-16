@@ -82,9 +82,11 @@ $sigStr = http_build_query($data);
 if ($passphrase !== '') $sigStr .= '&passphrase=' . urlencode($passphrase);
 $data['signature'] = md5($sigStr);
 
+// GET redirect, not a POST-form submission — see course-unlock-payfast-
+// create.php for why (confirmed PayFast accepts GET here; a plain
+// navigation isn't governed by CSP's form-action directive at all).
 jsonOk([
-    'paymentId'  => $paymentId,
-    'pfHost'     => $pfHost,
-    'formAction' => "https://{$pfHost}/eng/process",
-    'formFields' => $data,
+    'paymentId'   => $paymentId,
+    'pfHost'      => $pfHost,
+    'redirectUrl' => "https://{$pfHost}/eng/process?" . http_build_query($data),
 ]);

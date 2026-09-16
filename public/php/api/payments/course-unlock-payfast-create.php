@@ -119,9 +119,16 @@ $sigStr = http_build_query($data);
 if ($passphrase !== '') $sigStr .= '&passphrase=' . urlencode($passphrase);
 $data['signature'] = md5($sigStr);
 
+// A GET redirect rather than a POST-form submission — PayFast's own
+// /eng/process endpoint accepts either (confirmed directly: a GET with
+// these exact params returns a real 302 to a genuine
+// payment.payfast.io/.../payment/{id} session, not an error). A plain
+// navigation isn't governed by CSP's form-action directive at all, which a
+// dynamically-submitted POST form was hitting inconsistently in production
+// regardless of how the form was constructed — this sidesteps that
+// entirely instead of continuing to chase it.
 jsonOk([
-    'paymentId'  => $paymentId,
-    'pfHost'     => $pfHost,
-    'formAction' => "https://{$pfHost}/eng/process",
-    'formFields' => $data,
+    'paymentId'   => $paymentId,
+    'pfHost'      => $pfHost,
+    'redirectUrl' => "https://{$pfHost}/eng/process?" . http_build_query($data),
 ]);
