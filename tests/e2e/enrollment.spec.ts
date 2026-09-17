@@ -40,10 +40,7 @@ test.describe("Course enrollment & delivery @destructive", () => {
 
     await page.goto(`/courses/${FREE_COURSE_SLUG}`);
     await page.getByRole("button", { name: "Enrol free" }).click();
-    await expect(page.getByRole("button", { name: "Continue learning" })).toBeVisible({ timeout: 10_000 });
-
-    // Second click on the now-enrolled button navigates to the first lesson.
-    await page.getByRole("button", { name: "Continue learning" }).click();
+    // Successful free enrolment opens the first lesson immediately.
     await page.waitForURL(/\/lesson\//, { timeout: 10_000 });
 
     // Lesson content renders.

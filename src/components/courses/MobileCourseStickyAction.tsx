@@ -1,16 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Eye } from "lucide-react";
 import type { Course } from "@/types/lms";
 import { formatCurrency } from "@/lib/format";
 import { EnrollButton } from "@/components/courses/EnrollButton";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 
 type Props = {
   course: Course;
   enrolCardId: string;
+  adminPreview?: boolean;
+  previewHref?: string;
 };
 
-export function MobileCourseStickyAction({ course, enrolCardId }: Props) {
+export function MobileCourseStickyAction({ course, enrolCardId, adminPreview = false, previewHref }: Props) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -38,7 +42,15 @@ export function MobileCourseStickyAction({ course, enrolCardId }: Props) {
           <p className="truncate text-xs font-medium text-muted">{course.title}</p>
           <p className="text-lg font-bold text-ink">{formatCurrency(course.price)}</p>
         </div>
-        <div className="w-40 shrink-0"><EnrollButton course={course} /></div>
+        <div className="w-40 shrink-0">
+          {adminPreview && previewHref ? (
+            <ButtonLink href={previewHref} variant="ink" className="w-full gap-2 px-3">
+              <Eye aria-hidden="true" className="h-4 w-4" /> Preview
+            </ButtonLink>
+          ) : (
+            <EnrollButton course={course} />
+          )}
+        </div>
       </div>
     </div>
   );

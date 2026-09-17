@@ -1,0 +1,11 @@
+
+> vowlms@0.1.0 dev
+> next dev -p 3000
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.10.1.128:3000
+- Environments: .env.local
+✓ Ready in 1282ms
+Creating turbopack project { dir: 'C:\\Users\\sydwe\\Desktop\\vowlms', testMode: true }
+

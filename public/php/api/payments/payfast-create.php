@@ -5,6 +5,7 @@ require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../config/env.php';
 require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/response.php';
+require_once __DIR__ . '/../../lib/savva_career_pricing.php';
 ob_end_clean();
 
 setCors();
@@ -27,7 +28,9 @@ $cStmt = $db->prepare(
 $cStmt->execute([$courseSlug]);
 $course = $cStmt->fetch();
 if (!$course) jsonError('Course not found', 404);
-if ((float)$course['price'] <= 0) jsonError('This course is free — enrol directly');
+$cataloguePrice = savvaCareerCoursePriceZar($courseSlug);
+$chargePrice = $cataloguePrice ?? (float)$course['price'];
+if ($chargePrice <= 0) jsonError('This course is free — enrol directly');
 
 // Fetch user
 $uStmt = $db->prepare('SELECT name, email FROM users WHERE id = ? LIMIT 1');
@@ -52,7 +55,7 @@ $paymentId = generateId();
 $db->prepare(
     'INSERT INTO payments (id, user_id, course_id, amount, status, payfast_payment_id)
      VALUES (?, ?, ?, ?, "pending", NULL)'
-)->execute([$paymentId, $userId, $course['id'], $course['price']]);
+)->execute([$paymentId, $userId, $course['id'], $chargePrice]);
 
 // PayFast form data
 $pfHost = $sandbox ? 'sandbox.payfast.co.za' : 'www.payfast.co.za';
@@ -73,7 +76,7 @@ $data = [
     'name_last'     => implode(' ', array_slice(explode(' ', $user['name']), 1)) ?: '-',
     'email_address' => $user['email'],
     'm_payment_id'  => $paymentId,
-    'amount'        => number_format((float)$course['price'], 2, '.', ''),
+    'amount'        => number_format($chargePrice, 2, '.', ''),
     'item_name'     => substr($course['title'], 0, 100),
 ];
 

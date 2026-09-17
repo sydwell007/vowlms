@@ -126,14 +126,9 @@ export function EnrollButton({ course }: Props) {
       setEnrolled(true);
       invalidateCourseEnrollmentCounts(course.slug);
       toast.success(`You are enrolled in ${course.title}.`, {
-        description: "Your first lesson is ready.",
-        action: {
-          label: "Start",
-          onClick: () => {
-            window.location.href = firstLessonHref(course);
-          },
-        },
+        description: "Opening your first lesson...",
       });
+      window.location.href = firstLessonHref(course);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Please try again.");
     } finally {

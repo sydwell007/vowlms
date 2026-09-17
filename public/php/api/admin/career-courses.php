@@ -12,24 +12,13 @@ require_once __DIR__ . '/../../config/cors.php';
 require_once __DIR__ . '/../../config/db.php';
 require_once __DIR__ . '/../../lib/auth.php';
 require_once __DIR__ . '/../../lib/response.php';
+require_once __DIR__ . '/../../lib/savva_career_pricing.php';
 ob_end_clean();
 
 setCors();
 requireBridgeKey();
 $auth = requireAuth();
 requireRole($auth, 'admin');
-
-const CAREER_COURSE_SLUGS = [
-    'adobe-after-effects','adobe-animate','adobe-illustrator','adobe-indesign','adobe-photoshop','adobe-premiere-pro',
-    'space-travel-and-solar-system','agriscience-1','agriscience-2','agriscience-3',
-    'architectural-design-1','architectural-design-2','architectural-design-3','augmented-and-virtual-reality',
-    'drones-remote-pilot','entrepreneurship-and-small-business','startups-and-innovation',
-    'early-childhood-education-1','early-childhood-education-2','education-and-teaching-advanced',
-    'fundamentals-of-bitcoin-and-crypto','fundamentals-of-blockchain-and-crypto','introduction-to-ai','robotics','smart-cities',
-    'teaching-as-a-profession','transportation-technologies','wearable-technology','swift-app-development','java-se-8-associate',
-    'intuit-design-for-delight','career-exploration','digital-information-technology','meta-social-media-marketing',
-    'social-media-marketing','building-maintenance-technology-1','building-maintenance-technology-2'
-];
 
 function fetchCareerCourse(PDO $db, string $slug): ?array
 {
@@ -65,15 +54,15 @@ $slug = trim((string)($_GET['slug'] ?? ''));
 
 if ($method === 'GET') {
     $records = [];
-    foreach (CAREER_COURSE_SLUGS as $courseSlug) {
+    foreach (savvaCareerCourseSlugs() as $courseSlug) {
         $record = fetchCareerCourse($db, $courseSlug);
         if ($record) $records[] = $record;
     }
-    jsonOk(['courses' => $records, 'expected' => count(CAREER_COURSE_SLUGS)]);
+    jsonOk(['courses' => $records, 'expected' => count(savvaCareerCourseSlugs())]);
 }
 
 if ($method === 'PATCH') {
-    if (!in_array($slug, CAREER_COURSE_SLUGS, true)) jsonError('Career course not found', 404);
+    if (!isSavvaCareerCourse($slug)) jsonError('Career course not found', 404);
     $body = getJsonBody();
     $status = trim((string)($body['status'] ?? ''));
     if (!in_array($status, ['draft','published','archived'], true)) jsonError('Invalid course status', 400);
@@ -84,8 +73,13 @@ if ($method === 'PATCH') {
         jsonError('Course cannot be published until curriculum, assessment, and Thandi coverage checks pass', 409);
     }
 
-    $stmt = $db->prepare('UPDATE courses SET status=? WHERE slug=?');
-    $stmt->execute([$status, $slug]);
+    if ($status === 'published') {
+        $stmt = $db->prepare('UPDATE courses SET status=?, price=?, is_free=0 WHERE slug=?');
+        $stmt->execute([$status, SAVVA_CAREER_COURSE_PRICE_ZAR, $slug]);
+    } else {
+        $stmt = $db->prepare('UPDATE courses SET status=? WHERE slug=?');
+        $stmt->execute([$status, $slug]);
+    }
     jsonOk(fetchCareerCourse($db, $slug));
 }
 

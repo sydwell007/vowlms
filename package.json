@@ -17,6 +17,7 @@
     "qa:content": "tsx scripts/qa/content-integrity.mjs",
     "qa:microsoft": "tsx scripts/qa/microsoft-office-integrity.mts",
     "qa:career": "tsx scripts/qa/savva-career-integrity.mts",
+    "qa:career:browser": "node scripts/qa/browser-career-enrolment.mjs",
     "qa:links": "node scripts/qa/integration-links.mjs",
     "qa:routes": "node scripts/qa/browser-route-audit.mjs",
     "qa:visual": "node scripts/qa/visual-system-audit.mjs",

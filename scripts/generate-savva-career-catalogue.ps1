@@ -249,7 +249,10 @@ foreach ($folder in $folders) {
         $content = "<h2>$(ConvertTo-HtmlText $lessonName)</h2><p>This professionally authored lesson develops practical capability in $(ConvertTo-HtmlText $lessonName.ToLowerInvariant()) within $title. Work through Thandi's guided explanation, test the concept in the scenario, and capture evidence of your application.</p><h3>Learning sequence</h3><ol><li>Connect the concept to a real context.</li><li>Study the core principle and worked example.</li><li>Apply the principle in a decision or practical task.</li><li>Reflect, improve, and record evidence.</li></ol><aside><strong>Interactive lecture:</strong> Say &quot;Thandi, I have a question&quot; to pause the lecture. Thandi will answer, offer an example when requested, and resume from the last completed concept.</aside>"
         $lessons.Add([ordered]@{ slug=$lessonSlug; title=$lessonName; type='text'; content=$content; hasAssessment=$false; hasVRPractice=$false; durationMinutes=12; vowHuman=(New-ThandiConfig $title) })
       }
-      $modules.Add([ordered]@{ title=$moduleTitle; order=$i; description="Build capability in $moduleTitle."; outcome="Apply the principles of $moduleTitle in a practical context."; isFree=($i -eq 0); lessons=$lessons })
+      # SAVVA career courses are sold as one complete course. `isFree=false`
+      # is reserved for the separate per-module unlock model used by the 20
+      # professional-skills and seven Microsoft Office parent journeys.
+      $modules.Add([ordered]@{ title=$moduleTitle; order=$i; description="Build capability in $moduleTitle."; outcome="Apply the principles of $moduleTitle in a practical context."; isFree=$true; lessons=$lessons })
     }
   } else {
     $moduleOrder = 0
@@ -280,7 +283,7 @@ foreach ($folder in $folders) {
         $lessonSlug = "$slug-m$moduleOrder-guided-learning"
         $lessons.Add([ordered]@{ slug=$lessonSlug; title='Guided Learning'; type='text'; content="<h2>$moduleTitleClean</h2><p>Build and apply the essential concepts in this module through guided explanation, practical examples, and reflective activities.</p>"; hasAssessment=$false; hasVRPractice=$false; durationMinutes=15; vowHuman=(New-ThandiConfig $title) })
       }
-      $modules.Add([ordered]@{ title=$moduleTitle; order=$moduleOrder; description="Source-aligned learning for $moduleTitleClean."; outcome="Explain and apply the core concepts in $moduleTitleClean."; isFree=($moduleOrder -eq 0); lessons=$lessons })
+      $modules.Add([ordered]@{ title=$moduleTitle; order=$moduleOrder; description="Source-aligned learning for $moduleTitleClean."; outcome="Explain and apply the core concepts in $moduleTitleClean."; isFree=$true; lessons=$lessons })
       $moduleOrder++
     }
   }

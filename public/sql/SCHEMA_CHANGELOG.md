@@ -120,6 +120,13 @@
 
 All production imports require a backup, staging verification, and an authorised operator.
 
+## 039 - SAVVA career-course pricing repair
+
+- Sets all 37 SAVVA career courses to the canonical R999 whole-course price and `is_free=0`.
+- Preserves each course's existing draft, published, or archived status.
+- Adds no tables and does not alter enrolment, payment, progress, assessment, or certificate data.
+- The PHP checkout also validates these slugs against the same server-authoritative price so a stale zero-price row cannot reopen the free-enrolment path.
+
 ## 020 - Course orientation progress
 
 - Adds the additive `course_orientation_progress` table for the four native

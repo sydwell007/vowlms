@@ -1,13 +1,19 @@
 "use client";
 
-import { Check, Lock, ShieldCheck, TriangleAlert } from "lucide-react";
+import { Check, Eye, Lock, ShieldCheck, TriangleAlert } from "lucide-react";
 import { EnrollButton } from "@/components/courses/EnrollButton";
 import { PaymentGatewaySection } from "@/components/courses/PaymentGatewaySection";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 import { useCourseUnlockPurchase } from "@/lib/courses/useCourseUnlockPurchase";
 import { formatCurrency } from "@/lib/format";
 import type { Course } from "@/types/lms";
 
-type Props = { course: Course; accentColor: string };
+type Props = {
+  course: Course;
+  accentColor: string;
+  adminPreview?: boolean;
+  previewHref?: string;
+};
 
 /**
  * One combined enrol + unlock card. Free Module 1 is always the one obvious
@@ -17,7 +23,7 @@ type Props = { course: Course; accentColor: string };
  * both create the enrollment rows themselves as part of granting access.
  * Swaps to a short success line once the course is actually unlocked.
  */
-export function CourseEnrolCard({ course, accentColor }: Props) {
+export function CourseEnrolCard({ course, accentColor, adminPreview = false, previewHref }: Props) {
   const unlock = useCourseUnlockPurchase(course.slug, course.modules);
   const { isPaidCourse, totalModules, state, confirmingPayment, pricing, pricingUnavailable, savingsZar } = unlock;
 
@@ -29,14 +35,22 @@ export function CourseEnrolCard({ course, accentColor }: Props) {
       <div className="h-1.5 w-full" style={{ background: `linear-gradient(90deg, ${accentColor}, ${accentColor}00)` }} />
       <div className="p-5">
         <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: accentColor }}>
-          {isPaidCourse ? "Start free — Module 1" : "Enrol now"}
+          {adminPreview ? "Admin preview" : isPaidCourse ? "Start free — Module 1" : "Enrol now"}
         </p>
         {!isPaidCourse ? <p className="mt-2.5 text-4xl font-bold text-ink">{formatCurrency(course.price)}</p> : null}
-        {course.price > 0 ? <p className="mt-1 text-xs text-muted">One-time payment through PayFast</p> : null}
-        <div className={isPaidCourse ? "mt-3" : "mt-4"}><EnrollButton course={course} /></div>
+        {course.price > 0 ? <p className="mt-1 text-xs text-muted">{adminPreview ? "Launch price" : "One-time payment through PayFast"}</p> : null}
+        <div className={isPaidCourse ? "mt-3" : "mt-4"}>
+          {adminPreview && previewHref ? (
+            <ButtonLink href={previewHref} variant="ink" className="w-full gap-2">
+              <Eye aria-hidden="true" className="h-4 w-4" /> Preview course
+            </ButtonLink>
+          ) : (
+            <EnrollButton course={course} />
+          )}
+        </div>
       </div>
 
-      {isPaidCourse ? (
+      {isPaidCourse && !adminPreview ? (
         <div className="border-t-2" style={{ borderColor: `${accentColor}22` }}>
           {state === "unlocked" ? (
             <div className="flex items-center gap-2.5 px-5 py-4" style={{ backgroundColor: `${accentColor}0d` }}>

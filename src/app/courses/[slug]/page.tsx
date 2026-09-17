@@ -83,6 +83,7 @@ export default async function CourseDetailPage({
 
   const accentColor = getAcademyAccentColor(academy?.category);
   const firstLesson = course.modules[0]?.lessons[0];
+  const firstLessonHref = firstLesson ? `/lesson/${firstLesson.slug}` : undefined;
   const stats = getCourseStats(course);
   const courseVisual = getCourseVisual(course, academy?.category ?? "upskilling");
   const canonicalUrl = `${siteConfig.url}/courses/${course.slug}`;
@@ -187,7 +188,12 @@ export default async function CourseDetailPage({
               offset, since the card's height varies by enrolment state and a
               fixed push would make a taller state spill past the banner. */}
           <aside id="course-enrol-card" className="lg:sticky lg:top-24">
-            <CourseEnrolCard course={course} accentColor={accentColor} />
+            <CourseEnrolCard
+              course={course}
+              accentColor={accentColor}
+              adminPreview={isAdminPreview}
+              previewHref={firstLessonHref}
+            />
           </aside>
         </div>
       </section>
@@ -216,11 +222,14 @@ export default async function CourseDetailPage({
           <p className="max-w-xl text-white/70">
             Join a structured pathway with lessons, assessments, and practical learning. Earn a certificate plus {course.rewards} VowRewards on completion.
           </p>
-          {firstLesson ? <ButtonLink href={`/lesson/${firstLesson.slug}`}>Start first lesson</ButtonLink> : null}
+          {firstLessonHref ? <ButtonLink href={firstLessonHref}>Start first lesson</ButtonLink> : null}
         </div>
       </section>
 
-      <MobileCourseStickyAction course={course} enrolCardId="course-enrol-card" />
+      <MobileCourseStickyAction course={course} enrolCardId="course-enrol-card"
+        adminPreview={isAdminPreview}
+        previewHref={firstLessonHref}
+      />
     </main>
   );
 }
