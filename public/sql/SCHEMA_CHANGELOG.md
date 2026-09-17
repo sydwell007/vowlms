@@ -1,5 +1,16 @@
 # Schema Changelog
 
+## 038 - SAVVA career course catalogue
+
+- Adds 37 paid career courses to the Upskilling Academy as `draft`, preserving
+  administrator preview while excluding them from learner catalogue APIs.
+- Seeds 398 modules and their source-aligned lessons, final 80% mastery checks,
+  and structured Thandi VowHumans presenter settings for every lecture lesson.
+- Adds the admin-only `/admin/career-courses` release endpoint. Publication is
+  blocked unless modules, lessons, assessments, and Thandi coverage are complete.
+- The checked-in importer regenerates frontend course data from the supplied
+  source library without creating a production dependency on the source drive.
+
 ## 019 - VOWR wallet redemption requests
 
 - Adds `redemption_requests`, tracking learner requests to spend VOWR balance

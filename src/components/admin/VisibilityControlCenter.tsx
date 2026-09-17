@@ -1,8 +1,9 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
-import { Search } from "lucide-react";
+import { ExternalLink, Search } from "lucide-react";
 import type { VisibilityEntityType, VisibilityRow } from "@/lib/visibility-overrides";
 
 type Props = {
@@ -13,7 +14,7 @@ type Props = {
 
 const SECTIONS: { type: VisibilityEntityType; title: string; description: string }[] = [
   { type: "academy", title: "Academies", description: "Upskilling is always on for learners — everything else stays admin-only until you turn it on." },
-  { type: "course", title: "Upskilling courses", description: "The 20 complete courses are on by default. Microsoft Office and any unfinished course stay admin-only." },
+  { type: "course", title: "Upskilling courses", description: "The launched professional and Microsoft courses are live. The 37 SAVVA career courses remain admin-only until their release gate is deliberately changed." },
   { type: "service", title: "Ecosystem services", description: "VowRewards is built-in and on by default. Every other service is admin-only until it's ready." },
 ];
 
@@ -166,11 +167,23 @@ export function VisibilityControlCenter({ initialRows, connected }: Props) {
                         ) : null}
                       </p>
                     </div>
-                    <Switch
-                      checked={row.effectiveVisible}
-                      disabled={!connected || pendingKey === key}
-                      onChange={() => setOverride(row, !row.effectiveVisible)}
-                    />
+                    <div className="flex items-center gap-3">
+                      {section.type === "course" ? (
+                        <Link
+                          href={`/courses/${row.entityKey}`}
+                          title={`Preview ${row.label}`}
+                          aria-label={`Preview ${row.label}`}
+                          className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-muted transition hover:border-[#1166c8]/40 hover:text-[#1166c8]"
+                        >
+                          <ExternalLink aria-hidden="true" className="h-4 w-4" />
+                        </Link>
+                      ) : null}
+                      <Switch
+                        checked={row.effectiveVisible}
+                        disabled={!connected || pendingKey === key}
+                        onChange={() => setOverride(row, !row.effectiveVisible)}
+                      />
+                    </div>
                   </div>
                 );
               })}

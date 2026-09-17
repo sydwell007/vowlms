@@ -1,5 +1,5 @@
 param(
-  [string]$SourceRoot = "G:\3\_Business\1\_GoalVow Holdings\_2025\C\_Business Units\BU1\_Upskilling with CPD\4\_Microsoft Office Courses",
+  [string]$SourceRoot = "G:\3_Business\1_GoalVow Holdings_2025\C_Business Units\BU1_Upskilling with CPD\4_Microsoft Office Courses",
   [string]$OutputPath = "src\data\microsoft-office-source-content.json"
 )
 

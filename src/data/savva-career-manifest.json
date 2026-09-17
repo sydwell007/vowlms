@@ -1,0 +1,150 @@
+[
+    {
+        "slug":  "adobe-after-effects",
+        "title":  "Adobe After Effects"
+    },
+    {
+        "slug":  "adobe-animate",
+        "title":  "Adobe Animate"
+    },
+    {
+        "slug":  "adobe-illustrator",
+        "title":  "Adobe Illustrator"
+    },
+    {
+        "slug":  "adobe-indesign",
+        "title":  "Adobe InDesign"
+    },
+    {
+        "slug":  "adobe-photoshop",
+        "title":  "Adobe Photoshop"
+    },
+    {
+        "slug":  "adobe-premiere-pro",
+        "title":  "Adobe Premiere Pro"
+    },
+    {
+        "slug":  "space-travel-and-solar-system",
+        "title":  "Space Travel and Solar System"
+    },
+    {
+        "slug":  "agriscience-1",
+        "title":  "AgriScience 1"
+    },
+    {
+        "slug":  "agriscience-2",
+        "title":  "AgriScience 2"
+    },
+    {
+        "slug":  "agriscience-3",
+        "title":  "AgriScience 3"
+    },
+    {
+        "slug":  "architectural-design-1",
+        "title":  "Architectural Design 1"
+    },
+    {
+        "slug":  "architectural-design-2",
+        "title":  "Architectural Design 2"
+    },
+    {
+        "slug":  "architectural-design-3",
+        "title":  "Architectural Design 3"
+    },
+    {
+        "slug":  "augmented-and-virtual-reality",
+        "title":  "Augmented and Virtual Reality"
+    },
+    {
+        "slug":  "drones-remote-pilot",
+        "title":  "Drones Remote Pilot"
+    },
+    {
+        "slug":  "entrepreneurship-and-small-business",
+        "title":  "Entrepreneurship and Small Business"
+    },
+    {
+        "slug":  "startups-and-innovation",
+        "title":  "Startups and Innovation"
+    },
+    {
+        "slug":  "early-childhood-education-1",
+        "title":  "Early Childhood Education 1"
+    },
+    {
+        "slug":  "early-childhood-education-2",
+        "title":  "Early Childhood Education 2"
+    },
+    {
+        "slug":  "education-and-teaching-advanced",
+        "title":  "Education and Teaching Advanced"
+    },
+    {
+        "slug":  "fundamentals-of-bitcoin-and-crypto",
+        "title":  "Fundamentals of Bitcoin and Crypto"
+    },
+    {
+        "slug":  "fundamentals-of-blockchain-and-crypto",
+        "title":  "Fundamentals of Blockchain and Crypto"
+    },
+    {
+        "slug":  "introduction-to-ai",
+        "title":  "Introduction to AI"
+    },
+    {
+        "slug":  "robotics",
+        "title":  "Robotics"
+    },
+    {
+        "slug":  "smart-cities",
+        "title":  "Smart Cities"
+    },
+    {
+        "slug":  "teaching-as-a-profession",
+        "title":  "Teaching as a Profession"
+    },
+    {
+        "slug":  "transportation-technologies",
+        "title":  "Transportation Technologies"
+    },
+    {
+        "slug":  "wearable-technology",
+        "title":  "Wearable Technology"
+    },
+    {
+        "slug":  "swift-app-development",
+        "title":  "Swift App Development"
+    },
+    {
+        "slug":  "java-se-8-associate",
+        "title":  "Java SE 8 Associate"
+    },
+    {
+        "slug":  "intuit-design-for-delight",
+        "title":  "Intuit Design for Delight"
+    },
+    {
+        "slug":  "career-exploration",
+        "title":  "Career Exploration"
+    },
+    {
+        "slug":  "digital-information-technology",
+        "title":  "Digital Information Technology"
+    },
+    {
+        "slug":  "meta-social-media-marketing",
+        "title":  "Meta Social Media Marketing"
+    },
+    {
+        "slug":  "social-media-marketing",
+        "title":  "Social Media Marketing"
+    },
+    {
+        "slug":  "building-maintenance-technology-1",
+        "title":  "Building Maintenance Technology 1"
+    },
+    {
+        "slug":  "building-maintenance-technology-2",
+        "title":  "Building Maintenance Technology 2"
+    }
+]

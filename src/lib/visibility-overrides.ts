@@ -3,6 +3,7 @@ import { isHiddenAcademyCategory } from "@/lib/academy-launch";
 import { allGroupings } from "@/data/course-groupings";
 import { LEARNER_VISIBLE_UPSKILLING_SLUGS } from "@/lib/upskilling-visibility";
 import { ecosystemServices } from "@/data/ecosystem-services";
+import savvaCareerManifest from "@/data/savva-career-manifest.json";
 
 export type VisibilityEntityType = "academy" | "course" | "service";
 
@@ -66,6 +67,19 @@ export function buildVisibilityRows(overrides: VisibilityOverride[]): Visibility
       baselineVisible,
       overrideVisible,
       effectiveVisible: overrideVisible ?? baselineVisible,
+    });
+  }
+
+  for (const course of savvaCareerManifest) {
+    const overrideVisible = overrideMap.get(overrideKey("course", course.slug)) ?? null;
+    rows.push({
+      entityType: "course",
+      entityKey: course.slug,
+      label: course.title,
+      meta: "SAVVA Career Course",
+      baselineVisible: false,
+      overrideVisible,
+      effectiveVisible: overrideVisible ?? false,
     });
   }
 

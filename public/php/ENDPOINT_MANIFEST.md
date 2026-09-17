@@ -9,6 +9,7 @@
 | `/courses/{slug}/reviews` | GET/POST | Bridge key for read; enrolled learner JWT to create/update |
 | `/lessons/{slug}` | GET | Bridge key |
 | `/admin/lessons`, `/admin/lessons/{slug}` | GET/PUT | Bridge key + admin JWT |
+| `/admin/career-courses`, `/admin/career-courses/{slug}` | GET/PATCH | Bridge key + admin JWT; guarded draft/publish lifecycle |
 | `/files/serve` | GET/HEAD | Expiring HMAC signature |
 | `/user/avatar` | POST/DELETE | Bridge key + bearer token |
 | `/auth/register` | POST | Bridge key, rate limited; creates learner only |

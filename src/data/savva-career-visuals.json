@@ -1,0 +1,150 @@
+{
+    "adobe-after-effects":  {
+                                "src":  "/images/courses/career/adobe-after-effects.jpeg",
+                                "alt":  "A source-aligned visual for the Adobe After Effects course."
+                            },
+    "adobe-animate":  {
+                          "src":  "/images/courses/career/adobe-animate.jpeg",
+                          "alt":  "A source-aligned visual for the Adobe Animate course."
+                      },
+    "adobe-illustrator":  {
+                              "src":  "/images/courses/career/adobe-illustrator.jpeg",
+                              "alt":  "A source-aligned visual for the Adobe Illustrator course."
+                          },
+    "adobe-indesign":  {
+                           "src":  "/images/courses/career/adobe-indesign.jpeg",
+                           "alt":  "A source-aligned visual for the Adobe InDesign course."
+                       },
+    "adobe-photoshop":  {
+                            "src":  "/images/courses/career/adobe-photoshop.png",
+                            "alt":  "A source-aligned visual for the Adobe Photoshop course."
+                        },
+    "adobe-premiere-pro":  {
+                               "src":  "/images/courses/career/adobe-premiere-pro.jpeg",
+                               "alt":  "A source-aligned visual for the Adobe Premiere Pro course."
+                           },
+    "space-travel-and-solar-system":  {
+                                          "src":  "/images/courses/career/space-travel-and-solar-system.png",
+                                          "alt":  "A source-aligned visual for the Space Travel and Solar System course."
+                                      },
+    "agriscience-1":  {
+                          "src":  "/images/courses/career/agriscience-1.png",
+                          "alt":  "A source-aligned visual for the AgriScience 1 course."
+                      },
+    "agriscience-2":  {
+                          "src":  "/images/courses/career/agriscience-2.png",
+                          "alt":  "A source-aligned visual for the AgriScience 2 course."
+                      },
+    "agriscience-3":  {
+                          "src":  "/images/courses/career/agriscience-3.png",
+                          "alt":  "A source-aligned visual for the AgriScience 3 course."
+                      },
+    "architectural-design-1":  {
+                                   "src":  "/images/courses/career/architectural-design-1.jpeg",
+                                   "alt":  "A source-aligned visual for the Architectural Design 1 course."
+                               },
+    "architectural-design-2":  {
+                                   "src":  "/images/courses/career/architectural-design-2.jpeg",
+                                   "alt":  "A source-aligned visual for the Architectural Design 2 course."
+                               },
+    "architectural-design-3":  {
+                                   "src":  "/images/courses/career/architectural-design-3.png",
+                                   "alt":  "A source-aligned visual for the Architectural Design 3 course."
+                               },
+    "augmented-and-virtual-reality":  {
+                                          "src":  "/images/courses/career/augmented-and-virtual-reality.png",
+                                          "alt":  "A source-aligned visual for the Augmented and Virtual Reality course."
+                                      },
+    "drones-remote-pilot":  {
+                                "src":  "/images/courses/career/drones-remote-pilot.png",
+                                "alt":  "A source-aligned visual for the Drones Remote Pilot course."
+                            },
+    "entrepreneurship-and-small-business":  {
+                                                "src":  "/images/courses/career/entrepreneurship-and-small-business.png",
+                                                "alt":  "A source-aligned visual for the Entrepreneurship and Small Business course."
+                                            },
+    "startups-and-innovation":  {
+                                    "src":  "/images/courses/career/startups-and-innovation.jpeg",
+                                    "alt":  "A source-aligned visual for the Startups and Innovation course."
+                                },
+    "early-childhood-education-1":  {
+                                        "src":  "/images/courses/career/early-childhood-education-1.png",
+                                        "alt":  "A source-aligned visual for the Early Childhood Education 1 course."
+                                    },
+    "early-childhood-education-2":  {
+                                        "src":  "/images/courses/career/early-childhood-education-2.png",
+                                        "alt":  "A source-aligned visual for the Early Childhood Education 2 course."
+                                    },
+    "education-and-teaching-advanced":  {
+                                            "src":  "/images/courses/career/education-and-teaching-advanced.jpeg",
+                                            "alt":  "A source-aligned visual for the Education and Teaching Advanced course."
+                                        },
+    "fundamentals-of-bitcoin-and-crypto":  {
+                                               "src":  "/images/courses/career/fundamentals-of-bitcoin-and-crypto.png",
+                                               "alt":  "A source-aligned visual for the Fundamentals of Bitcoin and Crypto course."
+                                           },
+    "fundamentals-of-blockchain-and-crypto":  {
+                                                  "src":  "/images/courses/career/fundamentals-of-blockchain-and-crypto.jpeg",
+                                                  "alt":  "A source-aligned visual for the Fundamentals of Blockchain and Crypto course."
+                                              },
+    "introduction-to-ai":  {
+                               "src":  "/images/courses/career/introduction-to-ai.jpeg",
+                               "alt":  "A source-aligned visual for the Introduction to AI course."
+                           },
+    "robotics":  {
+                     "src":  "/images/courses/career/robotics.png",
+                     "alt":  "A source-aligned visual for the Robotics course."
+                 },
+    "smart-cities":  {
+                         "src":  "/images/courses/career/smart-cities.jpeg",
+                         "alt":  "A source-aligned visual for the Smart Cities course."
+                     },
+    "teaching-as-a-profession":  {
+                                     "src":  "/images/courses/career/teaching-as-a-profession.png",
+                                     "alt":  "A source-aligned visual for the Teaching as a Profession course."
+                                 },
+    "transportation-technologies":  {
+                                        "src":  "/images/courses/career/transportation-technologies.png",
+                                        "alt":  "A source-aligned visual for the Transportation Technologies course."
+                                    },
+    "wearable-technology":  {
+                                "src":  "/images/courses/career/wearable-technology.png",
+                                "alt":  "A source-aligned visual for the Wearable Technology course."
+                            },
+    "swift-app-development":  {
+                                  "src":  "/images/courses/career/swift-app-development.jpeg",
+                                  "alt":  "A source-aligned visual for the Swift App Development course."
+                              },
+    "java-se-8-associate":  {
+                                "src":  "/images/courses/career/java-se-8-associate.jpeg",
+                                "alt":  "A source-aligned visual for the Java SE 8 Associate course."
+                            },
+    "intuit-design-for-delight":  {
+                                      "src":  "/images/courses/career/intuit-design-for-delight.png",
+                                      "alt":  "A source-aligned visual for the Intuit Design for Delight course."
+                                  },
+    "career-exploration":  {
+                               "src":  "/images/courses/career/career-exploration.png",
+                               "alt":  "A source-aligned visual for the Career Exploration course."
+                           },
+    "digital-information-technology":  {
+                                           "src":  "/images/courses/career/digital-information-technology.png",
+                                           "alt":  "A source-aligned visual for the Digital Information Technology course."
+                                       },
+    "meta-social-media-marketing":  {
+                                        "src":  "/images/courses/career/meta-social-media-marketing.png",
+                                        "alt":  "A source-aligned visual for the Meta Social Media Marketing course."
+                                    },
+    "social-media-marketing":  {
+                                   "src":  "/images/courses/career/social-media-marketing.png",
+                                   "alt":  "A source-aligned visual for the Social Media Marketing course."
+                               },
+    "building-maintenance-technology-1":  {
+                                              "src":  "/images/courses/career/building-maintenance-technology-1.png",
+                                              "alt":  "A source-aligned visual for the Building Maintenance Technology 1 course."
+                                          },
+    "building-maintenance-technology-2":  {
+                                              "src":  "/images/courses/career/building-maintenance-technology-2.jpeg",
+                                              "alt":  "A source-aligned visual for the Building Maintenance Technology 2 course."
+                                          }
+}

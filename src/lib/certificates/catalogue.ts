@@ -1,3 +1,5 @@
+import careerCourseVisuals from "@/data/savva-career-visuals.json";
+
 const certificateFiles: Record<string, string> = {
   "business-ethics": "Business Ethics Cert.jpg",
   "workplace-compliance": "Workplace Compliance Cert.jpg",
@@ -37,5 +39,5 @@ export function getCertificateTemplateSrc(courseSlug: string) {
 }
 
 export function isCertificateCourse(courseSlug: string) {
-  return courseSlug in certificateFiles || dynamicCertificateCourses.has(courseSlug);
+  return courseSlug in certificateFiles || dynamicCertificateCourses.has(courseSlug) || courseSlug in careerCourseVisuals;
 }

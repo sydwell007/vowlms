@@ -33,6 +33,7 @@ const modules = [
   { title: "Analytics readiness", href: "/dashboard/admin/analytics", description: "Review authorised reporting sources" },
   { title: "AI lesson presenters", href: "/dashboard/admin/lessons", description: "Assign VowHumans guides to course lessons" },
   { title: "Visibility control center", href: "/dashboard/admin/visibility", description: "Control which academies, courses, and services learners can see" },
+  { title: "Career course release center", href: "/dashboard/admin/visibility?collection=career", description: "Preview the 37 draft SAVVA courses and manage their future learner release" },
   { title: "Module feedback", href: "/dashboard/admin/module-feedback", description: "Real learner \"Rate this Module\" survey results — flagged low ratings and written comments" },
   { title: "Settings", href: "/dashboard/admin/settings", description: "Review platform integration settings" },
 ];

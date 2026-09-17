@@ -1,3 +1,5 @@
+import careerCourseVisuals from "@/data/savva-career-visuals.json";
+
 export const visualAssets = {
   logo: "/images/goalvow-logo.png",
   ecosystemHero: "/images/vowlms/hero-ecosystem.webp",
@@ -151,6 +153,9 @@ export function getAcademyCourseImage(category: string) {
 export function getCourseVisual(course: { slug: string; title: string }, academyCategory: string): CourseVisual {
   const curatedVisual = upskillingCourseVisuals[course.slug as keyof typeof upskillingCourseVisuals];
   if (curatedVisual) return curatedVisual;
+
+  const careerVisual = careerCourseVisuals[course.slug as keyof typeof careerCourseVisuals];
+  if (careerVisual) return careerVisual;
 
   if (
     process.env.NODE_ENV !== "production" &&

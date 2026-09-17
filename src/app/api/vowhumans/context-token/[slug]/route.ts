@@ -3,6 +3,8 @@ import { bridgeGet, BridgeError, isBridgeConfigured } from "@/lib/bridge";
 import { hasActiveCourseEnrollment } from "@/lib/course-access";
 import { mintVowHumansLessonContextToken } from "@/lib/vowhumans-context-token";
 import { classifyThandiContextKey } from "@/lib/thandi/knowledge";
+import { getServerRole } from "@/lib/auth/getServerRole";
+import { getLessonBySlug } from "@/lib/data";
 
 const LESSON_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -19,8 +21,10 @@ export async function GET(
   // Thandi's sidewide "guide" key and real course slugs are public context —
   // only an actual lesson slug needs the bridge lookup + active-enrolment gate.
   const kind = classifyThandiContextKey(slug);
+  const role = await getServerRole();
+  const adminPreviewLesson = role === "admin" && Boolean(getLessonBySlug(slug));
 
-  if (kind === "lesson" && isBridgeConfigured()) {
+  if (kind === "lesson" && isBridgeConfigured() && !adminPreviewLesson) {
     try {
       const lesson = await bridgeGet<{ course: { slug: string } }>(`/lessons/${slug}`, { noAuth: true });
       if (!await hasActiveCourseEnrollment([lesson.course.slug])) {

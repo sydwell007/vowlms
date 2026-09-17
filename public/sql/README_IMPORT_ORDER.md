@@ -49,13 +49,22 @@ This is a phpMyAdmin/Afrihost migration package. It must never be served by Verc
 33. `035_seed_upskilling_vr_practices.sql`
 34. `036_disable_lemonsqueezy_routing.sql`
 35. `037_launch_microsoft_office_courses.sql`
-36. `verify_schema.sql`
+36. `038_seed_savva_career_courses.sql`
+37. `verify_schema.sql`
 
 `verify-seed-integrity.sql` is a separate, read-only diagnostic file (not part of
 the schema import order) — run it any time via phpMyAdmin or
 `GET public/php/api/qa/verify-seed-integrity.php`.
 
-### Current launch patch
+### Current catalogue patch
+
+After migration `037`, import `038_seed_savva_career_courses.sql` to add the
+37 SAVVA career courses as `draft` records. The patch is idempotent and seeds
+their modules, lessons, 80% mastery assessments, R999 launch price, and Thandi
+presenter configuration. Draft status keeps them out of learner APIs. Use the
+admin release endpoint only after staging review; it refuses incomplete courses.
+
+### Microsoft Office launch patch
 
 After the existing numbered chain through `036_disable_lemonsqueezy_routing.sql`,
 import `037_launch_microsoft_office_courses.sql`. It adds pricing and paid-child
@@ -105,7 +114,9 @@ already exists. Only `012` is written to be safely re-run.
    files that have shipped, not an instruction to rerun migrations already live.
 3. Run `verify_schema.sql` once you've applied whatever was missing.
 
-Migration `037_launch_microsoft_office_courses.sql` is the newest patch. It adds
+Migration `038_seed_savva_career_courses.sql` is the newest patch. It adds the
+37 admin-only SAVVA career courses and their complete curriculum records.
+Migration `037_launch_microsoft_office_courses.sql` adds
 the Microsoft Office launch pricing and paid-child unlock mappings. Migration
 `020_course_orientation_progress.sql` adds the
 `course_orientation_progress` table (`CREATE TABLE IF NOT EXISTS`) used by the

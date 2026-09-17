@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { createHmac } from "node:crypto";
-import { getAcademyBySlug, getChildModuleOrder, getCourseBySlug, getEnrollableCourseSlugs, getLessonBySlug, getParentGroupSlug } from "@/lib/data";
+import { getAcademyBySlug, getChildModuleOrder, getCourseBySlug, getEnrollableCourseSlugs, getLessonBySlug, getParentGroupSlug, isCourseVisible } from "@/lib/data";
+import { getServerRole } from "@/lib/auth/getServerRole";
 import { getModuleImageSrc } from "@/lib/module-images";
 import { getCourseVisual } from "@/lib/visual-assets";
 import { LessonPlayer } from "@/components/learning/LessonPlayer";
@@ -13,6 +14,10 @@ import type { LessonResource } from "@/components/learning/LessonPlayer";
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const result = getLessonBySlug(slug);
+  const role = await getServerRole();
+  if (result && !isCourseVisible(result.course, role)) {
+    return { title: "Lesson", robots: { index: false, follow: false } };
+  }
   return {
     title: result?.lesson.title ?? "Lesson",
     robots: { index: false, follow: false },
@@ -328,13 +333,17 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
 export default async function LessonPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const staticResult = getLessonBySlug(slug);
+  const role = await getServerRole();
+
+  if (staticResult && !isCourseVisible(staticResult.course, role)) notFound();
+  const isAdminPreview = role === "admin" && staticResult !== undefined && !isCourseVisible(staticResult.course, null);
 
   // Module 0 and generated VR capstones are native VowLMS content rather than
-  // Moodle rows. Serve them from the grouped model instead of asking the bridge
-  // for a slug it does not own.
-  if (staticResult && (staticResult.module.order === 0 || staticResult.lesson.type === "vr-practice")) {
+  // Moodle rows. Admin-only catalogue lessons also render from the checked-in
+  // model so release review works before the SQL seed is imported.
+  if (staticResult && (staticResult.module.order === 0 || staticResult.lesson.type === "vr-practice" || isAdminPreview)) {
     const { lesson, course, module: courseModule } = staticResult;
-    if (isBridgeConfigured()) {
+    if (isBridgeConfigured() && !isAdminPreview) {
       try {
         const practice = course.vrPractices.find((item) => item.lessonSlug === lesson.slug);
         const requiredCourseSlugs = practice?.sourceCourseSlug

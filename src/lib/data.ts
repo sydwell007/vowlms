@@ -15,6 +15,7 @@ import { MODULE_ASSESSMENTS } from "@/data/module-assessments";
 import { enrichMicrosoftOfficeLessons } from "@/data/microsoft-office-content";
 import { buildMicrosoftOfficeAssessment } from "@/data/microsoft-office-assessments";
 import { isPaidUpskillingCourse } from "@/data/priced-upskilling-courses";
+import savvaCareerCourseData from "@/data/savva-career-courses.json";
 import {
   getUpskillingModulePractice,
   insertPracticeAfterAssessment,
@@ -175,6 +176,7 @@ function buildParentCourse(grouping: typeof allGroupings[number]): Course {
  */
 function buildGroupedCourses(): Course[] {
   const parentCourses = allGroupings.map(buildParentCourse);
+  const savvaCareerCourses = savvaCareerCourseData as unknown as Course[];
 
   // Slugs to remove from the flat list: consumed children + MS Office placeholder stubs
   const excluded = new Set([...consumedSlugs, ...parentPlaceholderSlugs]);
@@ -186,7 +188,7 @@ function buildGroupedCourses(): Course[] {
   // Deduplicate by slug — first occurrence wins
   const seen = new Set<string>();
   const deduped: Course[] = [];
-  for (const c of [...parentCourses, ...remaining]) {
+  for (const c of [...parentCourses, ...savvaCareerCourses, ...remaining]) {
     if (!seen.has(c.slug)) {
       seen.add(c.slug);
       deduped.push(c);
