@@ -56,6 +56,16 @@ test("mobile course action waits until the main enrol card leaves view", async (
   assert.match(mobileAction, /aria-hidden=\{!isVisible\}/);
 });
 
+test("Upskilling academy makes the seven Microsoft courses immediately discoverable", async () => {
+  const grid = await read("src/components/academies/AcademyCourseGrid.tsx");
+  const visibility = await read("src/lib/upskilling-visibility.ts");
+
+  assert.match(grid, /label: "Microsoft Office"/);
+  assert.match(grid, /course\.slug\.startsWith\("microsoft-"\)/);
+  assert.match(grid, /Number\(isMicrosoftCourse\(b\)\) - Number\(isMicrosoftCourse\(a\)\)/);
+  assert.match(visibility, /\.\.\.msOfficeGroupings/);
+});
+
 test("all Upskilling parent courses have one shared curated-image mapping", async () => {
   const expectedSlugs = [
     "business-ethics",

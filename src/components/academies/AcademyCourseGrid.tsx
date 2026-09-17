@@ -1,22 +1,40 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, X } from "lucide-react";
+import { BriefcaseBusiness, LayoutGrid, Monitor, Search, X } from "lucide-react";
 import { CourseCard } from "@/components/courses/CourseCard";
 import type { CourseSummary, Role } from "@/types/lms";
 
 const PAGE_SIZE = 12;
 const LEVEL_OPTS = ["All levels", "Foundation", "Intermediate", "Advanced"] as const;
 const PRICE_OPTS = ["All", "Free", "Paid"] as const;
+const COLLECTION_OPTS = [
+  { value: "all", label: "All courses", Icon: LayoutGrid },
+  { value: "professional", label: "Professional skills", Icon: BriefcaseBusiness },
+  { value: "microsoft", label: "Microsoft Office", Icon: Monitor },
+] as const;
+
+type Collection = (typeof COLLECTION_OPTS)[number]["value"];
+
+function isMicrosoftCourse(course: CourseSummary) {
+  return course.slug.startsWith("microsoft-");
+}
 
 export function AcademyCourseGrid({ courses, role = null }: { courses: CourseSummary[]; role?: Role | null }) {
   const [level, setLevel] = useState<string>("All levels");
   const [price, setPrice] = useState<string>("All");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+  const [collection, setCollection] = useState<Collection>("all");
+  const hasMicrosoftCourses = courses.some(isMicrosoftCourse);
 
   const filtered = useMemo(() => {
-    let list = courses;
+    let list = [...courses];
+    if (collection === "microsoft") list = list.filter(isMicrosoftCourse);
+    if (collection === "professional") list = list.filter((course) => !isMicrosoftCourse(course));
+    if (collection === "all" && hasMicrosoftCourses) {
+      list.sort((a, b) => Number(isMicrosoftCourse(b)) - Number(isMicrosoftCourse(a)));
+    }
     if (level !== "All levels") list = list.filter((c) => c.level === level);
     if (price === "Free") list = list.filter((c) => c.price === 0);
     if (price === "Paid") list = list.filter((c) => c.price > 0);
@@ -25,13 +43,37 @@ export function AcademyCourseGrid({ courses, role = null }: { courses: CourseSum
       list = list.filter((c) => c.title.toLowerCase().includes(q) || c.description.toLowerCase().includes(q));
     }
     return list;
-  }, [courses, level, price, query]);
+  }, [collection, courses, hasMicrosoftCourses, level, price, query]);
 
   const paginated = filtered.slice(0, page * PAGE_SIZE);
   const hasMore = paginated.length < filtered.length;
 
   return (
     <div>
+      {hasMicrosoftCourses ? (
+        <div className="mb-6 flex flex-wrap gap-2" aria-label="Course collection">
+          {COLLECTION_OPTS.map(({ value, label, Icon }) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={collection === value}
+              onClick={() => { setCollection(value); setPage(1); }}
+              className={`inline-flex min-h-10 items-center gap-2 rounded-md border px-3.5 py-2 text-sm font-semibold transition ${
+                collection === value
+                  ? "border-[#1166c8] bg-[#1166c8] text-white"
+                  : "border-slate-200 bg-white text-muted hover:border-[#1166c8]/40 hover:text-ink"
+              }`}
+            >
+              <Icon aria-hidden="true" className="h-4 w-4" />
+              {label}
+              {value === "microsoft" ? (
+                <span className={`text-xs ${collection === value ? "text-white/75" : "text-muted"}`}>7</span>
+              ) : null}
+            </button>
+          ))}
+        </div>
+      ) : null}
+
       {/* Filters */}
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Search */}
@@ -93,7 +135,7 @@ export function AcademyCourseGrid({ courses, role = null }: { courses: CourseSum
           <p className="text-sm text-muted">Try a different keyword or adjust your filters.</p>
           <button
             type="button"
-            onClick={() => { setLevel("All levels"); setPrice("All"); setQuery(""); setPage(1); }}
+            onClick={() => { setCollection("all"); setLevel("All levels"); setPrice("All"); setQuery(""); setPage(1); }}
             className="mt-2 rounded-lg bg-[#06111f] px-6 py-3 text-sm font-semibold text-white hover:bg-[#0d2239] transition"
           >
             Clear filters
