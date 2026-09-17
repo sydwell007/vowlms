@@ -170,7 +170,11 @@ function bridgeToProps(d: BridgeLessonResponse, currentSlug: string) {
   const isVR = d.lesson.type === "vr-practice";
 
   const bridgeBase = (process.env.BRIDGE_BASE_URL ?? "").replace(/\/$/, "");
-  const rawContent = d.lesson.content ?? "";
+  const bridgeContent = d.lesson.content ?? "";
+  const sourceAlignedContent = getLessonBySlug(currentSlug)?.lesson.content ?? "";
+  const rawContent = sourceAlignedContent.includes("Source-aligned learning:")
+    ? sourceAlignedContent
+    : bridgeContent;
   const content = rewriteMoodleUrls(rawContent, bridgeBase);
 
   // Determine video URL — prefer uploaded video (via serve.php) over YouTube embed

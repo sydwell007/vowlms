@@ -12,6 +12,8 @@ import { getOpportunityPathways } from "@/data/opportunity-pathways";
 import { getCoursePreviewContent } from "@/data/course-preview-content";
 import { buildModuleZero } from "@/data/course-module-zero";
 import { MODULE_ASSESSMENTS } from "@/data/module-assessments";
+import { enrichMicrosoftOfficeLessons } from "@/data/microsoft-office-content";
+import { buildMicrosoftOfficeAssessment } from "@/data/microsoft-office-assessments";
 import { isPaidUpskillingCourse } from "@/data/priced-upskilling-courses";
 import {
   getUpskillingModulePractice,
@@ -88,7 +90,10 @@ function buildParentCourse(grouping: typeof allGroupings[number]): Course {
     if (!child) return;
 
     // Flatten all lessons from every internal section of the child course
-    const allLessons = child.modules.flatMap((m) => m.lessons);
+    const allLessons = enrichMicrosoftOfficeLessons(
+      childSlug,
+      child.modules.flatMap((m) => m.lessons),
+    );
     const practice = getUpskillingModulePractice(grouping.slug, idx + 1);
     const moduleLessons = practice
       ? insertPracticeAfterAssessment(allLessons, practice)
@@ -114,10 +119,15 @@ function buildParentCourse(grouping: typeof allGroupings[number]): Course {
   // these modules (see module-assessments/index.ts for the full story).
   // Falls back to the raw placeholder only for a module not yet authored,
   // so nothing silently disappears while content is still being filled in.
-  const assessments = modules.flatMap((m) =>
+  const assessments = modules.flatMap((m, moduleIndex) =>
     m.lessons
       .filter((l) => l.type === "assessment")
-      .map((l) => MODULE_ASSESSMENTS[l.slug])
+      .map((l) => MODULE_ASSESSMENTS[l.slug] ?? buildMicrosoftOfficeAssessment({
+        childSlug: grouping.moduleSlugOrder[moduleZero ? moduleIndex - 1 : moduleIndex] ?? "",
+        moduleTitle: m.title,
+        assessmentLesson: l,
+        moduleLessons: m.lessons,
+      }))
       .filter((a): a is NonNullable<typeof a> => Boolean(a)),
   );
   if (assessments.length === 0) {
@@ -210,9 +220,9 @@ export function isCourseVisible(course: Course, role?: Role | null): boolean {
   const academy = getAcademyBySlug(course.academySlug);
   if (isHiddenAcademyCategory(academy?.category, role)) return false;
   if (role === "admin") return true;
-  // Within Upskilling, only the 20 complete parent courses are learner-ready —
-  // the rest (Microsoft Office groupings, ungrouped raw Moodle courses) stay
-  // admin-only until they're finished and launched.
+  // Within Upskilling, only explicitly launched parent courses are learner-ready.
+  // Learner visibility includes the 20 professional-skills parents and seven
+  // sourced Microsoft Office parents. Ungrouped raw Moodle courses stay admin-only.
   if (course.academySlug === UPSKILLING_ACADEMY_SLUG && !isLearnerVisibleUpskillingCourse(course)) return false;
   return true;
 }

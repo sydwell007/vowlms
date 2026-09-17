@@ -34,7 +34,16 @@ export function CertificateViewer({ course, academyName, learnerName, completion
         doc.setTextColor(75, 75, 75); doc.setFontSize(7);
         doc.text(`Achieved: ${completionDate}   |   Authentication: ${shortCertificateId}`, 148.5, 193, { align: "center" });
       } else {
-        doc.setFillColor(6, 17, 31); doc.rect(0, 0, 297, 210, "F"); doc.setTextColor(245, 197, 66); doc.setFontSize(24); doc.text("Certificate of Completion", 148.5, 50, { align: "center" }); doc.setTextColor(255, 255, 255); doc.setFontSize(26); doc.text(learnerName, 148.5, 95, { align: "center" }); doc.setFontSize(18); doc.text(course.title, 148.5, 120, { align: "center" }); doc.setFontSize(10); doc.text(`Achieved: ${completionDate} | ${certificateId}`, 148.5, 175, { align: "center" });
+        doc.setFillColor(252, 253, 255); doc.rect(0, 0, 297, 210, "F");
+        doc.setDrawColor(202, 154, 33); doc.setLineWidth(1); doc.rect(7, 7, 283, 196); doc.setLineWidth(0.25); doc.rect(10, 10, 277, 190);
+        doc.setTextColor(20, 43, 82); doc.setFont("helvetica", "bold"); doc.setFontSize(12); doc.text("GOALVOW ACADEMY", 148.5, 28, { align: "center" });
+        doc.setFont("helvetica", "normal"); doc.setFontSize(25); doc.text(course.title.toUpperCase(), 148.5, 52, { align: "center", maxWidth: 250 });
+        doc.setTextColor(47, 55, 70); doc.setFontSize(12); doc.text("CERTIFICATE OF COMPLETION", 148.5, 68, { align: "center" });
+        doc.setFont("times", "italic"); doc.setFontSize(11); doc.text("proudly presented to", 148.5, 87, { align: "center" });
+        doc.setTextColor(20, 43, 82); doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.text(learnerName.toUpperCase(), 148.5, 108, { align: "center", maxWidth: 210 });
+        doc.setDrawColor(202, 154, 33); doc.line(62, 114, 235, 114);
+        doc.setTextColor(75, 85, 99); doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.text("has completed every required module and passed all course assessments.", 148.5, 130, { align: "center" });
+        doc.setFontSize(8); doc.text(`Achieved ${completionDate}   |   Authentication ${certificateId}`, 148.5, 181, { align: "center" });
       }
       doc.save(`${certificateId}.pdf`);
     } catch { setNotice("PDF download failed. Please try again."); }
@@ -63,9 +72,19 @@ export function CertificateViewer({ course, academyName, learnerName, completion
       <div className="mb-6 flex items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#1166c8]">GoalVow achievements</p><h1 className="mt-1 text-2xl font-semibold text-ink">Certificate of Completion</h1></div><Link href="/certificates" className="text-sm font-semibold text-[#1166c8] hover:underline">All certificates</Link></div>
       <section className="overflow-hidden rounded-lg border border-slate-200 bg-white p-2 shadow-[0_20px_50px_rgba(6,17,31,0.12)]">
         <div className="relative aspect-[1.414/1] overflow-hidden bg-white">
-          {templateSrc ? <Image src={templateSrc} alt={`${course.title} certificate`} fill priority sizes="(min-width: 1024px) 1100px, 100vw" className="object-contain" /> : null}
-          <p className="absolute left-[12%] right-[12%] top-[45%] text-center text-xl font-medium tracking-[0.1em] text-[#202176] sm:text-3xl">{learnerName.toUpperCase()}</p>
-          <p className="absolute bottom-[5.5%] left-[24%] right-[24%] text-center text-[7px] font-medium tracking-wide text-slate-600 sm:text-xs">Achieved {completionDate}  |  Authentication {shortCertificateId}</p>
+          {templateSrc ? <>
+            <Image src={templateSrc} alt={`${course.title} certificate`} fill priority sizes="(min-width: 1024px) 1100px, 100vw" className="object-contain" />
+            <p className="absolute left-[12%] right-[12%] top-[45%] text-center text-xl font-medium tracking-[0.1em] text-[#202176] sm:text-3xl">{learnerName.toUpperCase()}</p>
+            <p className="absolute bottom-[5.5%] left-[24%] right-[24%] text-center text-[7px] font-medium tracking-wide text-slate-600 sm:text-xs">Achieved {completionDate}  |  Authentication {shortCertificateId}</p>
+          </> : <div className="absolute inset-[2.5%] flex flex-col items-center justify-center border-2 border-[#ca9a21] px-[8%] text-center outline outline-1 outline-offset-4 outline-[#ca9a21]/70">
+            <p className="text-[8px] font-bold uppercase tracking-[0.18em] text-[#142b52] sm:text-sm">GoalVow Academy</p>
+            <h2 className="mt-[3%] text-base font-medium uppercase text-[#142b52] sm:text-3xl lg:text-4xl">{course.title}</h2>
+            <p className="mt-[2%] text-[9px] font-semibold uppercase text-slate-800 sm:text-lg">Certificate of Completion</p>
+            <p className="mt-[3%] font-serif text-[8px] italic text-slate-600 sm:text-base">proudly presented to</p>
+            <p className="mt-[1%] w-[76%] border-b border-[#ca9a21] pb-[1.5%] text-sm font-semibold uppercase text-[#142b52] sm:text-3xl">{learnerName}</p>
+            <p className="mt-[2%] max-w-3xl text-[7px] text-slate-600 sm:text-sm">For completing every required module and passing all course assessments.</p>
+            <p className="absolute bottom-[4%] left-[10%] right-[10%] text-[6px] font-medium text-slate-600 sm:text-xs">Achieved {completionDate} | Authentication {shortCertificateId}</p>
+          </div>}
         </div>
       </section>
       <div className="mt-5 flex flex-col gap-3 sm:flex-row">

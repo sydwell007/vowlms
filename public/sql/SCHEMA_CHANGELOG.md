@@ -119,3 +119,9 @@ All production imports require a backup, staging verification, and an authorised
   can be recorded.
 - Certificate issuance now verifies completion of all four orientation lessons
   alongside the existing module-completion and assessment-pass checks.
+
+## 037 - Microsoft Office course launch
+
+- Adds standard R299 unlock pricing for seven Microsoft Office 2019 learning journeys.
+- Keeps each first real module free and maps all later migrated child courses to the existing paid-unlock flow.
+- Does not rename or replace child course rows, preserving enrolment and progress compatibility.

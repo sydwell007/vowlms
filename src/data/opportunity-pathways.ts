@@ -123,6 +123,41 @@ export const UPSKILLING_OPPORTUNITY_PATHWAYS: Record<string, CourseOpportunityPa
     entrepreneurship: ["Independent research and analysis consultant", "Freelance strategy-advisory service"],
     furtherStudy: ["Diploma or Degree in Business or Data Analysis", "Certificate in Critical & Analytical Thinking", "Further study toward a Research Methods qualification"],
   },
+  "microsoft-word-basics": {
+    employment: ["Administrative Assistant", "Office Administrator", "Document Controller", "Customer Service Administrator"],
+    entrepreneurship: ["Professional document-formatting and CV service", "Virtual-assistant document support for small businesses"],
+    furtherStudy: ["Microsoft Office Specialist: Word Associate preparation", "Microsoft Word 2019 Advanced", "Certificate in Office Administration"],
+  },
+  "microsoft-word-advance": {
+    employment: ["Senior Administrator", "Executive Assistant", "Document Production Specialist", "Bid and Proposal Coordinator"],
+    entrepreneurship: ["Business template and document-automation service", "Mail-merge and report-production support for SMEs"],
+    furtherStudy: ["Microsoft Office Specialist: Word Expert preparation", "Microsoft 365 Apps project preparation", "Diploma in Business Administration"],
+  },
+  "microsoft-excel-basics": {
+    employment: ["Data Capture Clerk", "Finance Administrator", "Operations Assistant", "Junior Reporting Administrator"],
+    entrepreneurship: ["Spreadsheet setup and bookkeeping support for small businesses", "Freelance data-cleaning and reporting service"],
+    furtherStudy: ["Microsoft Office Specialist: Excel Associate preparation", "Microsoft Excel 2019 Expert", "Certificate in Data Analytics"],
+  },
+  "microsoft-excel-advance": {
+    employment: ["Data Analyst", "Financial Analyst", "Reporting Specialist", "Business Intelligence Assistant"],
+    entrepreneurship: ["Management-dashboard and spreadsheet-automation consultancy", "Freelance financial modelling and reporting service"],
+    furtherStudy: ["Microsoft Office Specialist: Excel Expert preparation", "Power BI or data-analytics certification", "Diploma in Business or Financial Analysis"],
+  },
+  "microsoft-power-point": {
+    employment: ["Presentation Designer", "Marketing Assistant", "Training Coordinator", "Bid and Proposal Assistant"],
+    entrepreneurship: ["Freelance presentation-design studio", "Pitch-deck and training-material service for entrepreneurs"],
+    furtherStudy: ["Microsoft Office Specialist: PowerPoint Associate preparation", "Certificate in Visual Communication", "Further study in Marketing or Communication"],
+  },
+  "microsoft-outlook": {
+    employment: ["Office Administrator", "Executive Assistant", "Project Administrator", "Customer Service Coordinator"],
+    entrepreneurship: ["Virtual-assistant and diary-management service", "Small-business workflow and inbox-organisation support"],
+    furtherStudy: ["Certificate in Office Administration", "Microsoft 365 productivity pathway", "Further study in Business Administration"],
+  },
+  "microsoft-access": {
+    employment: ["Database Administrator Assistant", "Data Administrator", "Operations Reporting Assistant", "Information Management Clerk"],
+    entrepreneurship: ["Small-business database setup and reporting service", "Data migration and record-management support"],
+    furtherStudy: ["Certificate in Database Fundamentals", "SQL and relational-database studies", "Diploma in Information Technology or Data Management"],
+  },
 };
 
 // ─── GoalVow Business School — admin-only preview ─────────────────────────────

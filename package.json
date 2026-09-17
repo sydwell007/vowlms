@@ -15,6 +15,7 @@
     "test:e2e": "playwright test",
     "qa:static": "node scripts/qa/static-checks.mjs",
     "qa:content": "tsx scripts/qa/content-integrity.mjs",
+    "qa:microsoft": "tsx scripts/qa/microsoft-office-integrity.mts",
     "qa:links": "node scripts/qa/integration-links.mjs",
     "qa:routes": "node scripts/qa/browser-route-audit.mjs",
     "qa:visual": "node scripts/qa/visual-system-audit.mjs",

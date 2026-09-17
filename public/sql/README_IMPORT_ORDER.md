@@ -31,11 +31,37 @@ This is a phpMyAdmin/Afrihost migration package. It must never be served by Verc
 15. `018_vowhuman_presenters.sql`
 16. `019_redemption_requests.sql`
 17. `020_course_orientation_progress.sql`
-18. `verify_schema.sql`
+18. `021_course_unlock_pricing.sql`
+19. `022_international_payments.sql`
+20. `023_gateway_config.sql`
+21. `024_gateway_config_fix.sql`
+22. `025_lemonsqueezy.sql`
+23. `026_fix_de_gateway.sql`
+24. `027_remove_fake_certificate_lessons.sql`
+25. `028_seed_module_assessments.sql`
+26. `029_recalculate_enrollment_progress.sql`
+27. `030_module_survey_responses.sql`
+28. `031_survey_lesson_type.sql`
+29. `032_vowr_valuation_rescale.sql`
+30. `033_vowr_reservations_and_dedupe.sql`
+31. `034_disable_founding_discount.sql`
+32. `035_paystack_zar_currency.sql`
+33. `035_seed_upskilling_vr_practices.sql`
+34. `036_disable_lemonsqueezy_routing.sql`
+35. `037_launch_microsoft_office_courses.sql`
+36. `verify_schema.sql`
 
 `verify-seed-integrity.sql` is a separate, read-only diagnostic file (not part of
 the schema import order) — run it any time via phpMyAdmin or
 `GET public/php/api/qa/verify-seed-integrity.php`.
+
+### Current launch patch
+
+After the existing numbered chain through `036_disable_lemonsqueezy_routing.sql`,
+import `037_launch_microsoft_office_courses.sql`. It adds pricing and paid-child
+unlock mappings for the seven learner-visible Microsoft Office courses. Back up
+the database first, apply it in staging, and confirm the verification query
+returns 4, 6, 7, 6, 6, 6, and 7 paid child modules for the seven parent slugs.
 
 ### Optional admin promotion (`005_admin_user_setup.sql`)
 
@@ -74,12 +100,14 @@ already exists. Only `012` is written to be safely re-run.
    exactly which numbered patches are already applied (check for the tables/columns
    each one adds — see `SCHEMA_CHANGELOG.md` for what each number introduced).
 2. Import only the patches missing from that comparison, in ascending numeric order.
-   The full historical chain is `007`, `009`, `011`, `012`, `013`, `014`, `015`,
-   `016`, `017`, `018`, `019`, `020` — this is a reference list of everything that has ever shipped, not
-   an instruction to run all of them regardless of what's already live.
+   The full historical chain continues from `007`, `009`, and `011` through
+   `034`, both `035` migrations, `036`, and `037`. This is a reference to the
+   files that have shipped, not an instruction to rerun migrations already live.
 3. Run `verify_schema.sql` once you've applied whatever was missing.
 
-Migration `020_course_orientation_progress.sql` is the newest patch. It adds the
+Migration `037_launch_microsoft_office_courses.sql` is the newest patch. It adds
+the Microsoft Office launch pricing and paid-child unlock mappings. Migration
+`020_course_orientation_progress.sql` adds the
 `course_orientation_progress` table (`CREATE TABLE IF NOT EXISTS`) used by the
 four Module 0 lessons on each production Upskilling course. Import `020` after
 `019`; it does not alter Moodle course, lesson, assessment, or progress rows.

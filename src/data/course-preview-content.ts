@@ -2,7 +2,7 @@ import type { CoursePreviewContent } from "@/types/lms";
 
 /**
  * Course Preview marketing copy — real, course-specific "why this, why now"
- * content for the 20 Upskilling Academy courses. Deliberately distinct from
+ * content for the 27 learner-visible Upskilling Academy courses. Deliberately distinct from
  * `outcomes` (skills you'll gain): this is framed around career and life
  * impact, written to persuade someone to enrol.
  */
@@ -206,6 +206,34 @@ export const COURSE_PREVIEW_CONTENT: Record<string, CoursePreviewContent> = {
       "Communicate your reasoning clearly and persuasively",
       "Build a foundational skill that strengthens every other skill you have",
     ],
+  },
+  "microsoft-word-basics": {
+    purpose: "Professional documents shape how your work is understood. Build practical Word skills through realistic document tasks, guided practice, and source-aligned activities.",
+    benefits: ["Create polished documents from a blank page or template", "Control layout, tables, lists, references, and visual objects", "Review accessibility and prepare files for confident distribution", "Build a portfolio-ready foundation for administrative and knowledge-work roles"],
+  },
+  "microsoft-word-advance": {
+    purpose: "Move beyond everyday editing into reusable, secure, and automated Word workflows for reports, templates, mailings, and complex business documents.",
+    benefits: ["Create custom styles, templates, and reusable building blocks", "Automate repetitive work with fields, macros, and mail merge", "Manage long documents, references, and advanced content controls", "Protect documents and collaborate with greater consistency"],
+  },
+  "microsoft-excel-basics": {
+    purpose: "Turn raw figures into organised, accurate, and useful workbooks with a source-aligned Excel Associate learning journey built around real workplace tasks.",
+    benefits: ["Structure and format worksheets for clarity", "Use essential formulas, functions, tables, and ranges", "Transform and visualise data with confidence", "Prepare accurate, print-ready workbooks for others"],
+  },
+  "microsoft-excel-advance": {
+    purpose: "Develop expert-level spreadsheet judgement for complex formulas, validated models, analytical reporting, PivotTables, automation, and collaborative workbooks.",
+    benefits: ["Build and audit advanced formulas", "Analyse data with PivotTables and PivotCharts", "Use validation and protection to improve reliability", "Automate repeatable tasks and collaborate safely"],
+  },
+  "microsoft-power-point": {
+    purpose: "Learn to design, organise, and deliver presentations that help audiences understand ideas and act, from the first slide through professional delivery.",
+    benefits: ["Build clear presentation structures and slide narratives", "Work confidently with visuals, media, animation, and transitions", "Use masters and settings for consistent design", "Prepare, rehearse, print, and deliver polished presentations"],
+  },
+  "microsoft-outlook": {
+    purpose: "Use Outlook as a professional work-management system, not merely an inbox, by connecting messages, calendars, contacts, tasks, and repeatable workflows.",
+    benefits: ["Write and manage professional email efficiently", "Organise high-volume inboxes with practical controls", "Coordinate calendars, meetings, contacts, tasks, and notes", "Automate routine actions while retaining oversight"],
+  },
+  "microsoft-access": {
+    purpose: "Move beyond disconnected spreadsheets by learning how relational databases store, connect, query, and present dependable operational information.",
+    benefits: ["Plan useful tables, fields, keys, and relationships", "Create forms for controlled data entry", "Ask meaningful questions with queries", "Produce clear reports from connected business records"],
   },
 };
 

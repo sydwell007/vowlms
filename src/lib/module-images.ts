@@ -167,11 +167,21 @@ const MODULE_IMAGES: Record<string, Record<number, string>> = {
   },
 };
 
+const MICROSOFT_OFFICE_COURSE_IMAGES: Record<string, string> = {
+  "microsoft-word-basics": "/images/courses/microsoft/word-foundation.webp",
+  "microsoft-word-advance": "/images/courses/microsoft/word-advanced.webp",
+  "microsoft-excel-basics": "/images/courses/microsoft/excel-associate.webp",
+  "microsoft-excel-advance": "/images/courses/microsoft/excel-expert.webp",
+  "microsoft-power-point": "/images/courses/microsoft/powerpoint.webp",
+  "microsoft-outlook": "/images/courses/microsoft/outlook-2019.webp",
+  "microsoft-access": "/images/courses/microsoft/access-2019.webp",
+};
+
 export function getModuleImageSrc(courseSlug: string, moduleOrder: number): string | null {
-  if (moduleOrder === 0 && MODULE_IMAGES[courseSlug]) {
+  if (moduleOrder === 0 && (MODULE_IMAGES[courseSlug] || MICROSOFT_OFFICE_COURSE_IMAGES[courseSlug])) {
     return "/images/module-zero-orientation.jpg";
   }
   const filename = MODULE_IMAGES[courseSlug]?.[moduleOrder];
-  if (!filename) return null;
+  if (!filename) return MICROSOFT_OFFICE_COURSE_IMAGES[courseSlug] ?? null;
   return `${MODULE_IMAGE_DIR}/${filename}`;
 }

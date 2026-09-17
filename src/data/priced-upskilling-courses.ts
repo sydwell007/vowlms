@@ -1,7 +1,7 @@
 /**
- * Which of the 20 Upskilling parent courses have real unlock pricing
- * configured (`public/sql/021_course_unlock_pricing.sql`'s
- * `course_unlock_pricing` table) — Module 1 free, everything after it paid.
+ * Upskilling parent courses with real unlock pricing configured by migrations
+ * 021 and 037 in the `course_unlock_pricing` table. Module 1 stays free and
+ * every later module is paid.
  *
  * This is only used to decide *shape* (mark modules 2+ as `isFree: false`,
  * enroll only Module 1's real child course on first "Enrol free", show the
@@ -29,6 +29,13 @@ export const PRICED_UPSKILLING_COURSE_SLUGS = new Set([
   "time-management",
   "team-management",
   "critical-thinking",
+  "microsoft-word-basics",
+  "microsoft-word-advance",
+  "microsoft-excel-basics",
+  "microsoft-excel-advance",
+  "microsoft-power-point",
+  "microsoft-outlook",
+  "microsoft-access",
 ]);
 
 export function isPaidUpskillingCourse(slug: string): boolean {

@@ -12,9 +12,8 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { CourseEnrolCard } from "@/components/courses/CourseEnrolCard";
 import { CourseExperience } from "@/components/courses/CourseExperience";
 import { CourseRatingBadge } from "@/components/courses/CourseRatingBadge";
-import { EnrollButton } from "@/components/courses/EnrollButton";
+import { MobileCourseStickyAction } from "@/components/courses/MobileCourseStickyAction";
 import { getAcademyBySlug, getAcademyHref, getCourseBySlug, isCourseVisible } from "@/lib/data";
-import { formatCurrency } from "@/lib/format";
 import { getAcademyAccentColor } from "@/lib/academy-colors";
 import { formatCourseDurationWeeks, getCourseStats } from "@/lib/course-content";
 import { getServerRole } from "@/lib/auth/getServerRole";
@@ -187,7 +186,7 @@ export default async function CourseDetailPage({
           {/* Enrol card sits within the hero's own height — no fixed downward
               offset, since the card's height varies by enrolment state and a
               fixed push would make a taller state spill past the banner. */}
-          <aside className="lg:sticky lg:top-24">
+          <aside id="course-enrol-card" className="lg:sticky lg:top-24">
             <CourseEnrolCard course={course} accentColor={accentColor} />
           </aside>
         </div>
@@ -221,15 +220,7 @@ export default async function CourseDetailPage({
         </div>
       </section>
 
-      <div className="fixed inset-x-0 bottom-14 z-40 border-t border-slate-200 bg-white/95 px-4 py-3 shadow-[0_-12px_30px_rgba(6,17,31,0.12)] backdrop-blur-lg lg:hidden">
-        <div className="mx-auto flex max-w-7xl items-center gap-4">
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-medium text-muted">{course.title}</p>
-            <p className="text-lg font-bold text-ink">{formatCurrency(course.price)}</p>
-          </div>
-          <div className="w-40 shrink-0"><EnrollButton course={course} /></div>
-        </div>
-      </div>
+      <MobileCourseStickyAction course={course} enrolCardId="course-enrol-card" />
     </main>
   );
 }

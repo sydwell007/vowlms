@@ -13,8 +13,12 @@ const lessonPageSource = readFileSync(
 );
 
 test("lesson sidebar opens only the active module by default", () => {
-  assert.match(playerSource, /useState<Set<number>>\([\s\S]*new Set\(\[module\.order\]\)/);
-  assert.match(playerSource, /expandedModules\.has\(m\.order\)/);
+  assert.match(playerSource, /useState<number \| null>\(module\.order\)/);
+  assert.match(playerSource, /expandedModule === m\.order/);
+  assert.match(
+    playerSource,
+    /setExpandedModule\(\(current\) => \(current === moduleOrder \? null : moduleOrder\)\)/,
+  );
   assert.equal(
     [...lessonPageSource.matchAll(/key=\{`\$\{[^`]+\.order\}`\}/g)].length,
     3,

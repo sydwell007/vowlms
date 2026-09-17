@@ -471,40 +471,40 @@ export const upskillGroupings: CourseGrouping[] = [
 export const msOfficeGroupings: CourseGrouping[] = [
   {
     slug: "microsoft-word-basics",
-    title: "Microsoft Word Basics",
+    title: "Microsoft Word 2019 Foundation",
     description:
-      "Master the fundamentals of Microsoft Word — document creation, editing, formatting, tables, lists, references, and settings for professional output.",
+      "Build job-ready Microsoft Word skills for creating, formatting, organising, reviewing, and finalising accessible professional documents.",
     level: "Foundation",
-    duration: "12 weeks",
+    duration: "10 weeks",
     outcomes: [
-      "Create and format professional Word documents",
-      "Work with tables, lists, and references",
-      "Manage document settings and styles",
-      "Earn a GoalVow Microsoft Word certificate",
+      "Create, navigate, save, and share professional Word documents",
+      "Format text, paragraphs, sections, tables, lists, and visual objects",
+      "Use references, review tools, accessibility checks, and finalisation controls",
+      "Earn a GoalVow Microsoft Word 2019 Foundation certificate",
     ],
     moduleSlugOrder: [
-      "working-with-word-objects",
-      "managing-word-edits-and-document-layouts",
       "managing-word-documents-and-options",
+      "managing-word-edits-and-document-layouts",
+      "working-with-word-objects",
       "inserting-and-managing-word-tables-and-lists",
       "managing-word-references-and-finalizing-word-documents",
-      "updating-word-settings",
     ],
   },
   {
     slug: "microsoft-word-advance",
-    title: "Microsoft Word Advanced",
+    title: "Microsoft Word 2019 Advanced",
     description:
       "Take your Word skills further — custom styles, templates, reusable content, macros, mail merge, and restricting editing for enterprise document workflows.",
-    level: "Intermediate",
-    duration: "12 weeks",
+    level: "Advanced",
+    duration: "14 weeks",
     outcomes: [
       "Create reusable templates and custom design elements",
       "Automate workflows with macros and mail merge",
       "Restrict editing and manage document security",
-      "Earn a GoalVow Microsoft Word Advanced certificate",
+      "Earn a GoalVow Microsoft Word 2019 Advanced certificate",
     ],
     moduleSlugOrder: [
+      "updating-word-settings",
       "modifying-and-creating-document-style-and-templates",
       "creating-reusable-content-and-custom-design-elements",
       "creating-reference-tables-and-restricting-editing",
@@ -515,7 +515,7 @@ export const msOfficeGroupings: CourseGrouping[] = [
   },
   {
     slug: "microsoft-excel-basics",
-    title: "Microsoft Excel Basics",
+    title: "Microsoft Excel 2019 Associate",
     description:
       "Build a solid Excel foundation — worksheets, formatting, formulas, data transformation, visualisation, and print-ready workbook management.",
     level: "Foundation",
@@ -524,7 +524,7 @@ export const msOfficeGroupings: CourseGrouping[] = [
       "Navigate and format Excel workbooks with confidence",
       "Write essential formulas and transform data",
       "Visualise data with charts and prepare print-ready output",
-      "Earn a GoalVow Microsoft Excel certificate",
+      "Earn a GoalVow Microsoft Excel 2019 Associate certificate",
     ],
     moduleSlugOrder: [
       "introduction-to-excel",
@@ -539,16 +539,16 @@ export const msOfficeGroupings: CourseGrouping[] = [
   },
   {
     slug: "microsoft-excel-advance",
-    title: "Microsoft Excel Advanced",
+    title: "Microsoft Excel 2019 Expert",
     description:
       "Master advanced Excel techniques — data validation, auditing, advanced formulas, PivotTables, PivotCharts, macros, and collaborative workbooks.",
-    level: "Intermediate",
+    level: "Advanced",
     duration: "14 weeks",
     outcomes: [
       "Validate and audit complex Excel datasets",
       "Write advanced formulas and use PivotTables",
       "Automate tasks with simple macros",
-      "Earn a GoalVow Microsoft Excel Advanced certificate",
+      "Earn a GoalVow Microsoft Excel 2019 Expert certificate",
     ],
     moduleSlugOrder: [
       "managing-and-formatting-data",
@@ -562,7 +562,7 @@ export const msOfficeGroupings: CourseGrouping[] = [
   },
   {
     slug: "microsoft-power-point",
-    title: "Microsoft PowerPoint",
+    title: "Microsoft PowerPoint 2019",
     description:
       "Create compelling presentations from scratch — content, visuals, animations, slide masters, slideshow configuration, and professional delivery.",
     level: "Foundation",
@@ -571,7 +571,7 @@ export const msOfficeGroupings: CourseGrouping[] = [
       "Build structured presentations with professional design",
       "Add and work with advanced visuals and animations",
       "Configure and deliver polished slideshows",
-      "Earn a GoalVow Microsoft PowerPoint certificate",
+      "Earn a GoalVow Microsoft PowerPoint 2019 certificate",
     ],
     moduleSlugOrder: [
       "introducing-the-powerpoint-fundamentals",
@@ -585,7 +585,7 @@ export const msOfficeGroupings: CourseGrouping[] = [
   },
   {
     slug: "microsoft-outlook",
-    title: "Microsoft Outlook",
+    title: "Microsoft Outlook 2019",
     description:
       "Take control of your inbox and workday — email composition, organisation, automation, calendar management, contacts, tasks, and notes.",
     level: "Foundation",
@@ -594,7 +594,7 @@ export const msOfficeGroupings: CourseGrouping[] = [
       "Compose, organise, and automate email workflows",
       "Manage calendars, contacts, tasks, and notes efficiently",
       "Apply professional email practices in the workplace",
-      "Earn a GoalVow Microsoft Outlook certificate",
+      "Earn a GoalVow Microsoft Outlook 2019 certificate",
     ],
     moduleSlugOrder: [
       "getting-started-with-outlook",
@@ -608,7 +608,7 @@ export const msOfficeGroupings: CourseGrouping[] = [
   },
   {
     slug: "microsoft-access",
-    title: "Microsoft Access",
+    title: "Microsoft Access 2019",
     description:
       "Build and query relational databases. Cover data entry, structure design, queries, reporting, relationships, and presenting complex data insights.",
     level: "Intermediate",
@@ -617,12 +617,12 @@ export const msOfficeGroupings: CourseGrouping[] = [
       "Design and populate relational database structures",
       "Write queries to extract and analyse data",
       "Create reports and present complex data findings",
-      "Earn a GoalVow Microsoft Access certificate",
+      "Earn a GoalVow Microsoft Access 2019 certificate",
     ],
     moduleSlugOrder: [
       "introduction-to-databases-and-microsoft-access",
-      "adding-and-editing-data",
       "designing-and-setting-up-data-structure",
+      "adding-and-editing-data",
       "asking-questions-of-data",
       "understanding-reporting-basics",
       "defining-database-relationships",

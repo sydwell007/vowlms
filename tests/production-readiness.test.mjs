@@ -45,6 +45,17 @@ test("course detail pages contain only the selected course", async () => {
   assert.doesNotMatch(course, /getCourseSummariesByAcademy/);
 });
 
+test("mobile course action waits until the main enrol card leaves view", async () => {
+  const course = await read("src/app/courses/[slug]/page.tsx");
+  const mobileAction = await read("src/components/courses/MobileCourseStickyAction.tsx");
+
+  assert.match(course, /id="course-enrol-card"/);
+  assert.match(course, /<MobileCourseStickyAction course=\{course\} enrolCardId="course-enrol-card"/);
+  assert.match(mobileAction, /new IntersectionObserver/);
+  assert.match(mobileAction, /setIsVisible\(!entry\.isIntersecting\)/);
+  assert.match(mobileAction, /aria-hidden=\{!isVisible\}/);
+});
+
 test("all Upskilling parent courses have one shared curated-image mapping", async () => {
   const expectedSlugs = [
     "business-ethics",

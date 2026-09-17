@@ -33,11 +33,11 @@ export async function GET(request: Request) {
 
   if (!isBridgeConfigured()) {
     return ok({
-      zar: { items: [{ parentSlug: slugs.split(",")[0], standardPriceZar: 299, priceZar: 209, foundingActive: true, foundingSlotsLeft: 87 }], subtotalZar: 209, isBundle: false, bundleDiscountPercent: 0, totalZar: 209, vowrDiscountPercent: 12, vowrPrice: 184 },
+      zar: { items: [{ parentSlug: slugs.split(",")[0], standardPriceZar: 299, priceZar: 299, foundingActive: false, foundingSlotsLeft: 0 }], subtotalZar: 299, isBundle: false, bundleDiscountPercent: 0, totalZar: 299, vowrDiscountPercent: 12, vowrPrice: 263 },
       gateway: country === "ZA" ? "payfast" : "paypal",
       currency: country === "ZA" ? "ZAR" : "USD",
       countryCode: country,
-      amountCharged: country === "ZA" ? 209 : 11,
+      amountCharged: country === "ZA" ? 299 : 16,
       exchangeRate: country === "ZA" ? 1 : 0.053,
       conversionAvailable: true,
     } satisfies InternationalPriceResponse);

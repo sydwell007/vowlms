@@ -103,6 +103,34 @@ const upskillingCourseVisuals = {
     src: "/images/courses/upskilling/critical-thinking.webp",
     alt: "Professionals compare evidence and question assumptions before reaching a conclusion.",
   },
+  "microsoft-word-basics": {
+    src: "/images/courses/microsoft/word-foundation.webp",
+    alt: "A professional creates and reviews a polished business document with colleagues.",
+  },
+  "microsoft-word-advance": {
+    src: "/images/courses/microsoft/word-advanced.webp",
+    alt: "Two experienced professionals refine a complex structured report together.",
+  },
+  "microsoft-excel-basics": {
+    src: "/images/courses/microsoft/excel-associate.webp",
+    alt: "A finance professional builds a clear spreadsheet and practical chart.",
+  },
+  "microsoft-excel-advance": {
+    src: "/images/courses/microsoft/excel-expert.webp",
+    alt: "Data analysts examine an advanced workbook and analytical dashboard.",
+  },
+  "microsoft-power-point": {
+    src: "/images/courses/microsoft/powerpoint.webp",
+    alt: "A presenter rehearses a polished visual presentation with colleagues.",
+  },
+  "microsoft-outlook": {
+    src: "/images/courses/microsoft/outlook-2019.webp",
+    alt: "An operations professional coordinates messages, meetings, and tasks.",
+  },
+  "microsoft-access": {
+    src: "/images/courses/microsoft/access-2019.webp",
+    alt: "Business intelligence professionals design and review a relational database.",
+  },
 } as const satisfies Record<string, CourseVisual>;
 
 const warnedCourseSlugs = new Set<string>();

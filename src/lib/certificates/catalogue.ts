@@ -21,11 +21,21 @@ const certificateFiles: Record<string, string> = {
   "critical-thinking": "Critical Thinking.jpg",
 };
 
+const dynamicCertificateCourses = new Set([
+  "microsoft-word-basics",
+  "microsoft-word-advance",
+  "microsoft-excel-basics",
+  "microsoft-excel-advance",
+  "microsoft-power-point",
+  "microsoft-outlook",
+  "microsoft-access",
+]);
+
 export function getCertificateTemplateSrc(courseSlug: string) {
   const fileName = certificateFiles[courseSlug];
   return fileName ? `/images/certificates/${encodeURIComponent(fileName)}` : null;
 }
 
 export function isCertificateCourse(courseSlug: string) {
-  return courseSlug in certificateFiles;
+  return courseSlug in certificateFiles || dynamicCertificateCourses.has(courseSlug);
 }
