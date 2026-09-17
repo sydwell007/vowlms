@@ -9,3 +9,4 @@
 ✓ Ready in 1282ms
 Creating turbopack project { dir: 'C:\\Users\\sydwe\\Desktop\\vowlms', testMode: true }
 
+ GET / 200 in 1501ms (next.js: 599ms, proxy.ts: 155ms, application-code: 747ms)
